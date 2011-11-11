@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, MainActivity!</string>
+    <string name="app_name">NoteIt</string>
+    <string name="add_shoplist">Add...</string>
+    <string name="noteit_prefs">Preferences...</string>
+    <string name="login_email">Email:</string>
+    <string name="login_password">Password:</string>
+    <string name="login_activity_title">Please login</string>
+	<string name="shoplistsactivity_title">Shopping Lists</string>
+</resources>

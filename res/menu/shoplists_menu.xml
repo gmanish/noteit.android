@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+   <item android:id="@+id/add_shoplist"
+		android:icon="@drawable/ic_actionbar_add"    		
+        android:title="@string/add_shoplist"
+        android:showAsAction="ifRoom" />
+   <item android:id="@+id/noteit_prefs"
+		android:icon="@drawable/ic_actionbar_settings"    		
+        android:title="@string/noteit_prefs" 
+        android:showAsAction="ifRoom"/>
+</menu>
