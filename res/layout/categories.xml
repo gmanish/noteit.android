@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_categories"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ListView
+        android:id="@+android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" 
+        android:layout_weight="1"/>
+
+	    <LinearLayout 
+	        style="@android:style/Holo.ButtonBar"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal">
+		    
+		    <ImageButton
+		        android:id="@+id/button_categories_add"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@android:drawable/ic_menu_add" />
+		
+		    <ImageButton
+		        android:id="@+id/button_categories_delete"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@android:drawable/ic_menu_delete" />
+		
+		    <ImageButton
+		        android:id="@+id/button_categories_preferences"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@android:drawable/ic_menu_preferences" />
+		    
+		</LinearLayout>
+</LinearLayout>

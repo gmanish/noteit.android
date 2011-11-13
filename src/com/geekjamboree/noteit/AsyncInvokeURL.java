@@ -28,7 +28,7 @@ import org.json.JSONObject;
  *
  */
 class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
-	private final String 				mNoteItWebUrl = "http://10.0.2.2/noteit/controller/AppController.php";
+	private final String 				mNoteItWebUrl = "http://10.0.2.2/noteit.web/controller/AppController.php";
 	private ArrayList<NameValuePair> 	mParams;
 	private	OnPostExecuteListener		mPostExecuteListener = null;
 	

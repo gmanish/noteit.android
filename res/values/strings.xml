@@ -8,4 +8,5 @@
     <string name="login_password">Password:</string>
     <string name="login_activity_title">Please login</string>
 	<string name="shoplistsactivity_title">Shopping Lists</string>
+	<string name="categoriesactivity_title">Categories</string>
 </resources>

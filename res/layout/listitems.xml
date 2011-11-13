@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_listitems"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="fill_vertical"
+    android:gravity="fill_vertical"
+    android:orientation="vertical" >
+
+    <ListView
+        android:id="@+android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="440dp"
+        android:layout_above="@+id/imageButton1" />
+
+    <ImageButton
+        android:id="@+id/button_listitems_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:src="@android:drawable/ic_menu_add" />
+
+    <ImageButton
+        android:id="@+id/button_listitems_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/imageButton1"
+        android:src="@android:drawable/ic_menu_delete" />
+
+    <ImageButton
+        android:id="@+id/button_listitems_preferences"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/imageButton2"
+        android:src="@android:drawable/ic_menu_preferences" />
+
+</RelativeLayout>
