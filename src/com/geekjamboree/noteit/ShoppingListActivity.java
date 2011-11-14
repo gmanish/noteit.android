@@ -33,7 +33,7 @@ public class ShoppingListActivity extends Activity implements AsyncInvokeURLTask
         setTitle(getResources().getText(R.string.shoplistsactivity_title));
         
         mListView = (ListView) findViewById(android.R.id.list);
-        mListView.setDividerHeight(2);
+ //       mListView.setDividerHeight(2);
         
 	   	((NoteItApplication)getApplication()).fetchShoppingLists(this);
     }

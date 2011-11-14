@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -38,7 +37,7 @@ public class CategoryListActivity
         setTitle(getResources().getText(R.string.categoriesactivity_title));
         
         mListView = (ListView) findViewById(android.R.id.list);
-        mListView.setDividerHeight(2);
+ //       mListView.setDividerHeight(2);
 
         ((NoteItApplication)getApplication()).fetchCategories(this);
  

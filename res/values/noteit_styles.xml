@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="GradientBackground">
+        <item name="android:background">@drawable/application_background_normal</item>
+    </style>
+</resources>
