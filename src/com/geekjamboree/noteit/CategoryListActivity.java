@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.geekjamboree.noteit.NoteItApplication.Category;
+import com.geekjamboree.noteit.CustomTitlebarWrapper;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -33,8 +34,9 @@ public class CategoryListActivity
 	public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	
+    	CustomTitlebarWrapper toolbar = new CustomTitlebarWrapper(this);
     	setContentView(R.layout.categories);
-        setTitle(getResources().getText(R.string.categoriesactivity_title));
+        toolbar.SetTitle(getResources().getText(R.string.categoriesactivity_title));
         
         mListView = (ListView) findViewById(android.R.id.list);
  //       mListView.setDividerHeight(2);

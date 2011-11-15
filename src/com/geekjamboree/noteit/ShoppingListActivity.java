@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,13 +30,15 @@ public class ShoppingListActivity extends Activity implements AsyncInvokeURLTask
     public void onCreate(Bundle savedInstanceState) { 
     	
     	super.onCreate(savedInstanceState);
-    	setContentView(R.layout.shoppinglists);
-        setTitle(getResources().getText(R.string.shoplistsactivity_title));
+
+    	CustomTitlebarWrapper toolbar = new CustomTitlebarWrapper(this);
+        setContentView(R.layout.shoppinglists);
+        toolbar.SetTitle(getResources().getText(R.string.shoplistsactivity_title));
         
         mListView = (ListView) findViewById(android.R.id.list);
  //       mListView.setDividerHeight(2);
         
-	   	((NoteItApplication)getApplication()).fetchShoppingLists(this);
+ 	   	((NoteItApplication)getApplication()).fetchShoppingLists(this);
     }
     
     @Override
@@ -43,6 +46,16 @@ public class ShoppingListActivity extends Activity implements AsyncInvokeURLTask
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.shoplists_menu, menu);
         return true;
+    }
+    
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	switch(item.getItemId()){
+    		case R.id.noteit_prefs:
+    			startActivity(new Intent(this, MainPreferenceActivity.class));
+    			return true;
+    	}
+    	
+    	return false;
     }
     
     public void onPostExecute(JSONObject json) {

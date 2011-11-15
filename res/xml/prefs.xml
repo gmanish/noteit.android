@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+	<PreferenceCategory 
+	    android:title="Login Information"
+	    android:key="Login_Information" >
+	    
+	    <EditTextPreference 
+	        android:title="Email"
+	        android:key="email"
+	        android:summary="The email ID registered with Note It!"
+	        android:dialogTitle="Email ID"
+	        android:dialogMessage="Please enter the email ID"
+	        android:defaultValue="you@email.com" />
+	    
+	</PreferenceCategory>    
+
+</PreferenceScreen>

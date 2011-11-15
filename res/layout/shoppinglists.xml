@@ -4,38 +4,37 @@
     android:id="@+id/layout_shoppinglists"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
+    
    <ListView
         android:id="@+android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:cacheColorHint="#000000"
         android:listSelector="@color/listview_selector"
-        />
+        android:background="@drawable/listitem_background_normal"/>
+   
     <LinearLayout
-        style="@android:style/Holo.ButtonBar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
+        android:orientation="horizontal" 
+        style="@style/GradientBackground">
+        
         <ImageButton
 	        android:id="@+id/button_shoppinglists_add"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:src="@android:drawable/ic_menu_add" />
-	
+	        android:src="@android:drawable/ic_menu_add" 
+	        style="@style/NoteitButtonStyle"/>
+        
 	    <ImageButton
 	        android:id="@+id/button_shoppinglists_delete"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:src="@android:drawable/ic_menu_delete" />
-	
+	        android:src="@android:drawable/ic_menu_delete" 
+	        style="@style/NoteitButtonStyle"/>
+	    
 	    <ImageButton
 	        android:id="@+id/button_shoppinglists_preferences"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:src="@android:drawable/ic_menu_preferences" />
-	
+	        android:src="@android:drawable/ic_menu_preferences" 
+	        style="@style/NoteitButtonStyle"/>
+	    
     </LinearLayout>
+	    
 </LinearLayout>

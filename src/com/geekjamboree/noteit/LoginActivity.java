@@ -1,11 +1,15 @@
 package com.geekjamboree.noteit;
 
+import com.geekjamboree.noteit.CustomTitlebarWrapper;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,8 +22,15 @@ public class LoginActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CustomTitlebarWrapper toolbar = new CustomTitlebarWrapper(this);
         setContentView(R.layout.login);
-        setTitle(getResources().getText(R.string.login_activity_title));
+        toolbar.SetTitle(getResources().getText(R.string.login_activity_title));
+   
+        // Read the email id from the preference
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String emailID = prefs.getString("email", "you@email.com");
+        EditText editTextEmail = (EditText)findViewById(R.id.editEmailID);
+        editTextEmail.setText(emailID);
         
         Button next = (Button) findViewById(R.id.buttonLogin);
         next.setOnClickListener(new View.OnClickListener() {
