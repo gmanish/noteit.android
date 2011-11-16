@@ -9,4 +9,6 @@
     <string name="login_activity_title">Please login</string>
 	<string name="shoplistsactivity_title">Shopping Lists</string>
 	<string name="categoriesactivity_title">Categories</string>
+	<string name="preference_activity_title">Note It! Settings</string>
+	<string name="itemlistactivity_title">Items</string>
 </resources>

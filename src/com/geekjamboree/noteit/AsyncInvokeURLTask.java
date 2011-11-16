@@ -27,12 +27,12 @@ import org.json.JSONObject;
  * @author mgupta
  *
  */
-class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
+public class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 	private final String 				mNoteItWebUrl = "http://10.0.2.2/noteit.web/controller/AppController.php";
 	private ArrayList<NameValuePair> 	mParams;
 	private	OnPostExecuteListener		mPostExecuteListener = null;
 	
-	static interface OnPostExecuteListener{
+	public static interface OnPostExecuteListener{
 		void onPostExecute(JSONObject result);
 	}
 

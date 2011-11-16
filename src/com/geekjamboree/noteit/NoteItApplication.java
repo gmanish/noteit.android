@@ -12,11 +12,12 @@ import org.apache.http.message.BasicNameValuePair;
 
 public class NoteItApplication extends Application {
 
-	public class ShoppingListItem {
+	// Represents each shopping list that the user has
+	public class ShoppingList {
 		public String 	mName = "";
 		public long		mID = 0;
 		
-		public ShoppingListItem(long itemID, String itemName){
+		public ShoppingList(long itemID, String itemName){
 			mName = itemName;
 			mID = itemID;
 		}
@@ -24,15 +25,42 @@ public class NoteItApplication extends Application {
 		public String toString(){
 			return mName;
 		}
+		
+		public boolean equals(Object obj){
+			if (obj instanceof ShoppingList)
+				return (mID == ((ShoppingList)obj).mID);
+			else
+				return false;
+		}
 	}
 	
+	// Represents each category in the database
 	public class Category {
 		public String 	mName = "";
 		public long 	mID = 0;
+		public long 	mUserID = 0;
 		
-		public Category(long categoryID, String categoryName){
+		public Category(long categoryID, String categoryName, long userID){
 			mName = categoryName;
 			mID = categoryID;
+			mUserID = userID;
+		}
+		
+		public String toString(){
+			return mName;
+		}
+	}
+	
+	// Represents each item on the current shopping list
+	public class Item {
+		public String 	mName 			= "";
+		public long		mID				= 0;
+		public long 	mCategoryID 	= 0;	
+	
+		public Item(long id, String name, long categoryID){
+			mID = id;
+			mName = name;
+			mCategoryID = categoryID;
 		}
 		
 		public String toString(){
@@ -41,8 +69,9 @@ public class NoteItApplication extends Application {
 	}
 	
 	private long						mUserID = 0;
-	private ArrayList<ShoppingListItem>	mShoppingList = new ArrayList<NoteItApplication.ShoppingListItem>();
-	private ArrayList<Category>			mCategories = new ArrayList<NoteItApplication.Category>();
+	private long						mCurrentShoppingList = 0;
+	private ArrayList<ShoppingList>		mShoppingLists = new ArrayList<ShoppingList>();
+	private ArrayList<Category>			mCategories = new ArrayList<Category>();
 	
 	public void loginUser(String userEmail, AsyncInvokeURLTask.OnPostExecuteListener inPostExecute){
 		try {
@@ -74,7 +103,7 @@ public class NoteItApplication extends Application {
 	
 	public void fetchShoppingLists(AsyncInvokeURLTask.OnPostExecuteListener inPostExecute){
 		try {
-			mShoppingList.clear();
+			mShoppingLists.clear();
 	    	
 			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 	        nameValuePairs.add(new BasicNameValuePair("command", "do_get_shop_list"));
@@ -93,18 +122,18 @@ public class NoteItApplication extends Application {
 		}
 	}
 	
-	public void addShoppingListItem(long itemID, String itemName){
-		Log.i("NoteItApplication.addShoppingListItem", 
-    			"Item ID: " + itemID + " Item Name: " + itemName);
-		mShoppingList.add(new ShoppingListItem(itemID, itemName));
+	public void addShoppingList(long listID, String listName){
+		Log.i("NoteItApplication.addShoppingList", 
+    			"Item ID: " + listID + " Item Name: " + listName);
+		mShoppingLists.add(new ShoppingList(listID, listName));
 	}
 	
-	public int getShoppingListItemCount(){
-		return mShoppingList.size();
+	public int getShoppingListCount(){
+		return mShoppingLists.size();
 	}
 	
-	public ShoppingListItem getShoppingListItem(int index){
-		return mShoppingList.get(index);
+	public ShoppingList getShoppingList(int index){
+		return mShoppingLists.get(index);
 	}
 	
 	public void fetchCategories(AsyncInvokeURLTask.OnPostExecuteListener inPostExecute){
@@ -128,9 +157,59 @@ public class NoteItApplication extends Application {
 		}
 	}
 
-	public void addCategory(long itemID, String itemName){
+	public void addCategory(long itemID, String itemName, long userID){
 		Log.i("NoteItApplication.addCategory", 
     			"Item ID: " + itemID + " Item Name: " + itemName);
-		mCategories.add(new Category(itemID, itemName));
+		Category category = new Category(itemID, itemName, userID);
+		addCategory(category);
+	}
+	
+	public void addCategory(Category category){
+		if (!mCategories.contains(category)){
+			mCategories.add(category);
+		}
+	}
+	
+	public int getCategoryCount(){
+		return mCategories.size();
+	}
+	
+	public Category getCategory(int index){
+		return mCategories.get(index);
+	}
+	
+	public Category getCategory(long categoryID){
+		Category category = new Category(categoryID, "", 0); // dummy created to use indexOf
+		int index = mCategories.indexOf(category);
+		if (index < mCategories.size())
+			return mCategories.get(index);
+		return null;
+	}
+
+	public ArrayList<Category> getCategories(){
+		return mCategories;
+	}
+	
+	public void fetchItems(AsyncInvokeURLTask.OnPostExecuteListener inPostExecute){
+		try {
+
+			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+	        nameValuePairs.add(new BasicNameValuePair("command", "do_list_shop_items"));
+	        nameValuePairs.add(new BasicNameValuePair("arg1", "Y"));
+	        nameValuePairs.add(new BasicNameValuePair("arg2", "0"));
+	        nameValuePairs.add(new BasicNameValuePair("arg3", "0"));
+	        nameValuePairs.add(new BasicNameValuePair("arg4", String.valueOf(getUserID())));
+	        
+			AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs, inPostExecute);
+			task.execute();
+		} catch (CancellationException e) {
+			Log.e("NoteItApplication.loginUser", e.getMessage());
+		} catch (ExecutionException e) {
+			Log.e("NoteItApplication.loginUser", e.getMessage());
+		} catch (InterruptedException e) {
+			Log.e("NoteItApplication.loginUser", e.getMessage());
+		} catch (Exception e) {
+			Log.e("NoteItApplication.loginUser", e.getMessage());		
+		}
 	}
 }

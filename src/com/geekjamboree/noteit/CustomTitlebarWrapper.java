@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 /*
  *  A wrapper over customizing the toolbar in an activity. Note that the order of 
- *  contruction is important. A instance should be created before setContentView
+ *  construction is important. A instance should be created before setContentView
  *  is called in the parent activity and after super.OnCreate.
  */
 public class CustomTitlebarWrapper {

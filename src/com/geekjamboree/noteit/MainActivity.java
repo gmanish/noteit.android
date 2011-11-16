@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.view.View;
-import com.geekjamboree.noteit.CustomTitlebarWrapper;
+import com.geekjamboree.noteit.R;
 
 public class MainActivity extends Activity {
 

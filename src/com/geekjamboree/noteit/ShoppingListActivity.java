@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.geekjamboree.noteit.NoteItApplication.ShoppingListItem;
+import com.geekjamboree.noteit.R;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -21,7 +21,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 import android.widget.ListView;
 
-public class ShoppingListActivity extends Activity implements AsyncInvokeURLTask.OnPostExecuteListener {
+public class ShoppingListActivity 
+	extends Activity 
+	implements AsyncInvokeURLTask.OnPostExecuteListener {
 
 	ListView 	mListView;
 	
@@ -60,8 +62,8 @@ public class ShoppingListActivity extends Activity implements AsyncInvokeURLTask
     
     public void onPostExecute(JSONObject json) {
 		try {
-        	long 						retval = json.getLong("JSONRetVal");
-        	ArrayList<ShoppingListItem> shopList = new ArrayList<ShoppingListItem>();
+        	long 										retval = json.getLong("JSONRetVal");
+        	ArrayList<NoteItApplication.ShoppingList> 	shopList = new ArrayList<NoteItApplication.ShoppingList>();
 			
         	if (retval == 0 && !json.isNull("arg1")){
 	        	JSONArray jsonArr = json.getJSONArray("arg1");
@@ -72,19 +74,17 @@ public class ShoppingListActivity extends Activity implements AsyncInvokeURLTask
 	        	// handle this.
 	        	for (int index = 0; index < jsonArr.length(); index++){
 	        		JSONObject thisObj = jsonArr.getJSONObject(index);
-	        		ShoppingListItem thisItem = ((NoteItApplication)getApplication()).new ShoppingListItem(
+	        		NoteItApplication.ShoppingList thisItem = ((NoteItApplication)getApplication()).new ShoppingList(
 	        				Long.parseLong(thisObj.getString("listID")),
 							thisObj.getString("listName"));
 	        		
-	        		((NoteItApplication)getApplication()).addShoppingListItem(
-	        				thisItem.mID,
-	        				thisItem.mName);
+	        		((NoteItApplication)getApplication()).addShoppingList(thisItem.mID, thisItem.mName);
 	        		
 	        		shopList.add(thisItem);
 	        	}
 
 	        	if (!shopList.isEmpty()){
-	        		mListView.setAdapter(new ArrayAdapter<ShoppingListItem>(this, 
+	        		mListView.setAdapter(new ArrayAdapter<NoteItApplication.ShoppingList>(this, 
                 			R.layout.shoppinglists_item, R.id.shoppinglist_name, shopList));
                 	mListView.setTextFilterEnabled(true);
                 	mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

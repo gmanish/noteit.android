@@ -9,15 +9,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.geekjamboree.noteit.NoteItApplication.Category;
-import com.geekjamboree.noteit.CustomTitlebarWrapper;
+import com.geekjamboree.noteit.R;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -42,13 +43,22 @@ public class CategoryListActivity
  //       mListView.setDividerHeight(2);
 
         ((NoteItApplication)getApplication()).fetchCategories(this);
- 
+        
+        ImageButton textView = (ImageButton)findViewById(R.id.button_categories_preferences);
+        textView.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+                Intent myIntent = new Intent(CategoryListActivity.this, ItemListActivity.class);
+                startActivity(myIntent);
+			}
+		});
 	}
     
  	public void onPostExecute(JSONObject json) {
 		try {
-        	long 					retval = json.getLong("JSONRetVal");
-        	ArrayList<Category> 	categoryList = new ArrayList<Category>();
+        	long 									retval = json.getLong("JSONRetVal");
+        	ArrayList<NoteItApplication.Category> 	categoryList = new ArrayList<NoteItApplication.Category>();
 			
         	if (retval == 0 && !json.isNull("arg1")){
 	        	JSONArray jsonArr = json.getJSONArray("arg1");
@@ -59,20 +69,19 @@ public class CategoryListActivity
 	        	// handle this.
 	        	for (int index = 0; index < jsonArr.length(); index++){
 	        		JSONObject thisObj = jsonArr.getJSONObject(index);
-	        		Category thisItem = ((NoteItApplication)getApplication()).new Category(
+	        		NoteItApplication.Category thisCategory = ((NoteItApplication)getApplication()).new Category(
 	        				Long.parseLong(thisObj.getString("listID")),
-							thisObj.getString("listName"));
+							thisObj.getString("listName"),
+							0);
 	        		
-	        		((NoteItApplication)getApplication()).addCategory(
-	        				thisItem.mID,
-	        				thisItem.mName);
+	        		((NoteItApplication)getApplication()).addCategory(thisCategory);
 	        		
-	        		categoryList.add(thisItem);
+	        		categoryList.add(thisCategory);
 	        	}
 
 	        	if (!categoryList.isEmpty()){
 	        		
-                	mListView.setAdapter(new ArrayAdapter<Category>(
+                	mListView.setAdapter(new ArrayAdapter<NoteItApplication.Category>(
                 			getBaseContext(), 
                 			R.layout.shoppinglists_item, 
                 			R.id.shoppinglist_name, 
