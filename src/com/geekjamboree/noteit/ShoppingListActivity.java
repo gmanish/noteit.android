@@ -7,6 +7,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.geekjamboree.noteit.R;
+import com.geekjamboree.noteit.NoteItApplication;
+import com.geekjamboree.noteit.NoteItApplication.Category;
+import com.geekjamboree.noteit.NoteItApplication.ShoppingList;
+import com.geekjamboree.noteit.AsyncInvokeURLTask;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -47,6 +51,7 @@ public class ShoppingListActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.shoplists_menu, menu);
+        
         return true;
     }
     
@@ -74,7 +79,7 @@ public class ShoppingListActivity
 	        	// handle this.
 	        	for (int index = 0; index < jsonArr.length(); index++){
 	        		JSONObject thisObj = jsonArr.getJSONObject(index);
-	        		NoteItApplication.ShoppingList thisItem = ((NoteItApplication)getApplication()).new ShoppingList(
+	        		ShoppingList thisItem = new ShoppingList(
 	        				Long.parseLong(thisObj.getString("listID")),
 							thisObj.getString("listName"));
 	        		
@@ -87,19 +92,38 @@ public class ShoppingListActivity
 	        		mListView.setAdapter(new ArrayAdapter<NoteItApplication.ShoppingList>(this, 
                 			R.layout.shoppinglists_item, R.id.shoppinglist_name, shopList));
                 	mListView.setTextFilterEnabled(true);
-                	mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                	
+                	class ItemClickAndPostExecuteListener 
+                		implements AdapterView.OnItemClickListener, NoteItApplication.OnFetchCategoriesListener {
+                		
+                		View mView = null;
                 		
                 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 			String itemText = (String)mListView.getAdapter().getItem(position).toString();
                 			
+                			mView = view;
+                			
                 			// When clicked, show a toast with the TextView text
                 			Toast.makeText(getApplicationContext(), itemText, Toast.LENGTH_SHORT).show();
                 			
-                			// Invoke the category activity
-                            Intent myIntent = new Intent(view.getContext(), CategoryListActivity.class);
-                            startActivity(myIntent);
+                			// Now fetch the categories in the dbase
+                			((NoteItApplication)getApplication()).fetchCategories(this);
             			}
-                	});
+                		
+                	    public void onPostExecute(long resultCode, ArrayList<Category> categories, String message) {
+                			// Invoke the category activity
+                	    	assert(mView != null);
+                	    	if (mView != null && resultCode == 0){
+	                            Intent myIntent = new Intent(mView.getContext(), ItemListActivity.class);
+	                            startActivity(myIntent);
+                	    	}
+                	    	else
+                	    		// Display alert with error message
+                	    		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                	    }
+                	}
+                	
+                	mListView.setOnItemClickListener(new ItemClickAndPostExecuteListener());
             	}
             	else {
             		// Display alert with error message
@@ -115,5 +139,4 @@ public class ShoppingListActivity
 			Log.e("NoteItApplication.loginUser", e.getMessage());
 		}
 	}
-
 }

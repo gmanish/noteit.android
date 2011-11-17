@@ -11,13 +11,12 @@
         android:id="@+id/textEmailID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login_email"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:text="@string/login_email" />
 
     <EditText
         android:id="@+id/editEmailID"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
         <requestFocus />
     </EditText>
 
@@ -25,8 +24,7 @@
         android:id="@+id/textPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login_password"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:text="@string/login_password" />
 
     <EditText
         android:id="@+id/editPassword"

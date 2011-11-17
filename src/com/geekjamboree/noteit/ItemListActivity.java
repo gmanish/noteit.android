@@ -40,23 +40,27 @@ public class ItemListActivity extends ExpandableListActivity implements AsyncInv
 	        	JSONArray jsonArr = json.getJSONArray("arg1");
 	        	
 	        	ItemsExpandableListAdapter adapter = new ItemsExpandableListAdapter(
-	        			this, 
-	        			((NoteItApplication)getApplication()).getCategories());
+	        			this);
 	        	// [TODO]: This doesn't feel right, calling the app object
 	        	// to read shopping list items and having to populate them
 	        	// in the object from here. Figure out an elegant way to 
 	        	// handle this.
 	        	for (int index = 0; index < jsonArr.length(); index++){
 	        		JSONObject thisObj = jsonArr.getJSONObject(index);
-	        		Item thisItem = ((NoteItApplication)getApplication()).new Item(
+	        		
+	        		// construct the Item from JSON
+	        		Item thisItem = new Item(
 	        				Long.parseLong(thisObj.getString("instanceID")),
 							thisObj.getString("itemName"),
 							Long.parseLong(thisObj.getString("categoryID_FK")));
 	        		
+	        		// Get a reference to the parent Category
+	        		NoteItApplication.Category category = ((NoteItApplication)getApplication()).getCategory(thisItem.mCategoryID);
+	        		
         			//[TODO:] Send this data back to application
 	        		//((NoteItApplication)getApplication()).add(thisItem.mID, thisItem.mName);
 	        		
-	        		adapter.AddItem(thisItem);
+	        		adapter.AddItem(thisItem, category);
 	        	}
 
         		((ExpandableListView)mListView).setAdapter(adapter);

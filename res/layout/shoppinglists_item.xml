@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal" 
-	android:background="@color/listitem_background"
 	>    
     <TextView
         android:id="@+id/shoppinglist_name"
@@ -14,7 +13,6 @@
        	android:layout_centerVertical="true"
 		android:layout_weight="10"
         android:text="@+id/list_name"
-        android:textSize="16sp"
         android:padding="5dp"
         android:textColor="@color/listview_textcolor"
          />

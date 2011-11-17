@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello">Hello World, MainActivity!</string>
-    <string name="app_name">NoteIt</string>
+    <string name="app_name">Note It!</string>
     <string name="add_shoplist">Add...</string>
     <string name="noteit_prefs">Preferences...</string>
     <string name="login_email">Email:</string>
@@ -10,5 +10,5 @@
 	<string name="shoplistsactivity_title">Shopping Lists</string>
 	<string name="categoriesactivity_title">Categories</string>
 	<string name="preference_activity_title">Note It! Settings</string>
-	<string name="itemlistactivity_title">Items</string>
+	<string name="itemlistactivity_title">Items To Shop</string>
 </resources>

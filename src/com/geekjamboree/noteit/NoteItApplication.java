@@ -9,11 +9,14 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class NoteItApplication extends Application {
 
 	// Represents each shopping list that the user has
-	public class ShoppingList {
+	public static class ShoppingList {
 		public String 	mName = "";
 		public long		mID = 0;
 		
@@ -35,7 +38,7 @@ public class NoteItApplication extends Application {
 	}
 	
 	// Represents each category in the database
-	public class Category {
+	public static class Category {
 		public String 	mName = "";
 		public long 	mID = 0;
 		public long 	mUserID = 0;
@@ -49,10 +52,17 @@ public class NoteItApplication extends Application {
 		public String toString(){
 			return mName;
 		}
+
+		public boolean equals(Object obj){
+			if (obj instanceof Category)
+				return (mID == ((Category)obj).mID);
+			else
+				return false;
+		}
 	}
 	
 	// Represents each item on the current shopping list
-	public class Item {
+	public static class Item {
 		public String 	mName 			= "";
 		public long		mID				= 0;
 		public long 	mCategoryID 	= 0;	
@@ -66,6 +76,17 @@ public class NoteItApplication extends Application {
 		public String toString(){
 			return mName;
 		}
+
+		public boolean equals(Object obj){
+			if (obj instanceof Item)
+				return (mID == ((Item)obj).mID);
+			else
+				return false;
+		}
+	}
+	
+	public static interface OnFetchCategoriesListener {
+		void onPostExecute(long resultCode, ArrayList<Category> categories, String message);
 	}
 	
 	private long						mUserID = 0;
@@ -136,7 +157,7 @@ public class NoteItApplication extends Application {
 		return mShoppingLists.get(index);
 	}
 	
-	public void fetchCategories(AsyncInvokeURLTask.OnPostExecuteListener inPostExecute){
+	public void fetchCategories(OnFetchCategoriesListener inPostExecute){
 		try {
 			mCategories.clear();
 			
@@ -144,7 +165,52 @@ public class NoteItApplication extends Application {
 	        nameValuePairs.add(new BasicNameValuePair("command", "do_get_categories"));
 	        nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(getUserID())));
 	        
-			AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs, inPostExecute);
+        	class GetCategoriesTask implements AsyncInvokeURLTask.OnPostExecuteListener {
+        		
+        		OnFetchCategoriesListener mListener;
+        		
+        		GetCategoriesTask(OnFetchCategoriesListener inListener){
+        			mListener = inListener;
+        			if (mListener == null)
+        				throw new NullPointerException();
+        		}
+				
+        		public void onPostExecute(JSONObject json) {
+
+					try {
+			        	long retval = json.getLong("JSONRetVal");
+						
+			        	if (retval == 0 && !json.isNull("arg1")){
+				        	JSONArray jsonArr = json.getJSONArray("arg1");
+				        	
+				        	// [TODO]: This doesn't feel right, calling the app object
+				        	// to read shopping list items and having to populate them
+				        	// in the object from here. Figure out an elegant way to 
+				        	// handle this.
+				        	for (int index = 0; index < jsonArr.length(); index++){
+				        		
+				        		JSONObject thisObj = jsonArr.getJSONObject(index);
+				        		
+				        		Category thisCategory = new Category(
+				        				Long.parseLong(thisObj.getString("listID")),
+										thisObj.getString("listName"),
+										0L);
+				        		
+				        		addCategory(thisCategory);
+				        	}
+				        	
+				        	// Call the invoker
+				        	mListener.onPostExecute(retval, mCategories, "");
+			        	}
+					} catch (JSONException e) {
+						Log.e("NoteItApplication.loginUser: JSON Exception", e.getMessage());
+						mListener.onPostExecute(-1L, mCategories, e.getMessage());
+					}
+				}
+			}
+        	
+        	GetCategoriesTask  myListener = new GetCategoriesTask(inPostExecute);
+			AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs, myListener);
 			task.execute();
 		} catch (CancellationException e) {
 			Log.e("NoteItApplication.loginUser", e.getMessage());
@@ -181,7 +247,7 @@ public class NoteItApplication extends Application {
 	public Category getCategory(long categoryID){
 		Category category = new Category(categoryID, "", 0); // dummy created to use indexOf
 		int index = mCategories.indexOf(category);
-		if (index < mCategories.size())
+		if (index < mCategories.size() && index >= 0)
 			return mCategories.get(index);
 		return null;
 	}
@@ -195,9 +261,9 @@ public class NoteItApplication extends Application {
 
 			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 	        nameValuePairs.add(new BasicNameValuePair("command", "do_list_shop_items"));
-	        nameValuePairs.add(new BasicNameValuePair("arg1", "Y"));
-	        nameValuePairs.add(new BasicNameValuePair("arg2", "0"));
-	        nameValuePairs.add(new BasicNameValuePair("arg3", "0"));
+	        nameValuePairs.add(new BasicNameValuePair("arg1", "Y")); // Show Purchased Items
+	        nameValuePairs.add(new BasicNameValuePair("arg2", "1")); // Shopping List ID
+	        nameValuePairs.add(new BasicNameValuePair("arg3", "0")); // Start @ index
 	        nameValuePairs.add(new BasicNameValuePair("arg4", String.valueOf(getUserID())));
 	        
 			AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs, inPostExecute);
