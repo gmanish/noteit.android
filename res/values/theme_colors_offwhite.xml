@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!-- Off white colors from http://www.colourlovers.com/palette/4558/Blue_By_Me -->
+    
+    <color name="theme_offwhite_background">#FDFDFD</color>
+	<color name="theme_offwhite_normal_text">#000000</color>
+	
+    <color name="theme_offwhite_header_background">#3A668B</color>
+	<color name="theme_offwhite_header_text">@color/theme_offwhite_background</color>
+	
+    <color name="theme_offwhite_toolbar_background">@color/theme_offwhite_header_background</color>
+    
+	<color name="theme_offwhite_focusseditem_background">#B5D7DB</color>
+	<color name="theme_offwhite_presseditem_background">#3A668B</color>
+	
+	<color name="theme_offwhite_listitem_seperator">@color/theme_offwhite_header_background</color>
+	<color name="theme_offwhite_listitem_seperator_level2">#87d2db</color>
+	<color name="theme_offwhite_listitem_group_background">#618cb4</color>
+	<color name="theme_offwhite_listitem_group_text">#acacac</color>
+	<color name="theme_offwhite_listitem_child_background">@android:color/transparent</color>
+	
+</resources>

@@ -6,7 +6,6 @@ import com.geekjamboree.noteit.NoteItApplication.Category;
 import com.geekjamboree.noteit.NoteItApplication.Item;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +46,6 @@ public class ItemsExpandableListAdapter extends BaseExpandableListAdapter {
 	}
 	
 	public void AddItem(Item item, Category category){
-		assert false : Log.e("!! Assertion works !!", "");
 		if (category != null){
 			int index = mCategories.indexOf(category);
 			if (index < 0){
@@ -94,32 +92,39 @@ public class ItemsExpandableListAdapter extends BaseExpandableListAdapter {
 		return true;
 	}
 
-    public TextView getGenericView() {
+    public TextView getGenericView(int itemHeight) {
         // Layout parameters for the ExpandableListView
         AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, 	// Width 
-                32); 									// Height
+                itemHeight); 									// Height
 
         TextView textView = new TextView(mContext);
         textView.setLayoutParams(lp);
         // Center the text vertically
         textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
         // Set the text starting position
-        textView.setPadding(36, 0, 0, 0);
+        textView.setPadding(itemHeight + 10, 0, 0, 0);
         return textView;
     }
 
     public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
-        TextView textView = getGenericView();
+        TextView textView = getGenericView(32);
         textView.setText(getChild(groupPosition, childPosition).toString());
+        // Set the background to transparent
+        textView.setBackgroundColor(android.R.color.transparent);
         return textView;
 	}
 
     public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
-        TextView textView = getGenericView();
+        TextView textView = getGenericView(20);
         textView.setText(getGroup(groupPosition).toString());
+        // Set the background to transparent
+        textView.setBackgroundResource(R.color.listitem_group_background);
+        textView.setHeight(25);
+        textView.setTextAppearance(mContext, R.style.ListView_GroupTextAppearance);
+        
         return textView;
 	}
 }

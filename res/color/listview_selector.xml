@@ -8,6 +8,5 @@
     <item
         android:state_focused="true"
         android:drawable="@drawable/listview_selector_focused" />
-
         
 </selector>

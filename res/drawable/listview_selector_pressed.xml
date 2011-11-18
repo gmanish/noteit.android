@@ -3,9 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
  
-    <gradient
-        android:startColor="#800000"
-        android:endColor="#FF0000"
-        android:angle="90" />
- 
+    <!--  
+    <solid android:color="@color/theme_offwhite_presseditem_background" />
+    -->
+    
+    <gradient 
+     	android:startColor="@color/theme_offwhite_presseditem_background"
+     	android:endColor="@color/theme_offwhite_presseditem_background" 
+     	android:angle="90" />
+    
 </shape>

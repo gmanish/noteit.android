@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:background="@android:color/transparent">
 
     <ImageView
         android:id="@+id/imageView1"
@@ -12,7 +13,9 @@
 	   	android:paddingRight="5dp"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:src="@drawable/ic_launcher_noteit1" />
+        android:src="@drawable/ic_launcher_noteit1"
+        android:background="@android:color/transparent" />
+    
    <TextView
         android:id="@+id/textView_titlebar"
         android:layout_width="0dp"
@@ -20,5 +23,7 @@
         android:layout_gravity="center_vertical"
         android:layout_weight="10"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        style="@style/CustomWindowTitleFont" />
+        android:textColor="@color/theme_offwhite_header_text"
+        android:background="@android:color/transparent"/>
+   
 </LinearLayout>

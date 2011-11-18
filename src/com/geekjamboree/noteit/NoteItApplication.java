@@ -2,6 +2,7 @@ package com.geekjamboree.noteit;
 
 import android.app.Application;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.CancellationException;
@@ -85,12 +86,16 @@ public class NoteItApplication extends Application {
 		}
 	}
 	
+	public static interface OnFetchShoppingListsListener {
+		void onPostExecute(long resultCode, ArrayList<ShoppingList> categories, String message);
+	}
+
 	public static interface OnFetchCategoriesListener {
 		void onPostExecute(long resultCode, ArrayList<Category> categories, String message);
 	}
 	
 	private long						mUserID = 0;
-	private long						mCurrentShoppingList = 0;
+	private long						mCurrentShoppingListID = 0;
 	private ArrayList<ShoppingList>		mShoppingLists = new ArrayList<ShoppingList>();
 	private ArrayList<Category>			mCategories = new ArrayList<Category>();
 	
@@ -122,7 +127,7 @@ public class NoteItApplication extends Application {
 		mUserID = userID;
 	}
 	
-	public void fetchShoppingLists(AsyncInvokeURLTask.OnPostExecuteListener inPostExecute){
+	public void fetchShoppingLists(OnFetchShoppingListsListener inPostExecute){
 		try {
 			mShoppingLists.clear();
 	    	
@@ -130,7 +135,45 @@ public class NoteItApplication extends Application {
 	        nameValuePairs.add(new BasicNameValuePair("command", "do_get_shop_list"));
 	        nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(getUserID())));
 
-			AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs, inPostExecute);
+	        class FetchShoppingListsTask  implements AsyncInvokeURLTask.OnPostExecuteListener {
+	        	
+	        	OnFetchShoppingListsListener  mListener;
+	        	
+	        	FetchShoppingListsTask(OnFetchShoppingListsListener inPostExecute){
+	        		mListener = inPostExecute;
+	        	}
+        		
+	        	public void onPostExecute(JSONObject json) {
+	        		try {
+	                	long 										retval = json.getLong("JSONRetVal");
+	        			
+	                	if (retval == 0 && !json.isNull("arg1")){
+	        	        	JSONArray jsonArr = json.getJSONArray("arg1");
+	        	        	
+	        	        	// [TODO]: This doesn't feel right, calling the app object
+	        	        	// to read shopping list items and having to populate them
+	        	        	// in the object from here. Figure out an elegant way to 
+	        	        	// handle this.
+	        	        	for (int index = 0; index < jsonArr.length(); index++){
+	        	        		JSONObject thisObj = jsonArr.getJSONObject(index);
+	        	        		ShoppingList thisItem = new ShoppingList(
+	        	        				Long.parseLong(thisObj.getString("listID")),
+	        							thisObj.getString("listName"));
+	        	        		
+	        	        		addShoppingList(thisItem.mID, thisItem.mName);
+	        	        	}
+	        	        	
+	        	        	mListener.onPostExecute(retval, mShoppingLists, "");
+	                	}
+	        		} catch (JSONException e){
+	        			Toast.makeText(getApplicationContext(), "The server seems to be out of its mind. Please try later.", Toast.LENGTH_SHORT).show();
+	        			Log.e("NoteItApplication.fetchShoppingList", e.getMessage());
+	        		}
+	    		}
+	        }
+	        
+	        FetchShoppingListsTask  myListener = new FetchShoppingListsTask(inPostExecute);
+			AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs, myListener);
 			task.execute();
 		} catch (CancellationException e) {
 			Log.e("NoteItApplication.loginUser", e.getMessage());
@@ -155,6 +198,13 @@ public class NoteItApplication extends Application {
 	
 	public ShoppingList getShoppingList(int index){
 		return mShoppingLists.get(index);
+	}
+	
+	public void setCurrentShoppingList(int index){
+		ShoppingList thisList = getShoppingList(index);
+		if (thisList != null){
+			mCurrentShoppingListID = thisList.mID;
+		}
 	}
 	
 	public void fetchCategories(OnFetchCategoriesListener inPostExecute){
@@ -262,7 +312,7 @@ public class NoteItApplication extends Application {
 			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 	        nameValuePairs.add(new BasicNameValuePair("command", "do_list_shop_items"));
 	        nameValuePairs.add(new BasicNameValuePair("arg1", "Y")); // Show Purchased Items
-	        nameValuePairs.add(new BasicNameValuePair("arg2", "1")); // Shopping List ID
+	        nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(mCurrentShoppingListID))); // Shopping List ID
 	        nameValuePairs.add(new BasicNameValuePair("arg3", "0")); // Start @ index
 	        nameValuePairs.add(new BasicNameValuePair("arg4", String.valueOf(getUserID())));
 	        

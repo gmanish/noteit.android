@@ -4,8 +4,9 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:orientation="horizontal" 
-	>    
+    android:orientation="horizontal"
+    android:background="@android:color/transparent" >    
+    
     <TextView
         android:id="@+id/shoppinglist_name"
         android:layout_width="0dp"
@@ -14,8 +15,7 @@
 		android:layout_weight="10"
         android:text="@+id/list_name"
         android:padding="5dp"
-        android:textColor="@color/listview_textcolor"
-         />
+        android:background="@android:color/transparent"/>
 
    	<ImageView
         android:id="@+id/shoppinglist_disclosure"
@@ -24,7 +24,7 @@
         android:layout_centerVertical="true"
 		android:layout_weight="1"
 		android:paddingRight="5dp"
-        android:src="@drawable/ic_disclosure" 
-        />
+        android:src="@drawable/ic_disclosure"
+        android:background="@android:color/transparent" />
     
 </LinearLayout>

@@ -10,6 +10,7 @@ import com.geekjamboree.noteit.NoteItApplication;
 import com.geekjamboree.noteit.NoteItApplication.Category;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +29,7 @@ public class CategoryListActivity
 	implements NoteItApplication.OnFetchCategoriesListener {
 	
 	ListView		mListView;
+	ProgressDialog	mProgressDialog = null;
 	
 	public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
@@ -39,6 +41,7 @@ public class CategoryListActivity
         mListView = (ListView) findViewById(android.R.id.list);
  //       mListView.setDividerHeight(2);
 
+        mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message), true);
         ((NoteItApplication)getApplication()).fetchCategories(this);
         
         ImageButton textView = (ImageButton)findViewById(R.id.button_categories_preferences);
@@ -54,6 +57,8 @@ public class CategoryListActivity
     
  	public void onPostExecute(long resultCode, ArrayList<Category> categories, String message) {
     	ArrayList<NoteItApplication.Category> 	categoryList = ((NoteItApplication)getApplication()).getCategories();
+    	
+    	if (mProgressDialog != null) mProgressDialog.dismiss();
     	
     	if (resultCode == 0 && !categoryList.isEmpty()){
     		

@@ -7,22 +7,24 @@ import org.json.JSONObject;
 import com.geekjamboree.noteit.NoteItApplication.Item;
 
 import android.app.ExpandableListActivity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 public class ItemListActivity extends ExpandableListActivity implements AsyncInvokeURLTask.OnPostExecuteListener {
 	
-	ListView	mListView;
+	ExpandableListView	mListView;
+	ProgressDialog		mProgressDialog = null;
 	
     public void onCreate(Bundle savedInstanceState) { 
     	
     	super.onCreate(savedInstanceState);
 
+        mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message));
     	CustomTitlebarWrapper toolbar = new CustomTitlebarWrapper(this);
         setContentView(R.layout.itemlists);
         toolbar.SetTitle(getResources().getText(R.string.itemlistactivity_title));
@@ -36,6 +38,8 @@ public class ItemListActivity extends ExpandableListActivity implements AsyncInv
 		try {
         	long 			retval = json.getLong("JSONRetVal");
  			
+        	if (mProgressDialog != null) mProgressDialog.dismiss();
+        	
         	if (retval == 0 && !json.isNull("arg1")){
 	        	JSONArray jsonArr = json.getJSONArray("arg1");
 	        	
@@ -64,7 +68,12 @@ public class ItemListActivity extends ExpandableListActivity implements AsyncInv
 	        	}
 
         		((ExpandableListView)mListView).setAdapter(adapter);
-            	mListView.setTextFilterEnabled(true);
+            	
+        		mListView.setTextFilterEnabled(true);
+            	for (int i = 0; i < adapter.getGroupCount(); i++){
+            		mListView.expandGroup(i);
+            	}
+
             	mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             		
 	        		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
