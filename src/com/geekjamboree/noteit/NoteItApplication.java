@@ -94,10 +94,15 @@ public class NoteItApplication extends Application {
 		void onPostExecute(long resultCode, ArrayList<Category> categories, String message);
 	}
 	
+	public static interface OnFetchItemsListener {
+		void onPostExecute(long resultCode, ArrayList<Item> items, String message);
+	}
+	
 	private long						mUserID = 0;
 	private long						mCurrentShoppingListID = 0;
 	private ArrayList<ShoppingList>		mShoppingLists = new ArrayList<ShoppingList>();
 	private ArrayList<Category>			mCategories = new ArrayList<Category>();
+	private ArrayList<Item>				mItems = new ArrayList<Item>();
 	
 	public void loginUser(String userEmail, AsyncInvokeURLTask.OnPostExecuteListener inPostExecute){
 		try {
@@ -306,9 +311,11 @@ public class NoteItApplication extends Application {
 		return mCategories;
 	}
 	
-	public void fetchItems(AsyncInvokeURLTask.OnPostExecuteListener inPostExecute){
+	public void fetchItems(OnFetchItemsListener inPostExecute){
 		try {
-
+			
+			mItems.clear();
+			
 			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 	        nameValuePairs.add(new BasicNameValuePair("command", "do_list_shop_items"));
 	        nameValuePairs.add(new BasicNameValuePair("arg1", "Y")); // Show Purchased Items
@@ -316,8 +323,48 @@ public class NoteItApplication extends Application {
 	        nameValuePairs.add(new BasicNameValuePair("arg3", "0")); // Start @ index
 	        nameValuePairs.add(new BasicNameValuePair("arg4", String.valueOf(getUserID())));
 	        
-			AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs, inPostExecute);
+	        class FetchItemsTask implements AsyncInvokeURLTask.OnPostExecuteListener {
+	        	
+	        	OnFetchItemsListener	mListener;
+	        	
+	        	public FetchItemsTask(OnFetchItemsListener inListener) {
+	        		mListener = inListener;
+	        	} 
+	        	
+	        	public void onPostExecute(JSONObject json){
+	        		try {
+	                	long 	retval = json.getLong("JSONRetVal");
+	         			String 	message = json.getString("JSONRetMessage");
+	         			
+	                	if (retval == 0 && !json.isNull("arg1")){
+	        	        	JSONArray jsonArr = json.getJSONArray("arg1");
+	        	        	
+	        	        	for (int index = 0; index < jsonArr.length(); index++){
+	        	        		JSONObject thisObj = jsonArr.getJSONObject(index);
+	        	        		
+	        	        		// construct the Item from JSON
+	        	        		Item thisItem = new Item(
+	        	        				Long.parseLong(thisObj.getString("instanceID")),
+	        							thisObj.getString("itemName"),
+	        							Long.parseLong(thisObj.getString("categoryID_FK")));
+	        	        		
+	        	        		mItems.add(thisItem);
+	        	        	}
+	        	        	
+	        	        	mListener.onPostExecute(retval, mItems, message);
+	                	}
+	        		} catch (JSONException e){
+	        			Toast.makeText(getApplicationContext(), "The server seems to be out of its mind. Please try later.", Toast.LENGTH_SHORT).show();
+	        			Log.e("NoteItApplication.loginUser", e.getMessage());
+	        		}
+	        		
+	        	}
+	        }
+	        
+	        FetchItemsTask myTask = new FetchItemsTask(inPostExecute);
+			AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs, myTask);
 			task.execute();
+			
 		} catch (CancellationException e) {
 			Log.e("NoteItApplication.loginUser", e.getMessage());
 		} catch (ExecutionException e) {

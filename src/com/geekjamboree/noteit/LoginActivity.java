@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,7 +20,8 @@ import android.widget.Toast;
 public class LoginActivity 
 	extends Activity 
 	implements AsyncInvokeURLTask.OnPostExecuteListener {
-
+	ProgressDialog		mProgressDialog;
+	
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,9 @@ public class LoginActivity
         Button next = (Button) findViewById(R.id.buttonLogin);
         next.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+            	// show a progress dialog
+                mProgressDialog = ProgressDialog.show(LoginActivity.this, "", getResources().getString(R.string.progress_message), true);
+
             	// Try to authenticate the user with the supplied credentials.
             	// If authentication succeedes, switch to the shopping list view
             	EditText emailID = (EditText)findViewById(R.id.editEmailID);
@@ -50,6 +55,9 @@ public class LoginActivity
     
 	public void onPostExecute(JSONObject json) {
 		try {
+			if (mProgressDialog != null) {
+				mProgressDialog.dismiss();
+			}
         	long retval = json.getLong("JSONRetVal");
         	if (retval == 0){
 	        	// We're set to rock and roll

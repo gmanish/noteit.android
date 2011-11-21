@@ -59,9 +59,9 @@ public class CategoryListActivity
     	ArrayList<NoteItApplication.Category> 	categoryList = ((NoteItApplication)getApplication()).getCategories();
     	
     	if (mProgressDialog != null) mProgressDialog.dismiss();
-    	
+    	 
     	if (resultCode == 0 && !categoryList.isEmpty()){
-    		
+    		 
         	mListView.setAdapter(new ArrayAdapter<NoteItApplication.Category>(
         			getBaseContext(), 
         			R.layout.shoppinglists_item, 

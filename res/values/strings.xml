@@ -2,16 +2,26 @@
 <resources>
     <string name="hello">Hello World, MainActivity!</string>
     <string name="app_name">Note It!</string>
-    <string name="add_shoplist">Add...</string>
-    <string name="noteit_prefs">Preferences...</string>
-    <string name="login_email">Email:</string>
+
+    <string name="login_activity_title">Please log in</string>
+	<string name="login_email">Email:</string>
     <string name="login_password">Password:</string>
-    <string name="login_activity_title">Please login</string>
-	<string name="shoplistsactivity_title">Shopping Lists</string>
-	<string name="categoriesactivity_title">Categories</string>
-	<string name="preference_activity_title">Note It! Settings</string>
-	<string name="itemlistactivity_title">Items To Shop</string>
+    <string name="Login_Authenticating_message">Authenticating...</string>
+        
 	<string name="progress_message">Please wait...</string>
-	<string name="empty_shoppingitems">You have no pending items in this list. You can add new items by selecting \'Add\'</string>
+        
+	<string name="shoplistsactivity_title">Shopping Lists</string>
 	<string name="empty_shoppinglists">You do not have any shopping lists. Please add a list by selecting \'Add\'.</string>
+  	<string name="add_shoplist">Add...</string>
+    <string name="noteit_prefs">Preferences...</string>
+	<string name="shoppinglist_add_title">List Name</string>
+		
+	<string name="categoriesactivity_title">Categories</string>
+	
+	<string name="itemlistactivity_title">Items To Shop</string>
+	<string name="empty_shoppingitems">You have no pending items in this list. You can add new items by selecting \'Add\'</string>
+	    	
+	<string name="preference_activity_title">Note It! Settings</string>
+	    	
+	    
 </resources>
