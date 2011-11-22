@@ -40,7 +40,11 @@ public class LoginActivity
         next.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
             	// show a progress dialog
-                mProgressDialog = ProgressDialog.show(LoginActivity.this, "", getResources().getString(R.string.progress_message), true);
+                mProgressDialog = ProgressDialog.show(
+                		LoginActivity.this, 
+                		"", 
+                		getResources().getString(R.string.Login_Authenticating_message), 
+                		true);
 
             	// Try to authenticate the user with the supplied credentials.
             	// If authentication succeedes, switch to the shopping list view

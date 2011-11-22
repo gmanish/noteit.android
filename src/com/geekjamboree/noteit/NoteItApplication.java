@@ -86,6 +86,10 @@ public class NoteItApplication extends Application {
 		}
 	}
 	
+	public static interface OnMethodExecuteListerner {
+		void onPostExecute(long resultCode, String message);
+	}
+	
 	public static interface OnFetchShoppingListsListener {
 		void onPostExecute(long resultCode, ArrayList<ShoppingList> categories, String message);
 	}
@@ -165,7 +169,7 @@ public class NoteItApplication extends Application {
 	        	        				Long.parseLong(thisObj.getString("listID")),
 	        							thisObj.getString("listName"));
 	        	        		
-	        	        		addShoppingList(thisItem.mID, thisItem.mName);
+	        	        		mShoppingLists.add(thisItem);
 	        	        	}
 	        	        	
 	        	        	mListener.onPostExecute(retval, mShoppingLists, "");
@@ -191,10 +195,50 @@ public class NoteItApplication extends Application {
 		}
 	}
 	
-	public void addShoppingList(long listID, String listName){
-		Log.i("NoteItApplication.addShoppingList", 
-    			"Item ID: " + listID + " Item Name: " + listName);
-		mShoppingLists.add(new ShoppingList(listID, listName));
+	public void addShoppingList(String listName, OnMethodExecuteListerner inListener){
+		
+        class AddShoppingListTask  implements AsyncInvokeURLTask.OnPostExecuteListener {
+
+        	OnMethodExecuteListerner mListener;
+        	
+        	AddShoppingListTask(OnMethodExecuteListerner inListener) {
+        		mListener = inListener;
+        	}
+        	
+        	public void onPostExecute(JSONObject json) {
+        		try {
+        			long retVal = json.getLong("JSONRetVal");
+        			if (retVal == 0) {
+        				// Success
+        				
+        				mShoppingLists.add(
+        						new ShoppingList(
+        								json.getLong("arg1"), 
+        								json.getString("arg2")));
+        			
+        			}
+        			
+                	mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
+        		} catch (JSONException e){
+        			Toast.makeText(getApplicationContext(), "The server seems to be out of " +
+        							"its mind. Please try later.", Toast.LENGTH_SHORT).show();
+        			mListener.onPostExecute(-1, e.getMessage());
+        		}
+        	}
+        }
+
+        try {
+	        ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+	        nameValuePairs.add(new BasicNameValuePair("command", "do_add_shop_list"));
+	        nameValuePairs.add(new BasicNameValuePair("arg1", listName));
+	        nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(getUserID())));
+	        
+	        AddShoppingListTask myAddShopListTask = new AddShoppingListTask(inListener);
+	        AsyncInvokeURLTask 	task = new AsyncInvokeURLTask(nameValuePairs, myAddShopListTask);
+	        task.execute();
+        } catch (Exception e) {
+        	Log.e("NoteItApplication.addShoppingList", e.getMessage());
+        }
 	}
 	
 	public int getShoppingListCount(){

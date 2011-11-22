@@ -15,7 +15,6 @@
     </style>
 
 	<style name="ListView_GroupTextAppearance" parent="@android:style/TextAppearance.Small">
-	    <item name="android:textSize">13sp</item>
 	</style>
 	
     <style name="App_Theme" parent="android:Theme">

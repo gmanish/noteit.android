@@ -8,7 +8,6 @@ import com.geekjamboree.noteit.NoteItApplication.Category;
 import com.geekjamboree.noteit.NoteItApplication.ShoppingList;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -26,7 +25,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.ListView;
@@ -54,7 +53,7 @@ public class ShoppingListActivity
         // Show a spinning wheel dialog
         mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message), true);
     
-        ImageButton btnAdd = (ImageButton)findViewById(R.id.button_shoppinglists_add);
+        ImageButton btnAdd = (ImageButton) findViewById(R.id.button_shoppinglists_add);
         btnAdd.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -66,37 +65,38 @@ public class ShoppingListActivity
 					.setView(dialogView)
 					.setTitle(getResources().getString(R.string.shoppinglist_add_title))
 					.create();
+				
 				dialog.setButton(DialogInterface.BUTTON1, "OK", new DialogInterface.OnClickListener() {
 					
 					public void onClick(DialogInterface dialog, int which) {
-						Log.e("AddShoppingList", "OK");
+						EditText 	editListName = (EditText) dialogView.findViewById(R.id.dialog_addshoppinglist_editTextName);
+						String 		listName = editListName.getText().toString();
+
+						dialog.dismiss();
+					
+						// Create a new list with the name
+						((NoteItApplication)getApplication()).addShoppingList(
+								listName,
+								new NoteItApplication.OnMethodExecuteListerner() {
+									
+								public void onPostExecute(long resultCode, String message) {
+									if (resultCode != 0) {
+										Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+									}
+								}
+							});
+						}
+					}
+				);
+			
+				dialog.setButton(DialogInterface.BUTTON2, "Cancel", new DialogInterface.OnClickListener() {
+					
+					public void onClick(DialogInterface dialog, int which) {
+						Log.e("AddShoppingList", "Cancel");
+						dialog.dismiss();
 					}
 				});
-				// Dialog dialog = new Dialog(ShoppingListActivity.this, R.style.Theme_AppCustomDialog);
-				// Set the on OK listener
-				/*
-				Button okButton = (Button) dialog.findViewById(R.id.dialog_button_OK);
-				if (okButton != null) {
-					okButton.setOnClickListener(new OnClickListener() {
-						
-						public void onClick(View v) {
-							Log.e("ShoppingListActivity:AddList", "OK");
-							
-						}
-					});
-				}
-				
-				// set the on Cancel Listener
-				Button cancelButton = (Button) dialog.findViewById(R.id.dialog_button_Cancel);
-				if (okButton != null) {
-					cancelButton.setOnClickListener(new OnClickListener() {
-						
-						public void onClick(View v) {
-							Log.e("ShoppingListActivity:AddList", "Cancel");
-						}
-					});
-				}*/
-				
+
 				dialog.show();
 			}
 		});
