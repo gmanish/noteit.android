@@ -13,6 +13,7 @@
 	<string name="shoplistsactivity_title">Shopping Lists</string>
 	<string name="empty_shoppinglists">You do not have any shopping lists. Please add a list by selecting \'Add\'.</string>
   	<string name="add_shoplist">Add...</string>
+  	<string name="shopping_list_confirm_delte">Are you sure you want to delete this list?</string>
     <string name="noteit_prefs">Preferences...</string>
 	<string name="shoppinglist_add_title">List Name</string>
 		

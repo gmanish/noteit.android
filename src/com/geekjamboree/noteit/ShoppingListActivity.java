@@ -100,6 +100,52 @@ public class ShoppingListActivity
 				dialog.show();
 			}
 		});
+
+        // Hook up the Delete Shopping List Button
+        ImageButton btnDelete = (ImageButton) findViewById(R.id.button_shoppinglists_delete);
+        btnDelete.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+
+				// Delete the selected list
+				NoteItApplication.ShoppingList selItem = (NoteItApplication.ShoppingList)mListView.getSelectedItem();
+				if (selItem != null) {
+					final AlertDialog dialog = new AlertDialog.Builder(ShoppingListActivity.this).create();
+					
+					dialog.setTitle(getResources().getString(R.string.shoplistsactivity_title));
+					dialog.setMessage(getResources().getString(R.string.shopping_list_confirm_delte));
+					dialog.setButton(DialogInterface.BUTTON1, "Yes", new DialogInterface.OnClickListener() {
+						
+						public void onClick(DialogInterface dialog, int which) {
+	
+							dialog.dismiss();
+						
+								
+								((NoteItApplication)getApplication()).deleteShoppingList(
+									0,
+									new NoteItApplication.OnMethodExecuteListerner() {
+										
+									public void onPostExecute(long resultCode, String message) {
+										if (resultCode != 0) {
+											Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+										}
+									}
+								});
+							}
+						});
+			
+					dialog.setButton(DialogInterface.BUTTON2, "No", new DialogInterface.OnClickListener() {
+						
+						public void onClick(DialogInterface dialog, int which) {
+							Log.e("AddShoppingList", "Cancel");
+							dialog.dismiss();
+						}
+					});
+	
+					dialog.show();
+				}
+			}        
+        });
         
  	   	((NoteItApplication)getApplication()).fetchShoppingLists(this);
     }
@@ -163,6 +209,7 @@ public class ShoppingListActivity
         		// Display alert with error message
         		Toast.makeText(getApplicationContext(), "There are no lists. Please add a new list.", Toast.LENGTH_LONG).show();
         	}
+        	
         	
     	} else {
     		Toast.makeText(getApplicationContext(), "Error Occurred:" + errMsg, Toast.LENGTH_LONG).show();

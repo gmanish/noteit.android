@@ -14,6 +14,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.geekjamboree.noteit.AsyncInvokeURLTask.OnPostExecuteListener;
+
 public class NoteItApplication extends Application {
 
 	// Represents each shopping list that the user has
@@ -220,8 +222,6 @@ public class NoteItApplication extends Application {
         			
                 	mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
         		} catch (JSONException e){
-        			Toast.makeText(getApplicationContext(), "The server seems to be out of " +
-        							"its mind. Please try later.", Toast.LENGTH_SHORT).show();
         			mListener.onPostExecute(-1, e.getMessage());
         		}
         	}
@@ -240,6 +240,43 @@ public class NoteItApplication extends Application {
         	Log.e("NoteItApplication.addShoppingList", e.getMessage());
         }
 	}
+
+	public void deleteShoppingList(long listID, OnMethodExecuteListerner inListener) {
+		
+		class DeleteShoppingListTask implements OnPostExecuteListener {
+       	
+
+        	OnMethodExecuteListerner mListener;
+        	
+        	DeleteShoppingListTask(OnMethodExecuteListerner inListener) {
+        		mListener = inListener;
+        	}
+        	
+        	public void onPostExecute(JSONObject json) {
+        		try {
+                	mListener.onPostExecute(json.getLong("JSONRetVal"), json.getString("JSONRetMessage"));
+        		} catch (JSONException e){
+        			Toast.makeText(getApplicationContext(), "The server seems to be out of " +
+        							"its mind. Please try later.", Toast.LENGTH_SHORT).show();
+        			mListener.onPostExecute(-1, e.getMessage());
+        		}
+        	}
+		}
+		
+        try {
+	        ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+	        nameValuePairs.add(new BasicNameValuePair("command", "do_delete_shop_list"));
+	        nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(listID)));
+	        nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(getUserID())));
+	        
+	        DeleteShoppingListTask myDeleteTask = new DeleteShoppingListTask(inListener);
+	        AsyncInvokeURLTask 	task = new AsyncInvokeURLTask(nameValuePairs, myDeleteTask);
+	        task.execute();
+        } catch (Exception e) {
+        	Log.e("NoteItApplication.addShoppingList", e.getMessage());
+        	inListener.onPostExecute(-1, e.getMessage());
+        }
+ 	}
 	
 	public int getShoppingListCount(){
 		return mShoppingLists.size();
