@@ -23,6 +23,7 @@
         <activity android:name="MainPreferenceActivity"></activity>
         <activity android:name="ItemListActivity"></activity>
         <activity android:name="CategoryListActivity"></activity>
+        <activity android:name="AddEditItemActivity"></activity>
     </application>
 
 </manifest>

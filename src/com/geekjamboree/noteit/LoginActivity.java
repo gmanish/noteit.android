@@ -32,9 +32,11 @@ public class LoginActivity
    
         // Read the email id from the preference
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String emailID = prefs.getString("email", "you@email.com");
-        EditText editTextEmail = (EditText)findViewById(R.id.editEmailID);
-        editTextEmail.setText(emailID);
+        String emailID = prefs.getString("email", "");
+        if (emailID != "") {
+	        EditText editTextEmail = (EditText)findViewById(R.id.editEmailID);
+	        editTextEmail.setText(emailID);
+        }
         
         Button next = (Button) findViewById(R.id.buttonLogin);
         next.setOnClickListener(new View.OnClickListener() {

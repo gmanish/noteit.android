@@ -13,6 +13,16 @@
 	        android:dialogMessage="Please enter the email ID"
 	        android:defaultValue="you@email.com" />
 	    
-	</PreferenceCategory>    
+	</PreferenceCategory>
+	
+	<PreferenceCategory
+		android:title="Numbers and Units"
+		android:key="Numbers_and_Units" >
+		
+		<ListPreference 
+			android:title="Currency"
+			android:key="currency"
+			android:summary="The currency of your country"/>
+	</PreferenceCategory>
 
 </PreferenceScreen>

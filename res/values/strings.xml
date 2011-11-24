@@ -1,27 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="OK">OK</string>
+    <string name="Cancel">Cancel</string>
+    
     <string name="hello">Hello World, MainActivity!</string>
     <string name="app_name">Note It!</string>
 
     <string name="login_activity_title">Please log in</string>
 	<string name="login_email">Email:</string>
+	<string name="login_emailhint">you@email.com</string>
     <string name="login_password">Password:</string>
     <string name="Login_Authenticating_message">Authenticating...</string>
         
 	<string name="progress_message">Please wait...</string>
         
 	<string name="shoplistsactivity_title">Shopping Lists</string>
-	<string name="empty_shoppinglists">You do not have any shopping lists. Please add a list by selecting \'Add\'.</string>
+	<string name="empty_shoppinglists">You do not have any shopping lists. Please add a list by clicking the \"Add\" button.</string>
   	<string name="add_shoplist">Add...</string>
   	<string name="shopping_list_confirm_delte">Are you sure you want to delete this list?</string>
     <string name="noteit_prefs">Preferences...</string>
 	<string name="shoppinglist_add_title">List Name</string>
-		
+	<string name="shoppinglist_edit_title">Edit List</string>
+	<string name="menu_shoplist_delete">Delete</string>
+	<string name="menu_shoplist_edit">Edit</string>
+	    		
 	<string name="categoriesactivity_title">Categories</string>
 	
 	<string name="itemlistactivity_title">Items To Shop</string>
-	<string name="empty_shoppingitems">You have no pending items in this list. You can add new items by selecting \'Add\'</string>
+	<string name="empty_shoppingitems">You do not have any items in this list. You can add new items by clicking the Add button.</string>
 	    	
+	<string name="addedit_Title">Add Item</string>    
+	<string name="addedit_Name">Name:</string>
+	<string name="addedit_NameHint">Item Name</string>
+	<string name="addedit_quantity">Quantity:</string>
+	<string name="addedit_unit">Unit:</string>
+	<string name="addedit_price">Unit Price:</string>
+	<string name="addedit_category">Category:</string>
+	<string name="addedit_Done">Done</string>
+	<string name="addedit_Continue">Continue</string>
+	    
 	<string name="preference_activity_title">Note It! Settings</string>
 	    	
 	    

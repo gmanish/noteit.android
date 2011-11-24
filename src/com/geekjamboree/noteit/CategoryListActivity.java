@@ -44,8 +44,8 @@ public class CategoryListActivity
         mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message), true);
         ((NoteItApplication)getApplication()).fetchCategories(this);
         
-        ImageButton textView = (ImageButton)findViewById(R.id.button_categories_preferences);
-        textView.setOnClickListener(new View.OnClickListener() {
+        ImageButton prefButton = (ImageButton)findViewById(R.id.button_categories_preferences);
+        prefButton.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
 				// TODO Auto-generated method stub

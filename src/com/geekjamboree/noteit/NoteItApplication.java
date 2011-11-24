@@ -69,7 +69,17 @@ public class NoteItApplication extends Application {
 		public String 	mName 			= "";
 		public long		mID				= 0;
 		public long 	mCategoryID 	= 0;	
+		public long 	mListID			= 0;
+		public float	mQuantity		= 0;
+		public float	mUnitPrice		= 0;
+		public int		mUnitID			= 1; // default to "unit"
 	
+		public Item(long listID, long categoryID, String name) {
+			mListID = listID;
+			mCategoryID = categoryID;
+			mName = name;
+		}
+		
 		public Item(long id, String name, long categoryID){
 			mID = id;
 			mName = name;
@@ -241,7 +251,7 @@ public class NoteItApplication extends Application {
         }
 	}
 
-	public void deleteShoppingList(long listID, OnMethodExecuteListerner inListener) {
+	public void deleteShoppingList(final long listID, OnMethodExecuteListerner inListener) {
 		
 		class DeleteShoppingListTask implements OnPostExecuteListener {
        	
@@ -254,7 +264,12 @@ public class NoteItApplication extends Application {
         	
         	public void onPostExecute(JSONObject json) {
         		try {
-                	mListener.onPostExecute(json.getLong("JSONRetVal"), json.getString("JSONRetMessage"));
+        			long retVal = json.getLong("JSONRetVal");
+        			if (retVal == 0){
+        				// Delete it from our list as well
+        				mShoppingLists.remove(new ShoppingList(listID, ""));
+        			}
+                	mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
         		} catch (JSONException e){
         			Toast.makeText(getApplicationContext(), "The server seems to be out of " +
         							"its mind. Please try later.", Toast.LENGTH_SHORT).show();
@@ -264,7 +279,7 @@ public class NoteItApplication extends Application {
 		}
 		
         try {
-	        ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+	        ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
 	        nameValuePairs.add(new BasicNameValuePair("command", "do_delete_shop_list"));
 	        nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(listID)));
 	        nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(getUserID())));
@@ -277,6 +292,51 @@ public class NoteItApplication extends Application {
         	inListener.onPostExecute(-1, e.getMessage());
         }
  	}
+	
+	// edit the item with id = listDetail.mID
+	public void editShoppingList(final ShoppingList listDetail, OnMethodExecuteListerner inListener){
+		
+		class EditShoppingListTask implements OnPostExecuteListener {
+
+			OnMethodExecuteListerner mListener;
+			
+			EditShoppingListTask(OnMethodExecuteListerner inListener){
+				mListener = inListener;
+			}
+			
+	       	public void onPostExecute(JSONObject json) {
+	       		long retVal;
+				try {
+					retVal = json.getLong("JSONRetVal");
+		       		if (retVal == 0) {
+		       			ShoppingList newList = new ShoppingList(json.getLong("arg1"), json.getString("arg2"));
+		       			mShoppingLists.set(mShoppingLists.indexOf(newList), newList);
+		       		}
+
+                	mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
+				} catch (JSONException e) {
+					Log.e("NoteItApplication.editShoppingList", e.getMessage());
+                	mListener.onPostExecute(-1, e.getMessage());
+				}
+	       	}
+		}
+		
+		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
+		nameValuePairs.add(new BasicNameValuePair("command", "do_edit_shop_list"));
+		nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(listDetail.mID)));
+		nameValuePairs.add(new BasicNameValuePair("arg2", listDetail.mName));
+		nameValuePairs.add(new BasicNameValuePair("arg3", String.valueOf(getUserID())));
+
+		EditShoppingListTask myEditTask = new EditShoppingListTask(inListener);
+        AsyncInvokeURLTask task;
+		try {
+			task = new AsyncInvokeURLTask(nameValuePairs, myEditTask);
+	        task.execute();
+		} catch (Exception e) {
+			Log.e("NoteItApplication.editShoppingList", e.getMessage());
+			e.printStackTrace();
+		}
+	}
 	
 	public int getShoppingListCount(){
 		return mShoppingLists.size();
@@ -293,9 +353,16 @@ public class NoteItApplication extends Application {
 		}
 	}
 	
+	public long getCurrentShoppingList() {
+		return mCurrentShoppingListID;
+	}
+	
 	public void fetchCategories(OnFetchCategoriesListener inPostExecute){
 		try {
-			mCategories.clear();
+			if (mCategories == null) {
+				// There are no cached results
+				mCategories = new ArrayList<Category>();
+			}
 			
 			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 	        nameValuePairs.add(new BasicNameValuePair("command", "do_get_categories"));
@@ -455,5 +522,48 @@ public class NoteItApplication extends Application {
 		} catch (Exception e) {
 			Log.e("NoteItApplication.loginUser", e.getMessage());		
 		}
+	}
+	
+	public void addItem(Item inItem, OnMethodExecuteListerner inListener) {
+		
+		class AddItemTask implements OnPostExecuteListener {
+
+			OnMethodExecuteListerner mListener;
+			
+			AddItemTask(OnMethodExecuteListerner inListener){
+				mListener = inListener;
+			}
+			
+	       	public void onPostExecute(JSONObject json) {
+	       		long retVal;
+				try {
+					retVal = json.getLong("JSONRetVal");
+                	mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
+				} catch (JSONException e) {
+					Log.e("NoteItApplication.editShoppingList", e.getMessage());
+                	mListener.onPostExecute(-1, e.getMessage());
+				}
+	       	}
+		}
+		
+		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
+		nameValuePairs.add(new BasicNameValuePair("command", "do_add_item"));
+		nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(inItem.mListID)));
+		nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(inItem.mCategoryID)));
+		nameValuePairs.add(new BasicNameValuePair("arg3", inItem.mName));
+		nameValuePairs.add(new BasicNameValuePair("arg4", String.valueOf(inItem.mQuantity)));
+		nameValuePairs.add(new BasicNameValuePair("arg5", String.valueOf(inItem.mUnitPrice)));
+		nameValuePairs.add(new BasicNameValuePair("arg6", String.valueOf(inItem.mUnitID)));
+		nameValuePairs.add(new BasicNameValuePair("arg7", String.valueOf(getUserID())));
+		
+		AddItemTask myEditTask = new AddItemTask(inListener);
+        AsyncInvokeURLTask task;
+		try {
+			task = new AsyncInvokeURLTask(nameValuePairs, myEditTask);
+	        task.execute();
+		} catch (Exception e) {
+			Log.e("NoteItApplication.editShoppingList", e.getMessage());
+			e.printStackTrace();
+		}		
 	}
 }

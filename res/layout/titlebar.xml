@@ -7,12 +7,11 @@
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-	   	android:paddingLeft="5dp"
-	   	android:paddingRight="5dp"
+	   	android:paddingTop="5dp"
+	   	android:paddingBottom="5dp"
         android:layout_gravity="center_vertical"
-        android:layout_weight="1"
         android:src="@drawable/ic_launcher_noteit1"
         android:background="@android:color/transparent" />
     
@@ -21,7 +20,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_weight="10"
+        android:layout_weight="3"
+        android:text="@string/app_name"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/theme_offwhite_header_text"
         android:background="@android:color/transparent"/>

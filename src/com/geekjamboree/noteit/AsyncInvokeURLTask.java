@@ -88,6 +88,14 @@ public class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 				mPostExecuteListener.onPostExecute(json);
 			} catch (JSONException e){
 				Log.e("AsyncInvokeURLTask.onPostExecute", e.getMessage());
+				JSONObject json = new JSONObject();
+				try {
+					json.put("JSONRetVal", -1);
+					json.put("JSONRetMessage", e.getMessage());
+				} catch (JSONException newE) {
+					
+				}
+				mPostExecuteListener.onPostExecute(json);
 			}
 		}
 	}

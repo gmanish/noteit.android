@@ -1,61 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_itemslist"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-<!--         
- -->        
     <ExpandableListView
         android:id="@+android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:groupIndicator="@color/listitem_group_indicator"
-        android:listSelector="@color/listview_selector"
-        android:divider="@color/theme_offwhite_listitem_seperator"
+        android:cacheColorHint="#00000000"
         android:childDivider="@color/theme_offwhite_listitem_seperator_level2"
+        android:divider="@color/theme_offwhite_listitem_seperator"
         android:dividerHeight="1dp"
-        android:cacheColorHint="#00000000" />
-    
-    <TextView
-        android:id="@android:id/empty" 
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:groupIndicator="@color/listitem_group_indicator"/>
+
+    <LinearLayout 
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
         android:layout_weight="1"
-        android:layout_gravity="center_vertical"
-        android:padding="10dp"
-        android:text="@string/empty_shoppingitems"/>
+        android:orientation="horizontal"
+        android:padding="10dip">
         
-   
-    <LinearLayout
+        <TextView
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:padding="10dp"
+	        android:text="@string/empty_shoppingitems" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@android:drawable/ic_menu_add" />
+        
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/theme_offwhite_toolbar_background" >
-        
-        <ImageButton
-	        android:id="@+id/button_itemlist_add"
-	        android:src="@android:drawable/ic_menu_add" 
-	        style="@style/App_ButtonStyle"/>
+        android:background="@color/theme_offwhite_toolbar_background"
+        android:orientation="horizontal" >
 
         <ImageButton
-            android:id="@+id/button_itemlist_edit"
-            android:src="@android:drawable/ic_menu_edit" 
-            style="@style/App_ButtonStyle"/>
-        
-	    <ImageButton
-	        android:id="@+id/button_itemlist_delete"
-	        android:src="@android:drawable/ic_menu_delete" 
-	        style="@style/App_ButtonStyle"/>
-	    
-	    <ImageButton
-	        android:id="@+id/button_itemlist_preferences"
-	        android:src="@android:drawable/ic_menu_preferences" 
-	        style="@style/App_ButtonStyle"/>
-	    
-    </LinearLayout>
-    
+            android:id="@+id/itemlist_add"
+            style="@style/App_ButtonStyle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:src="@android:drawable/ic_menu_add" />
+
+        <ImageButton
+            android:id="@+id/itemlist_preference"
+            style="@style/App_ButtonStyle"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:src="@android:drawable/ic_menu_preferences" />
+
+    </RelativeLayout>
+
 </LinearLayout>
