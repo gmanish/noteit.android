@@ -56,6 +56,20 @@
             android:src="@android:drawable/ic_menu_add" />
 
         <ImageButton
+            android:id="@+id/itemlist_expandall"
+            style="@style/App_ButtonStyle"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/itemlist_add"
+            android:src="@drawable/arrow_down_float" />
+        
+        <ImageButton
+            android:id="@+id/itemlist_collapseall"
+            style="@style/App_ButtonStyle"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/itemlist_expandall"
+            android:src="@drawable/arrow_up_float" />
+        
+        <ImageButton
             android:id="@+id/itemlist_preference"
             style="@style/App_ButtonStyle"
             android:layout_alignParentRight="true"

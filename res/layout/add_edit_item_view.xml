@@ -10,19 +10,16 @@
 	    android:id="@+id/textView1"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:text="@string/addedit_Name"/>
+	    android:text="@string/addedit_Name" />
 
-    <EditText
-        android:id="@+id/addedit_editName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+	<AutoCompleteTextView
+	    android:id="@+id/addedit_editName"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:layout_below="@id/textView1"
-        android:hint="@string/addedit_NameHint">
-        <requestFocus />
-    </EditText>
-
-  	<TextView
+        android:layout_below="@id/textView1"/>
+   
+	<TextView
 	   	android:id="@+id/textView2"
 	   	android:layout_width="wrap_content"
 	   	android:layout_height="wrap_content"
@@ -85,26 +82,26 @@
 	    android:text="@string/addedit_price" />
 
 	<EditText
-	    android:id="@+id/editText3"
+	    android:id="@+id/addedit_editprice"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@+id/textView3"
 	    android:inputType="numberDecimal" 
-	    android:layout_marginBottom="5dp"/>
+	    android:layout_marginBottom="5dp" />
 	
 	<TextView
 	    android:id="@+id/textView4"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/editText3"
-	    android:text="@string/addedit_category"/>
+	    android:layout_below="@+id/addedit_editprice"
+	    android:text="@string/addedit_category" />
 		    
 	<Spinner
 	    android:id="@+id/addedit_spinCategories"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@+id/textView4"
-	    android:layout_marginBottom="5dp"/>
+	    android:layout_marginBottom="5dp" />
 
 	<LinearLayout 
 	    android:layout_width="match_parent"
@@ -113,18 +110,19 @@
 	    android:layout_marginTop="5dp">
 		
 		<Button
-		    android:id="@+id/addedit_btnDone"
-		    android:layout_width="0dip"
-		    android:layout_height="wrap_content"
-		    android:layout_weight="1"
-		    android:text="@string/addedit_Done" />
-	
-		<Button
 		    android:id="@+id/addedit_btnContinue"
 		    android:layout_width="0dip"
 		    android:layout_height="wrap_content"
 		    android:layout_weight="1"
 		    android:text="@string/addedit_Continue" />
+
+		<Button
+		    android:id="@+id/addedit_btnDone"
+		    android:layout_width="0dip"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:text="@string/addedit_Done" />
+		
 	</LinearLayout>
 
 </RelativeLayout>
