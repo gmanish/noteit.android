@@ -1,11 +1,5 @@
 package com.geekjamboree.noteit;
 
-import android.app.Application;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -15,6 +9,12 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.app.Application;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.geekjamboree.noteit.AsyncInvokeURLTask.OnPostExecuteListener;
 
@@ -78,7 +78,22 @@ public class NoteItApplication extends Application {
 		public float	mQuantity		= 0;
 		public float	mUnitPrice		= 0;
 		public int		mUnitID			= 1; // default to "unit"
-	
+
+		public Item() {
+			
+		}
+		
+		public Item(Item item){
+			this.mCategoryID = item.mCategoryID;
+			this.mClassID = item.mClassID;
+			this.mID = item.mID;
+			this.mListID = item.mListID;
+			this.mName = item.mName;
+			this.mQuantity = item.mQuantity;
+			this.mUnitID = item.mUnitID;
+			this.mUnitPrice = item.mUnitPrice;
+		}
+		
 		public Item(long itemID) {
 			mID = itemID;
 		}
@@ -712,6 +727,45 @@ public class NoteItApplication extends Application {
 		}		
 	}
 	
+	public void editItem(final long itemID, final Item item, OnMethodExecuteListerner inListener) {
+        
+		class EditItemTask  implements AsyncInvokeURLTask.OnPostExecuteListener {
+
+        	OnMethodExecuteListerner mListener;
+        	
+        	EditItemTask(OnMethodExecuteListerner inListener) {
+        		mListener = inListener;
+        	}
+        	
+        	public void onPostExecute(JSONObject json) {
+        		try {
+        			long retVal = json.getLong("JSONRetVal");
+                	mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
+        		} catch (JSONException e){
+        			mListener.onPostExecute(-1, e.getMessage());
+        		}
+        	}
+        }
+
+        try {
+	        ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+	        nameValuePairs.add(new BasicNameValuePair("command", "do_edit_shop_item"));
+	        nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(itemID)));
+//	        nameValuePairs.add(new BasicNameValuePair("arg2", value))  // List ID
+	        nameValuePairs.add(new BasicNameValuePair("arg3", String.valueOf(item.mCategoryID)));
+	        nameValuePairs.add(new BasicNameValuePair("arg4", item.mName));
+	        nameValuePairs.add(new BasicNameValuePair("arg5", String.valueOf(item.mQuantity)));
+	        nameValuePairs.add(new BasicNameValuePair("arg6", String.valueOf(item.mUnitPrice)));
+	        nameValuePairs.add(new BasicNameValuePair("arg7", String.valueOf(item.mUnitID)));
+	        nameValuePairs.add(new BasicNameValuePair("arg8", String.valueOf(getUserID())));
+	        
+	        EditItemTask myTask = new EditItemTask(inListener);
+	        AsyncInvokeURLTask 	task = new AsyncInvokeURLTask(nameValuePairs, myTask);
+	        task.execute();
+        } catch (Exception e) {
+        	Log.e("NoteItApplication.addShoppingList", e.getMessage());
+        }
+    }
 
 	public void deleteItem(final long itemID, OnMethodExecuteListerner inListener) {
         

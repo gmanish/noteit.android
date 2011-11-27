@@ -87,11 +87,13 @@ public class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 	        	JSONObject json = new JSONObject(result);
 				mPostExecuteListener.onPostExecute(json);
 			} catch (JSONException e){
-				Log.e("AsyncInvokeURLTask.onPostExecute", e.getMessage());
+				// If we have a json exception here, most likely
+				// means there's a huge error on the server side.
+				// send back an appropriate message
 				JSONObject json = new JSONObject();
 				try {
 					json.put("JSONRetVal", -1);
-					json.put("JSONRetMessage", e.getMessage());
+					json.put("JSONRetMessage", "There was an error connecting to the server. Please try later");
 				} catch (JSONException newE) {
 					
 				}

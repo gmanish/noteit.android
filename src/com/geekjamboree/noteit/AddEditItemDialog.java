@@ -6,16 +6,14 @@ import com.geekjamboree.noteit.NoteItApplication.Item;
 import com.geekjamboree.noteit.NoteItApplication.Category;
 import com.geekjamboree.noteit.NoteItApplication.OnAddItemListener;
 import com.geekjamboree.noteit.NoteItApplication.OnSuggestItemsListener;
-import com.geekjamboree.noteit.NoteItApplication.OnGetItemListener;
 import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -25,31 +23,72 @@ import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Toast;
 
-public class AddEditItemActivity extends Activity {
+public class AddEditItemDialog extends Dialog {
+	
+	public interface baseListener{
+		// Just a convenience, I need to have a single pointer
+		// as a member that can hold both types of listeners
+	}
+	
+	public interface addItemListener extends baseListener {
+		void onAddItem(NoteItApplication.Item item);
+	}
+	
+	public interface editItemListener extends baseListener {
+		void onEditItem(NoteItApplication.Item oldItem, NoteItApplication.Item newItem);
+	}
+	
+	public AddEditItemDialog(
+			Context context, 
+			NoteItApplication application,
+			addItemListener inListener) { // opens the dialog in Add mode
+		
+		super(context);
+		mApplication = application;
+		mItemID = 0;
+		mIsAddItem = true;
+		mListener = inListener;
+	}
 
-	static final int 	UNITS_GENERIC = 0;
-	static final int 	UNITS_METRIC = 1;
-	static final int	UNITS_IMPERIAL = 2;
-	Item 				thisItem;
+	public AddEditItemDialog(
+			Context context, 
+			NoteItApplication application,
+			editItemListener inListener, // Opens the dialog in Edit mode
+			long itemID) {
+		
+		super(context);
+		mApplication = application;
+		mItemID = itemID;
+		mIsAddItem = false;
+		mListener = inListener;
+	}
+
+	static final int 		UNITS_GENERIC = 0;
+	static final int 		UNITS_METRIC = 1;
+	static final int		UNITS_IMPERIAL = 2;
 	
-	boolean				mIsAddItem = true;
+	NoteItApplication		mApplication;
+	baseListener			mListener;
+	boolean					mIsAddItem = true;
+	long					mItemID = 0; // Holds only for edit mode
+
+	Item 					mOriginalItem;
 	
+
 	// controls
-	EditText					mEditName;
-	EditText					mEditQuantity;
-	EditText					mEditCost;
-	Spinner						mSpinCategories;
-	ArrayList<String>			mSuggestions = new ArrayList<String>();
-	ArrayAdapter<String>		mAutoCompleteAdapter;
-	AutoCompleteTextView 		mItemName;
-	ArrayList<Item>				mNewItems = new ArrayList<Item>();
-	long						mItemID = 0; // Holds only for edit mode
+	EditText				mEditName;
+	EditText				mEditQuantity;
+	EditText				mEditCost;
+	Spinner					mSpinCategories;
+	ArrayList<String>		mSuggestions = new ArrayList<String>();
+	ArrayAdapter<String>	mAutoCompleteAdapter;
+	AutoCompleteTextView 	mItemName;
 
 	// This one's for the AutoTextComplete
-	final TextWatcher			mTextChecker = new TextWatcher() {
+	final TextWatcher		mTextChecker = new TextWatcher() {
 		
 		public void onTextChanged(CharSequence s, int start, int before, int count) {
-			((NoteItApplication) getApplication()).suggestItems(s.toString(), new OnSuggestItemsListener() {
+			mApplication.suggestItems(s.toString(), new OnSuggestItemsListener() {
 				
 				public void onPostExecute(long resultCode, ArrayList<String> suggestions,
 						String message) {
@@ -76,13 +115,13 @@ public class AddEditItemActivity extends Activity {
 		}
 	};
 	
+    /* (non-Javadoc)
+     * @see android.app.Dialog#onCreate(android.os.Bundle)
+     */
     public void onCreate(Bundle savedInstanceState) { 
     	
     	super.onCreate(savedInstanceState);
-    	
-    	CustomTitlebarWrapper toolbar = new CustomTitlebarWrapper(this);
         setContentView(R.layout.add_edit_item_view);
-        toolbar.SetTitle(getResources().getText(R.string.addedit_Title));
         
         mSpinCategories = (Spinner) findViewById(R.id.addedit_spinCategories);
         if (mSpinCategories != null) {
@@ -94,97 +133,88 @@ public class AddEditItemActivity extends Activity {
         mEditCost = (EditText) findViewById(R.id.addedit_editprice);
         
         Button doneBtn = (Button) findViewById(R.id.addedit_btnDone);
-        doneBtn.setOnClickListener(new OnClickListener() {
+        doneBtn.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
 				saveItem();
+				dismiss();
 			}
 		});
 
-        mAutoCompleteAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, mSuggestions);
+        mAutoCompleteAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, mSuggestions);
         AutoCompleteTextView mItemName = (AutoCompleteTextView) findViewById(R.id.addedit_editName);
         mItemName.addTextChangedListener(mTextChecker);
         mItemName.setAdapter(mAutoCompleteAdapter);
         
         Button continueBtn = (Button) findViewById(R.id.addedit_btnContinue);
-        continueBtn.setOnClickListener(new OnClickListener() {
+        continueBtn.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
 				saveItem();
+				// clear contents here
 			}
 		});
 
-        // Are we opening in the add or edit mode
-        final Intent intent = getIntent();
-        mIsAddItem = intent.getBooleanExtra("ADD", true);
-        if (!mIsAddItem) {
-        	// read details of this item from the back-end
-        	mItemID = intent.getLongExtra("ITEMID", 0);
-        	if (mItemID != 0){
-        		((NoteItApplication)getApplication()).getItem(mItemID, new OnGetItemListener() {
-					
-					public void onPostExecute(long resultCode, Item item, String message) {
-						// Populate the view with this data
-						if (resultCode == 0) {
-							populateView(item);
-						} else {
-							Toast.makeText(AddEditItemActivity.this, message, Toast.LENGTH_LONG).show();
-						}
+    	if (mIsAddItem == false && mItemID != 0){
+    		mApplication.getItem(mItemID, new NoteItApplication.OnGetItemListener() {
+				
+				public void onPostExecute(long resultCode, Item item, String message) {
+					// Populate the view with this data
+					if (resultCode == 0) {
+						// Make a copy and save for later
+						mOriginalItem = new Item(item);
+						populateView(item);
+					} else {
+						Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
 					}
-				});
-        	}
-        }
+				}
+			});
+    	}
     }
-
+    
     protected void saveItem() {
     	try {
-	    	Item item = getItemFromView();
+	    	final Item item = getItemFromView();
 
 	    	if (mIsAddItem)	{
 	    		
-		    	((NoteItApplication) getApplication()).addItem(item, new OnAddItemListener() {
+		    	mApplication.addItem(item, new OnAddItemListener() {
 					
 					public void onPostExecute(long resultCode, Item item, String message) {
 						if (resultCode == 0){
-							Toast.makeText(AddEditItemActivity.this, "Item has been added", Toast.LENGTH_LONG).show();
-							// Add this item to our internal list so it can be returned to the calling activity
-							AddEditItemActivity.this.mNewItems.add(item);
-							Intent resultIntent = new Intent();
-							resultIntent.putExtra("RESULT", true);
-							resultIntent.putParcelableArrayListExtra("com.geekjamboree.noteit.items", AddEditItemActivity.this.mNewItems);
-							AddEditItemActivity.this.setResult(RESULT_OK, resultIntent);
-							finish();
+							Toast.makeText(getContext(), "Item has been added", Toast.LENGTH_LONG).show();
+							((addItemListener)mListener).onAddItem(item);
 						}
 						else
-							Toast.makeText(AddEditItemActivity.this, message, Toast.LENGTH_LONG).show();
+							Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
 					}
 					});
 	    	} else {
-	    		
-		    	((NoteItApplication) getApplication()).editItem(item.mID, item, new OnMethodExecuteListerner() {
+	    		// In this case, we need to send old item details to the caller, so copy it
+		    	mApplication.editItem(item.mID, item, new OnMethodExecuteListerner() {
 					
 					public void onPostExecute(long resultCode, String message) {
 						if (resultCode == 0) {
 							Toast.makeText(
-								AddEditItemActivity.this, 
-								getResources().getString(R.string.addedit_itemupdated), 
+								getContext(), 
+								mApplication.getResources().getString(R.string.addedit_itemupdated), 
 								Toast.LENGTH_LONG).show();
-							finish();
+							((editItemListener)mListener).onEditItem(mOriginalItem, item);
 						}
 						else
-							Toast.makeText(AddEditItemActivity.this, message, Toast.LENGTH_LONG).show();
+							Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
 					}
 				});
 	    	}
     	} catch (Exception e) {
-    		Toast.makeText(this, getResources().getString(R.string.server_error), Toast.LENGTH_LONG).show();
+    		Toast.makeText(getContext(), mApplication.getResources().getString(R.string.server_error), Toast.LENGTH_LONG).show();
     	}
     }
     
     protected void populateCategories() {
-    	ArrayList<Category> categories = ((NoteItApplication)getApplication()).getCategories();
+    	ArrayList<Category> categories = mApplication.getCategories();
         ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(
-                this, 
+                getContext(), 
                 android.R.layout.simple_spinner_item,
                 categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -215,7 +245,7 @@ public class AddEditItemActivity extends Activity {
     
     protected Item getItemFromView() throws Exception {
     	
-    	NoteItApplication app = ((NoteItApplication) getApplication());
+    	NoteItApplication app = mApplication;
     	Item item = new Item();
     	
     	int  position = mSpinCategories.getSelectedItemPosition();
@@ -227,7 +257,7 @@ public class AddEditItemActivity extends Activity {
     	item.mListID = (app.getCurrentShoppingList());
     	item.mName = mEditName.getEditableText().toString();
     	if (item.mName.isEmpty())
-    		throw new Exception(getResources().getString(R.string.addedit_nameblank));
+    		throw new Exception(mApplication.getResources().getString(R.string.addedit_nameblank));
    	
     	if (!mEditQuantity.getEditableText().toString().isEmpty())
     		item.mQuantity = Float.valueOf(mEditQuantity.getEditableText().toString());
@@ -238,5 +268,4 @@ public class AddEditItemActivity extends Activity {
 
     	return item;
     }
-
 }

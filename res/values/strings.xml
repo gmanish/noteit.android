@@ -6,6 +6,7 @@
     <string name="hello">Hello World, MainActivity!</string>
     <string name="app_name">Note It!</string>
 
+    <string name="server_error">The server seems to be out of its mind. Please try later.</string>
     <string name="login_activity_title">Please log in</string>
 	<string name="login_email">Email:</string>
 	<string name="login_emailhint">you@email.com</string>
@@ -43,7 +44,7 @@
 	<string name="addedit_Done">Done</string>
 	<string name="addedit_Continue">Add More</string>
 	<string name="addedit_nameblank">The item name cannot be blank</string>
-	    
+	<string name="addedit_itemupdated">The item details have been updated</string>    
 	<string name="preference_activity_title">Note It! Settings</string>
 	    	
 	    

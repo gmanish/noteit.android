@@ -20,7 +20,7 @@ import android.widget.Toast;
 public class LoginActivity 
 	extends Activity 
 	implements AsyncInvokeURLTask.OnPostExecuteListener {
-	ProgressDialog		mProgressDialog;
+	ProgressDialog		mProgressDialog = null;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -64,25 +64,28 @@ public class LoginActivity
 			if (mProgressDialog != null) {
 				mProgressDialog.dismiss();
 			}
-        	long retval = json.getLong("JSONRetVal");
-        	if (retval == 0){
-	        	// We're set to rock and roll
-	        	Log.i("NoteItApplication.loginUser", "Login successful. Let's get rocked!");
-            	if (!json.isNull("arg1")){
-					long userID = json.getLong("arg1");
-					((NoteItApplication)getApplication()).setUserID(userID);
-            		Toast.makeText(getApplicationContext(), "You have been logged in.", Toast.LENGTH_SHORT).show();
-                    Intent myIntent = new Intent(this, ShoppingListActivity.class);
-                    startActivity(myIntent);
-            	} else
-            		throw new Exception("Invalid email or password");
-        	} else 
-        		throw new Exception("Invalid email or password");
+			if (json.has("JSONRetVal")) {
+				// The server is up and running 
+	        	long retval = json.getLong("JSONRetVal");
+	        	if (retval == 0){
+		        	// We're set to rock and roll
+	            	if (!json.isNull("arg1")){
+						long userID = json.getLong("arg1");
+						((NoteItApplication)getApplication()).setUserID(userID);
+	            		Toast.makeText(this, "You have been logged in.", Toast.LENGTH_SHORT).show();
+	                    Intent myIntent = new Intent(this, ShoppingListActivity.class);
+	                    startActivity(myIntent);
+	            	} else
+	            		throw new Exception("Invalid email or password");
+	        	} else 
+	        		throw new Exception(json.getString("JSONRetMessage"));
+			} else
+				throw new Exception(getResources().getString(R.string.server_error));
 		} catch (JSONException e){
 			Toast.makeText(getApplicationContext(), "The server seems to be out of its mind. Please try later.", Toast.LENGTH_SHORT).show();
 			Log.e("NoteItApplication.loginUser", e.getMessage());
 		} catch (Exception e){
-    		Toast.makeText(getApplicationContext(), "Invalid email or password.", Toast.LENGTH_SHORT).show();
+    		Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
 			Log.e("NoteItApplication.loginUser", e.getMessage());
 		}
 		

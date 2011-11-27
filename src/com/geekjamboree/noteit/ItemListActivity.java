@@ -194,7 +194,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
         btnAdd.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
-				doAddItem();
+				doAddItem(true);
 			}
 		});
         
@@ -242,7 +242,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 						Toast.makeText(getApplicationContext(), "Add item selected on row ", Toast.LENGTH_SHORT).show();
 						break;
 					case QA_ID_EDIT:
-						doEditItem();
+						doEditItem(true);
 						break;
 					case QA_ID_DELETE:
 						doDeleteItem();
@@ -327,18 +327,56 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     protected void setUpQuickActions() {
 	}
     
-    protected void doAddItem() {
-		Intent intent = new Intent(ItemListActivity.this, AddEditItemActivity.class);
-		intent.putExtra("ADD", true);
-		startActivityForResult(intent, ADD_ITEM_REQUEST);
+    protected void doAddItem(boolean doDialog) {
+    	if (doDialog == false) {
+			Intent intent = new Intent(ItemListActivity.this, AddEditItemActivity.class);
+			intent.putExtra("ADD", true);
+			startActivityForResult(intent, ADD_ITEM_REQUEST);
+    	} else {
+    		AddEditItemDialog addDialog = new AddEditItemDialog(
+				this,
+				(NoteItApplication)getApplication(),
+				new AddEditItemDialog.addItemListener() {
+					
+					public void onAddItem(Item item) {
+		    			// New items were added by the called activity, we need to add them to our view
+		    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
+	    				Category category = ((NoteItApplication) getApplication()).getCategory(item.mCategoryID);
+	    				adapter.AddItem(item, category);
+						adapter.notifyDataSetChanged();
+					}
+				});
+	    	addDialog.show();
+    	}
     }
     
-    protected void doEditItem() {
-    	Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup, mSelectedChild);
-    	Intent intent = new Intent(ItemListActivity.this, AddEditItemActivity.class);
-		intent.putExtra("ADD", false);
-		intent.putExtra("ITEMID", selItem.mID);
-		startActivityForResult(intent, ADD_ITEM_REQUEST);
+    protected void doEditItem(boolean doDialog) {
+    	if (doDialog == true) {
+	    	Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup, mSelectedChild);
+			AddEditItemDialog addDialog = new AddEditItemDialog(
+					this, 
+					(NoteItApplication)getApplication(),
+    				new AddEditItemDialog.editItemListener() {
+						
+						public void onEditItem(Item oldItem, Item newItem) {
+			    			// An item has been updated, it's category may also have changed, hence we delete
+							// the old item from the adapter and insert a fresh one to ensure consistency
+			    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
+		    				Category category = ((NoteItApplication) getApplication()).getCategory(newItem.mCategoryID);
+		    				adapter.DeleteItem(oldItem);
+		    				adapter.AddItem(newItem, category);
+							adapter.notifyDataSetChanged();
+						}
+					},
+					selItem.mID);
+	    	addDialog.show();
+    	} else {
+	    	Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup, mSelectedChild);
+	    	Intent intent = new Intent(ItemListActivity.this, AddEditItemActivity.class);
+			intent.putExtra("ADD", false);
+			intent.putExtra("ITEMID", selItem.mID);
+			startActivityForResult(intent, ADD_ITEM_REQUEST);
+   	 	}
     }
     
     protected void doDeleteItem() {
@@ -371,4 +409,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	}        	
     	
     }
+        
+//    	public Dialog onCreateDialog(int dialogId) {
+//  	if (dialogId == Dialog_ADDEDIT){ 		
+//  	}
+//    }
+    
 }
