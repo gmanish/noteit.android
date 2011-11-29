@@ -1,6 +1,7 @@
 package com.geekjamboree.noteit;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
@@ -19,7 +20,7 @@ import com.geekjamboree.noteit.AsyncInvokeURLTask.OnPostExecuteListener;
 public class NoteItApplication extends Application {
 
 	// Represents each shopping list that the user has
-	public static class ShoppingList {
+	public class ShoppingList {
 		public String 	mName = "";
 		public long		mID = 0;
 		
@@ -65,7 +66,7 @@ public class NoteItApplication extends Application {
 	}
 	
 	// Represents each item on the current shopping list
-	public class Item {
+	public class Item implements Comparable<Item>{
 		
 		// [NOTE] If you add/remove members to the class don't forget to
 		// update the parcelable overridden methods
@@ -120,6 +121,16 @@ public class NoteItApplication extends Application {
 				return (mID == ((Item)obj).mID);
 			else
 				return false;
+		}
+		
+		public String getCategoryName() {
+			return getCategory(this.mCategoryID).mName;
+		}
+		
+		public int compareTo(Item item){
+			// Sort on category names, if they're same compare on item name
+			int result = getCategoryName().compareTo(item.getCategoryName());
+			return result == 0 ? mName.compareTo(item.mName) : result;
 		}
 	}
 	
@@ -557,6 +568,7 @@ public class NoteItApplication extends Application {
 	        	        		mItems.add(thisItem);
 	        	        	}
 	        	        	
+	        	        	Collections.sort(mItems);
 	        	        	mListener.onPostExecute(retval, mItems, message);
 	                	} else 
 	                		mListener.onPostExecute(retval, null, json.getString("JSONRetMessage"));

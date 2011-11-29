@@ -240,9 +240,10 @@ public class ShoppingListActivity
 	
 					dialog.dismiss();
 				
+					NoteItApplication app = (NoteItApplication)getApplication();
 					// Create a new list with the name
-					((NoteItApplication)getApplication()).editShoppingList(
-						new ShoppingList(
+					app.editShoppingList(
+							app.new ShoppingList(
 								((ShoppingList)mListView.getItemAtPosition(index)).mID, 
 								listName),
 						new NoteItApplication.OnMethodExecuteListerner() {

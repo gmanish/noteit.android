@@ -33,7 +33,7 @@
 	
 	<string name="itemlistqe_edit">Edit</string>
 	<string name="itemlistqe_delete">Delete</string>
-	<string name="itemlistqe_bought">Bought</string>
+	<string name="itemlistqe_bought">Done</string>
 	    	
 	<string name="addedit_Title">Add Item</string>    
 	<string name="addedit_Name">Name:</string>

@@ -181,16 +181,19 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	        else
 	        	textView = getGenericView(childHeight);
 	        setViewParams(textView, childHeight);
-	        if (thisItem.mIsPurchased > 0)
+	        
+	        if (thisItem.mIsPurchased > 0) {
 	        	textView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
-	        else 
+	        	textView.setTextAppearance(mContext, R.style.ListView_DoneItemTextAppearance);
+	        }
+	        else { 
 	        	textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+	        	textView.setTextAppearance(mContext, R.style.ListView_PendingItemTextAppearance);
+	        }
 	        
 	        textView.setText(getChild(groupPosition, childPosition).toString());
 	        // Set the background to transparent
 	        textView.setBackgroundColor(android.R.color.transparent);
-	        textView.setTextAppearance(mContext, R.style.ListView_GroupTextAppearance);
-	        
 	        return textView;
 		}
 
@@ -328,7 +331,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 					
 					mSelectedGroup = groupPosition;
 					mSelectedChild = childPosition;
-//					String itemText = (String)mListView.getExpandableListAdapter().getChild(groupPosition, childPosition).toString();
+//					Item selItem = (NoteItApplication.Item)mAdapter.getChild(groupPosition, childPosition);
+//					mQuickAction.getActionItem(0).setTitle(selItem.mIsPurchased == 1 ? "Not Purchased" : "Purchased");
     				mQuickAction.show(v);
 //        			Toast.makeText(getApplicationContext(), itemText, Toast.LENGTH_SHORT).show();
 					return false;
@@ -474,9 +478,5 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     		mListView.collapseGroup(i);
     	}        	
     	
-    }
-    
-    protected ArrayList<Item> sortItems(ArrayList<Item> list) {
-    	return list;
     }
 }

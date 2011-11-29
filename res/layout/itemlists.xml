@@ -59,14 +59,14 @@
             style="@style/App_ButtonStyle"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/itemlist_add"
-            android:src="@drawable/arrow_down_float" />
+            android:src="@drawable/expander_ic_minimized" />
         
         <ImageButton
             android:id="@+id/itemlist_collapseall"
             style="@style/App_ButtonStyle"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/itemlist_expandall"
-            android:src="@drawable/arrow_up_float" />
+            android:src="@drawable/expander_ic_maximized" />
         
         <ImageButton
             android:id="@+id/itemlist_preference"
