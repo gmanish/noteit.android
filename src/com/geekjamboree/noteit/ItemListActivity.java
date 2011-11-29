@@ -14,6 +14,7 @@ import android.app.ExpandableListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -97,7 +98,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 				Category category = ((NoteItApplication) getApplication()).getCategory(item.mCategoryID);
 				if (category != null) {
 					int categoryIndex = mCategories.indexOf(category);
-					if (categoryIndex > 0 && categoryIndex < mItems.size()) {
+					if (categoryIndex >= 0 && categoryIndex < mItems.size()) {
 						mItems.get(categoryIndex).remove(item);
 						// if this is the last item remove the category as well
 						if (mItems.get(categoryIndex).size() == 0) { 
@@ -141,39 +142,74 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			return true;
 		}
 
-	    public TextView getGenericView(int itemHeight) {
+	    public TextView getGenericView(final int itemHeight) {
+
+	        TextView textView = new TextView(mContext);
+	        return textView;
+	    }
+	    
+		/* From Android Documentation: Makes life interesting
+		 * 
+		 * @param convertView the old view to reuse, if possible. You should check
+		 *            that this view is non-null and of an appropriate type before
+		 *            using. If it is not possible to convert this view to display
+		 *            the correct data, this method can create a new view. It is not
+		 *            guaranteed that the convertView will have been previously
+		 *            created by
+		 *            {@link #getChildView(int, int, boolean, View, ViewGroup)}.
+		 */
+	    public void setViewParams(TextView view, int height) {
+
 	        // Layout parameters for the ExpandableListView
 	        AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
 	                ViewGroup.LayoutParams.MATCH_PARENT, 	// Width 
-	                itemHeight); 									// Height
-
-	        TextView textView = new TextView(mContext);
-	        textView.setLayoutParams(lp);
-	        // Center the text vertically
-	        textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-	        // Set the text starting position
-	        textView.setPadding(itemHeight + 10, 0, 0, 0);
-	        return textView;
+	                height); 									// Height
+	        view.setLayoutParams(lp);
+	        view.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+	        view.setPadding(height + 10, 0, 0, 0);
 	    }
-
+	    
 	    public View getChildView(int groupPosition, int childPosition,
 				boolean isLastChild, View convertView, ViewGroup parent) {
-	        TextView textView = getGenericView(32);
+
+	    	TextView 	textView;
+	        final int 	childHeight = 32;
+	        Item 		thisItem = (Item) getChild(groupPosition, childPosition);
+
+	        if (convertView != null)
+	        	textView = (TextView) convertView;
+	        else
+	        	textView = getGenericView(childHeight);
+	        setViewParams(textView, childHeight);
+	        if (thisItem.mIsPurchased > 0)
+	        	textView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+	        else 
+	        	textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+	        
 	        textView.setText(getChild(groupPosition, childPosition).toString());
 	        // Set the background to transparent
 	        textView.setBackgroundColor(android.R.color.transparent);
+	        textView.setTextAppearance(mContext, R.style.ListView_GroupTextAppearance);
+	        
 	        return textView;
 		}
 
 	    public View getGroupView(int groupPosition, boolean isExpanded,
 				View convertView, ViewGroup parent) {
-	        TextView textView = getGenericView(20);
+	    	
+	    	TextView	textView;	
+	    	final int 	groupHeight = 32;
+	    	
+	    	if (convertView != null)
+	    		textView = (TextView) convertView;
+	    	else
+	    		textView = getGenericView(groupHeight);
+	    	
+	    	setViewParams(textView, groupHeight);
 	        textView.setText(getGroup(groupPosition).toString());
 	        // Set the background to transparent
 	        textView.setBackgroundResource(R.color.listitem_group_background);
-	        textView.setHeight(25);
 	        textView.setTextAppearance(mContext, R.style.ListView_GroupTextAppearance);
-	        
 	        return textView;
 		}
 	}
@@ -239,7 +275,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 //				ActionItem actionItem = quickAction.getActionItem(pos);
 				switch(actionId){
 					case QA_ID_BOUGHT:
-						Toast.makeText(getApplicationContext(), "Add item selected on row ", Toast.LENGTH_SHORT).show();
+						doToggleMarkDone();
 						break;
 					case QA_ID_EDIT:
 						doEditItem(true);
@@ -265,6 +301,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     }
 
     public void onPostExecute(long retval, ArrayList<Item> items, String message) {
+    	
     	if (mProgressDialog != null) mProgressDialog.dismiss();
     	
     	if (retval == 0) {
@@ -310,7 +347,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     		
     		// refresh our view
     		ArrayList<Item> addedItems = new ArrayList<Item>();
-    		addedItems = data.getParcelableArrayListExtra("com.geekjamboree.noteit.items");
+//    		addedItems = data.getParcelableArrayListExtra("com.geekjamboree.noteit.items");
     		if (addedItems.size() > 0) {
     	
     			// New items were added by the called activity, we need to add them to our view
@@ -328,6 +365,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	}
     
     protected void doAddItem(boolean doDialog) {
+    	
     	if (doDialog == false) {
 			Intent intent = new Intent(ItemListActivity.this, AddEditItemActivity.class);
 			intent.putExtra("ADD", true);
@@ -351,6 +389,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     }
     
     protected void doEditItem(boolean doDialog) {
+    	
     	if (doDialog == true) {
 	    	Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup, mSelectedChild);
 			AddEditItemDialog addDialog = new AddEditItemDialog(
@@ -380,6 +419,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     }
     
     protected void doDeleteItem() {
+    	
     	final Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup, mSelectedChild);
     	if (selItem != null) {
     		((NoteItApplication) getApplication()).deleteItem(selItem.mID, new OnMethodExecuteListerner() {
@@ -396,23 +436,47 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			});
     	}
     }
+
+    void doToggleMarkDone() {
+    	
+    	final Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup, mSelectedChild);
+    	if (selItem != null){
+    		// Toggling an item done/undone essentially involved marking
+    		// setting the current date to <now>/<null>
+    		NoteItApplication app = (NoteItApplication) getApplication();
+    		Item newItem = app.new Item(selItem);
+    		newItem.mIsPurchased = newItem.mIsPurchased > 0 ? 0 : 1; // How do you do !(integer) in java?
+    		app.editItem(newItem.mID, newItem, new OnMethodExecuteListerner() {
+				
+				public void onPostExecute(long resultCode, String message) {
+					if (resultCode == 0) {
+						selItem.mIsPurchased = selItem.mIsPurchased > 0 ? 0 : 1;
+						ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
+						adapter.notifyDataSetChanged();
+					}
+					else
+						Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+				}
+			});
+    	}
+    }
     
     protected void doExpandAll() {
+    	
     	for (int i = 0; i < mAdapter.getGroupCount(); i++){
     		mListView.expandGroup(i);
     	}        	
     }
     
     protected void doCollapseAll() {
+    	
     	for (int i = 0; i < mAdapter.getGroupCount(); i++){
     		mListView.collapseGroup(i);
     	}        	
     	
     }
-        
-//    	public Dialog onCreateDialog(int dialogId) {
-//  	if (dialogId == Dialog_ADDEDIT){ 		
-//  	}
-//    }
     
+    protected ArrayList<Item> sortItems(ArrayList<Item> list) {
+    	return list;
+    }
 }

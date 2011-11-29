@@ -11,8 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Application;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -43,7 +41,7 @@ public class NoteItApplication extends Application {
 	}
 	
 	// Represents each category in the database
-	public static class Category {
+	public class Category {
 		public String 	mName = "";
 		public long 	mID = 0;
 		public long 	mUserID = 0;
@@ -67,8 +65,9 @@ public class NoteItApplication extends Application {
 	}
 	
 	// Represents each item on the current shopping list
-	public static class Item implements Parcelable {
-		// If you add/remove members to the class don't forget to
+	public class Item {
+		
+		// [NOTE] If you add/remove members to the class don't forget to
 		// update the parcelable overridden methods
 		public String 	mName 			= "";
 		public long		mID				= 0; // the instance id
@@ -78,6 +77,7 @@ public class NoteItApplication extends Application {
 		public float	mQuantity		= 0;
 		public float	mUnitPrice		= 0;
 		public int		mUnitID			= 1; // default to "unit"
+		public int		mIsPurchased	= 0; // SMALLINT at the backend
 
 		public Item() {
 			
@@ -92,6 +92,7 @@ public class NoteItApplication extends Application {
 			this.mQuantity = item.mQuantity;
 			this.mUnitID = item.mUnitID;
 			this.mUnitPrice = item.mUnitPrice;
+			this.mIsPurchased = item.mIsPurchased;
 		}
 		
 		public Item(long itemID) {
@@ -120,49 +121,6 @@ public class NoteItApplication extends Application {
 			else
 				return false;
 		}
-		
-		// From Parcelable
-	    public int describeContents()
-	    {
-	        return 0;
-	    }
-	 
-	    public void writeToParcel(Parcel dest, int flag)
-	    {
-			dest.writeString(mName);
-			dest.writeLong(mID);
-			dest.writeLong(mClassID);
-			dest.writeLong(mCategoryID);	
-			dest.writeLong(mListID);
-			dest.writeFloat(mQuantity);
-			dest.writeFloat(mUnitPrice);
-			dest.writeInt(mUnitID);
-	    }
-	    
-	    public Item(Parcel in)
-	    {
-	    	mName = in.readString();
-	    	mID = in.readLong();
-	    	mClassID = in.readLong();
-	    	mCategoryID = in.readLong();
-	    	mListID = in.readLong();
-	    	mQuantity = in.readFloat();
-	    	mUnitPrice = in.readFloat();
-	    	mUnitID = in.readInt();
-	    }
-	 
-	    @SuppressWarnings("rawtypes")
-		public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-	        public Item createFromParcel(Parcel in)
-	        {
-	            return new Item(in);
-	        }
-	 
-	        public Item[] newArray(int size)
-	        {
-	            return new Item[size];
-	        }
-	    };	
 	}
 	
 	public static interface OnMethodExecuteListerner {
@@ -245,9 +203,9 @@ public class NoteItApplication extends Application {
         		
 	        	public void onPostExecute(JSONObject json) {
 	        		try {
-	                	long 										retval = json.getLong("JSONRetVal");
+	                	long retval = json.getLong("JSONRetVal");
 	        			
-	                	if (retval == 0 && !json.isNull("arg1")){
+	                	if (retval == 0){
 	        	        	JSONArray jsonArr = json.getJSONArray("arg1");
 	        	        	
 	        	        	// [TODO]: This doesn't feel right, calling the app object
@@ -265,8 +223,13 @@ public class NoteItApplication extends Application {
 	        	        	
 	        	        	mListener.onPostExecute(retval, mShoppingLists, "");
 	                	}
+	                	else {
+	                		
+	                		mListener.onPostExecute(retval, null, json.getString("JSONRetMessage"));
+	                	}
+	                		
 	        		} catch (JSONException e){
-	        			Toast.makeText(getApplicationContext(), "The server seems to be out of its mind. Please try later.", Toast.LENGTH_SHORT).show();
+                		mListener.onPostExecute(-1, null, getResources().getString(R.string.server_error));
 	        			Log.e("NoteItApplication.fetchShoppingList", e.getMessage());
 	        		}
 	    		}
@@ -276,13 +239,13 @@ public class NoteItApplication extends Application {
 			AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs, myListener);
 			task.execute();
 		} catch (CancellationException e) {
-			Log.e("NoteItApplication.loginUser", e.getMessage());
+			Log.e("NoteItApplication.fetchShoppingLists", e.getMessage());
 		} catch (ExecutionException e) {
-			Log.e("NoteItApplication.loginUser", e.getMessage());
+			Log.e("NoteItApplication.fetchShoppingLists", e.getMessage());
 		} catch (InterruptedException e) {
-			Log.e("NoteItApplication.loginUser", e.getMessage());
+			Log.e("NoteItApplication.fetchShoppingLists", e.getMessage());
 		} catch (Exception e) {
-			Log.e("NoteItApplication.loginUser", e.getMessage());		
+			Log.e("NoteItApplication.fetchShoppingLists", e.getMessage());		
 		}
 	}
 	
@@ -425,15 +388,19 @@ public class NoteItApplication extends Application {
 		return mShoppingLists.get(index);
 	}
 	
-	public void setCurrentShoppingList(int index){
+	public void setCurrentShoppingListIndex(int index){
 		ShoppingList thisList = getShoppingList(index);
 		if (thisList != null){
 			mCurrentShoppingListID = thisList.mID;
 		}
 	}
 	
-	public long getCurrentShoppingList() {
+	public long getCurrentShoppingListID() {
 		return mCurrentShoppingListID;
+	}
+	
+	public ArrayList<ShoppingList> getShoppingList() {
+		return mShoppingLists;
 	}
 	
 	public void fetchCategories(OnFetchCategoriesListener inPostExecute){
@@ -462,8 +429,11 @@ public class NoteItApplication extends Application {
 					try {
 			        	long retval = json.getLong("JSONRetVal");
 						
-			        	if (retval == 0 && !json.isNull("arg1")){
+			        	if (retval == 0){
 				        	JSONArray jsonArr = json.getJSONArray("arg1");
+				        	
+				        	// Special Casing for "Uncategorized" (Category ID = 0)
+				        	addCategory(new Category(0, getResources().getString(R.string.category_uncategorized), 1));
 				        	
 				        	// [TODO]: This doesn't feel right, calling the app object
 				        	// to read shopping list items and having to populate them
@@ -483,9 +453,10 @@ public class NoteItApplication extends Application {
 				        	
 				        	// Call the invoker
 				        	mListener.onPostExecute(retval, mCategories, "");
-			        	}
+			        	} else 
+			        		mListener.onPostExecute(retval, null, json.getString("JSONRetMessage"));
 					} catch (JSONException e) {
-						Log.e("NoteItApplication.loginUser: JSON Exception", e.getMessage());
+						Log.e("NoteItApplication.fetchCategories: JSON Exception", e.getMessage());
 						mListener.onPostExecute(-1L, mCategories, e.getMessage());
 					}
 				}
@@ -495,13 +466,13 @@ public class NoteItApplication extends Application {
 			AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs, myListener);
 			task.execute();
 		} catch (CancellationException e) {
-			Log.e("NoteItApplication.loginUser", e.getMessage());
+			Log.e("NoteItApplication.fetchCategories", e.getMessage());
 		} catch (ExecutionException e) {
-			Log.e("NoteItApplication.loginUser", e.getMessage());
+			Log.e("NoteItApplication.fetchCategories", e.getMessage());
 		} catch (InterruptedException e) {
-			Log.e("NoteItApplication.loginUser", e.getMessage());
+			Log.e("NoteItApplication.fetchCategories", e.getMessage());
 		} catch (Exception e) {
-			Log.e("NoteItApplication.loginUser", e.getMessage());		
+			Log.e("NoteItApplication.fetchCategories", e.getMessage());		
 		}
 	}
 
@@ -563,7 +534,7 @@ public class NoteItApplication extends Application {
 	                	long 	retval = json.getLong("JSONRetVal");
 	         			String 	message = json.getString("JSONRetMessage");
 	         			
-	                	if (retval == 0 && !json.isNull("arg1")){
+	                	if (retval == 0){
 	        	        	JSONArray jsonArr = json.getJSONArray("arg1");
 	        	        	
 	        	        	for (int index = 0; index < jsonArr.length(); index++){
@@ -575,14 +546,23 @@ public class NoteItApplication extends Application {
 	        							thisObj.getString("itemName"),
 	        							Long.parseLong(thisObj.getString("categoryID_FK")));
 	        	        		
+	        	        		thisItem.mClassID = thisObj.getLong("itemID_FK");
+	        	        		thisItem.mListID = thisObj.getLong("listID_FK");
+	        	        		thisItem.mUnitID = thisObj.getInt("unitID_FK");
+	        	        		thisItem.mCategoryID = thisObj.getLong("categoryID_FK");
+	        	        		thisItem.mUnitPrice = (float)thisObj.getDouble("unitCost");
+	        	        		thisItem.mQuantity = (float)thisObj.getDouble("quantity");
+	        	        		thisItem.mIsPurchased = thisObj.getInt("isPurchased");
+	        	        		
 	        	        		mItems.add(thisItem);
 	        	        	}
 	        	        	
 	        	        	mListener.onPostExecute(retval, mItems, message);
-	                	}
+	                	} else 
+	                		mListener.onPostExecute(retval, null, json.getString("JSONRetMessage"));
 	        		} catch (JSONException e){
 	        			Toast.makeText(getApplicationContext(), "The server seems to be out of its mind. Please try later.", Toast.LENGTH_SHORT).show();
-	        			Log.e("NoteItApplication.loginUser", e.getMessage());
+	        			Log.e("NoteItApplication.fetchItems", e.getMessage());
 	        		}
 	        		
 	        	}
@@ -593,13 +573,13 @@ public class NoteItApplication extends Application {
 			task.execute();
 			
 		} catch (CancellationException e) {
-			Log.e("NoteItApplication.loginUser", e.getMessage());
+			Log.e("NoteItApplication.fetchItems", e.getMessage());
 		} catch (ExecutionException e) {
-			Log.e("NoteItApplication.loginUser", e.getMessage());
+			Log.e("NoteItApplication.fetchItems", e.getMessage());
 		} catch (InterruptedException e) {
-			Log.e("NoteItApplication.loginUser", e.getMessage());
+			Log.e("NoteItApplication.fetchItems", e.getMessage());
 		} catch (Exception e) {
-			Log.e("NoteItApplication.loginUser", e.getMessage());		
+			Log.e("NoteItApplication.fetchItems", e.getMessage());		
 		}
 	}
 
@@ -619,6 +599,7 @@ public class NoteItApplication extends Application {
 					retVal = json.getLong("JSONRetVal");
 					
 					if (retVal == 0){
+						
 						JSONArray itemArray = json.getJSONArray("arg1");
 						JSONObject itemObject = itemArray.getJSONObject(0);
 						
@@ -629,10 +610,11 @@ public class NoteItApplication extends Application {
 						
 						item.mClassID = itemObject.getLong("itemID_FK");
 						item.mListID = itemObject.getLong("listID_FK");
-						item.mUnitPrice = (float)itemObject.getDouble("unitCost");
-						item.mQuantity = (float)itemObject.getDouble("quantity");
 						item.mUnitID = itemObject.getInt("unitID_FK");
 						item.mCategoryID = itemObject.getLong("categoryID_FK");
+						item.mUnitPrice = (float)itemObject.getDouble("unitCost");
+						item.mQuantity = (float)itemObject.getDouble("quantity");
+    	        		item.mIsPurchased = itemObject.getInt("isPurchased");
 						
 						mListener.onPostExecute(retVal, item, json.getString("JSONRetMessage"));
 					} else {
@@ -672,9 +654,11 @@ public class NoteItApplication extends Application {
 			}
 			
 	       	public void onPostExecute(JSONObject json) {
+	       		
 	       		long retVal;
 	       		String message;
 				try {
+					
 					retVal = json.getLong("JSONRetVal");
 					message = json.getString("JSONRetMessage");
 					if (retVal == 0) {
@@ -691,6 +675,7 @@ public class NoteItApplication extends Application {
 						newItem.mQuantity = (float)object.getDouble("quantity");
 						newItem.mUnitID = object.getInt("unitID_FK");
 						newItem.mCategoryID = object.getLong("categoryID_FK");
+						newItem.mIsPurchased = object.getInt("isPurchased");
 						
 						// Add to our internal list
 						mItems.add(newItem);
@@ -700,7 +685,7 @@ public class NoteItApplication extends Application {
 					} else 
 						mListener.onPostExecute(retVal, null, message);
 				} catch (JSONException e) {
-					Log.e("NoteItApplication.editShoppingList", e.getMessage());
+					Log.e("NoteItApplication.addItem", e.getMessage());
                 	mListener.onPostExecute(-1, null, e.getMessage());
 				}
 	       	}
@@ -715,6 +700,7 @@ public class NoteItApplication extends Application {
 		nameValuePairs.add(new BasicNameValuePair("arg5", String.valueOf(inItem.mUnitPrice)));
 		nameValuePairs.add(new BasicNameValuePair("arg6", String.valueOf(inItem.mUnitID)));
 		nameValuePairs.add(new BasicNameValuePair("arg7", String.valueOf(getUserID())));
+		nameValuePairs.add(new BasicNameValuePair("arg8", String.valueOf(inItem.mIsPurchased)));
 		
 		AddItemTask myEditTask = new AddItemTask(inListener);
         AsyncInvokeURLTask task;
@@ -722,7 +708,7 @@ public class NoteItApplication extends Application {
 			task = new AsyncInvokeURLTask(nameValuePairs, myEditTask);
 	        task.execute();
 		} catch (Exception e) {
-			Log.e("NoteItApplication.editShoppingList", e.getMessage());
+			Log.e("NoteItApplication.addItem", e.getMessage());
 			e.printStackTrace();
 		}		
 	}
@@ -758,12 +744,13 @@ public class NoteItApplication extends Application {
 	        nameValuePairs.add(new BasicNameValuePair("arg6", String.valueOf(item.mUnitPrice)));
 	        nameValuePairs.add(new BasicNameValuePair("arg7", String.valueOf(item.mUnitID)));
 	        nameValuePairs.add(new BasicNameValuePair("arg8", String.valueOf(getUserID())));
+	        nameValuePairs.add(new BasicNameValuePair("arg9", String.valueOf(item.mIsPurchased)));
 	        
 	        EditItemTask myTask = new EditItemTask(inListener);
 	        AsyncInvokeURLTask 	task = new AsyncInvokeURLTask(nameValuePairs, myTask);
 	        task.execute();
         } catch (Exception e) {
-        	Log.e("NoteItApplication.addShoppingList", e.getMessage());
+        	Log.e("NoteItApplication.editItem", e.getMessage());
         }
     }
 
@@ -801,7 +788,7 @@ public class NoteItApplication extends Application {
 	        AsyncInvokeURLTask 	task = new AsyncInvokeURLTask(nameValuePairs, myTask);
 	        task.execute();
         } catch (Exception e) {
-        	Log.e("NoteItApplication.addShoppingList", e.getMessage());
+        	Log.e("NoteItApplication.deleteItem", e.getMessage());
         }
     }
 	
@@ -821,8 +808,8 @@ public class NoteItApplication extends Application {
 	       		
 				try {
 					if ((retVal = json.getLong("JSONRetVal")) == 0) {
-						JSONArray jsonSuggestions = json.getJSONArray("arg1");
 						
+						JSONArray jsonSuggestions = json.getJSONArray("arg1");
 						for (int i = 0; i < jsonSuggestions.length(); i++) {
 							suggestions.add(jsonSuggestions.getString(i));
 						}
@@ -847,7 +834,7 @@ public class NoteItApplication extends Application {
 			task = new AsyncInvokeURLTask(nameValuePairs, myEditTask);
 	        task.execute();
 		} catch (Exception e) {
-			Log.e("NoteItApplication.editShoppingList", e.getMessage());
+			Log.e("NoteItApplication.suggestItems", e.getMessage());
 			e.printStackTrace();
 		}		
 	}

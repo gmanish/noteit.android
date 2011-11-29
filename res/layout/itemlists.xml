@@ -13,8 +13,7 @@
         android:cacheColorHint="#00000000"
         android:childDivider="@color/theme_offwhite_listitem_seperator_level2"
         android:divider="@color/theme_offwhite_listitem_seperator"
-        android:dividerHeight="1dp"
-        android:groupIndicator="@color/listitem_group_indicator"/>
+        android:dividerHeight="1dp" />
 
     <LinearLayout 
         android:id="@android:id/empty"

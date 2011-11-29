@@ -151,7 +151,7 @@ public class AddEditItemActivity extends Activity {
 							AddEditItemActivity.this.mNewItems.add(item);
 							Intent resultIntent = new Intent();
 							resultIntent.putExtra("RESULT", true);
-							resultIntent.putParcelableArrayListExtra("com.geekjamboree.noteit.items", AddEditItemActivity.this.mNewItems);
+//							resultIntent.putParcelableArrayListExtra("com.geekjamboree.noteit.items", AddEditItemActivity.this.mNewItems);
 							AddEditItemActivity.this.setResult(RESULT_OK, resultIntent);
 							finish();
 						}
@@ -207,7 +207,8 @@ public class AddEditItemActivity extends Activity {
     	mEditCost.setText(String.valueOf(item.mUnitPrice));
     	ArrayAdapter<Category> adapter = (ArrayAdapter<Category>)mSpinCategories.getAdapter();
     	if (adapter != null){
-    		int position = adapter.getPosition(new Category(item.mCategoryID, "", 0));
+    		NoteItApplication app = (NoteItApplication) getApplication();
+    		int position = adapter.getPosition(app.new Category(item.mCategoryID, "", 0));
     		if (position >=0 && position < adapter.getCount())
     			mSpinCategories.setSelection(position);
     	}
@@ -216,7 +217,7 @@ public class AddEditItemActivity extends Activity {
     protected Item getItemFromView() throws Exception {
     	
     	NoteItApplication app = ((NoteItApplication) getApplication());
-    	Item item = new Item();
+    	Item item = app.new Item();
     	
     	int  position = mSpinCategories.getSelectedItemPosition();
     	if (position != Spinner.INVALID_POSITION) {
@@ -224,7 +225,7 @@ public class AddEditItemActivity extends Activity {
     	}
     	//item.mClassID =
     	item.mID = mIsAddItem ? 0 : mItemID;
-    	item.mListID = (app.getCurrentShoppingList());
+    	item.mListID = (app.getCurrentShoppingListID());
     	item.mName = mEditName.getEditableText().toString();
     	if (item.mName.isEmpty())
     		throw new Exception(getResources().getString(R.string.addedit_nameblank));

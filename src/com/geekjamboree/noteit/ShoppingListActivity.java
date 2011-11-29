@@ -52,7 +52,40 @@ public class ShoppingListActivity
         toolbar.SetTitle(getResources().getText(R.string.shoplistsactivity_title));
         
         mListView = (ListView) findViewById(android.R.id.list);
- //       mListView.setDividerHeight(2);
+    	mListView.setTextFilterEnabled(true);
+		mAdapter = new ArrayAdapter<NoteItApplication.ShoppingList>(
+				this, 
+    			R.layout.shoppinglists_item, 
+    			R.id.shoppinglist_name, 
+    			((NoteItApplication)getApplication()).getShoppingList());
+		mListView.setAdapter(mAdapter);
+    	
+    	class ItemClickAndPostExecuteListener 
+    		implements AdapterView.OnItemClickListener, NoteItApplication.OnFetchCategoriesListener {
+    		
+    		View mView = null;
+    		
+    		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    			mView = view;
+    			// Now fetch the categories in the dbase
+    			((NoteItApplication)getApplication()).setCurrentShoppingListIndex(position);
+    			((NoteItApplication)getApplication()).fetchCategories(this);
+			}
+    		
+    	    public void onPostExecute(long resultCode, ArrayList<Category> categories, String message) {
+    			// Invoke the category activity
+    	    	assert(mView != null);
+    	    	if (mView != null && resultCode == 0){
+                    Intent myIntent = new Intent(mView.getContext(), ItemListActivity.class);
+                    startActivity(myIntent);
+    	    	}
+    	    	else
+    	    		// Display alert with error message
+    	    		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+    	    }
+    	}
+    	
+    	mListView.setOnItemClickListener(new ItemClickAndPostExecuteListener());
         
         // Show a spinning wheel dialog
         mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message), true);
@@ -126,19 +159,22 @@ public class ShoppingListActivity
      
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+        
+    	MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.shoplists_menu, menu);
         
         return true;
     }
     
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+    	
     	super.onCreateContextMenu(menu, v, menuInfo);
     	MenuInflater inflater = getMenuInflater();
     	inflater.inflate(R.menu.shoplists_menu_context, menu);
     }
     
     public boolean onOptionsItemSelected(MenuItem item) {
+    	
     	switch(item.getItemId()){
     		case R.id.noteit_prefs:
     			startActivity(new Intent(this, MainPreferenceActivity.class));
@@ -166,57 +202,26 @@ public class ShoppingListActivity
     	
     	if (mProgressDialog != null) mProgressDialog.dismiss();
     	
+
     	if (retval == 0){ // success
-        	if (!shopList.isEmpty()){
-        		mAdapter = new ArrayAdapter<NoteItApplication.ShoppingList>(
-        				this, 
-            			R.layout.shoppinglists_item, 
-            			R.id.shoppinglist_name, 
-            			shopList);
-        		
-        		mListView.setAdapter(mAdapter);
-            	mListView.setTextFilterEnabled(true);
-            	
-            	class ItemClickAndPostExecuteListener 
-            		implements AdapterView.OnItemClickListener, NoteItApplication.OnFetchCategoriesListener {
-            		
-            		View mView = null;
-            		
-            		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            			mView = view;
-            			// Now fetch the categories in the dbase
-            			((NoteItApplication)getApplication()).setCurrentShoppingList(position);
-            			((NoteItApplication)getApplication()).fetchCategories(this);
-        			}
-            		
-            	    public void onPostExecute(long resultCode, ArrayList<Category> categories, String message) {
-            			// Invoke the category activity
-            	    	assert(mView != null);
-            	    	if (mView != null && resultCode == 0){
-                            Intent myIntent = new Intent(mView.getContext(), ItemListActivity.class);
-                            startActivity(myIntent);
-            	    	}
-            	    	else
-            	    		// Display alert with error message
-            	    		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-            	    }
-            	}
-            	
-            	mListView.setOnItemClickListener(new ItemClickAndPostExecuteListener());
-        	}
-        	else {
-        		// Display alert with error message
-        		Toast.makeText(getApplicationContext(), "There are no lists. Please add a new list.", Toast.LENGTH_LONG).show();
-        	}
-        	
-        	
+    		// [TODO]: Since we're directly passing a reference to the NoteItApplication.getShoppingList
+    		// to the ListView as it's adapter and since NoteItApplication takes care of add/deleting items
+    		// from the mShoppingList member. We don't have to clear the adapter. It is automatically taken
+    		// care of. Got to improve this though.
+    		// mAdapter.clear();
+        	// if (!shopList.isEmpty()){
+        	//	 mAdapter.addAll(shopList);
+        	// }
+    		
+    		mAdapter.notifyDataSetChanged();
     	} else {
     		Toast.makeText(getApplicationContext(), "Error Occurred:" + errMsg, Toast.LENGTH_LONG).show();
     	}
     }
     
     protected void editShoppingList(final int index) {
-		if (index >= 0 && index < mListView.getCount()) {
+		
+    	if (index >= 0 && index < mListView.getCount()) {
 			// inflate the view from resource layout
 			LayoutInflater	inflater = (LayoutInflater) ShoppingListActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			final View dialogView = inflater.inflate(R.layout.dialog_addshoppinglist, (ViewGroup) findViewById(R.id.dialog_addshoppinglist_root));
@@ -268,7 +273,8 @@ public class ShoppingListActivity
     }
     
     protected void deleteShoppingList(final int index){
-		if (index >= 0 && index < mListView.getCount()) {
+
+    	if (index >= 0 && index < mListView.getCount()) {
 			final AlertDialog dialog = new AlertDialog.Builder(ShoppingListActivity.this).create();
 			
 			dialog.setTitle(getResources().getString(R.string.shoplistsactivity_title));

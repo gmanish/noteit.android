@@ -6,6 +6,7 @@
     <string name="hello">Hello World, MainActivity!</string>
     <string name="app_name">Note It!</string>
 
+    <string name="category_uncategorized">Uncategorized</string>
     <string name="server_error">The server seems to be out of its mind. Please try later.</string>
     <string name="login_activity_title">Please log in</string>
 	<string name="login_email">Email:</string>
@@ -18,7 +19,7 @@
 	<string name="shoplistsactivity_title">Shopping Lists</string>
 	<string name="empty_shoppinglists">You do not have any shopping lists. Please add a list by clicking the \"Add\" button.</string>
   	<string name="add_shoplist">Add...</string>
-  	<string name="shopping_list_confirm_delte">Are you sure you want to delete this list?</string>
+  	<string name="shopping_list_confirm_delte">Are you sure you want to delete this list? All items in the list will also be deleted.</string>
     <string name="noteit_prefs">Preferences...</string>
 	<string name="shoppinglist_add_title">List Name</string>
 	<string name="shoppinglist_edit_title">Edit List</string>
@@ -36,7 +37,7 @@
 	    	
 	<string name="addedit_Title">Add Item</string>    
 	<string name="addedit_Name">Name:</string>
-	<string name="addedit_NameHint">Item Name</string>
+	<string name="addedit_Name_Hint">Item Name</string>
 	<string name="addedit_quantity">Quantity:</string>
 	<string name="addedit_unit">Unit:</string>
 	<string name="addedit_price">Unit Price:</string>

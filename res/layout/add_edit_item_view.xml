@@ -5,50 +5,31 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="10dip" >
-
+	
 	<TextView
-	    android:id="@+id/textView1"
-	    style="@style/AddEdit_TextViewStyle"
+	    android:id="@+id/addedit_textview_caption"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_marginBottom="2dp"
-	    android:text="@string/addedit_Name" />
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentTop="true"
+	    android:layout_marginBottom="10dip"
+	    android:text="@string/addedit_Title"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	<AutoCompleteTextView
 	    android:id="@+id/addedit_editName"
 	    style="@style/AddEdit_WidgetHeight"
 	    android:layout_width="match_parent"
-        android:layout_marginBottom="3dp"
-        android:layout_below="@id/textView1"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@+id/addedit_textview_caption"
         android:hint="@string/addedit_Name_Hint" />
    
-	<TextView
-	   	android:id="@+id/textView2"
-	    style="@style/AddEdit_TextViewStyle"
-	   	android:layout_width="wrap_content"
-	   	android:layout_height="wrap_content"
-	   	android:layout_below="@+id/addedit_editName"
-	    android:layout_marginBottom="2dp"
-		android:baselineAligned="true"
-	   	android:text="@string/addedit_quantity" />
-  
-	<TextView
-	   	android:id="@+id/textview_unit"
-	    style="@style/AddEdit_TextViewStyle"
-	   	android:layout_width="wrap_content"
-	   	android:layout_height="wrap_content"
-	   	android:layout_below="@+id/addedit_editName"
-	    android:layout_marginBottom="2dp"
-		android:baselineAligned="true"
-	   	android:layout_alignParentRight="true"
-	   	android:text="@string/addedit_unit" />
-	
 	<LinearLayout
        android:id="@+id/addedit_updowncontrol"
        android:layout_width="fill_parent"
        android:layout_height="wrap_content"
-       android:layout_below="@+id/textView2"
-       android:layout_marginBottom="3dp" 
+       android:layout_below="@+id/addedit_editName"
+       android:layout_marginBottom="5dp" 
        android:gravity="center_vertical"
   	   android:orientation="horizontal">
 
@@ -59,6 +40,7 @@
 		    android:layout_alignParentTop="true"
 		    android:layout_alignParentLeft="true"
 		    android:layout_weight="0.1"
+		    android:focusable="false"
 		    android:text="-" />
         
 		<EditText
@@ -68,7 +50,8 @@
 		    android:minWidth="90dp"
 		    android:layout_weight="0.4"
 		    android:layout_alignParentTop="true"
-		    android:inputType="numberDecimal" />
+		    android:inputType="numberDecimal"
+		    android:hint="@string/addedit_quantity" />
 		
 		<Button
 		    android:id="@+id/addedit_btnIncrement"
@@ -77,6 +60,7 @@
 		    android:layout_alignParentTop="true"
 		    android:layout_weight="0.1"
 		    android:layout_toLeftOf="@+id/addedit_units"
+		    android:focusable="false"
 		    android:text="+" />
 
 	    <Spinner
@@ -89,23 +73,14 @@
 	    		
 	</LinearLayout>
 
-	<TextView
-	    android:id="@+id/textView3"
-	    style="@style/AddEdit_TextViewStyle"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/addedit_updowncontrol"
-	    android:layout_marginBottom="2dp"
-	    android:baselineAligned="true"
-	    android:text="@string/addedit_price" />
-
 	<EditText
 	    android:id="@+id/addedit_editprice"
 	    style="@style/AddEdit_WidgetHeight"
 	    android:layout_width="match_parent"
-	    android:layout_below="@+id/textView3"
+	    android:layout_below="@+id/addedit_updowncontrol"
 	    android:inputType="numberDecimal" 
-	    android:layout_marginBottom="3dp" />
+	    android:layout_marginBottom="5dp" 
+	    android:hint="@string/addedit_price"/>
 	
 	<TextView
 	    android:id="@+id/textView4"
@@ -121,25 +96,24 @@
 	    style="@style/AddEdit_WidgetHeight"
 	    android:layout_width="match_parent"
 	    android:layout_below="@+id/textView4"
-	    android:layout_marginBottom="3dp" />
+	    android:layout_marginBottom="5dp" />
 
 	<LinearLayout 
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content" 
-	    android:layout_alignParentBottom="true"
 	    android:layout_alignParentRight="true"
-	    android:layout_marginTop="5dp">
+	    android:layout_below="@+id/addedit_spinCategories"
+	    android:gravity="right"
+	    android:layout_marginTop="10dp">
 		
 		<Button
 		    android:id="@+id/addedit_btnContinue"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
+		    style="@style/App_TextButtonStyle"
 		    android:text="@string/addedit_Continue" />
 
 		<Button
 		    android:id="@+id/addedit_btnDone"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
+		    style="@style/App_TextButtonStyle"
 		    android:text="@string/addedit_Done" />
 		
 	</LinearLayout>

@@ -8,7 +8,7 @@ import com.geekjamboree.noteit.NoteItApplication.OnAddItemListener;
 import com.geekjamboree.noteit.NoteItApplication.OnSuggestItemsListener;
 import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
 
-import android.app.Dialog;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
@@ -23,7 +23,7 @@ import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Toast;
 
-public class AddEditItemDialog extends Dialog {
+public class AddEditItemDialog extends AlertDialog {
 	
 	public interface baseListener{
 		// Just a convenience, I need to have a single pointer
@@ -31,10 +31,12 @@ public class AddEditItemDialog extends Dialog {
 	}
 	
 	public interface addItemListener extends baseListener {
+		
 		void onAddItem(NoteItApplication.Item item);
 	}
 	
 	public interface editItemListener extends baseListener {
+		
 		void onEditItem(NoteItApplication.Item oldItem, NoteItApplication.Item newItem);
 	}
 	
@@ -43,7 +45,7 @@ public class AddEditItemDialog extends Dialog {
 			NoteItApplication application,
 			addItemListener inListener) { // opens the dialog in Add mode
 		
-		super(context);
+		super(context, R.style.Theme_AppCustomDialog);
 		mApplication = application;
 		mItemID = 0;
 		mIsAddItem = true;
@@ -56,7 +58,7 @@ public class AddEditItemDialog extends Dialog {
 			editItemListener inListener, // Opens the dialog in Edit mode
 			long itemID) {
 		
-		super(context);
+		super(context, R.style.Theme_AppCustomDialog);
 		mApplication = application;
 		mItemID = itemID;
 		mIsAddItem = false;
@@ -88,6 +90,7 @@ public class AddEditItemDialog extends Dialog {
 	final TextWatcher		mTextChecker = new TextWatcher() {
 		
 		public void onTextChanged(CharSequence s, int start, int before, int count) {
+			
 			mApplication.suggestItems(s.toString(), new OnSuggestItemsListener() {
 				
 				public void onPostExecute(long resultCode, ArrayList<String> suggestions,
@@ -115,6 +118,19 @@ public class AddEditItemDialog extends Dialog {
 		}
 	};
 	
+	protected class DialogFieldException extends Exception {
+
+		private static final long serialVersionUID = 0x84586262L; // Completely Random to suppress warning
+
+		DialogFieldException(){
+		}
+		
+		DialogFieldException(String message){
+			
+			super(message);
+		}
+	}
+	
     /* (non-Javadoc)
      * @see android.app.Dialog#onCreate(android.os.Bundle)
      */
@@ -122,6 +138,8 @@ public class AddEditItemDialog extends Dialog {
     	
     	super.onCreate(savedInstanceState);
         setContentView(R.layout.add_edit_item_view);
+        
+//        setTitle(getContext().getResources().getString(R.string.addedit_Title));
         
         mSpinCategories = (Spinner) findViewById(R.id.addedit_spinCategories);
         if (mSpinCategories != null) {
@@ -136,8 +154,20 @@ public class AddEditItemDialog extends Dialog {
         doneBtn.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				saveItem();
-				dismiss();
+				try {
+					saveItem();
+					dismiss();
+		    	}catch (DialogFieldException dialogException){
+		    		
+		    		Toast.makeText(getContext(), 
+		    				dialogException.getMessage(), 
+		    				Toast.LENGTH_LONG).show();
+		    	}
+		    	catch (Exception e) {
+		    		Toast.makeText(getContext(), 
+		    				getContext().getResources().getString(R.string.server_error), 
+		    				Toast.LENGTH_LONG).show();
+		    	}
 			}
 		});
 
@@ -150,10 +180,30 @@ public class AddEditItemDialog extends Dialog {
         continueBtn.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				saveItem();
-				// clear contents here
+				
+				try {
+					saveItem();
+					// clear contents here
+					clearDialogFields();
+		    	}catch (DialogFieldException dialogException){
+		    		
+		    		Toast.makeText(getContext(), 
+		    				dialogException.getMessage(), 
+		    				Toast.LENGTH_LONG).show();
+		    		
+		    	}
+		    	catch (Exception e) {
+		    		Toast.makeText(getContext(), 
+		    				getContext().getResources().getString(R.string.server_error), 
+		    				Toast.LENGTH_LONG).show();
+	    	}
 			}
 		});
+        
+        if (!mIsAddItem) {
+        	// In the edit mode "Add More" button does not make sense
+        	continueBtn.setVisibility(View.INVISIBLE);
+        }
 
     	if (mIsAddItem == false && mItemID != 0){
     		mApplication.getItem(mItemID, new NoteItApplication.OnGetItemListener() {
@@ -162,7 +212,7 @@ public class AddEditItemDialog extends Dialog {
 					// Populate the view with this data
 					if (resultCode == 0) {
 						// Make a copy and save for later
-						mOriginalItem = new Item(item);
+						mOriginalItem = mApplication.new Item(item);
 						populateView(item);
 					} else {
 						Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
@@ -172,46 +222,39 @@ public class AddEditItemDialog extends Dialog {
     	}
     }
     
-    protected void saveItem() {
-    	try {
-	    	final Item item = getItemFromView();
+    protected void saveItem() throws DialogFieldException {
 
-	    	if (mIsAddItem)	{
-	    		
-		    	mApplication.addItem(item, new OnAddItemListener() {
-					
-					public void onPostExecute(long resultCode, Item item, String message) {
-						if (resultCode == 0){
-							Toast.makeText(getContext(), "Item has been added", Toast.LENGTH_LONG).show();
-							((addItemListener)mListener).onAddItem(item);
-						}
-						else
-							Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+    	final Item item = getItemFromView();
+
+    	if (mIsAddItem)	{
+    		
+	    	mApplication.addItem(item, new OnAddItemListener() {
+				
+				public void onPostExecute(long resultCode, Item item, String message) {
+					if (resultCode == 0){
+						((addItemListener)mListener).onAddItem(item);
 					}
-					});
-	    	} else {
-	    		// In this case, we need to send old item details to the caller, so copy it
-		    	mApplication.editItem(item.mID, item, new OnMethodExecuteListerner() {
-					
-					public void onPostExecute(long resultCode, String message) {
-						if (resultCode == 0) {
-							Toast.makeText(
-								getContext(), 
-								mApplication.getResources().getString(R.string.addedit_itemupdated), 
-								Toast.LENGTH_LONG).show();
-							((editItemListener)mListener).onEditItem(mOriginalItem, item);
-						}
-						else
-							Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
-					}
+					else
+						Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+				}
 				});
+    	} else {
+    		// In this case, we need to send old item details to the caller, so copy it
+	    	mApplication.editItem(item.mID, item, new OnMethodExecuteListerner() {
+				
+				public void onPostExecute(long resultCode, String message) {
+					if (resultCode == 0) {
+						((editItemListener)mListener).onEditItem(mOriginalItem, item);
+					}
+					else
+						Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+				}
+			});
 	    	}
-    	} catch (Exception e) {
-    		Toast.makeText(getContext(), mApplication.getResources().getString(R.string.server_error), Toast.LENGTH_LONG).show();
-    	}
     }
     
     protected void populateCategories() {
+    	
     	ArrayList<Category> categories = mApplication.getCategories();
         ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(
                 getContext(), 
@@ -237,16 +280,17 @@ public class AddEditItemDialog extends Dialog {
     	mEditCost.setText(String.valueOf(item.mUnitPrice));
     	ArrayAdapter<Category> adapter = (ArrayAdapter<Category>)mSpinCategories.getAdapter();
     	if (adapter != null){
-    		int position = adapter.getPosition(new Category(item.mCategoryID, "", 0));
+    		int position = adapter.getPosition(mApplication.new Category(item.mCategoryID, "", 0));
     		if (position >=0 && position < adapter.getCount())
     			mSpinCategories.setSelection(position);
     	}
+    	mEditCost.setActivated(true);
     }
     
-    protected Item getItemFromView() throws Exception {
+    protected Item getItemFromView() throws DialogFieldException {
     	
     	NoteItApplication app = mApplication;
-    	Item item = new Item();
+    	Item item = mApplication.new Item();
     	
     	int  position = mSpinCategories.getSelectedItemPosition();
     	if (position != Spinner.INVALID_POSITION) {
@@ -254,10 +298,10 @@ public class AddEditItemDialog extends Dialog {
     	}
     	//item.mClassID =
     	item.mID = mIsAddItem ? 0 : mItemID;
-    	item.mListID = (app.getCurrentShoppingList());
+    	item.mListID = (app.getCurrentShoppingListID());
     	item.mName = mEditName.getEditableText().toString();
     	if (item.mName.isEmpty())
-    		throw new Exception(mApplication.getResources().getString(R.string.addedit_nameblank));
+    		throw new DialogFieldException(getContext().getResources().getString(R.string.addedit_nameblank));
    	
     	if (!mEditQuantity.getEditableText().toString().isEmpty())
     		item.mQuantity = Float.valueOf(mEditQuantity.getEditableText().toString());
@@ -267,5 +311,14 @@ public class AddEditItemDialog extends Dialog {
     		item.mUnitPrice = Float.valueOf(mEditCost.getEditableText().toString());
 
     	return item;
+    }
+    
+    void clearDialogFields() {
+
+    	mEditName.setText("");
+    	mEditQuantity.setText("");
+    	mEditCost.setText("");
+    	mEditName.setActivated(true);
+		//mSpinCategories.setSelection(position);
     }
 }
