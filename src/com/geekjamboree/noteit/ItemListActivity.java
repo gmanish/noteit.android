@@ -1,6 +1,7 @@
  package com.geekjamboree.noteit;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.geekjamboree.noteit.ActionItem;
 import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
@@ -14,10 +15,14 @@ import android.app.ExpandableListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.text.TextUtils.TruncateAt;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -36,14 +41,21 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	ItemsExpandableListAdapter 	mAdapter;
 	ProgressDialog				mProgressDialog = null;
 	QuickAction 				mQuickAction = null;
-	int							mSelectedGroup = 0;
-	int 						mSelectedChild = 0;
+	AtomicInteger				mSelectedGroup = new AtomicInteger();
+	AtomicInteger				mSelectedChild = new AtomicInteger();
+	boolean						mDisplayExtras = true;
+	Integer						mFontSize = 3;
+	CustomTitlebarWrapper		mToolbar;
 	
 	static final int ADD_ITEM_REQUEST = 0;	
 	
 	static final int QA_ID_EDIT 	= 0;
 	static final int QA_ID_DELETE	= 1;
 	static final int QA_ID_BOUGHT	= 2;
+	
+	static final int ITEM_FONT_LARGE 	= 0;
+	static final int ITEM_FONT_MEDIUM	= 1;
+	static final int ITEM_FONT_SMALL	= 2;
 	
 	// Custom adapter for my shopping items
 	public class ItemsExpandableListAdapter extends BaseExpandableListAdapter {
@@ -72,6 +84,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		}
 		
 		public void AddCategory(Category category){
+			
 			if (!mCategories.contains(category)) {
 				assert(category.mName != "");
 				mCategories.add(category);
@@ -79,6 +92,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		}
 		
 		public void AddItem(Item item, Category category){
+			
 			if (category != null){
 				int index = mCategories.indexOf(category);
 				if (index < 0){
@@ -94,6 +108,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		}
 		
 		public void DeleteItem(final Item item) {
+			
 			if (item != null) {
 				Category category = ((NoteItApplication) getApplication()).getCategory(item.mCategoryID);
 				if (category != null) {
@@ -111,41 +126,115 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		}
 		
 		public Object getChild(int groupPosition, int childPosition) {
+			
 			return mItems.get(groupPosition).get(childPosition);
 		}
 
 		public long getChildId(int groupPosition, int childPosition) {
+			
 			return childPosition;
 		}
 
+		public Object getNextChild(int groupPosition, int childPosition) {
+			
+			if (childPosition < getChildrenCount(groupPosition) - 1) {
+				// There are more next items in the same group
+				return getChild(groupPosition, childPosition + 1);
+			} else  if (groupPosition < getGroupCount() - 1)
+				return getChild(groupPosition + 1, 0);
+			
+			return null;
+		}
+		
+		public Object getPrevChild(int groupPosition, int childPosition) {
+			
+			if (childPosition > 0) {
+				// There are more next items in the same group
+				return getChild(groupPosition, childPosition -1);
+			} else if (groupPosition > 0) {
+				return getChild(
+					groupPosition - 1, 	// The previous group
+					getChildrenCount(groupPosition - 1) -1); // Last child
+			}
+			
+			return null;
+		}
+		
+		public boolean getNextChildPosition(
+				AtomicInteger groupPosition, //[IN/OUT] 
+				AtomicInteger childPosition) //[IN/OUT]
+		{
+			
+			if (childPosition.get() < getChildrenCount(groupPosition.get()) - 1) {
+
+				childPosition.set(childPosition.get() + 1);
+				return true;
+			} else if (groupPosition.get() < getGroupCount() - 1) {
+				
+				groupPosition.set(groupPosition.get() + 1);
+				childPosition.set(0);
+				return true;
+			}
+			
+			return false;
+		}
+
+		public boolean getPrevChildPosition(
+				AtomicInteger groupPosition, //[IN/OUT] 
+				AtomicInteger childPosition) //[IN/OUT]
+		{
+			
+			if (childPosition.get() > 0) {
+
+				childPosition.set(childPosition.get() - 1);
+				return true;
+			} else if (groupPosition.get() > 0) {
+				
+				groupPosition.set(groupPosition.get() - 1);
+				childPosition.set(getChildrenCount(groupPosition.get()) - 1);
+				return true;
+			}
+			
+			return false;
+		}
+
 		public int getChildrenCount(int groupPosition) {
+			
 			return mItems.get(groupPosition).size();
 		}
 
 		public Object getGroup(int groupPosition) {
+			
 			return mCategories.get(groupPosition);
 		}
 
 		public int getGroupCount() {
+			
 			return mCategories.size();
 		}
 
 		public long getGroupId(int groupPosition) {
+			
 			return groupPosition;
 		}
 
 		public boolean hasStableIds() {
+			
 			return true;
 		}
 
 		public boolean isChildSelectable(int groupPosition, int childPosition) {
+			
 			return true;
 		}
 
-	    public TextView getGenericView(final int itemHeight) {
-
-	        TextView textView = new TextView(mContext);
-	        return textView;
+	    public View getView(ViewGroup parent) {
+	    	
+	    	LayoutInflater li = (LayoutInflater) getApplication().getSystemService(LAYOUT_INFLATER_SERVICE);
+	    	if (li != null) {
+	    		return li.inflate(R.layout.listitems_item, parent, false);
+	    	} else
+	    		return null;
 	    }
 	    
 		/* From Android Documentation: Makes life interesting
@@ -158,61 +247,110 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		 *            created by
 		 *            {@link #getChildView(int, int, boolean, View, ViewGroup)}.
 		 */
-	    public void setViewParams(TextView view, int height) {
+	    public void setViewParams(View view, int height) {
 
-	        // Layout parameters for the ExpandableListView
-	        AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-	                ViewGroup.LayoutParams.MATCH_PARENT, 	// Width 
-	                height); 									// Height
-	        view.setLayoutParams(lp);
-	        view.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+	    	 ViewGroup.LayoutParams params = new AbsListView.LayoutParams(
+		                ViewGroup.LayoutParams.MATCH_PARENT, 
+		                height);
+	        
+	        view.setLayoutParams(params);
 	        view.setPadding(height + 10, 0, 0, 0);
 	    }
 	    
-	    public View getChildView(int groupPosition, int childPosition,
-				boolean isLastChild, View convertView, ViewGroup parent) {
+	    public View getChildView(
+	    		int groupPosition, 
+	    		int childPosition,
+				boolean isLastChild, 
+				View convertView, 
+				ViewGroup parent) {
 
-	    	TextView 	textView;
-	        final int 	childHeight = 32;
-	        Item 		thisItem = (Item) getChild(groupPosition, childPosition);
-
-	        if (convertView != null)
-	        	textView = (TextView) convertView;
-	        else
-	        	textView = getGenericView(childHeight);
-	        setViewParams(textView, childHeight);
+	        Item thisItem = (Item) getChild(groupPosition, childPosition);;
+	        View view;
 	        
-	        if (thisItem.mIsPurchased > 0) {
-	        	textView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
-	        	textView.setTextAppearance(mContext, R.style.ListView_DoneItemTextAppearance);
-	        }
-	        else { 
-	        	textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-	        	textView.setTextAppearance(mContext, R.style.ListView_PendingItemTextAppearance);
+	        if (convertView == null) {
+		        view = getView(parent);
+	        } else {
+	        	view = convertView;
 	        }
 	        
-	        textView.setText(getChild(groupPosition, childPosition).toString());
-	        // Set the background to transparent
-	        textView.setBackgroundColor(android.R.color.transparent);
-	        return textView;
+	        if (view != null) {
+    	        TextView				textView = (TextView) view.findViewById(R.id.itemlist_name);
+    	        TextView 				quantity = (TextView) view.findViewById(R.id.itemlist_quantity);
+    	        TextView 				price = (TextView) view.findViewById(R.id.itemlist_price);
+    	        TextView				total = (TextView) view.findViewById(R.id.itemlist_Total);
+    	        ViewGroup.LayoutParams 	params = (ViewGroup.LayoutParams) parent.getLayoutParams();
+    	        
+    	        if (params != null) {  
+    	            params.width = ViewGroup.LayoutParams.FILL_PARENT;
+    	            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+    	        } else {
+    	        	params = new AbsListView.LayoutParams(
+    		                ViewGroup.LayoutParams.MATCH_PARENT, 
+    		                ViewGroup.LayoutParams.WRAP_CONTENT);
+    	        }	
+    	        
+    	        if (textView != null) {
+
+			        if (thisItem.mIsPurchased > 0) {
+			        	textView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+			        	if (mFontSize == 3)
+			        		textView.setTextAppearance(mContext, R.style.ItemList__TextAppearance_DoneItem_Small);
+			        	else if (mFontSize == 2)
+			        		textView.setTextAppearance(mContext, R.style.ItemList__TextAppearance_DoneItem_Medium);
+			        	else
+			        		textView.setTextAppearance(mContext, R.style.ItemList__TextAppearance_DoneItem_Large);
+			        }
+			        else { 
+			        	if (mFontSize == 3)
+			        		textView.setTextAppearance(mContext, R.style.ItemList_TextAppearance_PendingItem_Small);
+			        	else if (mFontSize == 2)
+			        		textView.setTextAppearance(mContext, R.style.ItemList_TextAppearance_PendingItem_Medium);
+			        	else
+			        		textView.setTextAppearance(mContext, R.style.ItemList_TextAppearance_PendingItem_Large);
+			        	textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+			        }
+			        
+			        textView.setText(thisItem.mName.toString());
+			        textView.setBackgroundColor(android.R.color.transparent);
+	        	}
+	        	
+	        	if (mDisplayExtras && quantity != null && thisItem.mQuantity > 0 ) {
+	        		quantity.setText(String.valueOf(thisItem.mQuantity));
+	        		quantity.setVisibility(View.VISIBLE);
+		        	if (price != null && thisItem.mUnitPrice > 0){
+		        		price.setText(String.valueOf(thisItem.mUnitPrice));
+		        		total.setText(String.valueOf(thisItem.mUnitPrice * thisItem.mQuantity));
+		        		price.setVisibility(View.VISIBLE);
+		        		total.setVisibility(View.VISIBLE);
+		        	} else {
+		        		price.setVisibility(View.GONE);
+		        		total.setVisibility(View.GONE);
+		        	}
+	        	} else {
+	        		quantity.setVisibility(View.GONE);
+	        		price.setVisibility(View.GONE);
+	        		total.setVisibility(View.GONE);
+	        	}
+	        }
+	        return view;
 		}
 
-	    public View getGroupView(int groupPosition, boolean isExpanded,
-				View convertView, ViewGroup parent) {
+	    public View getGroupView(
+	    		int groupPosition, 
+	    		boolean isExpanded,
+				View convertView, 
+				ViewGroup parent) {
 	    	
-	    	TextView	textView;	
 	    	final int 	groupHeight = 32;
-	    	
-	    	if (convertView != null)
-	    		textView = (TextView) convertView;
-	    	else
-	    		textView = getGenericView(groupHeight);
+	        TextView 	textView = new TextView(mContext);
 	    	
 	    	setViewParams(textView, groupHeight);
 	        textView.setText(getGroup(groupPosition).toString());
-	        // Set the background to transparent
 	        textView.setBackgroundResource(R.color.listitem_group_background);
-	        textView.setTextAppearance(mContext, R.style.ListView_GroupTextAppearance);
+	        textView.setTextAppearance(mContext, R.style.ItemList_TextAppearance_GroupsItem);
+	        textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+	        textView.setPadding(10, 0, 10, 0);
+	        textView.setEllipsize(TruncateAt.END);
 	        return textView;
 		}
 	}
@@ -222,60 +360,38 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	super.onCreate(savedInstanceState);
 
         mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message));
-    	CustomTitlebarWrapper toolbar = new CustomTitlebarWrapper(this);
+    	mToolbar = new CustomTitlebarWrapper(this);
         setContentView(R.layout.itemlists);
-        toolbar.SetTitle(getResources().getText(R.string.itemlistactivity_title));
+        NoteItApplication app = (NoteItApplication) getApplication();
+        mToolbar.SetTitle(app.getShoppingList().get(app.getCurrentShoppingListIndex()).mName);
+        doSetupToolbarButtons();
         
         mListView = (ExpandableListView) findViewById(android.R.id.list);
         
-        // The add button in the toolbar
-        ImageButton btnAdd = (ImageButton) findViewById(R.id.itemlist_add);
-        btnAdd.setOnClickListener(new OnClickListener() {
-			
-			public void onClick(View v) {
-				doAddItem(true);
-			}
-		});
-        
-        ImageButton expandAll = (ImageButton) findViewById(R.id.itemlist_expandall);
-        expandAll.setOnClickListener(new OnClickListener() {
-			
-			public void onClick(View v) {
-				doExpandAll();
-			}
-		});
-        
-        ImageButton collapseAll = (ImageButton) findViewById(R.id.itemlist_collapseall);
-        collapseAll.setOnClickListener(new OnClickListener() {
-			
-			public void onClick(View v) {
-				doCollapseAll();
-			}
-		});
-        
         // Set up Quick Actions
         ActionItem boughtItem 	= new ActionItem(
-						        		QA_ID_BOUGHT, 
-						        		getResources().getString(R.string.itemlistqe_bought), 
-						        		getResources().getDrawable(R.drawable.ok));
-		ActionItem editItem		= new ActionItem(
-										QA_ID_EDIT,
-										getResources().getString(R.string.itemlistqe_edit),
-										getResources().getDrawable(R.drawable.edit)); 
-		ActionItem deleteItem	= new ActionItem(
-										QA_ID_DELETE,
-										getResources().getString(R.string.itemlistqe_delete),
-										getResources().getDrawable(R.drawable.delete));
-		
-        mQuickAction = new QuickAction(this);
+					        		QA_ID_BOUGHT, 
+					        		getResources().getString(R.string.itemlistqe_bought), 
+					        		getResources().getDrawable(R.drawable.ok));
+        ActionItem editItem 	= new ActionItem(
+									QA_ID_EDIT,
+									getResources().getString(R.string.itemlistqe_edit),
+									getResources().getDrawable(R.drawable.edit)); 
+        ActionItem deleteItem 	= new ActionItem(
+									QA_ID_DELETE,
+									getResources().getString(R.string.itemlistqe_delete),
+									getResources().getDrawable(R.drawable.delete));
+
+		mQuickAction = new QuickAction(this);
 		mQuickAction.addActionItem(boughtItem);
 		mQuickAction.addActionItem(editItem);
 		mQuickAction.addActionItem(deleteItem);
 		
 		//setup the action item click listener
 		mQuickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
+			
 			public void onItemClick(QuickAction quickAction, int pos, int actionId) {
-//				ActionItem actionItem = quickAction.getActionItem(pos);
+
 				switch(actionId){
 					case QA_ID_BOUGHT:
 						doToggleMarkDone();
@@ -287,23 +403,51 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 						doDeleteItem();
 						break;
 				}
-				if (actionId == QA_ID_BOUGHT) { 
-				} else if (actionId == QA_ID_EDIT ) {
-				}
 			}
 		});
 		
-		//setup on dismiss listener, set the icon back to normal
 		mQuickAction.setOnDismissListener(new PopupWindow.OnDismissListener() {			
+			
 			public void onDismiss() {
-//				mMoreIv.setImageResource(R.drawable.ic_list_more);
 			}
 		});    
-        	
- 	   	((NoteItApplication)getApplication()).fetchItems(this);
+		
+ 	   	app.fetchItems(this);
     }
 
-    public void onPostExecute(long retval, ArrayList<Item> items, String message) {
+	protected SharedPreferences.OnSharedPreferenceChangeListener mPrefChangeListener = 
+			new SharedPreferences.OnSharedPreferenceChangeListener() {
+			
+			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+					String key) {
+				if (key == "Display_Price_Quantity" || key == "Item_Font_Size") {
+					Log.i("ItemListActivity.onSharedPreferenceChanged", "Display_Price_Quantity preference changed");
+					mDisplayExtras = sharedPreferences.getBoolean("Display_Price_Quantity", true);
+			        mFontSize = Integer.valueOf(sharedPreferences.getString("Item_Font_Size", "3"));
+					mListView.invalidateViews();
+				}
+				
+			}
+		};
+		
+    @Override
+	protected void onPause() {
+    	PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(mPrefChangeListener);
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this); 
+		prefs.registerOnSharedPreferenceChangeListener(mPrefChangeListener);
+		mDisplayExtras = prefs.getBoolean("Display_Price_Quantity", true);
+        mFontSize = Integer.valueOf(prefs.getString("Item_Font_Size", "3"));
+		mListView.invalidateViews();
+		super.onResume();
+	}
+
+	public void onPostExecute(long retval, ArrayList<Item> items, String message) {
     	
     	if (mProgressDialog != null) mProgressDialog.dismiss();
     	
@@ -329,12 +473,13 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 				public boolean onChildClick(ExpandableListView parent, View v,
 						int groupPosition, int childPosition, long id) {
 					
-					mSelectedGroup = groupPosition;
-					mSelectedChild = childPosition;
-//					Item selItem = (NoteItApplication.Item)mAdapter.getChild(groupPosition, childPosition);
-//					mQuickAction.getActionItem(0).setTitle(selItem.mIsPurchased == 1 ? "Not Purchased" : "Purchased");
-    				mQuickAction.show(v);
-//        			Toast.makeText(getApplicationContext(), itemText, Toast.LENGTH_SHORT).show();
+					if (v.getId() == R.id.itemlist_name) {
+						doToggleMarkDone();
+					} else {
+	    				mQuickAction.show(v);
+					}
+					mSelectedGroup.set(groupPosition);
+					mSelectedChild.set(childPosition);
 					return false;
 				}
 			});        	
@@ -395,14 +540,17 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     protected void doEditItem(boolean doDialog) {
     	
     	if (doDialog == true) {
-	    	Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup, mSelectedChild);
+	    	Item selItem = (Item) mListView.getExpandableListAdapter().getChild(
+	    			mSelectedGroup.get(), 
+	    			mSelectedChild.get());
 			AddEditItemDialog addDialog = new AddEditItemDialog(
 					this, 
 					(NoteItApplication)getApplication(),
     				new AddEditItemDialog.editItemListener() {
 						
 						public void onEditItem(Item oldItem, Item newItem) {
-			    			// An item has been updated, it's category may also have changed, hence we delete
+			    			
+							// An item has been updated, it's category may also have changed, hence we delete
 							// the old item from the adapter and insert a fresh one to ensure consistency
 			    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
 		    				Category category = ((NoteItApplication) getApplication()).getCategory(newItem.mCategoryID);
@@ -411,10 +559,40 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 							adapter.notifyDataSetChanged();
 						}
 					},
+					new AddEditItemDialog.navigateItemsListener() {
+						
+						public long onPreviousItem() {
+							
+							ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
+							if (adapter.getPrevChildPosition(mSelectedGroup, mSelectedChild)) {
+								
+								Item prevItem = (Item) adapter.getChild(mSelectedGroup.get(), mSelectedChild.get());
+								if (prevItem != null) {
+									return prevItem.mID;
+								}
+							}
+
+							return 0;
+						}
+						
+						public long onNextItem() {
+							
+							ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
+							if (adapter.getNextChildPosition(mSelectedGroup, mSelectedChild)) {
+								
+								Item nextItem = (Item) adapter.getChild(mSelectedGroup.get(), mSelectedChild.get());
+								if (nextItem != null) {
+									return nextItem.mID;
+								}
+							}
+							
+							return 0;
+						}
+					},
 					selItem.mID);
 	    	addDialog.show();
     	} else {
-	    	Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup, mSelectedChild);
+	    	Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup.get(), mSelectedChild.get());
 	    	Intent intent = new Intent(ItemListActivity.this, AddEditItemActivity.class);
 			intent.putExtra("ADD", false);
 			intent.putExtra("ITEMID", selItem.mID);
@@ -424,7 +602,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     
     protected void doDeleteItem() {
     	
-    	final Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup, mSelectedChild);
+    	final Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup.get(), mSelectedChild.get());
     	if (selItem != null) {
     		((NoteItApplication) getApplication()).deleteItem(selItem.mID, new OnMethodExecuteListerner() {
 				
@@ -443,7 +621,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 
     void doToggleMarkDone() {
     	
-    	final Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup, mSelectedChild);
+    	final Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup.get(), mSelectedChild.get());
     	if (selItem != null){
     		// Toggling an item done/undone essentially involved marking
     		// setting the current date to <now>/<null>
@@ -478,5 +656,38 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     		mListView.collapseGroup(i);
     	}        	
     	
+    }
+    
+    protected void doSetupToolbarButtons() {
+
+    	ImageButton addButton = new ImageButton(this);
+    	addButton.setImageResource(R.drawable.add);
+    	mToolbar.addRightAlignedButton(addButton, true, false);
+    	addButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+					doAddItem(true);
+			}
+		});
+    	
+    	ImageButton expandAll = new ImageButton(this);
+    	expandAll.setImageResource(R.drawable.down);
+    	mToolbar.addRightAlignedButton(expandAll, true, false);
+    	expandAll.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				doExpandAll();
+			}
+		});
+    	
+    	ImageButton collapseAll = new ImageButton(this);
+    	collapseAll.setImageResource(R.drawable.up);
+    	mToolbar.addRightAlignedButton(collapseAll, true, false);
+    	collapseAll.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				doCollapseAll();
+			}
+		});
     }
 }

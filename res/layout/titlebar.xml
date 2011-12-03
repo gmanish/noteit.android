@@ -1,29 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/titlebar_root"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="2dip"
+    android:paddingRight="2dip"
+    android:paddingBottom="2dip"
     android:orientation="horizontal"
-    android:background="@android:color/transparent">
+    android:background="@drawable/application_titlebar">
+
+    <ImageButton
+        android:id="@+id/imageButton_Home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/home"
+        style="@style/App_ButtonStyle" />
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-	   	android:paddingTop="5dp"
-	   	android:paddingBottom="5dp"
-        android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_launcher_noteit1"
-        android:background="@android:color/transparent" />
+        android:layout_width="2px"
+        android:layout_height="match_parent"
+        android:src="@drawable/vertical_separator" />
     
    <TextView
         android:id="@+id/textView_titlebar"
-        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_weight="1"
         android:layout_gravity="center_vertical"
-        android:layout_weight="3"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip"
         android:text="@string/app_name"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/theme_offwhite_header_text"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:background="@android:color/transparent"/>
-   
+
 </LinearLayout>

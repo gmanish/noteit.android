@@ -3,9 +3,9 @@
 
     <item
         android:state_expanded ="true"
-        android:drawable="@drawable/ic_arrow_down" />
+        android:drawable="@drawable/collapse" />
 
     <item
-        android:drawable="@drawable/ic_arrow_up" />
+        android:drawable="@drawable/expand" />
 
 </selector>

@@ -14,7 +14,7 @@
 	    android:drawable="@android:color/transparent" />
 	
     <item
-        android:drawable="@color/theme_offwhite_listitem_group_background" />
+        android:drawable="@drawable/listview_group_background" />
         
 </selector>
 

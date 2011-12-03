@@ -40,6 +40,7 @@ public class ShoppingListActivity
 	ListView 										mListView;
 	ProgressDialog									mProgressDialog = null;
 	ArrayAdapter<NoteItApplication.ShoppingList>	mAdapter;
+	CustomTitlebarWrapper 							mToolbar;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -47,9 +48,10 @@ public class ShoppingListActivity
     	
     	super.onCreate(savedInstanceState);
     	
-    	CustomTitlebarWrapper toolbar = new CustomTitlebarWrapper(this);
+        mToolbar = new CustomTitlebarWrapper(this);
         setContentView(R.layout.shoppinglists);
-        toolbar.SetTitle(getResources().getText(R.string.shoplistsactivity_title));
+        mToolbar.SetTitle(getResources().getText(R.string.shoplistsactivity_title));
+        doSetupToolbarButtons();
         
         mListView = (ListView) findViewById(android.R.id.list);
     	mListView.setTextFilterEnabled(true);
@@ -93,66 +95,15 @@ public class ShoppingListActivity
         // register for context menus
         registerForContextMenu(mListView);
         
-        ImageButton btnAdd = (ImageButton) findViewById(R.id.button_shoppinglists_add);
-        btnAdd.setOnClickListener(new OnClickListener() {
-			
-			public void onClick(View v) {
-				// inflate the view from resource layout
-				LayoutInflater	inflater = (LayoutInflater) ShoppingListActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				final View dialogView = inflater.inflate(R.layout.dialog_addshoppinglist, (ViewGroup) findViewById(R.id.dialog_addshoppinglist_root));
-				
-				AlertDialog dialog = new AlertDialog.Builder(ShoppingListActivity.this)
-					.setView(dialogView)
-					.setTitle(getResources().getString(R.string.shoppinglist_add_title))
-					.create();
-				
-				dialog.setButton(DialogInterface.BUTTON1, "OK", new DialogInterface.OnClickListener() {
-					
-					public void onClick(DialogInterface dialog, int which) {
-						EditText 	editListName = (EditText) dialogView.findViewById(R.id.dialog_addshoppinglist_editTextName);
-						String 		listName = editListName.getText().toString();
-
-						dialog.dismiss();
-					
-						// Create a new list with the name
-						((NoteItApplication)getApplication()).addShoppingList(
-								listName,
-								new NoteItApplication.OnMethodExecuteListerner() {
-									
-								public void onPostExecute(long resultCode, String message) {
-									if (resultCode != 0) {
-										Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-									} else {
-										// refresh the listView
-										mAdapter.notifyDataSetChanged();
-									}
-								}
-							});
-						}
-					}
-				);
-			
-				dialog.setButton(DialogInterface.BUTTON2, "Cancel", new DialogInterface.OnClickListener() {
-					
-					public void onClick(DialogInterface dialog, int which) {
-						Log.e("AddShoppingList", "Cancel");
-						dialog.dismiss();
-					}
-				});
-
-				dialog.show();
-			}
-		});
-
         // Hook up the preference button
-        ImageButton prefButton = (ImageButton)findViewById(R.id.button_shoppinglists_preferences);
-        prefButton.setOnClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
+//        ImageButton prefButton = (ImageButton)findViewById(R.id.button_shoppinglists_preferences);
+//        prefButton.setOnClickListener(new View.OnClickListener() {
+//			
+//			public void onClick(View v) {
 				// TODO Auto-generated method stub
-    			startActivity(new Intent(ShoppingListActivity.this, MainPreferenceActivity.class));
-			}
-		});
+//    			startActivity(new Intent(ShoppingListActivity.this, MainPreferenceActivity.class));
+//			}
+///		});
 
 		((NoteItApplication)getApplication()).fetchShoppingLists(this);
     }
@@ -238,26 +189,30 @@ public class ShoppingListActivity
 				public void onClick(DialogInterface dialog, int which) {
 					String 	listName = editListName.getText().toString();
 	
-					dialog.dismiss();
-				
-					NoteItApplication app = (NoteItApplication)getApplication();
-					// Create a new list with the name
-					app.editShoppingList(
-							app.new ShoppingList(
-								((ShoppingList)mListView.getItemAtPosition(index)).mID, 
-								listName),
-						new NoteItApplication.OnMethodExecuteListerner() {
-							
-							public void onPostExecute(long resultCode, String message) {
-								if (resultCode != 0) {
-									Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-								} else {
-									// refresh the listView
-									mAdapter.notifyDataSetChanged();
+					if (!listName.isEmpty()) {
+						dialog.dismiss();
+					
+						NoteItApplication app = (NoteItApplication)getApplication();
+						// Create a new list with the name
+						app.editShoppingList(
+								app.new ShoppingList(
+									((ShoppingList)mListView.getItemAtPosition(index)).mID, 
+									listName),
+							new NoteItApplication.OnMethodExecuteListerner() {
+								
+								public void onPostExecute(long resultCode, String message) {
+									if (resultCode != 0) {
+										Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+									} else {
+										// refresh the listView
+										mAdapter.notifyDataSetChanged();
+									}
 								}
 							}
-						}
-					);
+						);
+					} else 
+						Toast.makeText(getApplicationContext(), getResources().getString(R.string.shoppinglist_name_blank), Toast.LENGTH_SHORT).show();
+					
 				}
 			});
 			
@@ -313,5 +268,65 @@ public class ShoppingListActivity
 
 			dialog.show();
 		}    	
+    }
+    
+    protected void doSetupToolbarButtons() {
+
+    	ImageButton addButton = new ImageButton(this);
+    	addButton.setImageResource(R.drawable.add);
+    	addButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				// inflate the view from resource layout
+				LayoutInflater	inflater = (LayoutInflater) ShoppingListActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				final View dialogView = inflater.inflate(R.layout.dialog_addshoppinglist, (ViewGroup) findViewById(R.id.dialog_addshoppinglist_root));
+				
+				AlertDialog dialog = new AlertDialog.Builder(ShoppingListActivity.this)
+					.setView(dialogView)
+					.setTitle(getResources().getString(R.string.shoppinglist_add_title))
+					.create();
+				
+				dialog.setButton(DialogInterface.BUTTON1, "OK", new DialogInterface.OnClickListener() {
+					
+					public void onClick(DialogInterface dialog, int which) {
+						EditText 	editListName = (EditText) dialogView.findViewById(R.id.dialog_addshoppinglist_editTextName);
+						String 		listName = editListName.getText().toString();
+	
+						if (!listName.isEmpty()) {
+							dialog.dismiss();
+						
+							// Create a new list with the name
+							((NoteItApplication)getApplication()).addShoppingList(
+									listName,
+									new NoteItApplication.OnMethodExecuteListerner() {
+										
+									public void onPostExecute(long resultCode, String message) {
+										if (resultCode != 0) {
+											Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+										} else {
+											// refresh the listView
+											mAdapter.notifyDataSetChanged();
+										}
+									}
+								});
+							} else 
+								Toast.makeText(getApplicationContext(), getResources().getString(R.string.shoppinglist_name_blank), Toast.LENGTH_SHORT).show();
+						}
+					}
+				);
+			
+				dialog.setButton(DialogInterface.BUTTON2, "Cancel", new DialogInterface.OnClickListener() {
+					
+					public void onClick(DialogInterface dialog, int which) {
+						Log.e("AddShoppingList", "Cancel");
+						dialog.dismiss();
+					}
+				});
+	
+				dialog.show();
+			}
+    	});
+		
+    	mToolbar.addRightAlignedButton(addButton, true, false);
     }
 }

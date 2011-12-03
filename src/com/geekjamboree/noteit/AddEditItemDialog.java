@@ -10,6 +10,8 @@ import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Toast;
@@ -40,29 +43,38 @@ public class AddEditItemDialog extends AlertDialog {
 		void onEditItem(NoteItApplication.Item oldItem, NoteItApplication.Item newItem);
 	}
 	
+	public interface navigateItemsListener {
+
+		long onPreviousItem();
+		long onNextItem();
+	}
+	
 	public AddEditItemDialog(
 			Context context, 
 			NoteItApplication application,
-			addItemListener inListener) { // opens the dialog in Add mode
+			addItemListener inListener) {   // opens the dialog in Add mode
 		
-		super(context, R.style.Theme_AppCustomDialog);
+		super(context, R.style.AppCustomDialog);
 		mApplication = application;
 		mItemID = 0;
 		mIsAddItem = true;
 		mListener = inListener;
+		mNavigationListener = null;
 	}
 
 	public AddEditItemDialog(
 			Context context, 
 			NoteItApplication application,
 			editItemListener inListener, // Opens the dialog in Edit mode
+			navigateItemsListener inNavigationListener,
 			long itemID) {
 		
-		super(context, R.style.Theme_AppCustomDialog);
+		super(context, R.style.AppCustomDialog);
 		mApplication = application;
 		mItemID = itemID;
 		mIsAddItem = false;
 		mListener = inListener;
+		mNavigationListener = inNavigationListener;
 	}
 
 	static final int 		UNITS_GENERIC = 0;
@@ -73,9 +85,8 @@ public class AddEditItemDialog extends AlertDialog {
 	baseListener			mListener;
 	boolean					mIsAddItem = true;
 	long					mItemID = 0; // Holds only for edit mode
-
 	Item 					mOriginalItem;
-	
+	navigateItemsListener 	mNavigationListener; 
 
 	// controls
 	EditText				mEditName;
@@ -171,11 +182,16 @@ public class AddEditItemDialog extends AlertDialog {
 			}
 		});
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean showSuggestions = prefs.getBoolean("Show_Suggestions", true);
+        
         mAutoCompleteAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, mSuggestions);
         AutoCompleteTextView mItemName = (AutoCompleteTextView) findViewById(R.id.addedit_editName);
-        mItemName.addTextChangedListener(mTextChecker);
         mItemName.setAdapter(mAutoCompleteAdapter);
         
+        if (showSuggestions)
+        	mItemName.addTextChangedListener(mTextChecker);
+
         Button continueBtn = (Button) findViewById(R.id.addedit_btnContinue);
         continueBtn.setOnClickListener(new View.OnClickListener() {
 			
@@ -200,26 +216,56 @@ public class AddEditItemDialog extends AlertDialog {
 			}
 		});
         
-        if (!mIsAddItem) {
-        	// In the edit mode "Add More" button does not make sense
-        	continueBtn.setVisibility(View.INVISIBLE);
-        }
+        Button cancelBtn = (Button) findViewById(R.id.addedit_btnCancel);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				dismiss();
+			}
+		});    	        
+        
+        ImageButton prevBtn = (ImageButton) findViewById(R.id.addedit_btnPrev);
+        ImageButton nextBtn = (ImageButton) findViewById(R.id.addedit_btnNext);
 
-    	if (mIsAddItem == false && mItemID != 0){
-    		mApplication.getItem(mItemID, new NoteItApplication.OnGetItemListener() {
+        if (!mIsAddItem) {
+        	
+        	prevBtn.setOnClickListener(new View.OnClickListener() {
 				
-				public void onPostExecute(long resultCode, Item item, String message) {
-					// Populate the view with this data
-					if (resultCode == 0) {
-						// Make a copy and save for later
-						mOriginalItem = mApplication.new Item(item);
-						populateView(item);
-					} else {
-						Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+				public void onClick(View v) {
+					
+					long prevItemID = mNavigationListener.onPreviousItem(); 
+					if (prevItemID > 0) {
+						mItemID = prevItemID;
+						doFetchAndDisplayItem(prevItemID);
 					}
 				}
 			});
-    	}
+        	
+        	nextBtn.setOnClickListener(new View.OnClickListener() {
+				
+				public void onClick(View v) {
+					
+					long nextItemID = mNavigationListener.onNextItem(); 
+					if (nextItemID > 0) {
+						mItemID = nextItemID;
+						doFetchAndDisplayItem(nextItemID);
+					}
+				}
+			});
+        }
+        
+        if (!mIsAddItem) {
+        	// In the edit mode "Add More" button does not make sense
+        	continueBtn.setVisibility(View.INVISIBLE);
+        } else {
+        	// In the Add mode, next and prev don't make sense
+        	nextBtn.setVisibility(View.INVISIBLE);
+        	prevBtn.setVisibility(View.INVISIBLE);
+        }
+        
+    	if (mIsAddItem == false && mItemID != 0){
+    		doFetchAndDisplayItem(mItemID);
+    	}    	
     }
     
     protected void saveItem() throws DialogFieldException {
@@ -271,10 +317,17 @@ public class AddEditItemDialog extends AlertDialog {
                 public void onNothingSelected(AdapterView<?> parent) {
                 }
             });
+        
+        // Set the selection to the "Uncategorized" category  
+        // which has a hard coded id = 1
+        int index = categories.indexOf(mApplication.new Category(1, "", mApplication.getUserID()));
+        if (index >= 0)
+        	mSpinCategories.setSelection(index);        
     }
     
     @SuppressWarnings("unchecked")
     protected void populateView(Item item) {
+    	
     	mEditName.setText(item.mName);
     	mEditQuantity.setText(String.valueOf(item.mQuantity));
     	mEditCost.setText(String.valueOf(item.mUnitPrice));
@@ -286,6 +339,25 @@ public class AddEditItemDialog extends AlertDialog {
     	}
     	mEditCost.setActivated(true);
     }
+    
+    protected void doFetchAndDisplayItem(long itemID) {
+    	
+    	mItemID = itemID;
+		mApplication.getItem(itemID, new NoteItApplication.OnGetItemListener() {
+			
+			public void onPostExecute(long resultCode, Item item, String message) {
+				// Populate the view with this data
+				if (resultCode == 0) {
+					// Make a copy and save for later
+					mOriginalItem = mApplication.new Item(item);
+					populateView(item);
+				} else {
+					Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+				}
+			}
+		});    	
+    }
+    
     
     protected Item getItemFromView() throws DialogFieldException {
     	
@@ -319,6 +391,7 @@ public class AddEditItemDialog extends AlertDialog {
     	mEditQuantity.setText("");
     	mEditCost.setText("");
     	mEditName.setActivated(true);
+    	mEditName.requestFocus();
 		//mSpinCategories.setSelection(position);
     }
 }

@@ -3,17 +3,20 @@
     android:id="@+id/layout_itemslist"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/application_background_normal"
     android:orientation="vertical" >
 
-    <ExpandableListView
+    <com.geekjamboree.noteit.ExpandableListViewIndicatorOnRight
         android:id="@+android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:cacheColorHint="#00000000"
-        android:childDivider="@color/theme_offwhite_listitem_seperator_level2"
-        android:divider="@color/theme_offwhite_listitem_seperator"
-        android:dividerHeight="1dp" />
+        android:groupIndicator="@color/listitem_group_indicator"
+        android:childDivider="@drawable/listview_item_separator"
+        android:divider="@drawable/listview_item_separator"
+        android:dividerHeight="2px" 
+        android:requiresFadingEdge="vertical" />
 
     <LinearLayout 
         android:id="@android:id/empty"
@@ -39,42 +42,5 @@
             android:src="@android:drawable/ic_menu_add" />
         
     </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/RelativeLayout1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/theme_offwhite_toolbar_background"
-        android:orientation="horizontal" >
-
-        <ImageButton
-            android:id="@+id/itemlist_add"
-            style="@style/App_ButtonStyle"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:src="@android:drawable/ic_menu_add" />
-
-        <ImageButton
-            android:id="@+id/itemlist_expandall"
-            style="@style/App_ButtonStyle"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/itemlist_add"
-            android:src="@drawable/expander_ic_minimized" />
-        
-        <ImageButton
-            android:id="@+id/itemlist_collapseall"
-            style="@style/App_ButtonStyle"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/itemlist_expandall"
-            android:src="@drawable/expander_ic_maximized" />
-        
-        <ImageButton
-            android:id="@+id/itemlist_preference"
-            style="@style/App_ButtonStyle"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:src="@android:drawable/ic_menu_preferences" />
-
-    </RelativeLayout>
 
 </LinearLayout>

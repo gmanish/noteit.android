@@ -8,11 +8,17 @@
 	    <EditTextPreference 
 	        android:title="Email"
 	        android:key="email"
-	        android:summary="The email ID registered with Note It!"
+	        android:summary="The email ID registered with Note It! This email ID also will be used in case you should forget your password."
 	        android:dialogTitle="Email ID"
 	        android:dialogMessage="Please enter the email ID"
 	        android:defaultValue="you@email.com" />
 	    
+	    <CheckBoxPreference
+	    	android:title="Remember Me"
+	    	android:key="Remember_Me"
+	    	android:summaryOff="Note It! will not remember your login information. You will have to use your credentials everytime."
+	    	android:summaryOn="Note It! will remember your login infotmation and sign you in automatically." />
+
 	</PreferenceCategory>
 	
 	<PreferenceCategory
@@ -22,7 +28,70 @@
 		<ListPreference 
 			android:title="Currency"
 			android:key="currency"
-			android:summary="The currency of your country"/>
+			android:summary="The default currency you want to use."/>
+			
+	    <ListPreference
+	    	android:title="Measurement Units"
+	    	android:key="MeasurementUnits"
+	    	android:summary="Whether distance is measured in Miles or Kilometers. Weight in pounds or kilograms etc." />
+	
 	</PreferenceCategory>
 
+	<PreferenceCategory
+		android:title="Auto Complete"
+		android:key="Items_AutoComplete" >
+	    
+	    <CheckBoxPreference
+	    	android:title="Show suggestions"
+	    	android:key="Show_Suggestions"
+	    	android:summaryOff="Note It will not display suggestions as you type item names"
+	    	android:summaryOn="Note It will search its extensive database for products and display suggestions as you type." />
+	    		    
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="Shopping Lists"
+		android:key="Shopping_Lists" >
+	    
+	    <CheckBoxPreference
+	    	android:title="Delete all items on list"
+	    	android:key="Allow_NonEmpty_List_Delte"
+	    	android:summaryOff="If a list has items in it, it cannot be deleted."
+	    	android:summaryOn="Deleting a list deletes all items in the list." />
+	    	
+	    <CheckBoxPreference
+	    	android:title="Display on Startup"
+	    	android:key="Start_with_shopping_List_Screen"
+	    	android:summaryOff="When Note It is launched, it will open with your last used Shopping List."
+	    	android:summaryOn="When Note It is started, it will display all your Shopping Lists." />
+	    
+	</PreferenceCategory>
+		
+	<PreferenceCategory
+		android:title="Items in Shopping Lists"
+		android:key="Items_List" >
+	    
+	    <CheckBoxPreference
+	    	android:title="Show Price and Quantity"
+	    	android:key="Display_Price_Quantity"
+	    	android:summaryOff="Displays only the item's name in the list."
+	    	android:summaryOn="Displays the price and quantity of the item, if available. Also computes Total price." />
+	    		    
+	    <ListPreference
+	    	android:title="Item Font Size"
+	    	android:key="Item_Font_Size"
+	    	android:summary="The size of the font used to display items in the list" 
+	    	android:entries="@array/itemFontSize"/>
+	    	
+	    <CheckBoxPreference
+	    	android:title="Delete bought Items"
+	    	android:key="Delete_Bought_Items"
+	    	android:summaryOff="When an item is marked done, it won't be deleted from the list."
+	    	android:summaryOn="Marking an item done, deletes it from the list." />
+	    	
+
+	</PreferenceCategory>
+	
+	
+		
 </PreferenceScreen>

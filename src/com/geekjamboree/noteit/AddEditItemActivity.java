@@ -113,6 +113,14 @@ public class AddEditItemActivity extends Activity {
 				saveItem();
 			}
 		});
+        
+        Button cancelBtn = (Button) findViewById(R.id.addedit_btnCancel);
+        cancelBtn.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				finish();
+			}
+		});
 
         // Are we opening in the add or edit mode
         final Intent intent = getIntent();
@@ -198,6 +206,13 @@ public class AddEditItemActivity extends Activity {
                 public void onNothingSelected(AdapterView<?> parent) {
                 }
             });
+        
+        // Set the selection to the "Uncategorized" category  
+        // which has a hard coded id = 1
+		NoteItApplication app = (NoteItApplication) getApplication();
+        int index = categories.indexOf(app.new Category(1, "", app.getUserID()));
+        if (index >= 0)
+        	mSpinCategories.setSelection(index);
     }
     
     @SuppressWarnings("unchecked")

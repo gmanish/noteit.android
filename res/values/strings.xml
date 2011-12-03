@@ -23,6 +23,7 @@
     <string name="noteit_prefs">Preferences...</string>
 	<string name="shoppinglist_add_title">List Name</string>
 	<string name="shoppinglist_edit_title">Edit List</string>
+	<string name="shoppinglist_name_blank">The name of the Shopping List cannot be left blank.</string>
 	<string name="menu_shoplist_delete">Delete</string>
 	<string name="menu_shoplist_edit">Edit</string>
 	    		
@@ -47,6 +48,11 @@
 	<string name="addedit_nameblank">The item name cannot be blank</string>
 	<string name="addedit_itemupdated">The item details have been updated</string>    
 	<string name="preference_activity_title">Note It! Settings</string>
+	<string-array name="itemFontSize">
+	    <item>Large</item>
+	    <item>Medium</item>
+	    <item>Small</item>
+	</string-array>
 	    	
 	    
 </resources>

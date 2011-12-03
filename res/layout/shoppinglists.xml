@@ -3,6 +3,7 @@
     android:id="@+id/layout_shoppinglists"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@drawable/application_background_normal"
     android:orientation="vertical" >
 
     <ListView
@@ -10,8 +11,9 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:divider="@color/theme_offwhite_listitem_seperator"
-        android:dividerHeight="1dp"/>
+        android:divider="@drawable/listview_item_separator"
+        android:dividerHeight="2px"
+        android:requiresFadingEdge="vertical" />
 
     <LinearLayout 
         android:id="@android:id/empty"
@@ -30,26 +32,5 @@
 	        android:text="@string/empty_shoppinglists" />
         
     </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/RelativeLayout1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/theme_offwhite_toolbar_background"
-        android:orientation="horizontal" >
-
-        <ImageButton
-            android:id="@+id/button_shoppinglists_add"
-            style="@style/App_ButtonStyle"
-            android:src="@android:drawable/ic_menu_add" />
-
-        <ImageButton
-            android:id="@+id/button_shoppinglists_preferences"
-            style="@style/App_ButtonStyle"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:src="@android:drawable/ic_menu_preferences" />
-
-    </RelativeLayout>
 
 </LinearLayout>

@@ -410,6 +410,10 @@ public class NoteItApplication extends Application {
 		return mCurrentShoppingListID;
 	}
 	
+	public int getCurrentShoppingListIndex() {
+		return mShoppingLists.indexOf(new ShoppingList(mCurrentShoppingListID, ""));
+	}
+	
 	public ArrayList<ShoppingList> getShoppingList() {
 		return mShoppingLists;
 	}
@@ -443,13 +447,6 @@ public class NoteItApplication extends Application {
 			        	if (retval == 0){
 				        	JSONArray jsonArr = json.getJSONArray("arg1");
 				        	
-				        	// Special Casing for "Uncategorized" (Category ID = 0)
-				        	addCategory(new Category(0, getResources().getString(R.string.category_uncategorized), 1));
-				        	
-				        	// [TODO]: This doesn't feel right, calling the app object
-				        	// to read shopping list items and having to populate them
-				        	// in the object from here. Figure out an elegant way to 
-				        	// handle this.
 				        	for (int index = 0; index < jsonArr.length(); index++){
 				        		
 				        		JSONObject thisObj = jsonArr.getJSONObject(index);

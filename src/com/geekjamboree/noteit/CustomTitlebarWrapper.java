@@ -1,7 +1,12 @@
 package com.geekjamboree.noteit;
 
 import android.app.Activity;
+import android.view.Gravity;
 import android.view.Window;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /*
@@ -30,4 +35,41 @@ public class CustomTitlebarWrapper {
          }
     }
 
+    public void addRightAlignedButton(ImageButton button, boolean separatorBefore, boolean separatorAfter) {
+    	
+    	LinearLayout 				root = (LinearLayout) mParent.findViewById(R.id.titlebar_root);
+    	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(
+    			LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+
+    	if (separatorBefore) {
+        	
+    		LinearLayout.LayoutParams leftSepLP = new LinearLayout.LayoutParams(
+        			2, LayoutParams.MATCH_PARENT);
+        	ImageView imageSep = new ImageView(root.getContext());
+        	lp.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+        	imageSep.setLayoutParams(leftSepLP);
+        	imageSep.setImageResource(R.drawable.vertical_separator);
+        	imageSep.setPadding(0, 2, 0, 2);
+    		root.addView(imageSep);
+    	}
+
+    	lp.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+    	button.setLayoutParams(lp);
+    	button.setPadding(0, 2, 0, 2);
+    	button.setBackgroundResource(R.color.app_button_background);
+    	root.addView(button);
+    	
+    	if (separatorAfter) {
+        	
+    		LinearLayout.LayoutParams rightSepLP = new LinearLayout.LayoutParams(
+        			2, LayoutParams.MATCH_PARENT);
+        	ImageView imageSep = new ImageView(root.getContext());
+        	lp.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+        	imageSep.setLayoutParams(rightSepLP);
+        	imageSep.setImageResource(R.drawable.vertical_separator);
+        	imageSep.setPadding(0, 2, 0, 2);
+    		root.addView(imageSep);
+    	}
+    }
+    
 }
