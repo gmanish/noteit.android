@@ -1,4 +1,4 @@
- package com.geekjamboree.noteit;
+package com.geekjamboree.noteit;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -11,9 +11,12 @@ import com.geekjamboree.noteit.QuickAction;
 import com.geekjamboree.noteit.NoteItApplication.Category;
 import com.geekjamboree.noteit.NoteItApplication.Item;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ExpandableListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
@@ -26,6 +29,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.AbsListView;
@@ -250,7 +254,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	    public void setViewParams(View view, int height) {
 
 	    	 ViewGroup.LayoutParams params = new AbsListView.LayoutParams(
-		                ViewGroup.LayoutParams.MATCH_PARENT, 
+		                ViewGroup.LayoutParams.FILL_PARENT, 
 		                height);
 	        
 	        view.setLayoutParams(params);
@@ -285,7 +289,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
     	        } else {
     	        	params = new AbsListView.LayoutParams(
-    		                ViewGroup.LayoutParams.MATCH_PARENT, 
+    		                ViewGroup.LayoutParams.FILL_PARENT, 
     		                ViewGroup.LayoutParams.WRAP_CONTENT);
     	        }	
     	        
@@ -315,7 +319,11 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	        	}
 	        	
 	        	if (mDisplayExtras && quantity != null && thisItem.mQuantity > 0 ) {
-	        		quantity.setText(String.valueOf(thisItem.mQuantity));
+	        		NoteItApplication app = (NoteItApplication) getApplication();
+	        		quantity.setText(
+	        				String.valueOf(thisItem.mQuantity) + 
+	        				" " + 
+	        				app.getUnitFromID(thisItem.mUnitID).mAbbreviation);
 	        		quantity.setVisibility(View.VISIBLE);
 		        	if (price != null && thisItem.mUnitPrice > 0){
 		        		price.setText(String.valueOf(thisItem.mUnitPrice));
@@ -397,7 +405,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 						doToggleMarkDone();
 						break;
 					case QA_ID_EDIT:
-						doEditItem(true);
+						doEditItem();
 						break;
 					case QA_ID_DELETE:
 						doDeleteItem();
@@ -513,91 +521,82 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     protected void setUpQuickActions() {
 	}
     
-    protected void doAddItem(boolean doDialog) {
+    protected void doAddItem() {
     	
-    	if (doDialog == false) {
-			Intent intent = new Intent(ItemListActivity.this, AddEditItemActivity.class);
-			intent.putExtra("ADD", true);
-			startActivityForResult(intent, ADD_ITEM_REQUEST);
-    	} else {
-    		AddEditItemDialog addDialog = new AddEditItemDialog(
-				this,
-				(NoteItApplication)getApplication(),
-				new AddEditItemDialog.addItemListener() {
-					
-					public void onAddItem(Item item) {
-		    			// New items were added by the called activity, we need to add them to our view
-		    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
-	    				Category category = ((NoteItApplication) getApplication()).getCategory(item.mCategoryID);
-	    				adapter.AddItem(item, category);
-						adapter.notifyDataSetChanged();
-					}
-				});
-	    	addDialog.show();
-    	}
+		AddEditItemDialog addDialog = new AddEditItemDialog(
+			this,
+			(NoteItApplication)getApplication(),
+			new AddEditItemDialog.addItemListener() {
+				
+				public void onAddItem(Item item) {
+	    			// New items were added by the called activity, we need to add them to our view
+	    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
+    				Category category = ((NoteItApplication) getApplication()).getCategory(item.mCategoryID);
+    				adapter.AddItem(item, category);
+					adapter.notifyDataSetChanged();
+				}
+			});
+    	addDialog.show();
     }
     
-    protected void doEditItem(boolean doDialog) {
+    protected void doEditItem() {
     	
-    	if (doDialog == true) {
-	    	Item selItem = (Item) mListView.getExpandableListAdapter().getChild(
-	    			mSelectedGroup.get(), 
-	    			mSelectedChild.get());
-			AddEditItemDialog addDialog = new AddEditItemDialog(
-					this, 
-					(NoteItApplication)getApplication(),
-    				new AddEditItemDialog.editItemListener() {
-						
-						public void onEditItem(Item oldItem, Item newItem) {
-			    			
-							// An item has been updated, it's category may also have changed, hence we delete
-							// the old item from the adapter and insert a fresh one to ensure consistency
-			    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
-		    				Category category = ((NoteItApplication) getApplication()).getCategory(newItem.mCategoryID);
+    	Item selItem = (Item) mListView.getExpandableListAdapter().getChild(
+    			mSelectedGroup.get(), 
+    			mSelectedChild.get());
+		AddEditItemDialog addDialog = new AddEditItemDialog(
+				this, 
+				(NoteItApplication)getApplication(),
+				new AddEditItemDialog.editItemListener() {
+					
+					public void onEditItem(Item oldItem, Item newItem, int bitMask) {
+		    			
+		    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
+	    				Category category = ((NoteItApplication) getApplication()).getCategory(newItem.mCategoryID);
+	    				if ((bitMask & Item.ITEM_CATEGORYID) > 0 || (bitMask & Item.ITEM_NAME) > 0) {
 		    				adapter.DeleteItem(oldItem);
 		    				adapter.AddItem(newItem, category);
-							adapter.notifyDataSetChanged();
-						}
-					},
-					new AddEditItemDialog.navigateItemsListener() {
+	    				} else {
+	    					Item selItem = (Item) mListView.getExpandableListAdapter().getChild(
+	    							mSelectedGroup.get(), 
+	    							mSelectedChild.get());
+	    					selItem.copyFrom(newItem);
+	    				}
+						adapter.notifyDataSetChanged();
+					}
+				},
+				new AddEditItemDialog.navigateItemsListener() {
+					
+					public long onPreviousItem() {
 						
-						public long onPreviousItem() {
+						ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
+						if (adapter.getPrevChildPosition(mSelectedGroup, mSelectedChild)) {
 							
-							ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
-							if (adapter.getPrevChildPosition(mSelectedGroup, mSelectedChild)) {
-								
-								Item prevItem = (Item) adapter.getChild(mSelectedGroup.get(), mSelectedChild.get());
-								if (prevItem != null) {
-									return prevItem.mID;
-								}
+							Item prevItem = (Item) adapter.getChild(mSelectedGroup.get(), mSelectedChild.get());
+							if (prevItem != null) {
+								return prevItem.mID;
 							}
+						}
 
-							return 0;
+						return 0;
+					}
+					
+					public long onNextItem() {
+						
+						ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
+						if (adapter.getNextChildPosition(mSelectedGroup, mSelectedChild)) {
+							
+							Item nextItem = (Item) adapter.getChild(mSelectedGroup.get(), mSelectedChild.get());
+							if (nextItem != null) {
+								return nextItem.mID;
+							}
 						}
 						
-						public long onNextItem() {
-							
-							ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
-							if (adapter.getNextChildPosition(mSelectedGroup, mSelectedChild)) {
-								
-								Item nextItem = (Item) adapter.getChild(mSelectedGroup.get(), mSelectedChild.get());
-								if (nextItem != null) {
-									return nextItem.mID;
-								}
-							}
-							
-							return 0;
-						}
-					},
-					selItem.mID);
-	    	addDialog.show();
-    	} else {
-	    	Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup.get(), mSelectedChild.get());
-	    	Intent intent = new Intent(ItemListActivity.this, AddEditItemActivity.class);
-			intent.putExtra("ADD", false);
-			intent.putExtra("ITEMID", selItem.mID);
-			startActivityForResult(intent, ADD_ITEM_REQUEST);
-   	 	}
+						return 0;
+					}
+				},
+				selItem.mID);
+    	addDialog.show();
     }
     
     protected void doDeleteItem() {
@@ -623,23 +622,13 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	
     	final Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup.get(), mSelectedChild.get());
     	if (selItem != null){
-    		// Toggling an item done/undone essentially involved marking
-    		// setting the current date to <now>/<null>
-    		NoteItApplication app = (NoteItApplication) getApplication();
-    		Item newItem = app.new Item(selItem);
-    		newItem.mIsPurchased = newItem.mIsPurchased > 0 ? 0 : 1; // How do you do !(integer) in java?
-    		app.editItem(newItem.mID, newItem, new OnMethodExecuteListerner() {
-				
-				public void onPostExecute(long resultCode, String message) {
-					if (resultCode == 0) {
-						selItem.mIsPurchased = selItem.mIsPurchased > 0 ? 0 : 1;
-						ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
-						adapter.notifyDataSetChanged();
-					}
-					else
-						Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
-				}
-			});
+    		
+    		if (selItem.mIsPurchased <= 0 && selItem.mIsAskLater > 0) {
+    			// Item is being marked done and "Ask Later" is checked
+    			doAskForPriceAndSave(selItem);
+    		} else {
+    			doCommitToggleItemDone(selItem, false, 0);
+    		}
     	}
     }
     
@@ -666,7 +655,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	addButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
-					doAddItem(true);
+					doAddItem();
 			}
 		});
     	
@@ -689,5 +678,113 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 				doCollapseAll();
 			}
 		});
+    }
+    
+    protected float doAskForPriceAndSave(final Item item) {
+
+		// inflate the view from resource layout
+		LayoutInflater	inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final View dialogView = inflater.inflate(R.layout.dialog_addshoppinglist, (ViewGroup) findViewById(R.id.dialog_addshoppinglist_root));
+		String text = String.format(
+				getResources().getString(R.string.addedit_askLaterPrompt), 
+				item.mQuantity,
+				((NoteItApplication) getApplication()).getUnitFromID(item.mUnitID).mAbbreviation, 
+				item.mName);
+		
+		AlertDialog dialog = new AlertDialog.Builder(this)
+			.setView(dialogView)
+			.setTitle(getResources().getString(R.string.addedit_asklater_price))
+			.setCancelable(false)
+			.create();
+    	
+    	dialog.setMessage(text);
+		dialog.setOwnerActivity(this);
+		final EditText editPrice = (EditText) dialogView.findViewById(R.id.dialog_addshoppinglist_editTextName);
+		dialog.setButton(
+				DialogInterface.BUTTON1, 
+				getResources().getString(R.string.OK), 
+				new DialogInterface.OnClickListener() {
+		
+			public void onClick(DialogInterface dialog, int which) {
+				if (editPrice != null) {
+					doCommitToggleItemDone(item, true, Float.valueOf(editPrice.getText().toString()));
+				} else {
+					doCommitToggleItemDone(item, true, 0);
+				}
+			}
+		});
+	
+		dialog.setButton(
+				DialogInterface.BUTTON2, 
+				getResources().getString(R.string.Skip), 
+				new DialogInterface.OnClickListener() {
+			
+			public void onClick(DialogInterface dialog, int which) {
+				
+				// Even if the user cancels the Price dialog, we still need to toggle the done state
+				doCommitToggleItemDone(item, false, 0);
+			}
+		});
+		if (editPrice != null) {
+			editPrice.setSelectAllOnFocus(true);
+			editPrice.setText(String.valueOf(item.mUnitPrice));
+			editPrice.requestFocus();
+		}
+		dialog.show();
+		return 0;
+	}
+    
+    protected Dialog onCreateDialog(int id) {
+    	if (id == 666){
+			AlertDialog dialog = new AlertDialog.Builder(this)
+				.setTitle(getResources().getString(R.string.addedit_price))
+				.setMessage("WTF?")
+				.setCancelable(false)
+				.create();
+			return dialog;
+    	} else 
+    		return null;
+    }
+    
+    // Send in the item as is without any changes
+    protected void doCommitToggleItemDone(final Item item, final boolean resetAskLater, final float newPrice) {
+    	
+    	NoteItApplication 	app = (NoteItApplication) getApplication();
+    	final Item 			newItem = app.new Item(item);
+    	int					editBitmask = Item.ITEM_ISPURCHASED;
+    	
+    	newItem.mIsPurchased = newItem.mIsPurchased > 0 ? 0 : 1;
+
+    	if (resetAskLater) {
+			newItem.mIsAskLater = 0;
+			editBitmask = editBitmask | Item.ITEM_ISASKLATER;
+    	}
+    	
+    	if (newPrice > 0) {
+    		editBitmask = editBitmask | Item.ITEM_UNITCOST;
+    		if (newItem.mQuantity > 0)
+    			newItem.mUnitPrice = newPrice / newItem.mQuantity;
+    		else
+    			newItem.mUnitPrice = newPrice;
+    	}
+    	
+		app.editItem(
+				editBitmask, 
+    			newItem, 
+    			new OnMethodExecuteListerner() {
+				
+					public void onPostExecute(long resultCode, String message) {
+						
+						if (resultCode == 0) {
+							item.mIsPurchased = newItem.mIsPurchased;
+							item.mIsAskLater = newItem.mIsAskLater;
+							item.mUnitPrice = newItem.mUnitPrice; 
+							ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
+							adapter.notifyDataSetChanged();
+						}
+						else
+							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+					}
+			});
     }
 }

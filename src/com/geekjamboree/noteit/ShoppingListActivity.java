@@ -6,6 +6,7 @@ import com.geekjamboree.noteit.R;
 import com.geekjamboree.noteit.NoteItApplication;
 import com.geekjamboree.noteit.NoteItApplication.Category;
 import com.geekjamboree.noteit.NoteItApplication.ShoppingList;
+import com.geekjamboree.noteit.NoteItApplication.Unit;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -105,7 +106,12 @@ public class ShoppingListActivity
 //			}
 ///		});
 
-		((NoteItApplication)getApplication()).fetchShoppingLists(this);
+		((NoteItApplication) getApplication()).fetchShoppingLists(this);
+		((NoteItApplication) getApplication()).fetchUnits(Unit.METRIC, new NoteItApplication.OnMethodExecuteListerner() {
+			
+			public void onPostExecute(long resultCode, String message) {
+			}
+		});
     }
      
     @Override
@@ -189,7 +195,7 @@ public class ShoppingListActivity
 				public void onClick(DialogInterface dialog, int which) {
 					String 	listName = editListName.getText().toString();
 	
-					if (!listName.isEmpty()) {
+					if (!listName.trim().matches("")) {
 						dialog.dismiss();
 					
 						NoteItApplication app = (NoteItApplication)getApplication();
@@ -292,7 +298,7 @@ public class ShoppingListActivity
 						EditText 	editListName = (EditText) dialogView.findViewById(R.id.dialog_addshoppinglist_editTextName);
 						String 		listName = editListName.getText().toString();
 	
-						if (!listName.isEmpty()) {
+						if (!listName.trim().matches("")) {
 							dialog.dismiss();
 						
 							// Create a new list with the name
@@ -327,6 +333,16 @@ public class ShoppingListActivity
 			}
     	});
 		
+    	ImageButton settingsButton = new ImageButton(this);
+    	settingsButton.setImageResource(R.drawable.settings);
+    	settingsButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+    			startActivity(new Intent(ShoppingListActivity.this, MainPreferenceActivity.class));
+			}
+		});
+
     	mToolbar.addRightAlignedButton(addButton, true, false);
+    	mToolbar.addRightAlignedButton(settingsButton, true, false);
     }
 }

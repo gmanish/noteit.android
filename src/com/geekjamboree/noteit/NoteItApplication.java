@@ -19,6 +19,34 @@ import com.geekjamboree.noteit.AsyncInvokeURLTask.OnPostExecuteListener;
 
 public class NoteItApplication extends Application {
 
+	public class Unit {
+		static final int METRIC = 1;
+		static final int IMPERIAL = 2;
+			
+		public String 	mName = "";
+		public String 	mAbbreviation = "";
+		public int 		mID = 0;
+		public int 		mType = METRIC;
+		
+		public Unit(int id, String name, String abbreviation, int type) {
+			mID = id;
+			mAbbreviation = abbreviation;
+			mName = name;
+			mType = type;
+		}
+	
+		public String toString(){
+			return mName;
+		}
+
+		public boolean equals(Object obj){
+			if (obj instanceof Unit)
+				return (mID == ((Unit)obj).mID);
+			else
+				return false;
+		}
+	}
+	
 	// Represents each shopping list that the user has
 	public class ShoppingList {
 		public String 	mName = "";
@@ -68,8 +96,20 @@ public class NoteItApplication extends Application {
 	// Represents each item on the current shopping list
 	public class Item implements Comparable<Item>{
 		
-		// [NOTE] If you add/remove members to the class don't forget to
-		// update the parcelable overridden methods
+		public static final int ITEM_INSTANCEID		= 1 << 0;
+		public static final int ITEM_USERID			= 1 << 1;
+		public static final int ITEM_LISTID			= 1 << 2;
+		public static final int ITEM_CATEGORYID     = 1 << 3;
+		public static final int ITEM_NAME       	= 1 << 4;
+		public static final int ITEM_UNITCOST       = 1 << 5;
+		public static final int ITEM_QUANTITY       = 1 << 6;
+		public static final int ITEM_UNITID         = 1 << 7;
+		public static final int ITEM_DATEADDED      = 1 << 8;
+		public static final int ITEM_DATEPURCHASED  = 1 << 9;
+		public static final int ITEM_CLASSID		= 1 << 10;
+		public static final int ITEM_ISPURCHASED	= 1 << 11;
+		public static final int ITEM_ISASKLATER		= 1 << 12;
+		
 		public String 	mName 			= "";
 		public long		mID				= 0; // the instance id
 		public long 	mClassID		= 0; // the id of the item in the catalog table
@@ -79,6 +119,7 @@ public class NoteItApplication extends Application {
 		public float	mUnitPrice		= 0;
 		public int		mUnitID			= 1; // default to "unit"
 		public int		mIsPurchased	= 0; // SMALLINT at the backend
+		public int 		mIsAskLater 	= 0; // SMALLINT at the backend
 
 		public Item() {
 			
@@ -94,8 +135,22 @@ public class NoteItApplication extends Application {
 			this.mUnitID = item.mUnitID;
 			this.mUnitPrice = item.mUnitPrice;
 			this.mIsPurchased = item.mIsPurchased;
+			this.mIsAskLater = item.mIsAskLater;
 		}
 		
+		public void copyFrom(Item item) {
+			this.mCategoryID = item.mCategoryID;
+			this.mClassID = item.mClassID;
+			this.mID = item.mID;
+			this.mListID = item.mListID;
+			this.mName = item.mName;
+			this.mQuantity = item.mQuantity;
+			this.mUnitID = item.mUnitID;
+			this.mUnitPrice = item.mUnitPrice;
+			this.mIsPurchased = item.mIsPurchased;
+			this.mIsAskLater = item.mIsAskLater;
+		}
+
 		public Item(long itemID) {
 			mID = itemID;
 		}
@@ -122,7 +177,7 @@ public class NoteItApplication extends Application {
 			else
 				return false;
 		}
-		
+				
 		public String getCategoryName() {
 			return getCategory(this.mCategoryID).mName;
 		}
@@ -167,6 +222,7 @@ public class NoteItApplication extends Application {
 	private ArrayList<ShoppingList>		mShoppingLists = new ArrayList<ShoppingList>();
 	private ArrayList<Category>			mCategories = new ArrayList<Category>();
 	private ArrayList<Item>				mItems = new ArrayList<Item>();
+	private ArrayList<Unit>				mUnits = new ArrayList<Unit>();
 	
 	public void loginUser(String userEmail, AsyncInvokeURLTask.OnPostExecuteListener inPostExecute){
 		try {
@@ -391,6 +447,22 @@ public class NoteItApplication extends Application {
 		}
 	}
 	
+	public int getUnitsCount() {
+		return mUnits.size();
+	}
+	
+	public ArrayList<Unit> getUnits() {
+		return mUnits;
+	}
+	
+	public Unit getUnitFromID(int id) {
+		int index = mUnits.indexOf(new Unit(id, "", "", 0));
+		if (index >= 0)
+			return mUnits.get(index);
+		else
+			return null;
+	}
+	
 	public int getShoppingListCount(){
 		return mShoppingLists.size();
 	}
@@ -561,6 +633,7 @@ public class NoteItApplication extends Application {
 	        	        		thisItem.mUnitPrice = (float)thisObj.getDouble("unitCost");
 	        	        		thisItem.mQuantity = (float)thisObj.getDouble("quantity");
 	        	        		thisItem.mIsPurchased = thisObj.getInt("isPurchased");
+	        	        		thisItem.mIsAskLater = thisObj.getInt("isAskLater");
 	        	        		
 	        	        		mItems.add(thisItem);
 	        	        	}
@@ -624,6 +697,7 @@ public class NoteItApplication extends Application {
 						item.mUnitPrice = (float)itemObject.getDouble("unitCost");
 						item.mQuantity = (float)itemObject.getDouble("quantity");
     	        		item.mIsPurchased = itemObject.getInt("isPurchased");
+    	        		item.mIsAskLater = itemObject.getInt("isAskLater");
 						
 						mListener.onPostExecute(retVal, item, json.getString("JSONRetMessage"));
 					} else {
@@ -685,6 +759,7 @@ public class NoteItApplication extends Application {
 						newItem.mUnitID = object.getInt("unitID_FK");
 						newItem.mCategoryID = object.getLong("categoryID_FK");
 						newItem.mIsPurchased = object.getInt("isPurchased");
+						newItem.mIsAskLater = object.getInt("isAskLater");
 						
 						// Add to our internal list
 						mItems.add(newItem);
@@ -710,6 +785,7 @@ public class NoteItApplication extends Application {
 		nameValuePairs.add(new BasicNameValuePair("arg6", String.valueOf(inItem.mUnitID)));
 		nameValuePairs.add(new BasicNameValuePair("arg7", String.valueOf(getUserID())));
 		nameValuePairs.add(new BasicNameValuePair("arg8", String.valueOf(inItem.mIsPurchased)));
+		nameValuePairs.add(new BasicNameValuePair("arg9", String.valueOf(inItem.mIsAskLater)));
 		
 		AddItemTask myEditTask = new AddItemTask(inListener);
         AsyncInvokeURLTask task;
@@ -722,7 +798,7 @@ public class NoteItApplication extends Application {
 		}		
 	}
 	
-	public void editItem(final long itemID, final Item item, OnMethodExecuteListerner inListener) {
+	public void editItem(final int bitMask, final Item item, OnMethodExecuteListerner inListener) {
         
 		class EditItemTask  implements AsyncInvokeURLTask.OnPostExecuteListener {
 
@@ -745,15 +821,30 @@ public class NoteItApplication extends Application {
         try {
 	        ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 	        nameValuePairs.add(new BasicNameValuePair("command", "do_edit_shop_item"));
-	        nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(itemID)));
+	        nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(item.mID)));
 //	        nameValuePairs.add(new BasicNameValuePair("arg2", value))  // List ID
-	        nameValuePairs.add(new BasicNameValuePair("arg3", String.valueOf(item.mCategoryID)));
-	        nameValuePairs.add(new BasicNameValuePair("arg4", item.mName));
-	        nameValuePairs.add(new BasicNameValuePair("arg5", String.valueOf(item.mQuantity)));
-	        nameValuePairs.add(new BasicNameValuePair("arg6", String.valueOf(item.mUnitPrice)));
-	        nameValuePairs.add(new BasicNameValuePair("arg7", String.valueOf(item.mUnitID)));
+	        if ((bitMask & Item.ITEM_CATEGORYID) > 0)
+	        	nameValuePairs.add(new BasicNameValuePair("arg3", String.valueOf(item.mCategoryID)));
+
+	        if ((bitMask & Item.ITEM_NAME) > 0)
+	        	nameValuePairs.add(new BasicNameValuePair("arg4", item.mName));
+	        
+	        if ((bitMask & Item.ITEM_QUANTITY) > 0)
+	        	nameValuePairs.add(new BasicNameValuePair("arg5", String.valueOf(item.mQuantity)));
+	        
+	        if ((bitMask & Item.ITEM_UNITCOST) > 0)
+	        	nameValuePairs.add(new BasicNameValuePair("arg6", String.valueOf(item.mUnitPrice)));
+	        
+	        if ((bitMask & Item.ITEM_UNITID) > 0)
+	        	nameValuePairs.add(new BasicNameValuePair("arg7", String.valueOf(item.mUnitID)));
+	        
 	        nameValuePairs.add(new BasicNameValuePair("arg8", String.valueOf(getUserID())));
-	        nameValuePairs.add(new BasicNameValuePair("arg9", String.valueOf(item.mIsPurchased)));
+	        
+	        if ((bitMask & Item.ITEM_ISPURCHASED) > 0)
+	        	nameValuePairs.add(new BasicNameValuePair("arg9", String.valueOf(item.mIsPurchased)));
+	        
+	        if ((bitMask & Item.ITEM_ISASKLATER) > 0)
+	        	nameValuePairs.add(new BasicNameValuePair("arg10", String.valueOf(item.mIsAskLater)));
 	        
 	        EditItemTask myTask = new EditItemTask(inListener);
 	        AsyncInvokeURLTask 	task = new AsyncInvokeURLTask(nameValuePairs, myTask);
@@ -841,6 +932,56 @@ public class NoteItApplication extends Application {
         AsyncInvokeURLTask task;
 		try {
 			task = new AsyncInvokeURLTask(nameValuePairs, myEditTask);
+	        task.execute();
+		} catch (Exception e) {
+			Log.e("NoteItApplication.suggestItems", e.getMessage());
+			e.printStackTrace();
+		}		
+	}
+	
+	public void fetchUnits(int unitType, OnMethodExecuteListerner listener) {
+		
+		class getUnitsTask implements OnPostExecuteListener {
+
+			OnMethodExecuteListerner mListener;
+			
+			getUnitsTask(OnMethodExecuteListerner inListener){
+				mListener = inListener;
+			}
+			
+	       	public void onPostExecute(JSONObject json) {
+	       		long 				retVal = -1;
+	       		
+				try {
+					if ((retVal = json.getLong("JSONRetVal")) == 0) {
+						JSONArray jsonUnits = json.getJSONArray("arg1");
+						for (int index = 0; index < jsonUnits.length(); index++) {
+							JSONObject obj = jsonUnits.getJSONObject(index);
+							mUnits.add(new Unit(
+									obj.getInt("unitID"),
+									obj.getString("unitName"),
+									obj.getString("unitAbbreviation"),
+									obj.getInt("unitType")));
+						}
+					}
+					mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
+				} catch (JSONException e) {
+					Log.e("NoteItApplication.editShoppingList", e.getMessage());
+                	mListener.onPostExecute(-1, e.getMessage());
+				}
+	       	}
+		}
+		
+		mUnits.clear();
+		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+		nameValuePairs.add(new BasicNameValuePair("command", "do_get_units"));
+		nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(unitType)));
+		nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(getUserID())));
+		
+		getUnitsTask 		myTask = new getUnitsTask(listener);
+        AsyncInvokeURLTask 	task;
+		try {
+			task = new AsyncInvokeURLTask(nameValuePairs, myTask);
 	        task.execute();
 		} catch (Exception e) {
 			Log.e("NoteItApplication.suggestItems", e.getMessage());

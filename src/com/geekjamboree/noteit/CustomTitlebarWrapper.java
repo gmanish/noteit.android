@@ -44,7 +44,7 @@ public class CustomTitlebarWrapper {
     	if (separatorBefore) {
         	
     		LinearLayout.LayoutParams leftSepLP = new LinearLayout.LayoutParams(
-        			2, LayoutParams.MATCH_PARENT);
+        			2, LayoutParams.FILL_PARENT);
         	ImageView imageSep = new ImageView(root.getContext());
         	lp.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
         	imageSep.setLayoutParams(leftSepLP);
@@ -62,7 +62,7 @@ public class CustomTitlebarWrapper {
     	if (separatorAfter) {
         	
     		LinearLayout.LayoutParams rightSepLP = new LinearLayout.LayoutParams(
-        			2, LayoutParams.MATCH_PARENT);
+        			2, LayoutParams.FILL_PARENT);
         	ImageView imageSep = new ImageView(root.getContext());
         	lp.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
         	imageSep.setLayoutParams(rightSepLP);

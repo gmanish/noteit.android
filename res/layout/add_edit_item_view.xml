@@ -10,7 +10,7 @@
 		android:id="@+id/addedit_titlebar"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginBottom="10dip"
+		android:layout_marginBottom="5dip"
 		android:gravity="center_vertical"
 		android:orientation="horizontal">
 		
@@ -24,7 +24,7 @@
 		    android:text="@string/addedit_Title"
 		    android:gravity="center_vertical"
 		    android:textAppearance="?android:attr/textAppearanceLarge" />
-		
+
 		<ImageButton
 	        android:id="@+id/addedit_btnPrev"
 	        android:layout_width="wrap_content"
@@ -32,15 +32,14 @@
 	        android:layout_gravity="center_vertical|right"
 	        android:src="@drawable/left"
 	        style="@style/App_ButtonStyle" />
-		
-		<ImageButton
-	        android:id="@+id/addedit_btnNext"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="center_vertical|right"
-	        android:src="@drawable/right"
-	        style="@style/App_ButtonStyle" />
 
+		<ImageButton
+		    android:id="@+id/addedit_btnNext"
+		    style="@style/App_ButtonStyle"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:src="@drawable/right" />
+		
 	</LinearLayout>
 	
 	<AutoCompleteTextView
@@ -48,14 +47,22 @@
 	    style="@style/AddEdit_Widget"
 	    android:layout_width="match_parent"
         android:layout_marginBottom="5dp"
-        android:layout_below="@+id/addedit_titlebar"
-        android:hint="@string/addedit_Name_Hint" />
+        android:layout_below="@+id/addedit_titlebar"/>
    
+	<TextView
+	    android:id="@+id/addedit_labelQuantity"
+	    style="@style/AddEdit_TextViewStyle"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/addedit_editName"
+	    android:layout_marginBottom="2dp"
+	    android:text="@string/addedit_quantity" />
+	
 	<LinearLayout
        android:id="@+id/addedit_updowncontrol"
        android:layout_width="fill_parent"
        android:layout_height="wrap_content"
-       android:layout_below="@+id/addedit_editName"
+       android:layout_below="@+id/addedit_labelQuantity"
        android:layout_marginBottom="5dp" 
        android:gravity="center_vertical"
   	   android:orientation="horizontal">
@@ -77,8 +84,7 @@
 		    android:minWidth="90dp"
 		    android:layout_weight="0.4"
 		    android:layout_alignParentTop="true"
-		    android:inputType="numberDecimal"
-		    android:hint="@string/addedit_quantity" />
+		    android:inputType="numberDecimal" />
 		
 		<Button
 		    android:id="@+id/addedit_btnIncrement"
@@ -100,21 +106,72 @@
 	    		
 	</LinearLayout>
 
-	<EditText
-	    android:id="@+id/addedit_editprice"
-	    style="@style/AddEdit_Widget"
-	    android:layout_width="match_parent"
+	<TextView
+	    android:id="@+id/addedit_labelPrice"
+	    style="@style/AddEdit_TextViewStyle"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
 	    android:layout_below="@+id/addedit_updowncontrol"
-	    android:inputType="numberDecimal" 
-	    android:layout_marginBottom="5dp" 
-	    android:hint="@string/addedit_price"/>
+	    android:layout_marginBottom="2dp"
+	    android:text="@string/addedit_price" />
+
+	<TextView
+	    android:id="@+id/addedit_labelTotal"
+	    style="@style/AddEdit_TextViewStyle"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/addedit_updowncontrol"
+	    android:layout_toRightOf="@+id/addedit_labelPrice"
+	    android:layout_alignParentRight="true"
+	    android:layout_marginBottom="2dp"
+	    android:gravity="right|center_vertical"
+	    android:text="Total: $39.99" />
 	
+	<LinearLayout
+       android:id="@+id/layout_price"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:layout_below="@+id/addedit_labelPrice"
+       android:layout_marginBottom="5dp" 
+       android:gravity="center_vertical"
+  	   android:orientation="horizontal">
+		
+		<EditText
+		    android:id="@+id/addedit_editprice"
+		    style="@style/AddEdit_Widget"
+		    android:layout_width="0dip"
+		    android:layout_alignParentLeft="true"
+		    android:layout_weight="1"
+		    android:layout_gravity="center_vertical"
+		    android:gravity="left|center_vertical"
+		    android:inputType="numberDecimal" />
+		
+		<CheckBox
+		    android:id="@+id/addedit_AskLater"
+		    android:layout_width="0dip"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentRight="true"
+		    android:layout_weight="1"
+		    android:layout_gravity="center_vertical"
+		    android:gravity="left|center_vertical"
+		    android:text="@string/addedit_askLater" />
+		
+		<ImageButton
+		    android:id="@+id/addedit_asklater_help"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentRight="true"
+		    android:src="@drawable/help" 
+		    android:background="@color/app_button_background" />
+
+	</LinearLayout>
+		
 	<TextView
 	    android:id="@+id/textView4"
 	    style="@style/AddEdit_TextViewStyle"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/addedit_editprice"
+	    android:layout_below="@+id/layout_price"
 	    android:layout_marginBottom="2dp"
 	    android:text="@string/addedit_category" />
 		    

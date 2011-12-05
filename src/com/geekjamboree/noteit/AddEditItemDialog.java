@@ -7,6 +7,7 @@ import com.geekjamboree.noteit.NoteItApplication.Category;
 import com.geekjamboree.noteit.NoteItApplication.OnAddItemListener;
 import com.geekjamboree.noteit.NoteItApplication.OnSuggestItemsListener;
 import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
+import com.geekjamboree.noteit.NoteItApplication.Unit;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -15,15 +16,18 @@ import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddEditItemDialog extends AlertDialog {
@@ -40,7 +44,10 @@ public class AddEditItemDialog extends AlertDialog {
 	
 	public interface editItemListener extends baseListener {
 		
-		void onEditItem(NoteItApplication.Item oldItem, NoteItApplication.Item newItem);
+		void onEditItem(
+				NoteItApplication.Item oldItem, 
+				NoteItApplication.Item newItem,
+				int editItemBitMask);
 	}
 	
 	public interface navigateItemsListener {
@@ -87,16 +94,20 @@ public class AddEditItemDialog extends AlertDialog {
 	long					mItemID = 0; // Holds only for edit mode
 	Item 					mOriginalItem;
 	navigateItemsListener 	mNavigationListener; 
+	
+	ArrayList<String>		mSuggestions = new ArrayList<String>();
+	ArrayAdapter<String>	mAutoCompleteAdapter;
+	AutoCompleteTextView 	mItemName;
 
 	// controls
 	EditText				mEditName;
 	EditText				mEditQuantity;
 	EditText				mEditCost;
+	TextView				mTextTotal;
 	Spinner					mSpinCategories;
-	ArrayList<String>		mSuggestions = new ArrayList<String>();
-	ArrayAdapter<String>	mAutoCompleteAdapter;
-	AutoCompleteTextView 	mItemName;
-
+	Spinner					mSpinUnits;
+	CheckBox				mAskLater;
+		
 	// This one's for the AutoTextComplete
 	final TextWatcher		mTextChecker = new TextWatcher() {
 		
@@ -149,17 +160,53 @@ public class AddEditItemDialog extends AlertDialog {
     	
     	super.onCreate(savedInstanceState);
         setContentView(R.layout.add_edit_item_view);
+
+        String title; 
+        if (mIsAddItem)
+        	title = getContext().getResources().getString(R.string.addedit_Title);
+        else
+        	title = getContext().getResources().getString(R.string.addedit_EditTitle);
         
-//        setTitle(getContext().getResources().getString(R.string.addedit_Title));
-        
+    	((TextView) findViewById(R.id.addedit_textview_caption)).setText(title);
+    	((ImageButton) findViewById(R.id.addedit_asklater_help)).setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				Toast.makeText(
+						getContext(),
+						getContext().getResources().getString(R.string.addedit_asklaterhelp), 
+						Toast.LENGTH_LONG).show();
+			}
+		});
+    	
         mSpinCategories = (Spinner) findViewById(R.id.addedit_spinCategories);
         if (mSpinCategories != null) {
         	populateCategories();
         }
         
+        mSpinUnits = (Spinner) findViewById(R.id.addedit_units);
+        if (mSpinUnits != null) {
+        	populateUnits();
+        }
+        
         mEditName = (EditText) findViewById(R.id.addedit_editName);
         mEditQuantity = (EditText) findViewById(R.id.addedit_txtQuantity);
         mEditCost = (EditText) findViewById(R.id.addedit_editprice);
+        mAskLater = (CheckBox) findViewById(R.id.addedit_AskLater);
+        mTextTotal = (TextView) findViewById(R.id.addedit_labelTotal);
+        mEditCost.setOnKeyListener(new View.OnKeyListener() {
+			
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				doUpdateTotal();
+				return false;
+			}
+		});
+        mEditQuantity.setOnKeyListener(new View.OnKeyListener() {
+			
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				doUpdateTotal();
+				return false;
+			}
+		});
         
         Button doneBtn = (Button) findViewById(R.id.addedit_btnDone);
         doneBtn.setOnClickListener(new View.OnClickListener() {
@@ -257,6 +304,7 @@ public class AddEditItemDialog extends AlertDialog {
         if (!mIsAddItem) {
         	// In the edit mode "Add More" button does not make sense
         	continueBtn.setVisibility(View.INVISIBLE);
+        	
         } else {
         	// In the Add mode, next and prev don't make sense
         	nextBtn.setVisibility(View.INVISIBLE);
@@ -285,12 +333,36 @@ public class AddEditItemDialog extends AlertDialog {
 				}
 				});
     	} else {
-    		// In this case, we need to send old item details to the caller, so copy it
-	    	mApplication.editItem(item.mID, item, new OnMethodExecuteListerner() {
+    		int bitFlags = 0; 
+
+    		if (!item.mName.equals(mOriginalItem.mName))
+    			bitFlags = bitFlags | Item.ITEM_NAME;
+    		
+    		if (item.mQuantity != mOriginalItem.mQuantity)
+    			bitFlags = bitFlags | Item.ITEM_QUANTITY;
+    		
+    		if (item.mUnitID != mOriginalItem.mUnitID)
+    			bitFlags = bitFlags | Item.ITEM_UNITID;
+    		
+    		if (item.mUnitPrice != mOriginalItem.mUnitPrice)
+    			bitFlags = bitFlags | Item.ITEM_UNITCOST;
+    		
+    		if (item.mIsAskLater != mOriginalItem.mIsAskLater)
+    			bitFlags = bitFlags | Item.ITEM_ISASKLATER;
+    		
+    		if (item.mCategoryID != mOriginalItem.mCategoryID)
+    			bitFlags = bitFlags | Item.ITEM_CATEGORYID;
+    		
+    		final int finalBitFlags = bitFlags;
+    		mApplication.editItem(
+    				finalBitFlags, 
+	    			item,  
+	    			new OnMethodExecuteListerner() {
 				
 				public void onPostExecute(long resultCode, String message) {
 					if (resultCode == 0) {
-						((editItemListener)mListener).onEditItem(mOriginalItem, item);
+						
+						((editItemListener)mListener).onEditItem(mOriginalItem, item, finalBitFlags);
 					}
 					else
 						Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
@@ -325,19 +397,39 @@ public class AddEditItemDialog extends AlertDialog {
         	mSpinCategories.setSelection(index);        
     }
     
+    protected void populateUnits() {
+    	
+    	ArrayList<Unit>	units = mApplication.getUnits();
+        ArrayAdapter<Unit> adapter = new ArrayAdapter<Unit>(
+                getContext(), 
+                android.R.layout.simple_spinner_item,
+                units);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinUnits.setAdapter(adapter);
+    }
+    
     @SuppressWarnings("unchecked")
     protected void populateView(Item item) {
     	
     	mEditName.setText(item.mName);
     	mEditQuantity.setText(String.valueOf(item.mQuantity));
     	mEditCost.setText(String.valueOf(item.mUnitPrice));
+    	mAskLater.setChecked(item.mIsAskLater > 0);
+    	
     	ArrayAdapter<Category> adapter = (ArrayAdapter<Category>)mSpinCategories.getAdapter();
     	if (adapter != null){
     		int position = adapter.getPosition(mApplication.new Category(item.mCategoryID, "", 0));
     		if (position >=0 && position < adapter.getCount())
     			mSpinCategories.setSelection(position);
     	}
-    	mEditCost.setActivated(true);
+    	ArrayAdapter<Unit> unitAdapter = (ArrayAdapter<Unit>)mSpinUnits.getAdapter();
+    	if (adapter != null) {
+    		int position = unitAdapter.getPosition(mApplication.new Unit(item.mUnitID, "", "", 0));
+    		if (position >= 0 && position < unitAdapter.getCount())
+    			mSpinUnits.setSelection(position);
+    	}
+    	
+    	doUpdateTotal();
     }
     
     protected void doFetchAndDisplayItem(long itemID) {
@@ -353,6 +445,7 @@ public class AddEditItemDialog extends AlertDialog {
 					populateView(item);
 				} else {
 					Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+					mOriginalItem = null;
 				}
 			}
 		});    	
@@ -361,25 +454,40 @@ public class AddEditItemDialog extends AlertDialog {
     
     protected Item getItemFromView() throws DialogFieldException {
     	
-    	NoteItApplication app = mApplication;
-    	Item item = mApplication.new Item();
+    	NoteItApplication 	app = mApplication;
+    	Item 				item;
+    	
+    	if (mOriginalItem != null) {
+    		// Copy all properties from the mOriginalItem as this dialog may not
+    		// set all the properties of item and we don't want the original props
+    		// to be changed if they are not set at all
+    		item = mApplication.new Item(mOriginalItem);
+    	}
+    	else 
+    		item = mApplication.new Item();
     	
     	int  position = mSpinCategories.getSelectedItemPosition();
     	if (position != Spinner.INVALID_POSITION) {
         	item.mCategoryID = ((Category)mSpinCategories.getItemAtPosition(position)).mID;
     	}
+    	
+    	position = mSpinUnits.getSelectedItemPosition();
+    	if (position != Spinner.INVALID_POSITION) {
+    		item.mUnitID = ((Unit) mSpinUnits.getItemAtPosition(position)).mID;
+    	}
+    	
     	//item.mClassID =
     	item.mID = mIsAddItem ? 0 : mItemID;
     	item.mListID = (app.getCurrentShoppingListID());
     	item.mName = mEditName.getEditableText().toString();
-    	if (item.mName.isEmpty())
+    	item.mIsAskLater = mAskLater.isChecked() ? 1 : 0;
+    	if (item.mName.trim().matches(""))
     		throw new DialogFieldException(getContext().getResources().getString(R.string.addedit_nameblank));
    	
-    	if (!mEditQuantity.getEditableText().toString().isEmpty())
+    	if (!mEditQuantity.getEditableText().toString().matches(""))
     		item.mQuantity = Float.valueOf(mEditQuantity.getEditableText().toString());
     	
-    	item.mUnitID = 1; // default to one unit
-    	if (!mEditCost.getEditableText().toString().isEmpty())
+    	if (!mEditCost.getEditableText().toString().matches(""))
     		item.mUnitPrice = Float.valueOf(mEditCost.getEditableText().toString());
 
     	return item;
@@ -390,8 +498,33 @@ public class AddEditItemDialog extends AlertDialog {
     	mEditName.setText("");
     	mEditQuantity.setText("");
     	mEditCost.setText("");
-    	mEditName.setActivated(true);
+//    	mEditName.setActivated(true);
     	mEditName.requestFocus();
 		//mSpinCategories.setSelection(position);
+    }
+    
+    void doUpdateTotal() {
+		
+    	String 			strcost = mEditCost.getEditableText().toString();
+		String 			strquantity = mEditQuantity.getEditableText().toString();
+		float 			newValue = 0;
+		float 			quantity = 0;
+		final String 	format = getContext().getResources().getString(R.string.addedit_total);
+		
+		try {
+			newValue = Float.valueOf(strcost.trim());
+			quantity = Float.valueOf(strquantity.trim());
+		} catch (Exception e) {
+			newValue = 0;
+			quantity = 0;
+		}
+		
+		if (newValue > 0 && quantity > 0) {
+			String total = String.format(format, newValue * quantity);			
+			mTextTotal.setText(total);
+			mTextTotal.setVisibility(View.VISIBLE);
+		} else {
+			mTextTotal.setVisibility(View.INVISIBLE);
+		}
     }
 }

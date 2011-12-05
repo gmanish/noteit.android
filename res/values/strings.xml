@@ -2,6 +2,7 @@
 <resources>
     <string name="OK">OK</string>
     <string name="Cancel">Cancel</string>
+    <string name="Skip">Skip</string>
     
     <string name="hello">Hello World, MainActivity!</string>
     <string name="app_name">Note It!</string>
@@ -18,9 +19,9 @@
         
 	<string name="shoplistsactivity_title">Shopping Lists</string>
 	<string name="empty_shoppinglists">You do not have any shopping lists. Please add a list by clicking the \"Add\" button.</string>
-  	<string name="add_shoplist">Add...</string>
+  	<string name="add_shoplist">Add</string>
   	<string name="shopping_list_confirm_delte">Are you sure you want to delete this list? All items in the list will also be deleted.</string>
-    <string name="noteit_prefs">Preferences...</string>
+    <string name="noteit_prefs">Settings</string>
 	<string name="shoppinglist_add_title">List Name</string>
 	<string name="shoppinglist_edit_title">Edit List</string>
 	<string name="shoppinglist_name_blank">The name of the Shopping List cannot be left blank.</string>
@@ -36,7 +37,8 @@
 	<string name="itemlistqe_delete">Delete</string>
 	<string name="itemlistqe_bought">Done</string>
 	    	
-	<string name="addedit_Title">Add Item</string>    
+	<string name="addedit_Title">Add Item</string> 
+	<string name="addedit_EditTitle">Edit Item</string>   
 	<string name="addedit_Name">Name:</string>
 	<string name="addedit_Name_Hint">Item Name</string>
 	<string name="addedit_quantity">Quantity:</string>
@@ -46,7 +48,13 @@
 	<string name="addedit_Done">Done</string>
 	<string name="addedit_Continue">Add More</string>
 	<string name="addedit_nameblank">The item name cannot be blank</string>
-	<string name="addedit_itemupdated">The item details have been updated</string>    
+	<string name="addedit_itemupdated">The item details have been updated</string>
+	<string name="addedit_askLater">Ask Later</string>
+	<string name="addedit_askLaterPrompt">How much did %1$.2f %2$s of %3$s cost?</string>
+	<string name="addedit_asklaterhelp">"If you do not know the price of the item, please check 'Ask Later'. You will be prompted for price when you mark the item 'Done'."</string>
+	<string name="addedit_total">Total: %1$.2f</string>
+	<string name="addedit_asklater_price">Total Price</string>
+
 	<string name="preference_activity_title">Note It! Settings</string>
 	<string-array name="itemFontSize">
 	    <item>Large</item>

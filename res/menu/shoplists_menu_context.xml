@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
+   
    <item android:id="@+id/menu_context_shoplist_delete"
-		android:icon="@drawable/ic_actionbar_add"    		
-        android:title="@string/menu_shoplist_delete"
-        android:showAsAction="ifRoom" />
+		android:icon="@drawable/add"    		
+        android:title="@string/menu_shoplist_delete" />
+   
    <item android:id="@+id/menu_context_shoplist_edit"
-		android:icon="@drawable/ic_actionbar_settings"    		
-        android:title="@string/menu_shoplist_edit" 
-        android:showAsAction="ifRoom"/>
+		android:icon="@drawable/settings"    		
+        android:title="@string/menu_shoplist_edit" />
+   
 </menu>

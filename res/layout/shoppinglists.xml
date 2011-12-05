@@ -13,6 +13,7 @@
         android:layout_weight="1"
         android:divider="@drawable/listview_item_separator"
         android:dividerHeight="2px"
+        android:cacheColorHint="#00000000"
         android:requiresFadingEdge="vertical" />
 
     <LinearLayout 
