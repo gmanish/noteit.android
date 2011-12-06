@@ -313,7 +313,8 @@ public class AddEditItemDialog extends AlertDialog {
         
     	if (mIsAddItem == false && mItemID != 0){
     		doFetchAndDisplayItem(mItemID);
-    	}    	
+    	} else 
+    		doUpdateTotal();
     }
     
     protected void saveItem() throws DialogFieldException {

@@ -213,10 +213,16 @@ public class NoteItApplication extends Application {
 		void onPostExecute(long resultCode, Item item, String message);
 	}
 	
+	public static interface OnAddCategoryListener {
+		void onPostExecute(long result, Category category, String message);
+	}
+	
 	public static interface OnAddItemListener {
 		void onPostExecute(long resultCode, Item item, String message);
 	}
 	
+	
+
 	private long						mUserID = 0;
 	private long						mCurrentShoppingListID = 0;
 	private ArrayList<ShoppingList>		mShoppingLists = new ArrayList<ShoppingList>();
@@ -492,11 +498,7 @@ public class NoteItApplication extends Application {
 	
 	public void fetchCategories(OnFetchCategoriesListener inPostExecute){
 		try {
-			if (mCategories == null) {
-				// There are no cached results
-				mCategories = new ArrayList<Category>();
-			}
-			
+			mCategories.clear();
 			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 	        nameValuePairs.add(new BasicNameValuePair("command", "do_get_categories"));
 	        nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(getUserID())));
@@ -526,9 +528,9 @@ public class NoteItApplication extends Application {
 				        		Category thisCategory = new Category(
 				        				Long.parseLong(thisObj.getString("listID")),
 										thisObj.getString("listName"),
-										0L);
+										thisObj.getLong("listID"));
 				        		
-				        		addCategory(thisCategory);
+				        		mCategories.add(thisCategory);
 				        	}
 				        	
 				        	// Call the invoker
@@ -556,16 +558,100 @@ public class NoteItApplication extends Application {
 		}
 	}
 
-	public void addCategory(long itemID, String itemName, long userID){
-		Log.i("NoteItApplication.addCategory", 
-    			"Item ID: " + itemID + " Item Name: " + itemName);
-		Category category = new Category(itemID, itemName, userID);
-		addCategory(category);
+	public void addCategory(Category category, OnAddCategoryListener inListener){
+		
+		try {
+			if (!mCategories.contains(category)){
+	
+				ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+		        nameValuePairs.add(new BasicNameValuePair("command", "do_add_category"));
+		        nameValuePairs.add(new BasicNameValuePair("arg1", category.mName));
+		        nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(getUserID())));
+	
+		        class AddCategoryTask implements AsyncInvokeURLTask.OnPostExecuteListener {
+	
+					OnAddCategoryListener mListener;
+					
+					public AddCategoryTask(OnAddCategoryListener listener) {
+						mListener = listener;
+					}
+					
+					public void onPostExecute(JSONObject json) {
+						
+						try {
+							long retVal = json.getLong("JSONRetVal");
+							if (retVal == 0) {
+								Category category = new Category(
+										json.getLong("arg1"), 
+										json.getString("arg2"), 
+										getUserID());
+								mCategories.add(category);
+								mListener.onPostExecute(retVal, category, "");
+							} else 
+								mListener.onPostExecute(
+									retVal, 
+									null, 
+									json.getString("JSONRetMessage"));
+						} catch (JSONException e) {
+							Log.e("NoteItApplication.addCategory: JSON Exception", e.getMessage());
+							mListener.onPostExecute(-1L, null, e.getMessage());
+						}
+					}
+				}
+		        
+		        AddCategoryTask listener = new AddCategoryTask(inListener);
+		        AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs, listener);
+		        task.execute();
+			}
+		} catch (CancellationException e) {
+			Log.e("NoteItApplication.fetchCategories", e.getMessage());
+		} catch (ExecutionException e) {
+			Log.e("NoteItApplication.fetchCategories", e.getMessage());
+		} catch (InterruptedException e) {
+			Log.e("NoteItApplication.fetchCategories", e.getMessage());
+		} catch (Exception e) {
+			Log.e("NoteItApplication.fetchCategories", e.getMessage());		
+		}
 	}
 	
-	public void addCategory(Category category){
-		if (!mCategories.contains(category)){
-			mCategories.add(category);
+	public void deleteCategory(final int index, OnMethodExecuteListerner listener) {
+
+		class DeleteCategoryListener implements AsyncInvokeURLTask.OnPostExecuteListener {
+			
+			OnMethodExecuteListerner mListener;
+			
+			public DeleteCategoryListener(OnMethodExecuteListerner listener) {
+				
+				mListener = listener;
+			}
+			
+			public void onPostExecute(JSONObject json) {
+				
+				long retVal = -1;
+				try {
+					retVal = json.getLong("JSONRetVal");
+					if (retVal == 0)
+						mCategories.remove(index);
+					mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
+				} catch (JSONException e) {
+					mListener.onPostExecute(retVal, e.getMessage());
+				}
+			}
+		}
+		
+		try {
+			Category 					category = mCategories.get(index);
+			ArrayList<NameValuePair> 	nameValuePairs = new ArrayList<NameValuePair>(2);
+
+			nameValuePairs.add(new BasicNameValuePair("command", "do_delete_category"));
+	        nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(category.mID)));
+	        nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(getUserID())));
+	        
+	        DeleteCategoryListener deleteListener = new DeleteCategoryListener(listener);
+	        AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs, deleteListener);
+	        task.execute();
+		} catch (Exception e) {
+			Log.e("NoteItApplication.deleteCategory", e.getMessage());
 		}
 	}
 	

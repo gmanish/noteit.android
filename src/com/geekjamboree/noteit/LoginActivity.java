@@ -1,5 +1,9 @@
 package com.geekjamboree.noteit;
 
+import java.util.ArrayList;
+
+import com.geekjamboree.noteit.NoteItApplication.Category;
+import com.geekjamboree.noteit.NoteItApplication.OnFetchCategoriesListener;
 import com.geekjamboree.noteit.R;
 
 import org.json.JSONException;
@@ -70,11 +74,26 @@ public class LoginActivity
 	        	if (retval == 0){
 		        	// We're set to rock and roll
 	            	if (!json.isNull("arg1")){
-						long userID = json.getLong("arg1");
-						((NoteItApplication)getApplication()).setUserID(userID);
+	            		
+						long 				userID = json.getLong("arg1");
+						NoteItApplication 	app = (NoteItApplication) getApplication();
+						
+						app.setUserID(userID);
 	            		Toast.makeText(this, "You have been logged in.", Toast.LENGTH_SHORT).show();
-	                    Intent myIntent = new Intent(this, ShoppingListActivity.class);
-	                    startActivity(myIntent);
+	            		
+	            		// Fetch the categories. This is a one time activity
+	            		app.fetchCategories(new OnFetchCategoriesListener() {
+							
+							public void onPostExecute(long resultCode, ArrayList<Category> categories,
+									String message) {
+
+								if (resultCode == 0) {
+									//Intent myIntent = new Intent(this, ShoppingListActivity.class);
+				            		Intent myIntent = new Intent(LoginActivity.this, DashBoardActivity.class);
+				                    startActivity(myIntent);
+								}
+							}
+						});
 	            	} else
 	            		throw new Exception("Invalid email or password");
 	        	} else 

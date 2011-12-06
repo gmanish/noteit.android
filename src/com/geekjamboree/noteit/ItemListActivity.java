@@ -22,9 +22,7 @@ import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.TextUtils.TruncateAt;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -349,17 +347,21 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 				View convertView, 
 				ViewGroup parent) {
 	    	
-	    	final int 	groupHeight = 32;
-	        TextView 	textView = new TextView(mContext);
+	    	ViewGroup viewGroup = null;
+	    	if (convertView == null) {
+		    	LayoutInflater li = (LayoutInflater) getApplication().getSystemService(LAYOUT_INFLATER_SERVICE);
+		    	if (li != null) {
+		    		viewGroup = (ViewGroup) li.inflate(R.layout.listitems_group, parent, false);
+		    	}
+	    	} else {
+	    		viewGroup = (ViewGroup) convertView;
+	    	}
 	    	
-	    	setViewParams(textView, groupHeight);
-	        textView.setText(getGroup(groupPosition).toString());
-	        textView.setBackgroundResource(R.color.listitem_group_background);
-	        textView.setTextAppearance(mContext, R.style.ItemList_TextAppearance_GroupsItem);
-	        textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-	        textView.setPadding(10, 0, 10, 0);
-	        textView.setEllipsize(TruncateAt.END);
-	        return textView;
+    		if (viewGroup != null) {
+		    	TextView  textView = (TextView) viewGroup.findViewById(R.id.itemslist_categoryName);
+		        textView.setText(getGroup(groupPosition).toString());
+    		}
+    		return viewGroup;
 		}
 	}
 	

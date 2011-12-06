@@ -1,39 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_categories"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/application_background_normal"
     android:orientation="vertical">
 
     <ListView
         android:id="@+android:id/list"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="0dp" 
         android:layout_weight="1"
-        android:divider="@color/theme_offwhite_listitem_seperator"
-        android:dividerHeight="1dp"
-        android:listSelector="@color/listview_selector"/>
+        android:divider="@drawable/listview_item_separator"
+        android:dividerHeight="2px"
+        android:cacheColorHint="#00000000"
+        android:requiresFadingEdge="vertical" />
 
-    <LinearLayout 
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/theme_offwhite_toolbar_background">
-	    
-	    <ImageButton
-	        android:id="@+id/button_categories_add"
-	        android:src="@android:drawable/ic_menu_add" 
-	        style="@style/App_ButtonStyle" />
-	
-	    <ImageButton
-	        android:id="@+id/button_categories_delete"
-	        android:src="@android:drawable/ic_menu_delete" 
-        	style="@style/App_ButtonStyle" />
-	
-	    <ImageButton
-	        android:id="@+id/button_categories_preferences"
-	        android:src="@android:drawable/ic_menu_preferences" 
-	        style="@style/App_ButtonStyle" />
-	    
-	</LinearLayout>
-</LinearLayout>
+ </LinearLayout>

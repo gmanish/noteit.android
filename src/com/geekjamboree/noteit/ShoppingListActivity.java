@@ -4,7 +4,6 @@ import java.util.ArrayList;
  
 import com.geekjamboree.noteit.R;
 import com.geekjamboree.noteit.NoteItApplication;
-import com.geekjamboree.noteit.NoteItApplication.Category;
 import com.geekjamboree.noteit.NoteItApplication.ShoppingList;
 import com.geekjamboree.noteit.NoteItApplication.Unit;
 
@@ -56,7 +55,7 @@ public class ShoppingListActivity
         
         mListView = (ListView) findViewById(android.R.id.list);
     	mListView.setTextFilterEnabled(true);
-		mAdapter = new ArrayAdapter<NoteItApplication.ShoppingList>(
+		mAdapter = new ArrayAdapter<ShoppingList>(
 				this, 
     			R.layout.shoppinglists_item, 
     			R.id.shoppinglist_name, 
@@ -64,7 +63,7 @@ public class ShoppingListActivity
 		mListView.setAdapter(mAdapter);
     	
     	class ItemClickAndPostExecuteListener 
-    		implements AdapterView.OnItemClickListener, NoteItApplication.OnFetchCategoriesListener {
+    		implements AdapterView.OnItemClickListener {
     		
     		View mView = null;
     		
@@ -72,20 +71,9 @@ public class ShoppingListActivity
     			mView = view;
     			// Now fetch the categories in the dbase
     			((NoteItApplication)getApplication()).setCurrentShoppingListIndex(position);
-    			((NoteItApplication)getApplication()).fetchCategories(this);
+                Intent myIntent = new Intent(mView.getContext(), ItemListActivity.class);
+                startActivity(myIntent);
 			}
-    		
-    	    public void onPostExecute(long resultCode, ArrayList<Category> categories, String message) {
-    			// Invoke the category activity
-    	    	assert(mView != null);
-    	    	if (mView != null && resultCode == 0){
-                    Intent myIntent = new Intent(mView.getContext(), ItemListActivity.class);
-                    startActivity(myIntent);
-    	    	}
-    	    	else
-    	    		// Display alert with error message
-    	    		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-    	    }
     	}
     	
     	mListView.setOnItemClickListener(new ItemClickAndPostExecuteListener());

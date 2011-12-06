@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name="MainActivity"></activity>
+        <activity android:name="DashBoardActivity"></activity>
         <activity android:name="ShoppingListActivity"></activity>
         <activity android:name="MainPreferenceActivity"></activity>
         <activity android:name="ItemListActivity"></activity>
