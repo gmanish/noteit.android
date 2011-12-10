@@ -71,6 +71,9 @@ public class NoteItApplication extends Application {
 	
 	// Represents each category in the database
 	public class Category {
+		public static final int CATEGORY_ID		= 1 << 0;
+		public static final int CATEGORY_NAME 	= 1 << 1;
+
 		public String 	mName = "";
 		public long 	mID = 0;
 		public long 	mUserID = 0;
@@ -79,6 +82,12 @@ public class NoteItApplication extends Application {
 			mName = categoryName;
 			mID = categoryID;
 			mUserID = userID;
+		}
+
+		public Category(Category category) {
+			this.mID = category.mID;
+			this.mName = category.mName;
+			this.mUserID = category.mUserID;
 		}
 		
 		public String toString(){
@@ -614,6 +623,39 @@ public class NoteItApplication extends Application {
 		}
 	}
 	
+	public void editCategory(int bitMask, Category category, final OnMethodExecuteListerner listener) {
+		
+		class EditCategoryListener implements AsyncInvokeURLTask.OnPostExecuteListener {
+			
+			public void onPostExecute(JSONObject json) {
+				
+				long retVal = -1;
+				try {
+					 retVal = json.getLong("JSONRetVal");
+					 listener.onPostExecute(retVal, json.getString("JSONRetMessage"));
+				} catch (JSONException e) {
+					Log.e("NoteItApplication.editCategory", e.getMessage());
+					listener.onPostExecute(retVal, e.getMessage());
+				}
+			}
+		}
+		
+		try {
+			ArrayList<NameValuePair> 	nameValuePairs = new ArrayList<NameValuePair>(3);
+			nameValuePairs.add(new BasicNameValuePair("command", "do_edit_category"));
+	        nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(category.mID)));
+	        nameValuePairs.add(new BasicNameValuePair("arg2", category.mName));
+	        nameValuePairs.add(new BasicNameValuePair("arg3", String.valueOf(getUserID())));
+	        
+	        EditCategoryListener editListener = new EditCategoryListener();
+	        AsyncInvokeURLTask task;
+			task = new AsyncInvokeURLTask(nameValuePairs, editListener);
+	        task.execute();
+		} catch (Exception e) {
+			Log.e("NoteItApplication.editCategory", e.getMessage());
+		}
+	}
+	
 	public void deleteCategory(final int index, OnMethodExecuteListerner listener) {
 
 		class DeleteCategoryListener implements AsyncInvokeURLTask.OnPostExecuteListener {
@@ -641,7 +683,7 @@ public class NoteItApplication extends Application {
 		
 		try {
 			Category 					category = mCategories.get(index);
-			ArrayList<NameValuePair> 	nameValuePairs = new ArrayList<NameValuePair>(2);
+			ArrayList<NameValuePair> 	nameValuePairs = new ArrayList<NameValuePair>(3);
 
 			nameValuePairs.add(new BasicNameValuePair("command", "do_delete_category"));
 	        nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(category.mID)));

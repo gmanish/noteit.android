@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
 
 import org.apache.http.client.ClientProtocolException;
@@ -28,7 +29,7 @@ import org.json.JSONObject;
  *
  */
 public class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
-	private final String 				mNoteItWebUrl = "http://10.0.2.2/noteit.web/controller/AppController.php";
+	private String 						mNoteItWebUrl;
 	private ArrayList<NameValuePair> 	mParams;
 	private	OnPostExecuteListener		mPostExecuteListener = null;
 	
@@ -43,18 +44,29 @@ public class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 		mPostExecuteListener = postExecuteListener;
 		if (mPostExecuteListener == null)
 			throw new Exception("Param postExecuteListener cannot be null.");
-	}
+		if(("sdk".equals(Build.PRODUCT)) || ("google_sdk".equals(Build.PRODUCT)))
+			// We're running in the emulator connect with host loopback
+//			mNoteItWebUrl = "http://geekjamboree.com/noteit/controller/appcontroller.php";
+			mNoteItWebUrl = "http://10.0.2.2/noteit.web/controller/appcontroller.php";
+		else
+			mNoteItWebUrl = "http://192.168.0.100/noteit.web/controller/appcontroller.php";
+//			mNoteItWebUrl = "http://geekjamboree.com/noteit/controller/appcontroller.php";
+		}
 	
 	@Override
 	protected String doInBackground(Void... params) {
 	    String result = "";
-	    
+
+//    	String paramString = URLEncodedUtils.format(mParams, "utf-8");
+//    	String completeUrl = mNoteItWebUrl += "?" + paramString;
+
 	    // Create a new HttpClient and Post Header
 	    HttpClient httpclient = new DefaultHttpClient();
 	    HttpPost httppost = new HttpPost(mNoteItWebUrl);
+	    
 	    try {
 	        // Add parameters
-	        httppost.setEntity(new UrlEncodedFormEntity(mParams));
+	    	httppost.setEntity(new UrlEncodedFormEntity(mParams));
 
 	        // Execute HTTP Post Request
 	        HttpResponse response = httpclient.execute(httppost);

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_itemslist"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:background="@drawable/application_background_normal"
     android:orientation="vertical" >
 
@@ -15,19 +15,18 @@
         android:groupIndicator="@color/listitem_group_indicator"
         android:childDivider="@drawable/listview_item_separator"
         android:divider="@drawable/listview_item_separator"
-        android:dividerHeight="2px" 
-        android:requiresFadingEdge="vertical" />
+        android:dividerHeight="2px" />
 
     <LinearLayout 
         android:id="@android:id/empty"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
         android:orientation="horizontal"
         android:padding="10dip">
         
         <TextView
-	        android:layout_width="match_parent"
+	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="center"
 	        android:layout_weight="1"
@@ -39,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@android:drawable/ic_menu_add" />
+            android:src="@drawable/add" />
         
     </LinearLayout>
 

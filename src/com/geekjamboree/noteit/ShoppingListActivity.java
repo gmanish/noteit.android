@@ -12,7 +12,9 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -41,9 +43,21 @@ public class ShoppingListActivity
 	ProgressDialog									mProgressDialog = null;
 	ArrayAdapter<NoteItApplication.ShoppingList>	mAdapter;
 	CustomTitlebarWrapper 							mToolbar;
+	int												mFontSize = 3;
 	
-	/** Called when the activity is first created. */
-    @Override
+	protected SharedPreferences.OnSharedPreferenceChangeListener mPrefChangeListener = 
+			new SharedPreferences.OnSharedPreferenceChangeListener() {
+			
+			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+					String key) {
+				if (key == "Item_Font_Size") {
+					mListView.invalidateViews();
+				}
+				
+			}
+		};
+
+	@Override
     public void onCreate(Bundle savedInstanceState) { 
     	
     	super.onCreate(savedInstanceState);
@@ -55,7 +69,7 @@ public class ShoppingListActivity
         
         mListView = (ListView) findViewById(android.R.id.list);
     	mListView.setTextFilterEnabled(true);
-		mAdapter = new ArrayAdapter<ShoppingList>(
+		mAdapter = new ArrayAdapterWithFontSize<ShoppingList> (
 				this, 
     			R.layout.shoppinglists_item, 
     			R.id.shoppinglist_name, 
@@ -84,16 +98,6 @@ public class ShoppingListActivity
         // register for context menus
         registerForContextMenu(mListView);
         
-        // Hook up the preference button
-//        ImageButton prefButton = (ImageButton)findViewById(R.id.button_shoppinglists_preferences);
-//        prefButton.setOnClickListener(new View.OnClickListener() {
-//			
-//			public void onClick(View v) {
-				// TODO Auto-generated method stub
-//    			startActivity(new Intent(ShoppingListActivity.this, MainPreferenceActivity.class));
-//			}
-///		});
-
 		((NoteItApplication) getApplication()).fetchShoppingLists(this);
 		((NoteItApplication) getApplication()).fetchUnits(Unit.METRIC, new NoteItApplication.OnMethodExecuteListerner() {
 			
@@ -102,7 +106,19 @@ public class ShoppingListActivity
 		});
     }
      
+	protected void onPause() {
+		PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(mPrefChangeListener);
+		super.onPause();
+	}
     @Override
+	protected void onResume() {
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this); 
+		prefs.registerOnSharedPreferenceChangeListener(mPrefChangeListener);
+		mListView.invalidateViews();
+		super.onResume();
+	}
+
+	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         
     	MenuInflater inflater = getMenuInflater();
@@ -171,13 +187,15 @@ public class ShoppingListActivity
 			LayoutInflater	inflater = (LayoutInflater) ShoppingListActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			final View dialogView = inflater.inflate(R.layout.dialog_addshoppinglist, (ViewGroup) findViewById(R.id.dialog_addshoppinglist_root));
 			
-			AlertDialog dialog = new AlertDialog.Builder(ShoppingListActivity.this)
+			AlertDialog dialog;
+			dialog = new AlertDialog.Builder(ShoppingListActivity.this)
 				.setView(dialogView)
 				.setTitle(getResources().getString(R.string.shoppinglist_edit_title))
 				.create();
-			
+
 			final EditText 	editListName = (EditText) dialogView.findViewById(R.id.dialog_addshoppinglist_editTextName);
 			editListName.setText(((ShoppingList)mListView.getItemAtPosition(index)).mName);
+
 			dialog.setButton(DialogInterface.BUTTON1, "OK", new DialogInterface.OnClickListener() {
 				
 				public void onClick(DialogInterface dialog, int which) {
@@ -206,10 +224,8 @@ public class ShoppingListActivity
 						);
 					} else 
 						Toast.makeText(getApplicationContext(), getResources().getString(R.string.shoppinglist_name_blank), Toast.LENGTH_SHORT).show();
-					
-				}
-			});
-			
+				}});
+				
 			dialog.setButton(DialogInterface.BUTTON2, "No", new DialogInterface.OnClickListener() {
 				
 				public void onClick(DialogInterface dialog, int which) {
@@ -217,7 +233,6 @@ public class ShoppingListActivity
 					dialog.dismiss();
 				}
 			});
-
 			dialog.show();
 		}
     }

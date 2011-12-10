@@ -79,7 +79,7 @@ public class LoginActivity
 						NoteItApplication 	app = (NoteItApplication) getApplication();
 						
 						app.setUserID(userID);
-	            		Toast.makeText(this, "You have been logged in.", Toast.LENGTH_SHORT).show();
+	            		Toast.makeText(this, "You are logged in.", Toast.LENGTH_SHORT).show();
 	            		
 	            		// Fetch the categories. This is a one time activity
 	            		app.fetchCategories(new OnFetchCategoriesListener() {
@@ -91,6 +91,8 @@ public class LoginActivity
 									//Intent myIntent = new Intent(this, ShoppingListActivity.class);
 				            		Intent myIntent = new Intent(LoginActivity.this, DashBoardActivity.class);
 				                    startActivity(myIntent);
+								} else {
+				            		Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
 								}
 							}
 						});

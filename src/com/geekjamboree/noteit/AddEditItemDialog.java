@@ -9,13 +9,14 @@ import com.geekjamboree.noteit.NoteItApplication.OnSuggestItemsListener;
 import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
 import com.geekjamboree.noteit.NoteItApplication.Unit;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,7 +31,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AddEditItemDialog extends AlertDialog {
+public class AddEditItemDialog extends Dialog {
 	
 	public interface baseListener{
 		// Just a convenience, I need to have a single pointer
@@ -118,28 +119,26 @@ public class AddEditItemDialog extends AlertDialog {
 				public void onPostExecute(long resultCode, ArrayList<String> suggestions,
 						String message) {
 					
-					mAutoCompleteAdapter.clear();
-					mAutoCompleteAdapter.addAll(suggestions);
-//					for (String suggestion : suggestions){
-//						mAutoCompleteAdapter.add(suggestion);
-//					}
-					mAutoCompleteAdapter.notifyDataSetChanged();
+					if (suggestions.size() > 0) {
+						mAutoCompleteAdapter.clear();
+						for (String suggestion : suggestions) {
+							mAutoCompleteAdapter.add(suggestion);
+							Log.i("AutoTextSuggestion: ", suggestion);
+						}
+						mAutoCompleteAdapter.notifyDataSetChanged();
+					}
 				}
 			});
 		}
 		
 		public void beforeTextChanged(CharSequence s, int start, int count,
 				int after) {
-			// TODO Auto-generated method stub
-			
 		}
 		
 		public void afterTextChanged(Editable s) {
-			// TODO Auto-generated method stub
-			
 		}
 	};
-	
+		
 	protected class DialogFieldException extends Exception {
 
 		private static final long serialVersionUID = 0x84586262L; // Completely Random to suppress warning
@@ -151,6 +150,18 @@ public class AddEditItemDialog extends AlertDialog {
 			
 			super(message);
 		}
+	}
+
+	// [NOTE] Since we have minSDKVersion set to 7 where we don't have showDialog(int, Bundle)
+	// available we're using this method to pass parameters to the Dialog. Change when we can
+	// move forward. This method is called from the Activity's onPrepareDialog and hence the  
+	// dialog fields are hooked up to the data members already
+	public void setItemID(long id){
+
+		mItemID = id;
+    	if (mIsAddItem == false && mItemID != 0){
+    		doFetchAndDisplayItem(mItemID);
+    	} 
 	}
 	
     /* (non-Javadoc)
@@ -315,6 +326,7 @@ public class AddEditItemDialog extends AlertDialog {
     		doFetchAndDisplayItem(mItemID);
     	} else 
     		doUpdateTotal();
+    	
     }
     
     protected void saveItem() throws DialogFieldException {
@@ -423,6 +435,7 @@ public class AddEditItemDialog extends AlertDialog {
     		if (position >=0 && position < adapter.getCount())
     			mSpinCategories.setSelection(position);
     	}
+    	
     	ArrayAdapter<Unit> unitAdapter = (ArrayAdapter<Unit>)mSpinUnits.getAdapter();
     	if (adapter != null) {
     		int position = unitAdapter.getPosition(mApplication.new Unit(item.mUnitID, "", "", 0));
@@ -431,6 +444,7 @@ public class AddEditItemDialog extends AlertDialog {
     	}
     	
     	doUpdateTotal();
+    	mEditName.requestFocus();
     }
     
     protected void doFetchAndDisplayItem(long itemID) {

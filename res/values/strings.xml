@@ -19,6 +19,7 @@
 
     <string name="categorylist_title">Categories</string>
     <string name="categorylists_add">Add Category</string>
+    <string name="categorylists_edit">Edit Category</string>
         
 	<string name="progress_message">Please wait...</string>
         
@@ -34,9 +35,11 @@
 	<string name="menu_shoplist_edit">Edit</string>
 	    		
 	<string name="categoriesactivity_title">Categories</string>
+	<string name="categoriesactivity_empty_list">You have not added any Categories. You can add new Categories by clicking the Add button.</string>
 	
 	<string name="itemlistactivity_title">Items To Shop</string>
 	<string name="empty_shoppingitems">You do not have any items in this list. You can add new items by clicking the Add button.</string>
+	<string name="itemlist_select_shoppinglist">Choose Shopping List</string>
 	
 	<string name="itemlistqe_edit">Edit</string>
 	<string name="itemlistqe_delete">Delete</string>

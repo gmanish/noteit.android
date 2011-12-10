@@ -14,18 +14,18 @@
         android:divider="@drawable/listview_item_separator"
         android:dividerHeight="2px"
         android:cacheColorHint="#00000000"
-        android:requiresFadingEdge="vertical" />
+        android:fadingEdge="vertical" />
 
     <LinearLayout 
         android:id="@android:id/empty"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
         android:orientation="horizontal"
         android:padding="10dip">
         
         <TextView
-	        android:layout_width="match_parent"
+	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="center"
 	        android:layout_weight="1"

@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:paddingLeft="20dip"
     android:paddingRight="20dip"
-    android:paddingTop="5dip"
-    android:paddingBottom="5dip"
+    android:paddingTop="10dip"
+    android:paddingBottom="10dip"
     android:orientation="vertical" >
 
     <TextView

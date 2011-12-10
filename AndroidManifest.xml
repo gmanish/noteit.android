@@ -11,7 +11,9 @@
         android:icon="@drawable/ic_launcher_noteit1"
         android:label="@string/app_name" 
         android:theme="@style/App_Theme"
-        android:name="NoteItApplication">
+        android:name="NoteItApplication" 
+        android:debuggable="true">
+        
         <activity android:name="LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,6 +27,7 @@
         <activity android:name="ItemListActivity"></activity>
         <activity android:name="CategoryListActivity"></activity>
         <activity android:name="AddEditItemActivity"></activity>
+    
     </application>
 
 </manifest>

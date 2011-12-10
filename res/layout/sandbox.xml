@@ -8,52 +8,15 @@
     android:paddingTop="5dip"
     android:paddingBottom="5dip" >
 
-    <TextView
-        android:id="@+id/itemlist_name"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:ellipsize="end"
-        android:gravity="left|center_vertical"
-        style="@style/ItemList_TextAppearance.PendingItem.Small"
-        android:text="Item Text" />
-
-    <TextView
-        android:id="@+id/itemlist_quantity"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/itemlist_name"
-        android:gravity="left|center_vertical"
-        android:text="Quantity"
-		style="@style/ItemsList_TextAppearance.Quantity" />
-
-	<TextView
-        android:id="@+id/itemlist_unit"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/itemlist_name"
-        android:layout_toRightOf="@+id/itemlist_quantity"
-        android:gravity="left|center_vertical"
-        android:text="Unit" 
-        style="@style/ItemsList_TextAppearance.Quantity" />
-
-	<TextView
-        android:id="@+id/itemlist_price"
+    <Button
+        android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/itemlist_name"
-        android:layout_toRightOf="@+id/itemlist_unit"
-        android:gravity="left|center_vertical"
-        android:text="Price" 
-        style="@style/ItemsList_TextAppearance.Price" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@android:color/transparent"
+        android:drawableRight="@drawable/ic_flyout"
+        android:text="Button"
+        android:textColor="#FFFFFF" />
 
-    <TextView
-        android:id="@+id/itemlist_Total"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/itemlist_name"
-        android:layout_toRightOf="@+id/itemlist_price"
-        android:layout_alignParentRight="true"
-        android:gravity="right"
-        android:text="Total" 
-        style="@style/ItemsList_TextAppearance.Total" />
-    
 </RelativeLayout>

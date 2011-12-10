@@ -86,7 +86,8 @@ public class DashBoardActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        
+		super.onCreate(savedInstanceState);
         CustomTitlebarWrapper toolbar = new CustomTitlebarWrapper(this);
         setContentView(R.layout.dashboard);
         toolbar.SetTitle(getResources().getText(R.string.dashboard_title));

@@ -28,8 +28,9 @@ public class ExpandableListViewIndicatorOnRight extends ExpandableListView {
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		
+		int paddingRight = (int)(getResources().getDisplayMetrics().density * 5 + 0.5); // dip to px
         if (oldw != w) {
-			setIndicatorBounds(w - groupIndicatorWidth, w);
+			setIndicatorBounds(w - (groupIndicatorWidth + paddingRight), w);
 		}
 		super.onSizeChanged(w, h, oldw, oldh);
 	}

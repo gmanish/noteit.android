@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.geekjamboree.noteit.ActionItem;
 import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
+import com.geekjamboree.noteit.NoteItApplication.ShoppingList;
 import com.geekjamboree.noteit.QuickAction;
 //import net.londatiga.android.R;
 
@@ -27,6 +28,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -45,6 +48,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	QuickAction 				mQuickAction = null;
 	AtomicInteger				mSelectedGroup = new AtomicInteger();
 	AtomicInteger				mSelectedChild = new AtomicInteger();
+	long						mSelectedItemID = 0;
 	boolean						mDisplayExtras = true;
 	Integer						mFontSize = 3;
 	CustomTitlebarWrapper		mToolbar;
@@ -59,6 +63,19 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	static final int ITEM_FONT_MEDIUM	= 1;
 	static final int ITEM_FONT_SMALL	= 2;
 	
+	static final int DIALOG_ADD_ITEM 	= 99;
+	static final int DIALOG_EDIT_ITEM	= 100;
+	
+	static final String SELECTED_GROUP 	= "selGroup";
+	static final String SELECTED_CHILD 	= "selChild";
+	static final String SELECTED_ITEM_ID= "selItemID";
+	
+    protected enum ItemType {
+    	PENDING, 
+    	DONE, 
+    	GROUP
+    }
+    
 	// Custom adapter for my shopping items
 	public class ItemsExpandableListAdapter extends BaseExpandableListAdapter {
 
@@ -295,20 +312,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 
 			        if (thisItem.mIsPurchased > 0) {
 			        	textView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
-			        	if (mFontSize == 3)
-			        		textView.setTextAppearance(mContext, R.style.ItemList__TextAppearance_DoneItem_Small);
-			        	else if (mFontSize == 2)
-			        		textView.setTextAppearance(mContext, R.style.ItemList__TextAppearance_DoneItem_Medium);
-			        	else
-			        		textView.setTextAppearance(mContext, R.style.ItemList__TextAppearance_DoneItem_Large);
+			        	textView.setTextAppearance(mContext, getPreferredTextAppearance(ItemType.DONE));
 			        }
 			        else { 
-			        	if (mFontSize == 3)
-			        		textView.setTextAppearance(mContext, R.style.ItemList_TextAppearance_PendingItem_Small);
-			        	else if (mFontSize == 2)
-			        		textView.setTextAppearance(mContext, R.style.ItemList_TextAppearance_PendingItem_Medium);
-			        	else
-			        		textView.setTextAppearance(mContext, R.style.ItemList_TextAppearance_PendingItem_Large);
+			        	textView.setTextAppearance(mContext, getPreferredTextAppearance(ItemType.PENDING));
 			        	textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
 			        }
 			        
@@ -360,24 +367,46 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     		if (viewGroup != null) {
 		    	TextView  textView = (TextView) viewGroup.findViewById(R.id.itemslist_categoryName);
 		        textView.setText(getGroup(groupPosition).toString());
+		        textView.setTextAppearance(mContext, getPreferredTextAppearance(ItemType.GROUP));
     		}
     		return viewGroup;
 		}
 	}
 	
+	protected SharedPreferences.OnSharedPreferenceChangeListener mPrefChangeListener = 
+			new SharedPreferences.OnSharedPreferenceChangeListener() {
+			
+			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+					String key) {
+				if (key == "Display_Price_Quantity" || key == "Item_Font_Size") {
+					Log.i("ItemListActivity.onSharedPreferenceChanged", "Display_Price_Quantity preference changed");
+					mDisplayExtras = sharedPreferences.getBoolean("Display_Price_Quantity", true);
+			        mFontSize = Integer.valueOf(sharedPreferences.getString("Item_Font_Size", "3"));
+					mListView.invalidateViews();
+				}
+				
+			}
+		};
+		
 	public void onCreate(Bundle savedInstanceState) { 
     	
     	super.onCreate(savedInstanceState);
 
+    	if (savedInstanceState != null) {
+    		Log.i("ItemListActivity.onCreate", "Got a valid savedInstanceState");
+    		mSelectedGroup.set(savedInstanceState.getInt(SELECTED_GROUP));
+    		mSelectedChild.set(savedInstanceState.getInt(SELECTED_CHILD));
+    		mSelectedItemID = savedInstanceState.getLong(SELECTED_ITEM_ID);
+    	}
+    	
         mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message));
     	mToolbar = new CustomTitlebarWrapper(this);
         setContentView(R.layout.itemlists);
+        
         NoteItApplication app = (NoteItApplication) getApplication();
         mToolbar.SetTitle(app.getShoppingList().get(app.getCurrentShoppingListIndex()).mName);
-        doSetupToolbarButtons();
-        
-        mListView = (ExpandableListView) findViewById(android.R.id.list);
-        
+        doSetupToolbarButtons(app.getShoppingList().get(app.getCurrentShoppingListIndex()).mName);
+                
         // Set up Quick Actions
         ActionItem boughtItem 	= new ActionItem(
 					        		QA_ID_BOUGHT, 
@@ -422,25 +451,25 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			}
 		});    
 		
+        mListView = (ExpandableListView) findViewById(android.R.id.list);
+		mAdapter = new ItemsExpandableListAdapter(this);
+		mListView.setAdapter(mAdapter);
+		
  	   	app.fetchItems(this);
     }
 
-	protected SharedPreferences.OnSharedPreferenceChangeListener mPrefChangeListener = 
-			new SharedPreferences.OnSharedPreferenceChangeListener() {
-			
-			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-					String key) {
-				if (key == "Display_Price_Quantity" || key == "Item_Font_Size") {
-					Log.i("ItemListActivity.onSharedPreferenceChanged", "Display_Price_Quantity preference changed");
-					mDisplayExtras = sharedPreferences.getBoolean("Display_Price_Quantity", true);
-			        mFontSize = Integer.valueOf(sharedPreferences.getString("Item_Font_Size", "3"));
-					mListView.invalidateViews();
-				}
-				
-			}
-		};
-		
     @Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt(SELECTED_GROUP, mSelectedGroup.get());
+		outState.putInt(SELECTED_CHILD, mSelectedChild.get());
+		Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup.get(), mSelectedChild.get());
+		if (selItem != null) {
+			outState.putLong(SELECTED_ITEM_ID, selItem.mID);
+		}
+	}
+
+	@Override
 	protected void onPause() {
     	PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(mPrefChangeListener);
 		super.onPause();
@@ -490,6 +519,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 					}
 					mSelectedGroup.set(groupPosition);
 					mSelectedChild.set(childPosition);
+					mSelectedItemID = ((Item) mListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).mID;
 					return false;
 				}
 			});        	
@@ -524,84 +554,110 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	}
     
     protected void doAddItem() {
-    	
-		AddEditItemDialog addDialog = new AddEditItemDialog(
-			this,
-			(NoteItApplication)getApplication(),
-			new AddEditItemDialog.addItemListener() {
-				
-				public void onAddItem(Item item) {
-	    			// New items were added by the called activity, we need to add them to our view
-	    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
-    				Category category = ((NoteItApplication) getApplication()).getCategory(item.mCategoryID);
-    				adapter.AddItem(item, category);
-					adapter.notifyDataSetChanged();
-				}
-			});
-    	addDialog.show();
+    	showDialog(DIALOG_ADD_ITEM);
     }
     
     protected void doEditItem() {
-    	
-    	Item selItem = (Item) mListView.getExpandableListAdapter().getChild(
-    			mSelectedGroup.get(), 
-    			mSelectedChild.get());
-		AddEditItemDialog addDialog = new AddEditItemDialog(
-				this, 
-				(NoteItApplication)getApplication(),
-				new AddEditItemDialog.editItemListener() {
-					
-					public void onEditItem(Item oldItem, Item newItem, int bitMask) {
-		    			
-		    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
-	    				Category category = ((NoteItApplication) getApplication()).getCategory(newItem.mCategoryID);
-	    				if ((bitMask & Item.ITEM_CATEGORYID) > 0 || (bitMask & Item.ITEM_NAME) > 0) {
-		    				adapter.DeleteItem(oldItem);
-		    				adapter.AddItem(newItem, category);
-	    				} else {
-	    					Item selItem = (Item) mListView.getExpandableListAdapter().getChild(
-	    							mSelectedGroup.get(), 
-	    							mSelectedChild.get());
-	    					selItem.copyFrom(newItem);
-	    				}
-						adapter.notifyDataSetChanged();
-					}
-				},
-				new AddEditItemDialog.navigateItemsListener() {
-					
-					public long onPreviousItem() {
-						
-						ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
-						if (adapter.getPrevChildPosition(mSelectedGroup, mSelectedChild)) {
-							
-							Item prevItem = (Item) adapter.getChild(mSelectedGroup.get(), mSelectedChild.get());
-							if (prevItem != null) {
-								return prevItem.mID;
-							}
-						}
-
-						return 0;
-					}
-					
-					public long onNextItem() {
-						
-						ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
-						if (adapter.getNextChildPosition(mSelectedGroup, mSelectedChild)) {
-							
-							Item nextItem = (Item) adapter.getChild(mSelectedGroup.get(), mSelectedChild.get());
-							if (nextItem != null) {
-								return nextItem.mID;
-							}
-						}
-						
-						return 0;
-					}
-				},
-				selItem.mID);
-    	addDialog.show();
+    	showDialog(DIALOG_EDIT_ITEM);
     }
     
-    protected void doDeleteItem() {
+    @Override
+	protected Dialog onCreateDialog(int id) {
+    	
+    	switch (id) {
+    	case DIALOG_ADD_ITEM:
+    		Log.i("ItemListActivity.onCreateDailog", "DIALOG_EDIT_ITEM");
+        	AddEditItemDialog addDialog = new AddEditItemDialog(
+    				this,
+    				(NoteItApplication)getApplication(),
+    				new AddEditItemDialog.addItemListener() {
+    					
+    					public void onAddItem(Item item) {
+    		    			// New items were added by the called activity, we need to add them to our view
+    		    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
+    	    				Category category = ((NoteItApplication) getApplication()).getCategory(item.mCategoryID);
+    	    				adapter.AddItem(item, category);
+    						adapter.notifyDataSetChanged();
+    					}
+    				});
+    		return addDialog;
+    		
+    	case DIALOG_EDIT_ITEM:
+    		Log.i("ItemListActivity.onCreateDailog", "DIALOG_EDIT_ITEM");
+    		AddEditItemDialog editDialog = new AddEditItemDialog(
+    			this, 
+    			(NoteItApplication)getApplication(),
+    			new AddEditItemDialog.editItemListener() {
+    				
+    				public void onEditItem(Item oldItem, Item newItem, int bitMask) {
+    	    			
+    	    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
+        				Category category = ((NoteItApplication) getApplication()).getCategory(newItem.mCategoryID);
+        				if ((bitMask & Item.ITEM_CATEGORYID) > 0 || (bitMask & Item.ITEM_NAME) > 0) {
+    	    				adapter.DeleteItem(oldItem);
+    	    				adapter.AddItem(newItem, category);
+        				} else {
+        					Item selItem = (Item) mListView.getExpandableListAdapter().getChild(
+        							mSelectedGroup.get(), 
+        							mSelectedChild.get());
+        					selItem.copyFrom(newItem);
+        				}
+    					adapter.notifyDataSetChanged();
+    				}
+    			},
+    			new AddEditItemDialog.navigateItemsListener() {
+    				
+    				public long onPreviousItem() {
+    					
+    					ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
+    					if (adapter.getPrevChildPosition(mSelectedGroup, mSelectedChild)) {
+    						
+    						Item prevItem = (Item) adapter.getChild(mSelectedGroup.get(), mSelectedChild.get());
+    						if (prevItem != null) {
+    							return mSelectedItemID = prevItem.mID;
+    						}
+    					}
+
+    					return 0;
+    				}
+    				
+    				public long onNextItem() {
+    					
+    					ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
+    					if (adapter.getNextChildPosition(mSelectedGroup, mSelectedChild)) {
+    						
+    						Item nextItem = (Item) adapter.getChild(mSelectedGroup.get(), mSelectedChild.get());
+    						if (nextItem != null) {
+    							return mSelectedItemID = nextItem.mID;
+    						}
+    					}
+    					
+    					return 0;
+    				}
+    			},
+    			mSelectedItemID);
+    		
+    		return editDialog;
+    		
+    	default:
+    		return super.onCreateDialog(id);
+    	}
+	}
+
+	@Override
+	protected void onPrepareDialog(int id, Dialog dialog) {
+		super.onPrepareDialog(id, dialog);
+		switch(id) {
+		case DIALOG_ADD_ITEM:
+			break;
+		case DIALOG_EDIT_ITEM:
+        	AddEditItemDialog editDialog = (AddEditItemDialog) dialog;
+        	editDialog.setItemID(mSelectedItemID);
+			break;
+		}
+	}
+
+	protected void doDeleteItem() {
     	
     	final Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup.get(), mSelectedChild.get());
     	if (selItem != null) {
@@ -649,15 +705,25 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	
     }
     
-    protected void doSetupToolbarButtons() {
+    protected void doSetupToolbarButtons(String listName) {
 
+    	Button listNameButton = new Button(this);
+    	listNameButton.setText(listName);
+    	mToolbar.addCenterFillButton(listNameButton);
+    	listNameButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				doDisplayShoppingLists();
+			}
+		});
+		
     	ImageButton addButton = new ImageButton(this);
     	addButton.setImageResource(R.drawable.add);
     	mToolbar.addRightAlignedButton(addButton, true, false);
     	addButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
-					doAddItem();
+				doAddItem();
 			}
 		});
     	
@@ -736,19 +802,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		return 0;
 	}
     
-    protected Dialog onCreateDialog(int id) {
-    	if (id == 666){
-			AlertDialog dialog = new AlertDialog.Builder(this)
-				.setTitle(getResources().getString(R.string.addedit_price))
-				.setMessage("WTF?")
-				.setCancelable(false)
-				.create();
-			return dialog;
-    	} else 
-    		return null;
-    }
-    
-    // Send in the item as is without any changes
+	// Send in the item as is without any changes
     protected void doCommitToggleItemDone(final Item item, final boolean resetAskLater, final float newPrice) {
     	
     	NoteItApplication 	app = (NoteItApplication) getApplication();
@@ -788,5 +842,64 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
 					}
 			});
+    }
+    
+    protected int getPreferredTextAppearance(ItemType type) {
+    	
+    	int appearance = 0;
+    	switch (type) {
+    	
+    	case PENDING:
+        	if (mFontSize == 3)
+        		appearance = R.style.ItemList_TextAppearance_PendingItem_Small;
+        	else if (mFontSize == 2)
+        		appearance = R.style.ItemList_TextAppearance_PendingItem_Medium;
+        	else
+        		appearance = R.style.ItemList_TextAppearance_PendingItem_Large;
+    		break;
+    	
+    	case DONE:
+        	if (mFontSize == 3)
+        		appearance = R.style.ItemList__TextAppearance_DoneItem_Small;
+        	else if (mFontSize == 2)
+        		appearance = R.style.ItemList__TextAppearance_DoneItem_Medium;
+        	else
+        		appearance = R.style.ItemList__TextAppearance_DoneItem_Large;
+    		break;
+
+    	case GROUP:
+    		if (mFontSize == 3)
+    			appearance = R.style.ItemList_TextAppearance_GroupsItem_Small;
+    		else if (mFontSize == 2)
+    			appearance = R.style.ItemList_TextAppearance_GroupsItem_Medium;
+    		else 
+    			appearance = R.style.ItemList_TextAppearance_GroupsItem_Large;
+    		break;
+    	}
+    	
+    	return appearance;
+    }
+    
+    protected void doDisplayShoppingLists() {
+    	
+    	final NoteItApplication app = (NoteItApplication) getApplication();
+    	
+    	ArrayList<ShoppingList> shoppingList = app.getShoppingList();
+    	ArrayAdapter<ShoppingList> adapter = new ArrayAdapter<ShoppingList>(
+    			this, 
+    			android.R.layout.simple_dropdown_item_1line,
+    			shoppingList);
+    	AlertDialog shoppingLists = new AlertDialog.Builder(this)
+    		.setTitle(R.string.itemlist_select_shoppinglist)
+    		.setAdapter(adapter, new DialogInterface.OnClickListener() {
+				
+				public void onClick(DialogInterface dialog, int which) {
+					
+					app.setCurrentShoppingListIndex(which);
+					app.fetchItems(ItemListActivity.this);
+				}
+			})
+			.create();
+    	shoppingLists.show();
     }
 }

@@ -1,9 +1,12 @@
 package com.geekjamboree.noteit;
 
 import android.app.Activity;
+import android.text.TextUtils.TruncateAt;
 import android.view.Gravity;
+import android.view.View;
 import android.view.Window;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,6 +21,7 @@ public class CustomTitlebarWrapper {
 
     boolean 	mCustomTitleSupported = false;
 	Activity	mParent;
+	TextView 	mTitleText;
 	
     public CustomTitlebarWrapper(Activity parent) {
     	mParent = parent;
@@ -25,21 +29,46 @@ public class CustomTitlebarWrapper {
 	}
     
     public void SetTitle(CharSequence charSequence){
-        if (mCustomTitleSupported) {
+        
+    	if (mCustomTitleSupported) {
         	mParent.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.titlebar);
         }
 
-        final TextView myTitleText = (TextView)mParent.findViewById(R.id.textView_titlebar);
-        if ( myTitleText != null ) {
-            myTitleText.setText(charSequence);
+    	mTitleText = (TextView) mParent.findViewById(R.id.textView_titlebar);
+        if (mTitleText != null) {
+        	mTitleText.setText(charSequence);
          }
     }
 
+    static final int BUTTON_DIMENSION = 50; //dip
+    public void addCenterFillButton(Button button) {
+    	
+    	final float 				scale = mParent.getResources().getDisplayMetrics().density;
+    	final int 					buttonSize = (int) (BUTTON_DIMENSION * scale + 0.5f);
+    	LinearLayout 				root = (LinearLayout) mParent.findViewById(R.id.titlebar_root);
+    	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, buttonSize);
+    	
+    	// When we display the center fill button, we don't have the title
+    	mTitleText.setVisibility(View.GONE);
+    	lp.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
+    	lp.weight = 1;
+    	button.setLayoutParams(lp);
+    	button.setPadding(10, 0, 10, 0);
+    	button.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_flyout, 0);
+    	button.setTextAppearance(mParent, android.R.style.TextAppearance_Medium);
+    	button.setTextColor(mParent.getResources().getColor(R.color.theme_offwhite_header_text));
+    	button.setSingleLine(true);
+    	button.setEllipsize(TruncateAt.END);
+    	button.setBackgroundResource(R.color.app_button_background);
+    	root.addView(button);
+    }
+    
     public void addRightAlignedButton(ImageButton button, boolean separatorBefore, boolean separatorAfter) {
     	
+    	final float 				scale = mParent.getResources().getDisplayMetrics().density;
+    	final int 					buttonSize = (int) (BUTTON_DIMENSION * scale + 0.5f);
     	LinearLayout 				root = (LinearLayout) mParent.findViewById(R.id.titlebar_root);
-    	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(
-    			LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(buttonSize, buttonSize);
 
     	if (separatorBefore) {
         	

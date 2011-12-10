@@ -3,6 +3,7 @@
  */
 package com.geekjamboree.noteit;
 
+import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
 import com.geekjamboree.noteit.R;
 import com.geekjamboree.noteit.NoteItApplication;
 import com.geekjamboree.noteit.NoteItApplication.Category;
@@ -13,8 +14,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +46,18 @@ public class CategoryListActivity
 	static final int QA_ID_DELETE	= 1;
 	static final int QA_ID_BOUGHT	= 2;
 	
+	protected SharedPreferences.OnSharedPreferenceChangeListener mPrefChangeListener = 
+			new SharedPreferences.OnSharedPreferenceChangeListener() {
+			
+			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+					String key) {
+				if (key == "Item_Font_Size") {
+					mListView.invalidateViews();
+				}
+				
+			}
+		};
+
 	public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	
@@ -53,7 +67,7 @@ public class CategoryListActivity
         doSetupToolbarButtons();
         
         mListView = (ListView) findViewById(android.R.id.list);
-        mAdapter = new ArrayAdapter<Category>(
+        mAdapter = new ArrayAdapterWithFontSize<Category>(
     			getBaseContext(), 
     			R.layout.categorieslist_item, 
     			R.id.categorylists_item_name, 
@@ -108,66 +122,50 @@ public class CategoryListActivity
     	// Categories should have been fetched by now, we don't need to do anything
 	}
     
-    protected void doSetupToolbarButtons() {
+    @Override
+	protected void onResume() {
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this); 
+		prefs.registerOnSharedPreferenceChangeListener(mPrefChangeListener);
+		mListView.invalidateViews();
+		super.onResume();
+	}
+
+	@Override
+	protected void onPause() {
+		PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(mPrefChangeListener);
+		super.onPause();
+	}
+
+	protected void doSetupToolbarButtons() {
 
     	ImageButton addButton = new ImageButton(this);
     	addButton.setImageResource(R.drawable.add);
     	addButton.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				// inflate the view from resource layout
-				LayoutInflater	inflater = (LayoutInflater) CategoryListActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				final View dialogView = inflater.inflate(R.layout.dialog_addshoppinglist, (ViewGroup) findViewById(R.id.dialog_addshoppinglist_root));
 				
-				AlertDialog dialog = new AlertDialog.Builder(CategoryListActivity.this)
-					.setView(dialogView)
-					.setTitle(getResources().getString(R.string.categorylists_add))
-					.create();
-				
-				dialog.setButton(DialogInterface.BUTTON1, "OK", new DialogInterface.OnClickListener() {
-					
-					public void onClick(DialogInterface dialog, int which) {
+				doShowCategoryNameDialog(true, 
+					new CategoryNameDialogListener() {
 						
-						dialog.dismiss();
-						Log.e("AddShoppingList", "OK");
-						EditText 	editListName = (EditText) dialogView.findViewById(R.id.dialog_addshoppinglist_editTextName);
-						String 		listName = editListName.getText().toString();
-
-						if (!listName.trim().matches("")) {
+						public void onDialogOK(String categoryName) {
 							
-							NoteItApplication app = (NoteItApplication) getApplication();
-							dialog.dismiss();
-
-							// Create a new list with the name
-							Category category = app.new Category(0, listName, app.getUserID());
+							NoteItApplication 	app = (NoteItApplication) getApplication();
+							Category 			category = app.new Category(0, categoryName, app.getUserID());
+							
 							((NoteItApplication) getApplication()).addCategory(
-									category,
-									new NoteItApplication.OnAddCategoryListener() {
-										
-										public void onPostExecute(long result, Category category, String message) {
-											if (result != 0) {
-												Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-											} else {
-									    		mAdapter.notifyDataSetChanged();
-											}
+								category,
+								new NoteItApplication.OnAddCategoryListener() {
+									
+									public void onPostExecute(long result, Category category, String message) {
+										if (result != 0) {
+											Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+										} else {
+								    		mAdapter.notifyDataSetChanged();
 										}
-									});
-						} else { 
-							Toast.makeText(getApplicationContext(), getResources().getString(R.string.shoppinglist_name_blank), Toast.LENGTH_SHORT).show();
+									}
+								});
 						}
-
-					}
 				});
-			
-				dialog.setButton(DialogInterface.BUTTON2, "Cancel", new DialogInterface.OnClickListener() {
-					
-					public void onClick(DialogInterface dialog, int which) {
-						Log.e("AddShoppingList", "Cancel");
-						dialog.dismiss();
-					}
-				});
-	
-				dialog.show();
 			}
     	});
 		
@@ -184,9 +182,30 @@ public class CategoryListActivity
     	mToolbar.addRightAlignedButton(settingsButton, true, false);
     }
     
-    protected void doEditCategory(int position) {
+    protected void doEditCategory(final int position) {
     	
-    	//NoteItApplication app = (NoteItApplication) getApplication();
+    	doShowCategoryNameDialog(false, new CategoryNameDialogListener() {
+			
+			public void onDialogOK(final String categoryName) {
+		    	
+				NoteItApplication 	app = (NoteItApplication) getApplication();
+		    	Category 			category = app.new Category(app.getCategories().get(position));
+		    	
+		    	category.mName = categoryName;
+		    	app.editCategory(Category.CATEGORY_NAME, category, new OnMethodExecuteListerner() {
+					
+					public void onPostExecute(long resultCode, String message) {
+						if (resultCode != 0)
+							Toast.makeText(CategoryListActivity.this, message, Toast.LENGTH_LONG).show();
+						else {
+							mAdapter.getItem(position).mName = categoryName;
+							mAdapter.notifyDataSetChanged();
+						}
+					}
+				});
+			}
+		});
+    	
     }
     
     protected void doDeleteCategory(int position) {
@@ -202,4 +221,50 @@ public class CategoryListActivity
 			}
 		});
     }
+    
+    static interface CategoryNameDialogListener {
+    	void onDialogOK(String categoryName);
+    }
+    
+    protected void doShowCategoryNameDialog(
+    		boolean isAdd, 
+    		final CategoryNameDialogListener listener) {
+		
+    	// inflate the view from resource layout
+		LayoutInflater	inflater = (LayoutInflater) CategoryListActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final View dialogView = inflater.inflate(
+				R.layout.dialog_addshoppinglist, 
+				(ViewGroup) findViewById(R.id.dialog_addshoppinglist_root));
+		
+		AlertDialog dialog = new AlertDialog.Builder(CategoryListActivity.this)
+			.setView(dialogView)
+			.create();
+
+		if (isAdd)
+			dialog.setTitle(getResources().getString(R.string.categorylists_add));
+		else
+			dialog.setTitle(getResources().getString(R.string.categorylists_edit));
+			
+		dialog.setButton(DialogInterface.BUTTON1, "OK", new DialogInterface.OnClickListener() {
+			
+			public void onClick(DialogInterface dialog, int which) {
+
+				EditText 	editListName = (EditText) dialogView.findViewById(R.id.dialog_addshoppinglist_editTextName);
+				String 		categoryName = editListName.getText().toString();
+
+				if (!categoryName.trim().equals("")) {
+					dialog.dismiss();
+					listener.onDialogOK(categoryName);
+				}
+			}
+		});
+		
+		dialog.setButton(DialogInterface.BUTTON2, "Cancel", new DialogInterface.OnClickListener() {
+			
+			public void onClick(DialogInterface dialog, int which) {
+			}
+		});
+
+		dialog.show();
+	}
 }
