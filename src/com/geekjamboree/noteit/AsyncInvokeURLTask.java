@@ -49,8 +49,8 @@ public class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 //			mNoteItWebUrl = "http://geekjamboree.com/noteit/controller/appcontroller.php";
 			mNoteItWebUrl = "http://10.0.2.2/noteit.web/controller/appcontroller.php";
 		else
-			mNoteItWebUrl = "http://192.168.0.100/noteit.web/controller/appcontroller.php";
-//			mNoteItWebUrl = "http://geekjamboree.com/noteit/controller/appcontroller.php";
+//			mNoteItWebUrl = "http://192.168.0.100/noteit.web/controller/appcontroller.php";
+			mNoteItWebUrl = "http://geekjamboree.com/noteit/controller/appcontroller.php";
 		}
 	
 	@Override

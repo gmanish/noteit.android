@@ -90,7 +90,7 @@ public class DashBoardActivity extends Activity {
 		super.onCreate(savedInstanceState);
         CustomTitlebarWrapper toolbar = new CustomTitlebarWrapper(this);
         setContentView(R.layout.dashboard);
-        toolbar.SetTitle(getResources().getText(R.string.dashboard_title));
+        toolbar.SetTitle(getResources().getText(R.string.app_name));
         
         DashBoardAdapter adapter = new DashBoardAdapter(/*this*/);
         adapter.addItem("Shopping Lists", R.drawable.cart_big, DASHBOARD_SHOPPINGLISTS);

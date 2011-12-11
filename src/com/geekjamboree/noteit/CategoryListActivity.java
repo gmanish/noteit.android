@@ -20,6 +20,7 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -178,6 +179,19 @@ public class CategoryListActivity
 			}
 		});
 
+    	ImageButton homeButton = new ImageButton(this);
+    	homeButton.setImageResource(R.drawable.home);
+    	homeButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				Intent intent = new Intent(CategoryListActivity.this, DashBoardActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				finish();
+			}
+		});
+
+    	mToolbar.addLeftAlignedButton(homeButton, false, true);
     	mToolbar.addRightAlignedButton(addButton, true, false);
     	mToolbar.addRightAlignedButton(settingsButton, true, false);
     }

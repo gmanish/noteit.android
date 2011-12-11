@@ -53,14 +53,34 @@ public class CustomTitlebarWrapper {
     	lp.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
     	lp.weight = 1;
     	button.setLayoutParams(lp);
-    	button.setPadding(10, 0, 10, 0);
+    	button.setPadding(10, 0, 5, 0);
     	button.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_flyout, 0);
-    	button.setTextAppearance(mParent, android.R.style.TextAppearance_Medium);
+    	button.setTextAppearance(mParent, android.R.style.TextAppearance_WindowTitle);
     	button.setTextColor(mParent.getResources().getColor(R.color.theme_offwhite_header_text));
     	button.setSingleLine(true);
     	button.setEllipsize(TruncateAt.END);
     	button.setBackgroundResource(R.color.app_button_background);
     	root.addView(button);
+    }
+    
+    public void addLeftAlignedButton(ImageButton button, boolean separatorBefore, boolean separatorAfter) {
+
+    	final float 				scale = mParent.getResources().getDisplayMetrics().density;
+    	final int 					buttonSize = (int) (BUTTON_DIMENSION * scale + 0.5f);
+    	LinearLayout 				root = (LinearLayout) mParent.findViewById(R.id.titlebar_root);
+    	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(buttonSize, buttonSize);
+    	
+    	if (separatorBefore)
+    		root.addView(getSeparator(Gravity.LEFT | Gravity.CENTER_VERTICAL), -1);
+    	
+    	lp.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
+    	button.setLayoutParams(lp);
+    	button.setPadding(0, 2, 0, 2);
+    	button.setBackgroundResource(R.color.app_button_background);
+    	root.addView(button);
+    	
+    	if (separatorAfter)
+    		root.addView(getSeparator(Gravity.LEFT | Gravity.CENTER_VERTICAL));
     }
     
     public void addRightAlignedButton(ImageButton button, boolean separatorBefore, boolean separatorAfter) {
@@ -70,17 +90,8 @@ public class CustomTitlebarWrapper {
     	LinearLayout 				root = (LinearLayout) mParent.findViewById(R.id.titlebar_root);
     	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(buttonSize, buttonSize);
 
-    	if (separatorBefore) {
-        	
-    		LinearLayout.LayoutParams leftSepLP = new LinearLayout.LayoutParams(
-        			2, LayoutParams.FILL_PARENT);
-        	ImageView imageSep = new ImageView(root.getContext());
-        	lp.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
-        	imageSep.setLayoutParams(leftSepLP);
-        	imageSep.setImageResource(R.drawable.vertical_separator);
-        	imageSep.setPadding(0, 2, 0, 2);
-    		root.addView(imageSep);
-    	}
+    	if (separatorBefore)
+    		root.addView(getSeparator(Gravity.RIGHT | Gravity.CENTER_VERTICAL));
 
     	lp.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
     	button.setLayoutParams(lp);
@@ -88,17 +99,23 @@ public class CustomTitlebarWrapper {
     	button.setBackgroundResource(R.color.app_button_background);
     	root.addView(button);
     	
-    	if (separatorAfter) {
-        	
-    		LinearLayout.LayoutParams rightSepLP = new LinearLayout.LayoutParams(
-        			2, LayoutParams.FILL_PARENT);
-        	ImageView imageSep = new ImageView(root.getContext());
-        	lp.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
-        	imageSep.setLayoutParams(rightSepLP);
-        	imageSep.setImageResource(R.drawable.vertical_separator);
-        	imageSep.setPadding(0, 2, 0, 2);
-    		root.addView(imageSep);
-    	}
+    	if (separatorAfter) 
+    		root.addView(getSeparator(Gravity.RIGHT | Gravity.CENTER_VERTICAL));
+    }
+    
+    protected ImageView getSeparator(int gravity) {
+    	
+    	LinearLayout 				root = (LinearLayout) mParent.findViewById(R.id.titlebar_root);
+		LinearLayout.LayoutParams 	separatorLP = new LinearLayout.LayoutParams(
+    			2, LayoutParams.FILL_PARENT);
+		
+    	ImageView imageSep = new ImageView(root.getContext());
+    	separatorLP.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+    	imageSep.setLayoutParams(separatorLP);
+    	imageSep.setImageResource(R.drawable.vertical_separator);
+    	imageSep.setPadding(0, 1, 0, 1);
+    	
+    	return imageSep;
     }
     
 }

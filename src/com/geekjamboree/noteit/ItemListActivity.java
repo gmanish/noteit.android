@@ -52,6 +52,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	boolean						mDisplayExtras = true;
 	Integer						mFontSize = 3;
 	CustomTitlebarWrapper		mToolbar;
+	Button						mShoppingListButton;
 	
 	static final int ADD_ITEM_REQUEST = 0;	
 	
@@ -399,11 +400,18 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     		mSelectedItemID = savedInstanceState.getLong(SELECTED_ITEM_ID);
     	}
     	
-        mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message));
-    	mToolbar = new CustomTitlebarWrapper(this);
-        setContentView(R.layout.itemlists);
-        
         NoteItApplication app = (NoteItApplication) getApplication();
+        if (app.getShoppingListCount() <= 0) {
+        	// Send user back to the ShoppingListActivity where a list can be created
+        	Intent intent = new Intent(this, ShoppingListActivity.class);
+        	startActivity(intent);
+        	finish();
+        	return;
+        }
+        
+        mToolbar = new CustomTitlebarWrapper(this);
+        setContentView(R.layout.itemlists);
+
         mToolbar.SetTitle(app.getShoppingList().get(app.getCurrentShoppingListIndex()).mName);
         doSetupToolbarButtons(app.getShoppingList().get(app.getCurrentShoppingListIndex()).mName);
                 
@@ -455,7 +463,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		mAdapter = new ItemsExpandableListAdapter(this);
 		mListView.setAdapter(mAdapter);
 		
- 	   	app.fetchItems(this);
+		if (app.getShoppingListCount() > 0)
+ 	   		app.fetchItems(this);
+
+		mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message));
     }
 
     @Override
@@ -471,7 +482,11 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 
 	@Override
 	protected void onPause() {
-    	PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(mPrefChangeListener);
+		SharedPreferences 	prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences.Editor editor = prefs.edit(); 
+		editor.putLong("LastUsedShoppingListID", ((NoteItApplication)getApplication()).getCurrentShoppingListID());
+		editor.commit();
+		prefs.unregisterOnSharedPreferenceChangeListener(mPrefChangeListener);
 		super.onPause();
 	}
 
@@ -506,7 +521,6 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 
     		((ExpandableListView)mListView).setAdapter(mAdapter);
     		mListView.setTextFilterEnabled(true);
-        	
         	mListView.setOnChildClickListener(new OnChildClickListener() {
 				
 				public boolean onChildClick(ExpandableListView parent, View v,
@@ -522,7 +536,9 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 					mSelectedItemID = ((Item) mListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).mID;
 					return false;
 				}
-			});        	
+			});
+        	
+        	doExpandAll();
     	}
     	else {
 			Toast.makeText(getApplicationContext(), "The server seems to be out of its mind. Please try later.", Toast.LENGTH_SHORT).show();
@@ -707,10 +723,23 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     
     protected void doSetupToolbarButtons(String listName) {
 
-    	Button listNameButton = new Button(this);
-    	listNameButton.setText(listName);
-    	mToolbar.addCenterFillButton(listNameButton);
-    	listNameButton.setOnClickListener(new OnClickListener() {
+    	ImageButton homeButton = new ImageButton(this);
+    	homeButton.setImageResource(R.drawable.home);
+    	mToolbar.addLeftAlignedButton(homeButton, false, true);
+    	homeButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				Intent intent = new Intent(ItemListActivity.this, DashBoardActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				finish();
+			}
+		});
+    	
+    	mShoppingListButton = new Button(this);
+    	mShoppingListButton.setText(listName);
+    	mToolbar.addCenterFillButton(mShoppingListButton);
+    	mShoppingListButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
 				doDisplayShoppingLists();
@@ -894,7 +923,11 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     		.setAdapter(adapter, new DialogInterface.OnClickListener() {
 				
 				public void onClick(DialogInterface dialog, int which) {
-					
+
+					ShoppingList shoppingList = app.getShoppingList(which);
+					if (shoppingList != null) {
+						mShoppingListButton.setText(shoppingList.mName);
+					}
 					app.setCurrentShoppingListIndex(which);
 					app.fetchItems(ItemListActivity.this);
 				}

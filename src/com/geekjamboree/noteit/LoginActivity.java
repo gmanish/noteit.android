@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import com.geekjamboree.noteit.NoteItApplication.Category;
 import com.geekjamboree.noteit.NoteItApplication.OnFetchCategoriesListener;
+import com.geekjamboree.noteit.NoteItApplication.ShoppingList;
+import com.geekjamboree.noteit.NoteItApplication.Unit;
 import com.geekjamboree.noteit.R;
 
 import org.json.JSONException;
@@ -55,7 +57,7 @@ public class LoginActivity
             	// Try to authenticate the user with the supplied credentials.
             	// If authentication succeedes, switch to the shopping list view
             	EditText emailID = (EditText)findViewById(R.id.editEmailID);
-            	((NoteItApplication)getApplication()).loginUser(
+            	((NoteItApplication) getApplication()).loginUser(
     				emailID.getText().toString(), 
     				LoginActivity.this);
             }
@@ -75,37 +77,80 @@ public class LoginActivity
 		        	// We're set to rock and roll
 	            	if (!json.isNull("arg1")){
 	            		
-						long 				userID = json.getLong("arg1");
-						NoteItApplication 	app = (NoteItApplication) getApplication();
+						long 					userID = json.getLong("arg1");
+						final NoteItApplication app = (NoteItApplication) getApplication();
 						
 						app.setUserID(userID);
 	            		Toast.makeText(this, "You are logged in.", Toast.LENGTH_SHORT).show();
 	            		
-	            		// Fetch the categories. This is a one time activity
-	            		app.fetchCategories(new OnFetchCategoriesListener() {
-							
-							public void onPostExecute(long resultCode, ArrayList<Category> categories,
-									String message) {
-
-								if (resultCode == 0) {
-									//Intent myIntent = new Intent(this, ShoppingListActivity.class);
-				            		Intent myIntent = new Intent(LoginActivity.this, DashBoardActivity.class);
-				                    startActivity(myIntent);
+	            		app.fetchUnits(Unit.METRIC, new NoteItApplication.OnMethodExecuteListerner() {
+	            			
+	            			public void onPostExecute(long resultCode, String message) {
+	    	            		
+	            				if (resultCode == 0) {
+		            				// Fetch the categories. This is a one time activity
+		    	            		app.fetchCategories(new OnFetchCategoriesListener() {
+		    							
+		    							public void onPostExecute(long resultCode, ArrayList<Category> categories,
+		    									String message) {
+	
+		    								if (resultCode == 0) {
+		    									final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+		    									boolean 				startDashboard = prefs.getBoolean("Start_Dashboard", true);
+		    									
+		    									if (startDashboard) {
+		    										//Intent myIntent = new Intent(this, ShoppingListActivity.class);
+		    					            		Intent myIntent = new Intent(LoginActivity.this, DashBoardActivity.class);
+		    					                    startActivity(myIntent);
+		    					                    finish();
+		    									} else {
+		    										final NoteItApplication app = (NoteItApplication) getApplication();
+		    										app.fetchShoppingLists(new NoteItApplication.OnFetchShoppingListsListener() {
+		    											
+		    											public void onPostExecute(long resultCode,
+		    													ArrayList<ShoppingList> categories, 
+		    													String message) {
+		    												
+		    												if (resultCode == 0) {
+		    			  										
+		    													long lastUsedShoppingListID = prefs.getLong("LastUsedShoppingListID", 0);
+		    													if (app.getShoppingListCount() > 0 && lastUsedShoppingListID != 0) {
+		    														int index = app.getShoppingList().indexOf((app.new ShoppingList(lastUsedShoppingListID, "")));
+		    														if (index >= 0)
+		    															app.setCurrentShoppingListIndex(index);
+		    														else
+		    															app.setCurrentShoppingListIndex(0);
+		    													} else if (app.getShoppingListCount() > 0) {
+		    														app.setCurrentShoppingListIndex(0);
+		    													}
+		    									                Intent myIntent = new Intent(LoginActivity.this, ItemListActivity.class);
+		    									                startActivity(myIntent);
+		    									                finish();
+		    												} else
+		    													Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+		    											}
+		    										});
+		    									}
+		    								} else {
+		    				            		Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+		    								}
+		    							}
+		    						});
 								} else {
 				            		Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
 								}
-							}
-						});
+	    	            	}
+	            		});
 	            	} else
 	            		throw new Exception("Invalid email or password");
 	        	} else 
 	        		throw new Exception(json.getString("JSONRetMessage"));
 			} else
 				throw new Exception(getResources().getString(R.string.server_error));
-		} catch (JSONException e){
+		} catch (JSONException e) {
 			Toast.makeText(getApplicationContext(), "The server seems to be out of its mind. Please try later.", Toast.LENGTH_SHORT).show();
 			Log.e("NoteItApplication.loginUser", e.getMessage());
-		} catch (Exception e){
+		} catch (Exception e) {
     		Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
 			Log.e("NoteItApplication.loginUser", e.getMessage());
 		}

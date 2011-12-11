@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.geekjamboree.noteit.R;
 import com.geekjamboree.noteit.NoteItApplication;
 import com.geekjamboree.noteit.NoteItApplication.ShoppingList;
-import com.geekjamboree.noteit.NoteItApplication.Unit;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -99,11 +98,7 @@ public class ShoppingListActivity
         registerForContextMenu(mListView);
         
 		((NoteItApplication) getApplication()).fetchShoppingLists(this);
-		((NoteItApplication) getApplication()).fetchUnits(Unit.METRIC, new NoteItApplication.OnMethodExecuteListerner() {
-			
-			public void onPostExecute(long resultCode, String message) {
-			}
-		});
+
     }
      
 	protected void onPause() {
@@ -344,7 +339,20 @@ public class ShoppingListActivity
     			startActivity(new Intent(ShoppingListActivity.this, MainPreferenceActivity.class));
 			}
 		});
+    	
+    	ImageButton homeButton = new ImageButton(this);
+    	homeButton.setImageResource(R.drawable.home);
+    	homeButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				Intent intent = new Intent(ShoppingListActivity.this, DashBoardActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				finish();
+			}
+		});
 
+    	mToolbar.addLeftAlignedButton(homeButton, false, true);
     	mToolbar.addRightAlignedButton(addButton, true, false);
     	mToolbar.addRightAlignedButton(settingsButton, true, false);
     }

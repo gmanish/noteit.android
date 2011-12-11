@@ -2,13 +2,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
 	<PreferenceCategory 
-	    android:title="Login Information"
+	    android:title="Start Up"
 	    android:key="Login_Information" >
 	    
 	    <EditTextPreference 
 	        android:title="Email"
 	        android:key="email"
-	        android:summary="The email ID registered with Note It! This email ID also will be used in case you should forget your password."
+	        android:summary="The email ID registered with Note It! This email ID will also be used in case you forget your password."
 	        android:dialogTitle="Email ID"
 	        android:dialogMessage="Please enter the email ID"
 	        android:defaultValue="you@email.com" />
@@ -16,8 +16,14 @@
 	    <CheckBoxPreference
 	    	android:title="Remember Me"
 	    	android:key="Remember_Me"
-	    	android:summaryOff="Note It! will not remember your login information. You will have to use your credentials everytime."
+	    	android:summaryOff="Note It! will not remember your login information. You will have to sign in everytime."
 	    	android:summaryOn="Note It! will remember your login infotmation and sign you in automatically." />
+
+	    <CheckBoxPreference
+	    	android:title="Start with Dashboard"
+	    	android:key="Start_Dashboard"
+	    	android:summaryOff="Note It! will launch with your last used Shopping List open."
+	    	android:summaryOn="Note It! will launch with the Dashboard open." />
 
 	</PreferenceCategory>
 	
@@ -33,20 +39,26 @@
 	    <ListPreference
 	    	android:title="Measurement Units"
 	    	android:key="MeasurementUnits"
-	    	android:summary="Whether distance is measured in Miles or Kilometers. Weight in pounds or kilograms etc." />
+	    	android:summary="Set the preferred units of measurement." />
 	
 	</PreferenceCategory>
 
 	<PreferenceCategory
-		android:title="Auto Complete"
+		android:title="Suggestions"
 		android:key="Items_AutoComplete" >
 	    
 	    <CheckBoxPreference
 	    	android:title="Show suggestions"
 	    	android:key="Show_Suggestions"
 	    	android:summaryOff="Note It will not display suggestions as you type item names"
-	    	android:summaryOn="Note It will search its extensive database for products and display suggestions as you type." />
+	    	android:summaryOn="Note It will display suggestions as you add items to your list." />
 	    		    
+	    <CheckBoxPreference
+	    	android:title="Share Location"
+	    	android:key="Share_Location"
+	    	android:summaryOff="Do not share location with Note It!"
+	    	android:summaryOn="Allow Note It! to use location for improved search and other services." />
+
 	</PreferenceCategory>
 
 	<PreferenceCategory
@@ -56,15 +68,9 @@
 	    <CheckBoxPreference
 	    	android:title="Delete all items on list"
 	    	android:key="Allow_NonEmpty_List_Delte"
-	    	android:summaryOff="If a list has items in it, it cannot be deleted."
-	    	android:summaryOn="Deleting a list deletes all items in the list." />
-	    	
-	    <CheckBoxPreference
-	    	android:title="Display on Startup"
-	    	android:key="Start_with_shopping_List_Screen"
-	    	android:summaryOff="When Note It is launched, it will open with your last used Shopping List."
-	    	android:summaryOn="When Note It is started, it will display all your Shopping Lists." />
-	    
+	    	android:summaryOff="A Shopping List with items in it, cannot be deleted."
+	    	android:summaryOn="Deleting a Shopping List deletes all items in the list." />
+	    		    
 	</PreferenceCategory>
 		
 	<PreferenceCategory
@@ -72,10 +78,10 @@
 		android:key="Items_List" >
 	    
 	    <CheckBoxPreference
-	    	android:title="Show Price and Quantity"
+	    	android:title="Show Extras"
 	    	android:key="Display_Price_Quantity"
-	    	android:summaryOff="Displays only the item's name in the list."
-	    	android:summaryOn="Displays the price and quantity of the item, if available. Also computes Total price." />
+	    	android:summaryOff="Extra details like Price, Quantity and Total will not be displayed with items."
+	    	android:summaryOn="Display extra information like Price, Quantity and Total with each Item." />
 	    		    
 	    <ListPreference
 	    	android:title="Item Font Size"
@@ -84,14 +90,11 @@
 	    	android:entries="@array/itemFontSize"/>
 	    	
 	    <CheckBoxPreference
-	    	android:title="Delete bought Items"
+	    	android:title="Hide Completed Items"
 	    	android:key="Delete_Bought_Items"
-	    	android:summaryOff="When an item is marked done, it won't be deleted from the list."
-	    	android:summaryOn="Marking an item done, deletes it from the list." />
-	    	
+	    	android:summaryOff="Don't hide items when they are marked done."
+	    	android:summaryOn="Hide items when they are marked done." />
 
 	</PreferenceCategory>
-	
-	
 		
 </PreferenceScreen>
