@@ -62,8 +62,9 @@ public class CategoryListActivity
 	public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	
-    	if (savedInstanceState != null) 
+    	if (savedInstanceState != null) {
     		mSelectedCategory = savedInstanceState.getInt(SELECTED_CATEGORY);
+    	}
     	
     	mToolbar = new CustomTitlebarWrapper(this);
     	setContentView(R.layout.categories);

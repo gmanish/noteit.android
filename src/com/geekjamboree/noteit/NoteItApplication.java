@@ -793,6 +793,10 @@ public class NoteItApplication extends Application {
 		}
 	}
 
+	public ArrayList<Item> getItems() {
+		return mItems;
+	}
+	
 	public void getItem(long instanceID, OnGetItemListener inListener) {
 		
 		class GetItemTask implements OnPostExecuteListener {

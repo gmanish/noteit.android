@@ -43,6 +43,9 @@ public class ShoppingListActivity
 	ArrayAdapter<NoteItApplication.ShoppingList>	mAdapter;
 	CustomTitlebarWrapper 							mToolbar;
 	int												mFontSize = 3;
+	boolean											mIsShoppingListFetched = false;
+	static final String								IS_SHOPPINGLIST_FETCHED = "IS_SHOPPINGLIST_FETCHED";
+	
 	
 	protected SharedPreferences.OnSharedPreferenceChangeListener mPrefChangeListener = 
 			new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -60,6 +63,10 @@ public class ShoppingListActivity
     public void onCreate(Bundle savedInstanceState) { 
     	
     	super.onCreate(savedInstanceState);
+    	
+    	if (savedInstanceState != null) {
+    		mIsShoppingListFetched = savedInstanceState.getBoolean(IS_SHOPPINGLIST_FETCHED);
+    	}
     	
         mToolbar = new CustomTitlebarWrapper(this);
         setContentView(R.layout.shoppinglists);
@@ -90,17 +97,26 @@ public class ShoppingListActivity
     	}
     	
     	mListView.setOnItemClickListener(new ItemClickAndPostExecuteListener());
-        
-        mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message), true);
-		Log.i("ShoppingListActivity.onCreate", "onCreate called");
-    
+            
         // register for context menus
         registerForContextMenu(mListView);
         
-		((NoteItApplication) getApplication()).fetchShoppingLists(this);
-
+		Log.i("ShoppingListActivity.onCreate", "onCreate called");
+		if (!mIsShoppingListFetched) {
+        	((NoteItApplication) getApplication()).fetchShoppingLists(this);
+            mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message), true);
+		}
+        else {
+        	Log.i("ShoppingListActivity:onCreate", "Skipping fetchShoppingLists()");
+        }
     }
      
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putBoolean(IS_SHOPPINGLIST_FETCHED, mIsShoppingListFetched);
+		super.onSaveInstanceState(outState);
+	}
+
 	protected void onPause() {
 		Log.i("ShoppingListActivity.onPause", "onPause called");
 		if (mProgressDialog != null) {
@@ -181,7 +197,7 @@ public class ShoppingListActivity
         	// if (!shopList.isEmpty()){
         	//	 mAdapter.addAll(shopList);
         	// }
-    		
+    		mIsShoppingListFetched = true;
     		mAdapter.notifyDataSetChanged();
     	} else {
     		Toast.makeText(getApplicationContext(), "Error Occurred:" + errMsg, Toast.LENGTH_LONG).show();

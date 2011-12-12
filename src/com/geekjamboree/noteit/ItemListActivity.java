@@ -53,6 +53,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	Integer						mFontSize = 3;
 	CustomTitlebarWrapper		mToolbar;
 	Button						mShoppingListButton;
+	boolean						mIsItemListFetched = false;
 	
 	static final int ADD_ITEM_REQUEST = 0;	
 	
@@ -67,9 +68,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	static final int DIALOG_ADD_ITEM 	= 99;
 	static final int DIALOG_EDIT_ITEM	= 100;
 	
-	static final String SELECTED_GROUP 	= "selGroup";
-	static final String SELECTED_CHILD 	= "selChild";
-	static final String SELECTED_ITEM_ID= "selItemID";
+	static final String SELECTED_GROUP 			= "selGroup";
+	static final String SELECTED_CHILD 			= "selChild";
+	static final String SELECTED_ITEM_ID		= "selItemID";
+	static final String IS_ITEMLIST_FETCHED 	= "IS_ITEM_LIST_FETCHED";
 	
     protected enum ItemType {
     	PENDING, 
@@ -367,11 +369,21 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	    	
     		if (viewGroup != null) {
 		    	TextView  textView = (TextView) viewGroup.findViewById(R.id.itemslist_categoryName);
-		        textView.setText(getGroup(groupPosition).toString());
+		    	String text = getGroup(groupPosition).toString();
+		    	text += " (" + getUnpurchasedChildrenCount(groupPosition) + "/" + getChildrenCount(groupPosition) + ")";
+		        textView.setText(text);
 		        textView.setTextAppearance(mContext, getPreferredTextAppearance(ItemType.GROUP));
     		}
     		return viewGroup;
 		}
+	    
+	    public int getUnpurchasedChildrenCount(int groupPosition) {
+	    	int count = 0;
+	    	for (Item item : mItems.get(groupPosition)) {
+	    		count += (item.mIsPurchased > 0 ? 1 : 0);
+	    	}
+	    	return count;
+	    }
 	}
 	
 	protected SharedPreferences.OnSharedPreferenceChangeListener mPrefChangeListener = 
@@ -398,6 +410,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     		mSelectedGroup.set(savedInstanceState.getInt(SELECTED_GROUP));
     		mSelectedChild.set(savedInstanceState.getInt(SELECTED_CHILD));
     		mSelectedItemID = savedInstanceState.getLong(SELECTED_ITEM_ID);
+    		mIsItemListFetched = savedInstanceState.getBoolean(IS_ITEMLIST_FETCHED);
     	}
     	
         NoteItApplication app = (NoteItApplication) getApplication();
@@ -462,11 +475,31 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
         mListView = (ExpandableListView) findViewById(android.R.id.list);
 		mAdapter = new ItemsExpandableListAdapter(this);
 		mListView.setAdapter(mAdapter);
+		mListView.setTextFilterEnabled(true);
+    	mListView.setOnChildClickListener(new OnChildClickListener() {
+			
+			public boolean onChildClick(ExpandableListView parent, View v,
+					int groupPosition, int childPosition, long id) {
+				
+				if (v.getId() == R.id.itemlist_name) {
+					doToggleMarkDone();
+				} else {
+    				mQuickAction.show(v);
+				}
+				mSelectedGroup.set(groupPosition);
+				mSelectedChild.set(childPosition);
+				mSelectedItemID = ((Item) mListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).mID;
+				return false;
+			}
+		});
 		
-		if (app.getShoppingListCount() > 0)
+		if (app.getShoppingListCount() > 0 && !mIsItemListFetched) {
+			mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message));
  	   		app.fetchItems(this);
-
-		mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message));
+		} else {
+			Log.i("ItemListActivity.onCreate", "Skipping fetchItems");
+			doDisplayItems(app.getItems());
+		}
     }
 
     @Override
@@ -474,6 +507,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		super.onSaveInstanceState(outState);
 		outState.putInt(SELECTED_GROUP, mSelectedGroup.get());
 		outState.putInt(SELECTED_CHILD, mSelectedChild.get());
+		outState.putBoolean(IS_ITEMLIST_FETCHED, mIsItemListFetched);
 		Item selItem = null;
 		if (mSelectedGroup.get() < mAdapter.getGroupCount() && 
 			mSelectedChild.get() < mAdapter.getChildrenCount(mSelectedGroup.get())) {
@@ -525,39 +559,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	}
     	
     	if (retval == 0) {
-        	
-    		mAdapter = new ItemsExpandableListAdapter(this);
-        	
-        	for (int index = 0; index < items.size(); index++){
-        		
-        		Item thisItem = items.get(index);
-        		
-        		// Get a reference to the parent Category
-        		NoteItApplication.Category category = ((NoteItApplication)getApplication()).getCategory(thisItem.mCategoryID);
-        		
-        		mAdapter.AddItem(thisItem, category);
-        	}
-
-    		((ExpandableListView)mListView).setAdapter(mAdapter);
-    		mListView.setTextFilterEnabled(true);
-        	mListView.setOnChildClickListener(new OnChildClickListener() {
-				
-				public boolean onChildClick(ExpandableListView parent, View v,
-						int groupPosition, int childPosition, long id) {
-					
-					if (v.getId() == R.id.itemlist_name) {
-						doToggleMarkDone();
-					} else {
-	    				mQuickAction.show(v);
-					}
-					mSelectedGroup.set(groupPosition);
-					mSelectedChild.set(childPosition);
-					mSelectedItemID = ((Item) mListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).mID;
-					return false;
-				}
-			});
-        	
-        	doExpandAll();
+        	mIsItemListFetched = true;
+        	doDisplayItems(items);
     	}
     	else {
 			Toast.makeText(getApplicationContext(), "The server seems to be out of its mind. Please try later.", Toast.LENGTH_SHORT).show();
@@ -956,5 +959,19 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			})
 			.create();
     	shoppingLists.show();
+    }
+    
+    protected void doDisplayItems(ArrayList<Item> items) {
+		mAdapter = new ItemsExpandableListAdapter(this);
+    	
+    	for (int index = 0; index < items.size(); index++){
+    		
+    		Item thisItem = items.get(index);
+    		NoteItApplication.Category category = ((NoteItApplication)getApplication()).getCategory(thisItem.mCategoryID);
+    		mAdapter.AddItem(thisItem, category);
+    	}
+
+		mListView.setAdapter(mAdapter);
+    	doExpandAll();
     }
 }
