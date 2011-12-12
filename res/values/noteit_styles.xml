@@ -12,7 +12,7 @@
 	</style>
 	
 	<style name="App_TitleBackground">
-		<item name="android:background">@color/theme_offwhite_header_background</item>
+		<item name="android:background">@drawable/application_titlebar</item>
     </style>
 
 	<style name="ItemList_TextAppearance.GroupsItem.Small" parent="@android:style/TextAppearance.Small">

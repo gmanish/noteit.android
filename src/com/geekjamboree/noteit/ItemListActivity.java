@@ -474,14 +474,29 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		super.onSaveInstanceState(outState);
 		outState.putInt(SELECTED_GROUP, mSelectedGroup.get());
 		outState.putInt(SELECTED_CHILD, mSelectedChild.get());
-		Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup.get(), mSelectedChild.get());
+		Item selItem = null;
+		if (mSelectedGroup.get() < mAdapter.getGroupCount() && 
+			mSelectedChild.get() < mAdapter.getChildrenCount(mSelectedGroup.get())) {
+			selItem = (Item) mListView.getExpandableListAdapter().getChild(
+									mSelectedGroup.get(), mSelectedChild.get());
+		}
 		if (selItem != null) {
 			outState.putLong(SELECTED_ITEM_ID, selItem.mID);
+		} else {
+			outState.putLong(SELECTED_ITEM_ID, 0);
 		}
 	}
 
 	@Override
 	protected void onPause() {
+		Log.i("ItemListActivity.onPause", "onPause called");
+		if (mProgressDialog != null) {
+			if (mProgressDialog.isShowing()) {
+				Log.i("ItemListActivity.onPause", "onPause called while progress is showing");
+				mProgressDialog.dismiss();
+			}
+			mProgressDialog = null;
+		}
 		SharedPreferences 	prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		SharedPreferences.Editor editor = prefs.edit(); 
 		editor.putLong("LastUsedShoppingListID", ((NoteItApplication)getApplication()).getCurrentShoppingListID());
@@ -503,7 +518,11 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 
 	public void onPostExecute(long retval, ArrayList<Item> items, String message) {
     	
-    	if (mProgressDialog != null) mProgressDialog.dismiss();
+    	try {
+		if (mProgressDialog != null && mProgressDialog.isShowing()) {
+    		mProgressDialog.dismiss();
+    		mProgressDialog = null;
+    	}
     	
     	if (retval == 0) {
         	
@@ -542,6 +561,9 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	}
     	else {
 			Toast.makeText(getApplicationContext(), "The server seems to be out of its mind. Please try later.", Toast.LENGTH_SHORT).show();
+    	}
+    	} catch (Exception e) {
+    		Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
     	}
 	}
     

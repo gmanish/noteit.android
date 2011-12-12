@@ -91,8 +91,8 @@ public class ShoppingListActivity
     	
     	mListView.setOnItemClickListener(new ItemClickAndPostExecuteListener());
         
-        // Show a spinning wheel dialog
         mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message), true);
+		Log.i("ShoppingListActivity.onCreate", "onCreate called");
     
         // register for context menus
         registerForContextMenu(mListView);
@@ -102,9 +102,18 @@ public class ShoppingListActivity
     }
      
 	protected void onPause() {
+		Log.i("ShoppingListActivity.onPause", "onPause called");
+		if (mProgressDialog != null) {
+			if (mProgressDialog.isShowing()) {
+				Log.i("ShoppingListActivity.onPause", "onPause called while progress is showing");
+				mProgressDialog.dismiss();
+			}
+			mProgressDialog = null;
+		}
 		PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(mPrefChangeListener);
 		super.onPause();
 	}
+	
     @Override
 	protected void onResume() {
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this); 
@@ -156,8 +165,12 @@ public class ShoppingListActivity
     
     public void onPostExecute(long retval, ArrayList<ShoppingList> shopList, String errMsg) {
     	
-    	if (mProgressDialog != null) mProgressDialog.dismiss();
-    	
+		Log.i("ShoppingListActivity.onPostExecute", "onPostExecute called");
+    	if (mProgressDialog != null && mProgressDialog.isShowing()) {
+    		Log.i("ShoppingListActivity.onPostExecute", "Destroyed the progress bar");
+    		mProgressDialog.dismiss();
+    		mProgressDialog = null;
+    	}
 
     	if (retval == 0){ // success
     		// [TODO]: Since we're directly passing a reference to the NoteItApplication.getShoppingList

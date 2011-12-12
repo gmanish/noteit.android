@@ -10,13 +10,13 @@ import com.geekjamboree.noteit.NoteItApplication.Category;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +38,6 @@ public class CategoryListActivity
 	
 	ArrayAdapter<Category> 	mAdapter;
 	ListView				mListView;
-	ProgressDialog			mProgressDialog = null;
 	CustomTitlebarWrapper 	mToolbar;
 	QuickAction				mQuickAction;
 	int						mSelectedCategory = 0;
@@ -46,6 +45,7 @@ public class CategoryListActivity
 	static final int QA_ID_EDIT 	= 0;
 	static final int QA_ID_DELETE	= 1;
 	static final int QA_ID_BOUGHT	= 2;
+	static final String SELECTED_CATEGORY = "SELECTED_CATEGORY";
 	
 	protected SharedPreferences.OnSharedPreferenceChangeListener mPrefChangeListener = 
 			new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -61,6 +61,9 @@ public class CategoryListActivity
 
 	public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
+    	
+    	if (savedInstanceState != null) 
+    		mSelectedCategory = savedInstanceState.getInt(SELECTED_CATEGORY);
     	
     	mToolbar = new CustomTitlebarWrapper(this);
     	setContentView(R.layout.categories);
@@ -124,6 +127,12 @@ public class CategoryListActivity
 	}
     
     @Override
+	protected void onSaveInstanceState(Bundle outState) {
+    	outState.putInt(SELECTED_CATEGORY, mSelectedCategory);
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
 	protected void onResume() {
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this); 
 		prefs.registerOnSharedPreferenceChangeListener(mPrefChangeListener);
@@ -133,6 +142,7 @@ public class CategoryListActivity
 
 	@Override
 	protected void onPause() {
+		Log.i("CategoryListActivity.onPause", "onPause called");
 		PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(mPrefChangeListener);
 		super.onPause();
 	}

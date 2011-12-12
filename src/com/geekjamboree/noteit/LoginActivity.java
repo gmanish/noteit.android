@@ -67,8 +67,10 @@ public class LoginActivity
     
 	public void onPostExecute(JSONObject json) {
 		try {
-			if (mProgressDialog != null) {
+			if (mProgressDialog != null && mProgressDialog.isShowing()) {
+				Log.i("LoginActivity.onPostExecute", "Destroying Progressbar");
 				mProgressDialog.dismiss();
+				mProgressDialog = null;
 			}
 			if (json.has("JSONRetVal")) {
 				// The server is up and running 
