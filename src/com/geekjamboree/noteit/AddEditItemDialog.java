@@ -508,7 +508,7 @@ public class AddEditItemDialog extends Dialog {
     	return item;
     }
     
-    void clearDialogFields() {
+    public void clearDialogFields() {
 
     	mEditName.setText("");
     	mEditQuantity.setText("");

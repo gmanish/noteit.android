@@ -36,24 +36,26 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class ItemListActivity extends ExpandableListActivity implements NoteItApplication.OnFetchItemsListener {
 	
-	ExpandableListView			mListView;
-	ItemsExpandableListAdapter 	mAdapter;
-	ProgressDialog				mProgressDialog = null;
-	QuickAction 				mQuickAction = null;
-	AtomicInteger				mSelectedGroup = new AtomicInteger();
-	AtomicInteger				mSelectedChild = new AtomicInteger();
-	long						mSelectedItemID = 0;
-	boolean						mDisplayExtras = true;
-	Integer						mFontSize = 3;
-	CustomTitlebarWrapper		mToolbar;
-	Button						mShoppingListButton;
-	boolean						mIsItemListFetched = false;
+	ExpandableListViewIndicatorOnRight		mListView;
+	ItemsExpandableListAdapter 				mAdapter;
+	ProgressDialog							mProgressDialog = null;
+	QuickAction 							mQuickAction = null;
+	AtomicInteger							mSelectedGroup = new AtomicInteger();
+	AtomicInteger							mSelectedChild = new AtomicInteger();
+	long									mSelectedItemID = 0;
+	boolean									mDisplayExtras = true;
+	boolean									mDisplayCategoryExtras = true;
+	Integer									mFontSize = 3;
+	CustomTitlebarWrapper					mToolbar;
+	Button									mShoppingListButton;
+	boolean									mIsItemListFetched = false;
 	
 	static final int ADD_ITEM_REQUEST = 0;	
 	
@@ -368,11 +370,22 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	    	}
 	    	
     		if (viewGroup != null) {
-		    	TextView  textView = (TextView) viewGroup.findViewById(R.id.itemslist_categoryName);
-		    	String text = getGroup(groupPosition).toString();
-		    	text += " (" + getUnpurchasedChildrenCount(groupPosition) + "/" + getChildrenCount(groupPosition) + ")";
-		        textView.setText(text);
+		    	TextView  	textView = (TextView) viewGroup.findViewById(R.id.itemslist_categoryName);
+		    	TextView  	totals = (TextView) viewGroup.findViewById(R.id.itemslist_categoryTotals);
+		    	
+		        textView.setText(getGroup(groupPosition).toString());
 		        textView.setTextAppearance(mContext, getPreferredTextAppearance(ItemType.GROUP));
+
+		        if (mDisplayCategoryExtras) {
+			    	String 		totalsText;
+			    	totalsText = "(" + getUnpurchasedChildrenCount(groupPosition) + ")";
+			        totals.setText(totalsText);
+			        totals.setTextAppearance(mContext, getPreferredTextAppearance(ItemType.GROUP));
+			        totals.setPadding(0, 0, mListView.getRightMargin(), 0);
+			        totals.setVisibility(View.VISIBLE);
+		        } else {
+			        totals.setVisibility(View.GONE);
+		        }
     		}
     		return viewGroup;
 		}
@@ -380,7 +393,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	    public int getUnpurchasedChildrenCount(int groupPosition) {
 	    	int count = 0;
 	    	for (Item item : mItems.get(groupPosition)) {
-	    		count += (item.mIsPurchased > 0 ? 1 : 0);
+	    		count += (item.mIsPurchased <= 0 ? 1 : 0);
 	    	}
 	    	return count;
 	    }
@@ -394,6 +407,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 				if (key == "Display_Price_Quantity" || key == "Item_Font_Size") {
 					Log.i("ItemListActivity.onSharedPreferenceChanged", "Display_Price_Quantity preference changed");
 					mDisplayExtras = sharedPreferences.getBoolean("Display_Price_Quantity", true);
+					mDisplayCategoryExtras = sharedPreferences.getBoolean("Display_Category_Totals", true);
 			        mFontSize = Integer.valueOf(sharedPreferences.getString("Item_Font_Size", "3"));
 					mListView.invalidateViews();
 				}
@@ -472,7 +486,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			}
 		});    
 		
-        mListView = (ExpandableListView) findViewById(android.R.id.list);
+        mListView = (ExpandableListViewIndicatorOnRight) findViewById(android.R.id.list);
 		mAdapter = new ItemsExpandableListAdapter(this);
 		mListView.setAdapter(mAdapter);
 		mListView.setTextFilterEnabled(true);
@@ -545,6 +559,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this); 
 		prefs.registerOnSharedPreferenceChangeListener(mPrefChangeListener);
 		mDisplayExtras = prefs.getBoolean("Display_Price_Quantity", true);
+		mDisplayCategoryExtras = prefs.getBoolean("Display_Category_Totals", true);
         mFontSize = Integer.valueOf(prefs.getString("Item_Font_Size", "3"));
 		mListView.invalidateViews();
 		super.onResume();
@@ -690,6 +705,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		super.onPrepareDialog(id, dialog);
 		switch(id) {
 		case DIALOG_ADD_ITEM:
+			AddEditItemDialog addDialog = (AddEditItemDialog) dialog;
+			addDialog.clearDialogFields();
 			break;
 		case DIALOG_EDIT_ITEM:
         	AddEditItemDialog editDialog = (AddEditItemDialog) dialog;
@@ -729,6 +746,13 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     			doCommitToggleItemDone(selItem, false, 0);
     		}
     	}
+    }
+    
+    protected void doExpandPending() {
+    	for (int i = 0; i < mAdapter.getGroupCount(); i++){
+    		if (mAdapter.getUnpurchasedChildrenCount(i) > 0)
+    			mListView.expandGroup(i);
+    	}        	
     }
     
     protected void doExpandAll() {
@@ -962,16 +986,40 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     }
     
     protected void doDisplayItems(ArrayList<Item> items) {
+		float total = 0f;
+		float remaining = 0f;
+		
+		final String totalFormat = getResources().getString(R.string.itemlist_total);
+		final String remainingFormat = getResources().getString(R.string.itemlist_remaining);
+		
 		mAdapter = new ItemsExpandableListAdapter(this);
     	
     	for (int index = 0; index < items.size(); index++){
+    		Item 	thisItem = items.get(index);
+    		float 	itemPrice = thisItem.mQuantity * thisItem.mUnitPrice;
     		
-    		Item thisItem = items.get(index);
+    		total += itemPrice;
+    		remaining += thisItem.mIsPurchased > 0 ? 0 : itemPrice;
+    		
     		NoteItApplication.Category category = ((NoteItApplication)getApplication()).getCategory(thisItem.mCategoryID);
     		mAdapter.AddItem(thisItem, category);
     	}
 
 		mListView.setAdapter(mAdapter);
-    	doExpandAll();
+		
+		LinearLayout statusBar = (LinearLayout) findViewById(R.id.bottom_bar);
+		if (statusBar != null) {
+			if (total > 0 || remaining > 0) {
+				statusBar.setVisibility(View.VISIBLE);
+				String strTotal = String.format(totalFormat, total);
+				String strRemaining = String.format(remainingFormat, remaining);
+				TextView textViewTotal = (TextView) statusBar.findViewById(R.id.bottom_total);
+				TextView textViewRemaining = (TextView) statusBar.findViewById(R.id.bottom_remaining);
+				if (textViewTotal != null) textViewTotal.setText(strTotal);
+				if (textViewRemaining != null) textViewRemaining.setText(strRemaining);
+			} else
+				statusBar.setVisibility(View.GONE);
+		}
+		doExpandPending();
     }
 }

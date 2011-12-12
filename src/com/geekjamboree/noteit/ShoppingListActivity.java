@@ -28,9 +28,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ListView;
 
@@ -38,15 +38,39 @@ public class ShoppingListActivity
 	extends ListActivity 
 	implements NoteItApplication.OnFetchShoppingListsListener {
 
-	ListView 										mListView;
-	ProgressDialog									mProgressDialog = null;
-	ArrayAdapter<NoteItApplication.ShoppingList>	mAdapter;
-	CustomTitlebarWrapper 							mToolbar;
-	int												mFontSize = 3;
-	boolean											mIsShoppingListFetched = false;
-	static final String								IS_SHOPPINGLIST_FETCHED = "IS_SHOPPINGLIST_FETCHED";
+	ListView 				mListView;
+	ProgressDialog			mProgressDialog = null;
+	ShoppingListAdapter		mAdapter;
+	CustomTitlebarWrapper 	mToolbar;
+	int						mFontSize = 3;
+	boolean					mIsShoppingListFetched = false;
+	static final String		IS_SHOPPINGLIST_FETCHED = "IS_SHOPPINGLIST_FETCHED";
 	
-	
+
+	class ShoppingListAdapter extends ArrayAdapterWithFontSize<ShoppingList> {
+		public ShoppingListAdapter(
+				Context context, 
+				int resource, 
+				int textViewResourceId, 
+				ArrayList<ShoppingList> objects) {
+			super(context, resource, textViewResourceId, objects);
+		}
+		
+		public View getView(int position, View convertView, ViewGroup parent){
+			View view = super.getView(position, convertView, parent);
+			ShoppingList item = getItem(position);
+			if (item != null) {
+				TextView itemCount = (TextView) view.findViewById(R.id.shoppinglist_itemCount);
+				if (itemCount != null) {
+					itemCount.setText(" (" + String.valueOf(item.mItemCount) + ")");
+					itemCount.setTextAppearance(parent.getContext(), super.getPreferredTextAppearance());
+				}
+			}
+			return view;
+		}
+		
+	}
+		
 	protected SharedPreferences.OnSharedPreferenceChangeListener mPrefChangeListener = 
 			new SharedPreferences.OnSharedPreferenceChangeListener() {
 			
@@ -75,7 +99,7 @@ public class ShoppingListActivity
         
         mListView = (ListView) findViewById(android.R.id.list);
     	mListView.setTextFilterEnabled(true);
-		mAdapter = new ArrayAdapterWithFontSize<ShoppingList> (
+		mAdapter = new ShoppingListAdapter(
 				this, 
     			R.layout.shoppinglists_item, 
     			R.id.shoppinglist_name, 
@@ -229,11 +253,13 @@ public class ShoppingListActivity
 						dialog.dismiss();
 					
 						NoteItApplication app = (NoteItApplication)getApplication();
+						ShoppingList	  list = (ShoppingList) mListView.getItemAtPosition(index);
 						// Create a new list with the name
 						app.editShoppingList(
 								app.new ShoppingList(
-									((ShoppingList)mListView.getItemAtPosition(index)).mID, 
-									listName),
+									list.mID, 
+									listName,
+									list.mItemCount),
 							new NoteItApplication.OnMethodExecuteListerner() {
 								
 								public void onPostExecute(long resultCode, String message) {

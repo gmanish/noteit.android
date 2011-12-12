@@ -51,10 +51,16 @@ public class NoteItApplication extends Application {
 	public class ShoppingList {
 		public String 	mName = "";
 		public long		mID = 0;
+		public long 	mItemCount = 0;
 		
-		public ShoppingList(long itemID, String itemName){
+		public ShoppingList(long listID) {
+			mID = listID;
+		}
+		
+		public ShoppingList(long itemID, String itemName, long itemCount){
 			mName = itemName;
 			mID = itemID;
+			mItemCount = itemCount;
 		}
 		
 		public String toString(){
@@ -298,7 +304,8 @@ public class NoteItApplication extends Application {
 	        	        		JSONObject thisObj = jsonArr.getJSONObject(index);
 	        	        		ShoppingList thisItem = new ShoppingList(
 	        	        				Long.parseLong(thisObj.getString("listID")),
-	        							thisObj.getString("listName"));
+	        							thisObj.getString("listName"),
+	        							Long.parseLong(thisObj.getString("itemCount")));
 	        	        		
 	        	        		mShoppingLists.add(thisItem);
 	        	        	}
@@ -350,7 +357,8 @@ public class NoteItApplication extends Application {
         				mShoppingLists.add(
         						new ShoppingList(
         								json.getLong("arg1"), 
-        								json.getString("arg2")));
+        								json.getString("arg2"),
+        								0));
         			
         			}
         			
@@ -391,7 +399,7 @@ public class NoteItApplication extends Application {
         			long retVal = json.getLong("JSONRetVal");
         			if (retVal == 0){
         				// Delete it from our list as well
-        				mShoppingLists.remove(new ShoppingList(listID, ""));
+        				mShoppingLists.remove(new ShoppingList(listID));
         			}
                 	mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
         		} catch (JSONException e){
@@ -433,7 +441,10 @@ public class NoteItApplication extends Application {
 				try {
 					retVal = json.getLong("JSONRetVal");
 		       		if (retVal == 0) {
-		       			ShoppingList newList = new ShoppingList(json.getLong("arg1"), json.getString("arg2"));
+		       			ShoppingList newList = new ShoppingList(
+		       					json.getLong("arg1"), 
+		       					json.getString("arg2"),
+		       					listDetail.mItemCount); // Number of items wouldn't change
 		       			mShoppingLists.set(mShoppingLists.indexOf(newList), newList);
 		       		}
 
@@ -498,7 +509,7 @@ public class NoteItApplication extends Application {
 	}
 	
 	public int getCurrentShoppingListIndex() {
-		return mShoppingLists.indexOf(new ShoppingList(mCurrentShoppingListID, ""));
+		return mShoppingLists.indexOf(new ShoppingList(mCurrentShoppingListID));
 	}
 	
 	public ArrayList<ShoppingList> getShoppingList() {
@@ -896,6 +907,12 @@ public class NoteItApplication extends Application {
 						// Add to our internal list
 						mItems.add(newItem);
 						
+						// Increase itemCount on the parent list
+						int index = mShoppingLists.indexOf(new ShoppingList(newItem.mListID));
+						if (index >= 0) {
+							mShoppingLists.get(index).mItemCount++;
+						}
+						
 						// Invoke the callback
 						mListener.onPostExecute(retVal, newItem, message);
 					} else 
@@ -1002,6 +1019,12 @@ public class NoteItApplication extends Application {
         			if (retVal == 0) {
         				// Success
         				mItems.remove(new Item(itemID));
+        				
+						// Decrease itemCount on the parent list
+						int index = mShoppingLists.indexOf(new ShoppingList(itemID));
+						if (index >= 0) {
+							mShoppingLists.get(index).mItemCount--;
+						}
         			}
                 	mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
         		} catch (JSONException e){

@@ -78,9 +78,15 @@
 		android:key="Items_List" >
 	    
 	    <CheckBoxPreference
-	    	android:title="Show Extras"
+	    	android:title="Show Category Extras"
+	    	android:key="Display_Category_Totals"
+	    	android:summaryOff="Extra information like number of remaining and total Items will not be displayed with each Category."
+	    	android:summaryOn="Display extra information like number of remaining and total Items with each Category." />
+
+	    <CheckBoxPreference
+	    	android:title="Show Item Extras"
 	    	android:key="Display_Price_Quantity"
-	    	android:summaryOff="Extra details like Price, Quantity and Total will not be displayed with items."
+	    	android:summaryOff="Extra information like Price, Quantity and Total will not be displayed with items."
 	    	android:summaryOn="Display extra information like Price, Quantity and Total with each Item." />
 	    		    
 	    <ListPreference

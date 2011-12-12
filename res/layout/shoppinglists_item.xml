@@ -27,6 +27,18 @@
         android:text="@+id/list_name"
         style="@style/ItemList_TextAppearance.PendingItem.Small" />
 
+    <TextView
+        android:id="@+id/shoppinglist_itemCount"
+        android:layout_width="50dip"
+        android:layout_height="fill_parent"
+       	android:layout_gravity="center_vertical|right"
+       	android:gravity="center_vertical|right"
+		android:singleLine="true"
+		android:paddingLeft="5dip"
+		android:layout_marginRight="5dip"
+        android:text="@+id/list_itemCount"
+        style="@style/ItemList_TextAppearance.PendingItem.Small" />
+    
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"

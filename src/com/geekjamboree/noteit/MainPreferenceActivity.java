@@ -10,8 +10,8 @@ public class MainPreferenceActivity extends PreferenceActivity {
 
 	public void onCreate(Bundle savedInstanceState){
         
-        super.onCreate(savedInstanceState);
 		CustomTitlebarWrapper toolbar = new CustomTitlebarWrapper(this);
+        super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.prefs);
 
 		ListPreference currency = (ListPreference)findPreference("currency");

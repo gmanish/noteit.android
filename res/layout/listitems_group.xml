@@ -15,7 +15,8 @@
     
     <TextView
         android:id="@+id/itemslist_categoryName"
-        android:layout_width="fill_parent"
+        android:layout_width="0dip"
+        android:layout_weight="1"
         android:layout_height="fill_parent"
         android:paddingLeft="5dip"
         android:singleLine="true"
@@ -23,6 +24,19 @@
         android:gravity="left|center_vertical"
         style="@style/ItemList_TextAppearance.GroupsItem.Small"
         android:text="Item Text"
+        android:background="@android:color/transparent" />
+    
+    <TextView
+        android:id="@+id/itemslist_categoryTotals"
+        android:layout_width="80dip"
+        android:layout_height="fill_parent"
+        android:paddingLeft="5dip"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:layout_gravity="right|center_vertical"
+        style="@style/ItemList_TextAppearance.GroupsItem.Small"
+        android:text="(0/10)"
         android:background="@android:color/transparent" />
     
 </LinearLayout>

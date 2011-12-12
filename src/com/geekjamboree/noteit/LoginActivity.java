@@ -117,7 +117,7 @@ public class LoginActivity
 		    			  										
 		    													long lastUsedShoppingListID = prefs.getLong("LastUsedShoppingListID", 0);
 		    													if (app.getShoppingListCount() > 0 && lastUsedShoppingListID != 0) {
-		    														int index = app.getShoppingList().indexOf((app.new ShoppingList(lastUsedShoppingListID, "")));
+		    														int index = app.getShoppingList().indexOf((app.new ShoppingList(lastUsedShoppingListID)));
 		    														if (index >= 0)
 		    															app.setCurrentShoppingListIndex(index);
 		    														else

@@ -7,6 +7,7 @@ import android.widget.ExpandableListView;
 public class ExpandableListViewIndicatorOnRight extends ExpandableListView {
 
 	protected int groupIndicatorWidth = 0;
+	protected int mRightMargin;
 	
 	public ExpandableListViewIndicatorOnRight(Context context) {
 		super(context);
@@ -30,9 +31,16 @@ public class ExpandableListViewIndicatorOnRight extends ExpandableListView {
 		
 		int paddingRight = (int)(getResources().getDisplayMetrics().density * 5 + 0.5); // dip to px
         if (oldw != w) {
-			setIndicatorBounds(w - (groupIndicatorWidth + paddingRight), w);
+        	mRightMargin = (groupIndicatorWidth + paddingRight);
+			setIndicatorBounds(w - mRightMargin, w);
 		}
 		super.onSizeChanged(w, h, oldw, oldh);
 	}
-	
+
+	/*
+	 * Indicates the rightMargin any view in the List should have in order to not overlap with the groupIndicator
+	 */
+	public int getRightMargin() {
+		return mRightMargin;
+	}
 }
