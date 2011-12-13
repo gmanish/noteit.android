@@ -22,6 +22,7 @@ public class CustomTitlebarWrapper {
     boolean 	mCustomTitleSupported = false;
 	Activity	mParent;
 	TextView 	mTitleText;
+	int			index = 0;
 	
     public CustomTitlebarWrapper(Activity parent) {
     	mParent = parent;
@@ -62,7 +63,7 @@ public class CustomTitlebarWrapper {
     	button.setBackgroundResource(R.color.app_button_background);
     	root.addView(button);
     }
-    
+        
     public void addLeftAlignedButton(ImageButton button, boolean separatorBefore, boolean separatorAfter) {
 
     	final float 				scale = mParent.getResources().getDisplayMetrics().density;
@@ -71,16 +72,16 @@ public class CustomTitlebarWrapper {
     	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(buttonSize, buttonSize);
     	
     	if (separatorBefore)
-    		root.addView(getSeparator(Gravity.LEFT | Gravity.CENTER_VERTICAL), -1);
+    		root.addView(getSeparator(Gravity.LEFT | Gravity.CENTER_VERTICAL), index++);
     	
     	lp.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
     	button.setLayoutParams(lp);
     	button.setPadding(0, 2, 0, 2);
     	button.setBackgroundResource(R.color.app_button_background);
-    	root.addView(button);
+    	root.addView(button, index++);
     	
     	if (separatorAfter)
-    		root.addView(getSeparator(Gravity.LEFT | Gravity.CENTER_VERTICAL));
+    		root.addView(getSeparator(Gravity.LEFT | Gravity.CENTER_VERTICAL), index++);
     }
     
     public void addRightAlignedButton(ImageButton button, boolean separatorBefore, boolean separatorAfter) {

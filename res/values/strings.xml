@@ -6,7 +6,8 @@
     
     <string name="hello">Hello World, MainActivity!</string>
     <string name="app_name">Note It!</string>
-
+	<string name="app_home">Dashboard</string>
+		
     <string name="dashboard_title">Dashboard</string>
         
     <string name="category_uncategorized">Uncategorized</string>
@@ -42,6 +43,13 @@
 	<string name="itemlist_select_shoppinglist">Choose Shopping List</string>
 	<string name="itemlist_total">Total: %1$.2f</string>
 	<string name="itemlist_remaining">Remaining: %1$.2f</string>
+	<string name="itemlist_expandall">Expand All</string>
+	<string name="itemlist_collapseall">Collapse All</string>
+	<string name="itemlist_email">Share List</string>
+	<string name="itemlist_emailPrompt">Share List Via</string>
+	<string name="itemlist_alldone">All Done</string>
+	<string name="itemlist_emailIntro">The sender shared a Shopping List with you:</string>
+	<string name="itemlist_emailsig">Sent from Note It! | www.noteitweb.com</string>
 	
 	<string name="itemlistqe_edit">Edit</string>
 	<string name="itemlistqe_delete">Delete</string>

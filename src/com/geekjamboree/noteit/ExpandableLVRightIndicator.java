@@ -4,23 +4,23 @@ import android.util.AttributeSet;
 import android.widget.ExpandableListView;
 
 
-public class ExpandableListViewIndicatorOnRight extends ExpandableListView {
+public class ExpandableLVRightIndicator extends ExpandableListView {
 
 	protected int groupIndicatorWidth = 0;
 	protected int mRightMargin;
 	
-	public ExpandableListViewIndicatorOnRight(Context context) {
+	public ExpandableLVRightIndicator(Context context) {
 		super(context);
 		groupIndicatorWidth = getResources().getDrawable(R.drawable.up).getMinimumWidth(); 
 	}
 
-	public ExpandableListViewIndicatorOnRight(Context context,
+	public ExpandableLVRightIndicator(Context context,
 			AttributeSet attrs) {
 		super(context, attrs);
 		groupIndicatorWidth = getResources().getDrawable(R.drawable.up).getMinimumWidth(); 
 	}
 
-	public ExpandableListViewIndicatorOnRight(Context context,
+	public ExpandableLVRightIndicator(Context context,
 			AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		groupIndicatorWidth = getResources().getDrawable(R.drawable.up).getMinimumWidth(); 

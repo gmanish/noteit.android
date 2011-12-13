@@ -26,7 +26,9 @@ import android.widget.Toast;
 public class LoginActivity 
 	extends Activity 
 	implements AsyncInvokeURLTask.OnPostExecuteListener {
+	
 	ProgressDialog		mProgressDialog = null;
+	SharedPreferences	mPrefs;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -37,9 +39,10 @@ public class LoginActivity
         toolbar.SetTitle(getResources().getText(R.string.login_activity_title));
    
         // Read the email id from the preference
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String emailID = prefs.getString("email", "");
-        if (emailID != "") {
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isRememberMe = mPrefs.getBoolean("Remember_Me", true);
+        String emailID = mPrefs.getString("email", "");
+        if (emailID != "" && isRememberMe) {
 	        EditText editTextEmail = (EditText)findViewById(R.id.editEmailID);
 	        editTextEmail.setText(emailID);
         }
@@ -65,6 +68,18 @@ public class LoginActivity
         });
     }
     
+	@Override
+	protected void onPause() {
+    	EditText emailID = (EditText)findViewById(R.id.editEmailID);
+    	if (emailID != null) {
+    		SharedPreferences.Editor editor = mPrefs.edit();
+    		String email = emailID.getText().toString();
+    		editor.putString("email", email);
+    		editor.commit();
+    	}
+		super.onPause();
+	}
+
 	public void onPostExecute(JSONObject json) {
 		try {
 			if (mProgressDialog != null && mProgressDialog.isShowing()) {
@@ -107,7 +122,8 @@ public class LoginActivity
 		    					                    finish();
 		    									} else {
 		    										final NoteItApplication app = (NoteItApplication) getApplication();
-		    										app.fetchShoppingLists(new NoteItApplication.OnFetchShoppingListsListener() {
+		    										boolean					fetchCount = prefs.getBoolean("Display_Pending_Item_Count", true);
+		    										app.fetchShoppingLists(fetchCount, new NoteItApplication.OnFetchShoppingListsListener() {
 		    											
 		    											public void onPostExecute(long resultCode,
 		    													ArrayList<ShoppingList> categories, 

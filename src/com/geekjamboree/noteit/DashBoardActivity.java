@@ -6,18 +6,23 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class DashBoardActivity extends Activity {
 
-	protected GridView mGridView;
-
+	protected GridView 		mGridView;
+	CustomTitlebarWrapper	mToolbar;
+	
 	protected final int DASHBOARD_SHOPPINGLISTS = 0;
 	protected final int DASHBOARD_CATEGORIES = 1;
 	
@@ -88,10 +93,11 @@ public class DashBoardActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
         
 		super.onCreate(savedInstanceState);
-        CustomTitlebarWrapper toolbar = new CustomTitlebarWrapper(this);
+        mToolbar = new CustomTitlebarWrapper(this);
         setContentView(R.layout.dashboard);
-        toolbar.SetTitle(getResources().getText(R.string.app_name));
-        
+        mToolbar.SetTitle(getResources().getText(R.string.app_name));
+		doSetupToolbarButton();
+		
         DashBoardAdapter adapter = new DashBoardAdapter(/*this*/);
         adapter.addItem("Shopping Lists", R.drawable.cart_big, DASHBOARD_SHOPPINGLISTS);
         adapter.addItem("Categories", R.drawable.category_large, DASHBOARD_CATEGORIES);
@@ -115,6 +121,26 @@ public class DashBoardActivity extends Activity {
 		});
 	}
 
+
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        
+    	MenuInflater inflater = getMenuInflater();
+    	inflater.inflate(R.menu.dashboard_menu, menu);
+        return true;
+    }
+    
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	
+    	switch(item.getItemId()){
+    		case R.id.dashboard_settings:
+    			startActivity(new Intent(this, MainPreferenceActivity.class));
+    			return true;
+    	}
+    	
+    	return false;
+    }
+        	
 	protected void doDashboardShoppingLists() {
         
 		Intent intent = new Intent(this, ShoppingListActivity.class);
@@ -126,5 +152,18 @@ public class DashBoardActivity extends Activity {
 		
         Intent intent = new Intent(this, CategoryListActivity.class);
         startActivity(intent);
+	}
+	
+	protected void doSetupToolbarButton() {
+        ImageButton settings = new ImageButton(this);
+        mToolbar.addRightAlignedButton(settings, true, false);
+        settings.setImageResource(R.drawable.settings);
+        settings.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				Intent intent = new Intent(DashBoardActivity.this, MainPreferenceActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 }

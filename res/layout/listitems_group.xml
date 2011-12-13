@@ -7,11 +7,6 @@
     android:padding="0dip" 
     android:background="@android:color/transparent" >
 
-	<ImageView
-	    android:layout_width="fill_parent"
-	    android:layout_height="2dip"
-	    android:background="@drawable/listview_group_top" />
-    
     <LinearLayout
         android:id="@+id/lisitems_group_root"
         android:layout_width="fill_parent"
@@ -56,9 +51,4 @@
             android:text="(0/10)" />
     </LinearLayout>
 
-	<ImageView
-	    android:layout_width="fill_parent"
-	    android:layout_height="2dip"
-	    android:background="@drawable/listview_group_bottom" />
-        
 </LinearLayout>

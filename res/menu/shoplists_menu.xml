@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+   <item android:id="@+id/shoppinglist_home"
+       android:icon="@drawable/home"
+       android:title="@string/app_home" />
+
    <item android:id="@+id/add_shoplist"
 		android:icon="@drawable/add"    		
         android:title="@string/add_shoplist" />

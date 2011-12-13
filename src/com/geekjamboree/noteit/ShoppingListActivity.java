@@ -44,6 +44,7 @@ public class ShoppingListActivity
 	CustomTitlebarWrapper 	mToolbar;
 	int						mFontSize = 3;
 	boolean					mIsShoppingListFetched = false;
+	boolean					mIsDisplayCount	= true;
 	static final String		IS_SHOPPINGLIST_FETCHED = "IS_SHOPPINGLIST_FETCHED";
 	
 
@@ -58,12 +59,20 @@ public class ShoppingListActivity
 		
 		public View getView(int position, View convertView, ViewGroup parent){
 			View view = super.getView(position, convertView, parent);
-			ShoppingList item = getItem(position);
-			if (item != null) {
-				TextView itemCount = (TextView) view.findViewById(R.id.shoppinglist_itemCount);
-				if (itemCount != null) {
-					itemCount.setText(" (" + String.valueOf(item.mItemCount) + ")");
-					itemCount.setTextAppearance(parent.getContext(), super.getPreferredTextAppearance());
+			
+			TextView itemCount = (TextView) view.findViewById(R.id.shoppinglist_itemCount);
+			if (itemCount != null) {
+				if (mIsDisplayCount) {
+					ShoppingList item = getItem(position);
+					if (item != null) {
+						itemCount.setText(" (" + String.valueOf(item.mItemCount) + ")");
+						itemCount.setTextAppearance(parent.getContext(), super.getPreferredTextAppearance());
+						itemCount.setVisibility(View.VISIBLE);
+					} else { 
+						itemCount.setVisibility(View.GONE);
+					}
+				} else {
+					itemCount.setVisibility(View.GONE);
 				}
 			}
 			return view;
@@ -106,7 +115,10 @@ public class ShoppingListActivity
     			((NoteItApplication)getApplication()).getShoppingList());
 		mListView.setAdapter(mAdapter);
     	
-    	class ItemClickAndPostExecuteListener 
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	mIsDisplayCount = prefs.getBoolean("Display_Pending_Item_Count", true);
+		
+		class ItemClickAndPostExecuteListener 
     		implements AdapterView.OnItemClickListener {
     		
     		View mView = null;
@@ -127,7 +139,7 @@ public class ShoppingListActivity
         
 		Log.i("ShoppingListActivity.onCreate", "onCreate called");
 		if (!mIsShoppingListFetched) {
-        	((NoteItApplication) getApplication()).fetchShoppingLists(this);
+        	((NoteItApplication) getApplication()).fetchShoppingLists(mIsDisplayCount, this);
             mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message), true);
 		}
         else {
@@ -156,7 +168,8 @@ public class ShoppingListActivity
 	
     @Override
 	protected void onResume() {
-    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this); 
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	mIsDisplayCount = prefs.getBoolean("Display_Pending_Item_Count", true);
 		prefs.registerOnSharedPreferenceChangeListener(mPrefChangeListener);
 		mListView.invalidateViews();
 		super.onResume();
@@ -181,9 +194,18 @@ public class ShoppingListActivity
     public boolean onOptionsItemSelected(MenuItem item) {
     	
     	switch(item.getItemId()){
-    		case R.id.noteit_prefs:
-    			startActivity(new Intent(this, MainPreferenceActivity.class));
-    			return true;
+    	case R.id.add_shoplist:
+    		doAddShoppingList();
+    		return true;
+    	case R.id.noteit_prefs:
+			startActivity(new Intent(this, MainPreferenceActivity.class));
+			return true;
+    	case R.id.shoppinglist_home:
+			Intent intent = new Intent(this, DashBoardActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			finish();
+    		return true;
     	}
     	
     	return false;
@@ -336,53 +358,7 @@ public class ShoppingListActivity
     	addButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
-				// inflate the view from resource layout
-				LayoutInflater	inflater = (LayoutInflater) ShoppingListActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				final View dialogView = inflater.inflate(R.layout.dialog_addshoppinglist, (ViewGroup) findViewById(R.id.dialog_addshoppinglist_root));
-				
-				AlertDialog dialog = new AlertDialog.Builder(ShoppingListActivity.this)
-					.setView(dialogView)
-					.setTitle(getResources().getString(R.string.shoppinglist_add_title))
-					.create();
-				
-				dialog.setButton(DialogInterface.BUTTON1, "OK", new DialogInterface.OnClickListener() {
-					
-					public void onClick(DialogInterface dialog, int which) {
-						EditText 	editListName = (EditText) dialogView.findViewById(R.id.dialog_addshoppinglist_editTextName);
-						String 		listName = editListName.getText().toString();
-	
-						if (!listName.trim().matches("")) {
-							dialog.dismiss();
-						
-							// Create a new list with the name
-							((NoteItApplication)getApplication()).addShoppingList(
-									listName,
-									new NoteItApplication.OnMethodExecuteListerner() {
-										
-									public void onPostExecute(long resultCode, String message) {
-										if (resultCode != 0) {
-											Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-										} else {
-											// refresh the listView
-											mAdapter.notifyDataSetChanged();
-										}
-									}
-								});
-							} else 
-								Toast.makeText(getApplicationContext(), getResources().getString(R.string.shoppinglist_name_blank), Toast.LENGTH_SHORT).show();
-						}
-					}
-				);
-			
-				dialog.setButton(DialogInterface.BUTTON2, "Cancel", new DialogInterface.OnClickListener() {
-					
-					public void onClick(DialogInterface dialog, int which) {
-						Log.e("AddShoppingList", "Cancel");
-						dialog.dismiss();
-					}
-				});
-	
-				dialog.show();
+				doAddShoppingList();
 			}
     	});
 		
@@ -411,4 +387,53 @@ public class ShoppingListActivity
     	mToolbar.addRightAlignedButton(addButton, true, false);
     	mToolbar.addRightAlignedButton(settingsButton, true, false);
     }
+    
+    void doAddShoppingList() {
+		// inflate the view from resource layout
+		LayoutInflater	inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final View dialogView = inflater.inflate(R.layout.dialog_addshoppinglist, null, false);
+		
+		AlertDialog dialog = new AlertDialog.Builder(ShoppingListActivity.this)
+			.setView(dialogView)
+			.setTitle(getResources().getString(R.string.shoppinglist_add_title))
+			.create();
+		
+		dialog.setButton(DialogInterface.BUTTON1, "OK", new DialogInterface.OnClickListener() {
+			
+			public void onClick(DialogInterface dialog, int which) {
+				EditText 	editListName = (EditText) dialogView.findViewById(R.id.dialog_addshoppinglist_editTextName);
+				String 		listName = editListName.getText().toString();
+
+				if (!listName.trim().matches("")) {
+					dialog.dismiss();
+				
+					// Create a new list with the name
+					((NoteItApplication)getApplication()).addShoppingList(
+							listName,
+							new NoteItApplication.OnMethodExecuteListerner() {
+								
+							public void onPostExecute(long resultCode, String message) {
+								if (resultCode != 0) {
+									Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+								} else {
+									// refresh the listView
+									mAdapter.notifyDataSetChanged();
+								}
+							}
+						});
+					} else 
+						Toast.makeText(getApplicationContext(), getResources().getString(R.string.shoppinglist_name_blank), Toast.LENGTH_SHORT).show();
+				}
+			}
+		);
+	
+		dialog.setButton(DialogInterface.BUTTON2, "Cancel", new DialogInterface.OnClickListener() {
+			
+			public void onClick(DialogInterface dialog, int which) {
+				Log.e("AddShoppingList", "Cancel");
+				dialog.dismiss();
+			}
+		});
+
+		dialog.show();    }
 }

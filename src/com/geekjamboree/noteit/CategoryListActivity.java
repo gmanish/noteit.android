@@ -18,6 +18,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -88,7 +91,7 @@ public class CategoryListActivity
     	});
 
         // Set up Quick Actions
-         ActionItem editItem 	= new ActionItem(
+        ActionItem editItem 	= new ActionItem(
 									QA_ID_EDIT,
 									getResources().getString(R.string.itemlistqe_edit),
 									getResources().getDrawable(R.drawable.edit)); 
@@ -128,6 +131,33 @@ public class CategoryListActivity
 	}
     
     @Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+    	MenuInflater inflater = getMenuInflater();
+    	inflater.inflate(R.menu.categorylist_menu, menu);
+    	return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.categorylist_home:
+			Intent intent = new Intent(CategoryListActivity.this, DashBoardActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			finish();
+			break;
+		case R.id.categorylist_add:
+			doAddCategory();
+			break;
+		case R.id.categorylist_settings:
+			startActivity(new Intent(CategoryListActivity.this, MainPreferenceActivity.class));
+			break;
+		}
+		
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
 	protected void onSaveInstanceState(Bundle outState) {
     	outState.putInt(SELECTED_CATEGORY, mSelectedCategory);
 		super.onSaveInstanceState(outState);
@@ -155,29 +185,7 @@ public class CategoryListActivity
     	addButton.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				
-				doShowCategoryNameDialog(true, 
-					new CategoryNameDialogListener() {
-						
-						public void onDialogOK(String categoryName) {
-							
-							NoteItApplication 	app = (NoteItApplication) getApplication();
-							Category 			category = app.new Category(0, categoryName, app.getUserID());
-							
-							((NoteItApplication) getApplication()).addCategory(
-								category,
-								new NoteItApplication.OnAddCategoryListener() {
-									
-									public void onPostExecute(long result, Category category, String message) {
-										if (result != 0) {
-											Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-										} else {
-								    		mAdapter.notifyDataSetChanged();
-										}
-									}
-								});
-						}
-				});
+				doAddCategory();
 			}
     	});
 		
@@ -292,4 +300,28 @@ public class CategoryListActivity
 
 		dialog.show();
 	}
+    
+    void doAddCategory() {
+		doShowCategoryNameDialog(true, 
+			new CategoryNameDialogListener() {
+				public void onDialogOK(String categoryName) {
+					
+					NoteItApplication 	app = (NoteItApplication) getApplication();
+					Category 			category = app.new Category(0, categoryName, app.getUserID());
+					
+					((NoteItApplication) getApplication()).addCategory(
+						category,
+						new NoteItApplication.OnAddCategoryListener() {
+							
+							public void onPostExecute(long result, Category category, String message) {
+								if (result != 0) {
+									Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+								} else {
+						    		mAdapter.notifyDataSetChanged();
+								}
+							}
+						});
+				}
+		});
+    }
 }

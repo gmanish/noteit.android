@@ -25,6 +25,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -43,7 +46,7 @@ import android.widget.Toast;
 
 public class ItemListActivity extends ExpandableListActivity implements NoteItApplication.OnFetchItemsListener {
 	
-	ExpandableListViewIndicatorOnRight		mListView;
+	ExpandableLVRightIndicator		mListView;
 	ItemsExpandableListAdapter 				mAdapter;
 	ProgressDialog							mProgressDialog = null;
 	QuickAction 							mQuickAction = null;
@@ -53,9 +56,11 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	boolean									mDisplayExtras = true;
 	boolean									mDisplayCategoryExtras = true;
 	Integer									mFontSize = 3;
+	boolean									mHideDoneItems = false;
 	CustomTitlebarWrapper					mToolbar;
 	Button									mShoppingListButton;
 	boolean									mIsItemListFetched = false;
+	SharedPreferences						mPrefs;
 	
 	static final int ADD_ITEM_REQUEST = 0;	
 	
@@ -409,6 +414,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 					mDisplayExtras = sharedPreferences.getBoolean("Display_Price_Quantity", true);
 					mDisplayCategoryExtras = sharedPreferences.getBoolean("Display_Category_Totals", true);
 			        mFontSize = Integer.valueOf(sharedPreferences.getString("Item_Font_Size", "3"));
+			        mHideDoneItems = sharedPreferences.getBoolean("Delete_Bought_Items", false);
 					mListView.invalidateViews();
 				}
 				
@@ -442,7 +448,9 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
         mToolbar.SetTitle(app.getShoppingList().get(app.getCurrentShoppingListIndex()).mName);
         doSetupToolbarButtons(app.getShoppingList().get(app.getCurrentShoppingListIndex()).mName);
                 
-        // Set up Quick Actions
+		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+		// Set up Quick Actions
         ActionItem boughtItem 	= new ActionItem(
 					        		QA_ID_BOUGHT, 
 					        		getResources().getString(R.string.itemlistqe_bought), 
@@ -486,7 +494,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			}
 		});    
 		
-        mListView = (ExpandableListViewIndicatorOnRight) findViewById(android.R.id.list);
+        mListView = (ExpandableLVRightIndicator) findViewById(android.R.id.list);
 		mAdapter = new ItemsExpandableListAdapter(this);
 		mListView.setAdapter(mAdapter);
 		mListView.setTextFilterEnabled(true);
@@ -509,7 +517,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		
 		if (app.getShoppingListCount() > 0 && !mIsItemListFetched) {
 			mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message));
- 	   		app.fetchItems(this);
+ 	   		app.fetchItems(!mPrefs.getBoolean("Delete_Bought_Items", true), this);
 		} else {
 			Log.i("ItemListActivity.onCreate", "Skipping fetchItems");
 			doDisplayItems(app.getItems());
@@ -517,6 +525,41 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     }
 
     @Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+    	MenuInflater inflater = getMenuInflater();
+    	inflater.inflate(R.menu.itemlist_menu, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.itemlist_add:
+			doAddItem();
+			break;
+		case R.id.itemlist_home:
+			Intent intent = new Intent(ItemListActivity.this, DashBoardActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			finish();
+			break;
+		case R.id.itemlist_expandall:
+			doExpandAll();
+			break;
+		case R.id.itemlist_collapseall:
+			doCollapseAll();
+			break;
+		case R.id.itemlist_email:
+			doEmail();
+			break;
+		case R.id.itemlist_settings:
+			startActivity(new Intent(this, MainPreferenceActivity.class));
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putInt(SELECTED_GROUP, mSelectedGroup.get());
@@ -545,22 +588,21 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			}
 			mProgressDialog = null;
 		}
-		SharedPreferences 	prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		SharedPreferences.Editor editor = prefs.edit(); 
+		SharedPreferences.Editor editor = mPrefs.edit(); 
 		editor.putLong("LastUsedShoppingListID", ((NoteItApplication)getApplication()).getCurrentShoppingListID());
 		editor.commit();
-		prefs.unregisterOnSharedPreferenceChangeListener(mPrefChangeListener);
+		mPrefs.unregisterOnSharedPreferenceChangeListener(mPrefChangeListener);
 		super.onPause();
 	}
 
 	@Override
 	protected void onResume() {
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this); 
-		prefs.registerOnSharedPreferenceChangeListener(mPrefChangeListener);
-		mDisplayExtras = prefs.getBoolean("Display_Price_Quantity", true);
-		mDisplayCategoryExtras = prefs.getBoolean("Display_Category_Totals", true);
-        mFontSize = Integer.valueOf(prefs.getString("Item_Font_Size", "3"));
+		mPrefs.registerOnSharedPreferenceChangeListener(mPrefChangeListener);
+		mDisplayExtras = mPrefs.getBoolean("Display_Price_Quantity", true);
+		mDisplayCategoryExtras = mPrefs.getBoolean("Display_Category_Totals", true);
+		mHideDoneItems = mPrefs.getBoolean("Delete_Bought_Items", false);
+        mFontSize = Integer.valueOf(mPrefs.getString("Item_Font_Size", "3"));
 		mListView.invalidateViews();
 		super.onResume();
 	}
@@ -978,7 +1020,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 						mShoppingListButton.setText(shoppingList.mName);
 					}
 					app.setCurrentShoppingListIndex(which);
-					app.fetchItems(ItemListActivity.this);
+					app.fetchItems(!mPrefs.getBoolean("Delete_Bought_Items", true), ItemListActivity.this);
 				}
 			})
 			.create();
@@ -1001,8 +1043,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     		total += itemPrice;
     		remaining += thisItem.mIsPurchased > 0 ? 0 : itemPrice;
     		
-    		NoteItApplication.Category category = ((NoteItApplication)getApplication()).getCategory(thisItem.mCategoryID);
-    		mAdapter.AddItem(thisItem, category);
+    		if (thisItem.mIsPurchased <= 0 || ((thisItem.mIsPurchased > 0) && !mHideDoneItems)) {
+	    		NoteItApplication.Category category = ((NoteItApplication)getApplication()).getCategory(thisItem.mCategoryID);
+	    		mAdapter.AddItem(thisItem, category);
+    		}
     	}
 
 		mListView.setAdapter(mAdapter);
@@ -1021,5 +1065,35 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 				statusBar.setVisibility(View.GONE);
 		}
 		doExpandPending();
+    }
+    
+    protected void doEmail() {
+    	NoteItApplication	app = (NoteItApplication) getApplication();
+    	final Intent 		emailIntent = new Intent(Intent.ACTION_SEND);
+    	emailIntent.setType("text/plain");
+    	emailIntent.putExtra(
+    			Intent.EXTRA_SUBJECT, 
+    			app.getShoppingList().get(app.getCurrentShoppingListIndex()).mName);
+    	emailIntent.putExtra(Intent.EXTRA_TEXT, formatItemsList());
+    	startActivity(Intent.createChooser(emailIntent, getResources().getString(R.string.itemlist_emailPrompt)));
+    }
+    
+    protected String formatItemsList() {
+    	NoteItApplication app = (NoteItApplication) getApplication();
+    	String str = getResources().getString(R.string.itemlist_emailIntro) + "\n\n";
+    	for (Item item : app.getItems()) {
+    		str += item.mName;
+    		if (item.mQuantity > 0) {
+    			str += ", " + item.mQuantity;
+    			str += " " + app.getUnitFromID(item.mUnitID);
+    		}
+    		if (item.mUnitPrice > 0)
+    			str += ", " + item.mUnitPrice;
+    		str += "\n";
+    	}
+
+    	str += "\n\n";
+    	str += getResources().getString(R.string.itemlist_emailsig);		
+    	return str;
     }
 }

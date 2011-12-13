@@ -6,7 +6,7 @@
     android:background="@drawable/application_background_normal"
     android:orientation="vertical" >
 
-    <com.geekjamboree.noteit.ExpandableListViewIndicatorOnRight
+    <com.geekjamboree.noteit.ExpandableLVRightIndicator
         android:id="@+android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
@@ -14,7 +14,7 @@
         android:cacheColorHint="#00000000"
         android:groupIndicator="@color/listitem_group_indicator"
         android:childDivider="@drawable/listview_item_separator"
-        android:divider="#000000"
+        android:divider="@drawable/listview_group_separator"
         android:dividerHeight="2px" />
 
 	<ImageView

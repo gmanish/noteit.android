@@ -348,8 +348,11 @@ public class AddEditItemDialog extends Dialog {
     	} else {
     		int bitFlags = 0; 
 
-    		if (!item.mName.equals(mOriginalItem.mName))
+    		if (!item.mName.equals(mOriginalItem.mName)) {
     			bitFlags = bitFlags | Item.ITEM_NAME;
+    			// Duh! Back end needs the category ID if we change name
+    			bitFlags = bitFlags | Item.ITEM_CATEGORYID;
+    		}
     		
     		if (item.mQuantity != mOriginalItem.mQuantity)
     			bitFlags = bitFlags | Item.ITEM_QUANTITY;

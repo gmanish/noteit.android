@@ -17,13 +17,15 @@
 	    	android:title="Remember Me"
 	    	android:key="Remember_Me"
 	    	android:summaryOff="Note It! will not remember your login information. You will have to sign in everytime."
-	    	android:summaryOn="Note It! will remember your login infotmation and sign you in automatically." />
+	    	android:summaryOn="Note It! will remember your login infotmation and sign you in automatically."
+	    	android:defaultValue="true" />
 
 	    <CheckBoxPreference
 	    	android:title="Start with Dashboard"
 	    	android:key="Start_Dashboard"
 	    	android:summaryOff="Note It! will launch with your last used Shopping List open."
-	    	android:summaryOn="Note It! will launch with the Dashboard open." />
+	    	android:summaryOn="Note It! will launch with the Dashboard open."
+	    	android:defaultValue="true" />
 
 	</PreferenceCategory>
 	
@@ -44,33 +46,16 @@
 	</PreferenceCategory>
 
 	<PreferenceCategory
-		android:title="Suggestions"
-		android:key="Items_AutoComplete" >
-	    
-	    <CheckBoxPreference
-	    	android:title="Show suggestions"
-	    	android:key="Show_Suggestions"
-	    	android:summaryOff="Note It will not display suggestions as you type item names"
-	    	android:summaryOn="Note It will display suggestions as you add items to your list." />
-	    		    
-	    <CheckBoxPreference
-	    	android:title="Share Location"
-	    	android:key="Share_Location"
-	    	android:summaryOff="Do not share location with Note It!"
-	    	android:summaryOn="Allow Note It! to use location for improved search and other services." />
-
-	</PreferenceCategory>
-
-	<PreferenceCategory
 		android:title="Shopping Lists"
 		android:key="Shopping_Lists" >
 	    
 	    <CheckBoxPreference
-	    	android:title="Delete all items on list"
-	    	android:key="Allow_NonEmpty_List_Delte"
-	    	android:summaryOff="A Shopping List with items in it, cannot be deleted."
-	    	android:summaryOn="Deleting a Shopping List deletes all items in the list." />
-	    		    
+	    	android:title="Display Pending Items Count"
+	    	android:key="Display_Pending_Item_Count"
+	    	android:summaryOff="Do not display the number of pending Items in every Shopping List."
+	    	android:summaryOn="Display number of pending Items in each Shopping List. Turn off for faster loading."
+	    	android:defaultValue="true" />
+	    	
 	</PreferenceCategory>
 		
 	<PreferenceCategory
@@ -81,25 +66,49 @@
 	    	android:title="Show Category Extras"
 	    	android:key="Display_Category_Totals"
 	    	android:summaryOff="Extra information like number of remaining and total Items will not be displayed with each Category."
-	    	android:summaryOn="Display extra information like number of remaining and total Items with each Category." />
+	    	android:summaryOn="Display extra information like number of remaining and total Items with each Category."
+	    	android:defaultValue="true" />
 
 	    <CheckBoxPreference
 	    	android:title="Show Item Extras"
 	    	android:key="Display_Price_Quantity"
 	    	android:summaryOff="Extra information like Price, Quantity and Total will not be displayed with items."
-	    	android:summaryOn="Display extra information like Price, Quantity and Total with each Item." />
+	    	android:summaryOn="Display extra information like Price, Quantity and Total with each Item."
+	    	android:defaultValue="true" />
 	    		    
 	    <ListPreference
 	    	android:title="Item Font Size"
 	    	android:key="Item_Font_Size"
 	    	android:summary="The size of the font used to display items in the list" 
-	    	android:entries="@array/itemFontSize"/>
+	    	android:entries="@array/itemFontSize"
+	    	android:defaultValue="3" />
 	    	
 	    <CheckBoxPreference
 	    	android:title="Hide Completed Items"
 	    	android:key="Delete_Bought_Items"
 	    	android:summaryOff="Don't hide items when they are marked done."
-	    	android:summaryOn="Hide items when they are marked done." />
+	    	android:summaryOn="Hide items when they are marked done."
+	    	android:defaultValue="false" />
+
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="Suggestions"
+		android:key="Items_AutoComplete" >
+	    
+	    <CheckBoxPreference
+	    	android:title="Show suggestions"
+	    	android:key="Show_Suggestions"
+	    	android:summaryOff="Note It will not display suggestions as you type item names"
+	    	android:summaryOn="Note It will display suggestions as you add items to your list."
+	    	android:defaultValue="true" />
+	    		    
+	    <CheckBoxPreference
+	    	android:title="Share Location"
+	    	android:key="Share_Location"
+	    	android:summaryOff="Do not share location with Note It!"
+	    	android:summaryOn="Allow Note It! to use location for improved search and other services."
+	    	android:defaultValue="true" />
 
 	</PreferenceCategory>
 		

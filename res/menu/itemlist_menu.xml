@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+   <item android:id="@+id/itemlist_home"
+       android:icon="@drawable/home"
+       android:title="@string/app_home" />
+
+   <item android:id="@+id/itemlist_add"
+		android:icon="@drawable/add"    		
+        android:title="@string/add_shoplist" />
+
+   <item android:id="@+id/itemlist_email"
+		android:icon="@drawable/email" 		
+        android:title="@string/itemlist_email" />
+
+   <item android:id="@+id/itemlist_alldone"
+		android:icon="@drawable/tick" 		
+        android:title="@string/itemlist_alldone" />
+
+   <item android:id="@+id/itemlist_settings"
+		android:icon="@drawable/settings"    		
+        android:title="@string/noteit_prefs" />
+        
+   <item android:id="@+id/itemlist_expandall"
+		android:icon="@drawable/expand"    		
+        android:title="@string/itemlist_expandall" />
+
+   <item android:id="@+id/itemlist_collapseall"
+		android:icon="@drawable/collapse" 		
+        android:title="@string/itemlist_collapseall" />
+
+</menu>

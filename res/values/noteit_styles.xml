@@ -11,6 +11,10 @@
 	    <item name="android:background">@color/app_button_background</item>
 	</style>
 	
+    <style name="App_TextButtonStyle">
+        <item name="android:background">@drawable/filled_roundededges_nostroke</item>
+    </style>
+	
 	<style name="App_TitleBackground">
 		<item name="android:background">@drawable/application_titlebar</item>
     </style>

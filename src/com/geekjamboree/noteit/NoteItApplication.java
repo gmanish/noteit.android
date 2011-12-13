@@ -273,13 +273,14 @@ public class NoteItApplication extends Application {
 		mUserID = userID;
 	}
 	
-	public void fetchShoppingLists(OnFetchShoppingListsListener inPostExecute){
+	public void fetchShoppingLists(boolean isFetchCount, OnFetchShoppingListsListener inPostExecute){
 		try {
 			mShoppingLists.clear();
 	    	
 			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 	        nameValuePairs.add(new BasicNameValuePair("command", "do_get_shop_list"));
 	        nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(getUserID())));
+	        nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(isFetchCount ? 1 : 0)));
 
 	        class FetchShoppingListsTask  implements AsyncInvokeURLTask.OnPostExecuteListener {
 	        	
@@ -728,14 +729,14 @@ public class NoteItApplication extends Application {
 		return mCategories;
 	}
 	
-	public void fetchItems(OnFetchItemsListener inPostExecute){
+	public void fetchItems(boolean showPurchased, OnFetchItemsListener inPostExecute){
 		try {
 			
 			mItems.clear();
 			
 			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 	        nameValuePairs.add(new BasicNameValuePair("command", "do_list_shop_items"));
-	        nameValuePairs.add(new BasicNameValuePair("arg1", "Y")); // Show Purchased Items
+	        nameValuePairs.add(new BasicNameValuePair("arg1", showPurchased ? "1" : "0")); // Show Purchased Items
 	        nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(mCurrentShoppingListID))); // Shopping List ID
 	        nameValuePairs.add(new BasicNameValuePair("arg3", "0")); // Start @ index
 	        nameValuePairs.add(new BasicNameValuePair("arg4", String.valueOf(getUserID())));
