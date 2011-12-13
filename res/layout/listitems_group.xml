@@ -1,42 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/lisitems_group_root"
+    android:id="@+id/listitems_group_root"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="horizontal"
-    android:padding="5dp"
-    android:background="@drawable/listview_group_background" >
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="0dip" 
+    android:background="@android:color/transparent" >
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:src="@drawable/category" />
+	<ImageView
+	    android:layout_width="fill_parent"
+	    android:layout_height="2dip"
+	    android:background="@drawable/listview_group_top" />
     
-    <TextView
-        android:id="@+id/itemslist_categoryName"
-        android:layout_width="0dip"
+    <LinearLayout
+        android:id="@+id/lisitems_group_root"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
         android:layout_weight="1"
-        android:layout_height="fill_parent"
-        android:paddingLeft="5dip"
-        android:singleLine="true"
-        android:ellipsize="end"
-        android:gravity="left|center_vertical"
-        style="@style/ItemList_TextAppearance.GroupsItem.Small"
-        android:text="Item Text"
-        android:background="@android:color/transparent" />
-    
-    <TextView
-        android:id="@+id/itemslist_categoryTotals"
-        android:layout_width="80dip"
-        android:layout_height="fill_parent"
-        android:paddingLeft="5dip"
-        android:singleLine="true"
-        android:ellipsize="end"
-        android:gravity="center"
-        android:layout_gravity="right|center_vertical"
-        style="@style/ItemList_TextAppearance.GroupsItem.Small"
-        android:text="(0/10)"
-        android:background="@android:color/transparent" />
-    
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingTop="2dip"
+        android:paddingBottom="2dip"
+        android:paddingRight="5dip" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:src="@drawable/category" />
+
+        <TextView
+            android:id="@+id/itemslist_categoryName"
+            style="@style/ItemList_TextAppearance.GroupsItem.Small"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="5dip"
+            android:singleLine="true"
+            android:text="Item Text" />
+
+        <TextView
+            android:id="@+id/itemslist_categoryTotals"
+            style="@style/ItemList_TextAppearance.GroupsItem.Small"
+            android:layout_width="80dip"
+            android:layout_height="fill_parent"
+            android:layout_gravity="right|center_vertical"
+            android:gravity="right|center_vertical"
+            android:background="@android:color/transparent"
+            android:ellipsize="end"
+            android:paddingLeft="5dip"
+            android:singleLine="true"
+            android:text="(0/10)" />
+    </LinearLayout>
+
+	<ImageView
+	    android:layout_width="fill_parent"
+	    android:layout_height="2dip"
+	    android:background="@drawable/listview_group_bottom" />
+        
 </LinearLayout>
