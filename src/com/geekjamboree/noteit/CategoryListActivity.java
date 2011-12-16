@@ -3,6 +3,8 @@
  */
 package com.geekjamboree.noteit;
 
+import java.util.ArrayList;
+
 import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
 import com.geekjamboree.noteit.R;
 import com.geekjamboree.noteit.NoteItApplication;
@@ -14,6 +16,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -25,10 +28,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -39,11 +40,30 @@ import android.widget.Toast;
 public class CategoryListActivity 
 	extends ListActivity {
 	
-	ArrayAdapter<Category> 	mAdapter;
-	ListView				mListView;
+	CategoryListAdapter 	mAdapter;
+	DragDropListView		mListView;
 	CustomTitlebarWrapper 	mToolbar;
 	QuickAction				mQuickAction;
 	int						mSelectedCategory = 0;
+	
+	protected class CategoryListAdapter extends ArrayAdapterWithFontSize<Category> implements DragDropListener {
+
+		public CategoryListAdapter(Context context, int resource,
+				int textViewResourceId, ArrayList<Category> objects) {
+			super(context, resource, textViewResourceId, objects);
+		}
+
+		public void onDrag(int dragSource, int dropTarget) {
+			// I don't want to do anything here
+		}
+
+		public void onDrop(int dragSource, int dropTarget) {
+			Log.i("CategoryListAdapter.onDrop", "Dropping: " + dragSource + " @ " + dropTarget);
+			Category temp = getItem(dragSource);
+			remove(temp);
+			insert(temp, dropTarget);
+		}
+	}
 	
 	static final int QA_ID_EDIT 	= 0;
 	static final int QA_ID_DELETE	= 1;
@@ -74,13 +94,14 @@ public class CategoryListActivity
     	mToolbar.SetTitle(getResources().getText(R.string.categoriesactivity_title));
         doSetupToolbarButtons();
         
-        mListView = (ListView) findViewById(android.R.id.list);
-        mAdapter = new ArrayAdapterWithFontSize<Category>(
+        mListView = (DragDropListView) findViewById(android.R.id.list);
+        mAdapter = new CategoryListAdapter(
     			getBaseContext(), 
     			R.layout.categorieslist_item, 
     			R.id.categorylists_item_name, 
     			((NoteItApplication) getApplication()).getCategories());
     	mListView.setAdapter(mAdapter);
+    	mListView.setDragDropListener(mAdapter);
     	mListView.setTextFilterEnabled(true);
     	mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
     		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
