@@ -23,6 +23,9 @@ public class DragDropListView extends ListView {
 //	protected int 				mXDragOffset = 0;
 	protected int				mYDragOffset = 0;
 	protected DragDropListener	mDragDropListener = null;
+	protected int				mDragDropIndicatorLeft = 0;
+	protected int				mDragDropIndicatorRight = 0;
+	
 	
 	public DragDropListView(
 			Context context) {
@@ -46,12 +49,17 @@ public class DragDropListView extends ListView {
 		mDragDropListener = inListener;
 	}
 	
+	public void setDragDropIndicatorBounds(int left, int right) {
+		mDragDropIndicatorLeft = left;
+		mDragDropIndicatorRight = right;
+	}
+	
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
 		
 		int x = (int) ev.getX();
 		int y = (int) ev.getY();
-		if (ev.getAction() == MotionEvent.ACTION_DOWN && x >=0 && x < 100) {
+		if (ev.getAction() == MotionEvent.ACTION_DOWN && x >= mDragDropIndicatorLeft && x <=	 mDragDropIndicatorRight) {
 			
 			Log.i("CategoryListView.onTouchEvent"	, "X: " + x + " Y: " + y);
 			mIsDown = true;

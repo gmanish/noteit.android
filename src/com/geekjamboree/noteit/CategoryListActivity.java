@@ -16,9 +16,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,7 +41,7 @@ public class CategoryListActivity
 	extends ListActivity {
 	
 	CategoryListAdapter 	mAdapter;
-	DragDropListView		mListView;
+	CategoryListView		mListView;
 	CustomTitlebarWrapper 	mToolbar;
 	QuickAction				mQuickAction;
 	int						mSelectedCategory = 0;
@@ -94,7 +94,7 @@ public class CategoryListActivity
     	mToolbar.SetTitle(getResources().getText(R.string.categoriesactivity_title));
         doSetupToolbarButtons();
         
-        mListView = (DragDropListView) findViewById(android.R.id.list);
+        mListView = (CategoryListView) findViewById(android.R.id.list);
         mAdapter = new CategoryListAdapter(
     			getBaseContext(), 
     			R.layout.categorieslist_item, 
