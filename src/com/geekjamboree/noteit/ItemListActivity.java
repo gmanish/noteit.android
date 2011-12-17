@@ -517,7 +517,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		
 		if (app.getShoppingListCount() > 0 && !mIsItemListFetched) {
 			mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message));
- 	   		app.fetchItems(!mPrefs.getBoolean("Delete_Bought_Items", true), this);
+ 	   		app.fetchItems(
+ 	   				!mPrefs.getBoolean("Delete_Bought_Items", true),
+ 	   				mPrefs.getBoolean("Shuffle_Done_Items", true),
+ 	   				this);
 		} else {
 			Log.i("ItemListActivity.onCreate", "Skipping fetchItems");
 			doDisplayItems(app.getItems());
@@ -925,9 +928,9 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	// Send in the item as is without any changes
     protected void doCommitToggleItemDone(final Item item, final boolean resetAskLater, final float newPrice) {
     	
-    	NoteItApplication 	app = (NoteItApplication) getApplication();
-    	final Item 			newItem = app.new Item(item);
-    	int					editBitmask = Item.ITEM_ISPURCHASED;
+    	final NoteItApplication 	app = (NoteItApplication) getApplication();
+    	final Item 					newItem = app.new Item(item);
+    	int							editBitmask = Item.ITEM_ISPURCHASED;
     	
     	newItem.mIsPurchased = newItem.mIsPurchased > 0 ? 0 : 1;
 
@@ -956,6 +959,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 							item.mIsAskLater = newItem.mIsAskLater;
 							item.mUnitPrice = newItem.mUnitPrice; 
 							ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
+							if (item.mIsPurchased > 0 && mPrefs.getBoolean("Shuffle_Done_Items", true)) {
+								adapter.DeleteItem(item);
+								adapter.AddItem(item, app.getCategory(item.mCategoryID));
+							}
 							adapter.notifyDataSetChanged();
 						}
 						else
@@ -1020,7 +1027,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 						mShoppingListButton.setText(shoppingList.mName);
 					}
 					app.setCurrentShoppingListIndex(which);
-					app.fetchItems(!mPrefs.getBoolean("Delete_Bought_Items", true), ItemListActivity.this);
+					app.fetchItems(
+							!mPrefs.getBoolean("Delete_Bought_Items", true), 
+							mPrefs.getBoolean("Shuffle_Done_Items", true),
+							ItemListActivity.this);
 				}
 			})
 			.create();

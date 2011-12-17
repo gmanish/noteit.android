@@ -793,7 +793,10 @@ public class NoteItApplication extends Application {
 		return mCategories;
 	}
 	
-	public void fetchItems(boolean showPurchased, OnFetchItemsListener inPostExecute){
+	public void fetchItems(
+			boolean showPurchased, 
+			boolean movePurchasedToBottom, 
+			OnFetchItemsListener inPostExecute){
 		try {
 			
 			mItems.clear();
@@ -804,6 +807,7 @@ public class NoteItApplication extends Application {
 	        nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(mCurrentShoppingListID))); // Shopping List ID
 	        nameValuePairs.add(new BasicNameValuePair("arg3", "0")); // Start @ index
 	        nameValuePairs.add(new BasicNameValuePair("arg4", String.valueOf(getUserID())));
+	        nameValuePairs.add(new BasicNameValuePair("arg5", movePurchasedToBottom ? "1" : "0"));
 	        
 	        class FetchItemsTask implements AsyncInvokeURLTask.OnPostExecuteListener {
 	        	

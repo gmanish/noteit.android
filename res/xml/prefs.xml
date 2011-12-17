@@ -90,6 +90,13 @@
 	    	android:summaryOn="Hide items when they are marked done."
 	    	android:defaultValue="false" />
 
+	    <CheckBoxPreference
+	    	android:title="Move Done Items to Bottom"
+	    	android:key="Shuffle_Done_Items"
+	    	android:summaryOff="Done items will not be moved to the end of the list."
+	    	android:summaryOn="Done items will be moved to the end of the list."
+	    	android:defaultValue="true" />
+
 	</PreferenceCategory>
 
 	<PreferenceCategory
