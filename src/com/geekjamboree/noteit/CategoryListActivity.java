@@ -18,7 +18,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -57,13 +56,49 @@ public class CategoryListActivity
 			// I don't want to do anything here
 		}
 
-		public void onDrop(int dragSource, int dropTarget) {
+		public void onDrop(final int dragSource, final int dropTarget) {
 			Log.i("CategoryListAdapter.onDrop", "Dropping: " + dragSource + " @ " + dropTarget);
-			Category temp = getItem(dragSource);
-			remove(temp);
-			insert(temp, dropTarget);
+			final Category sourceCategory = getItem(dragSource);
+			final Category targetCategory = getItem(dropTarget);
+			
+			NoteItApplication app = (NoteItApplication) getApplication();
+			app.reorderCategory(sourceCategory, targetCategory.mRank, new OnMethodExecuteListerner() {
+				
+				public void onPostExecute(long resultCode, String message) {
+					// [TODO] The backend would have adjusted the ranking of all
+					// items between (dragSource, dropTarget). In order to
+					// obtain the adjusted ranks, we can refresh our category
+					// list. However, that seems far from ideal. Even if the back
+					// end were to implement this functionality, we'd need to
+					// make two queries still. We're reproducing the logic 
+					// used in the backend below.
+					doReAdjustRanks(dragSource, dropTarget);
+					// Now adjust what's visible to the user
+					remove(sourceCategory);
+					insert(sourceCategory, dropTarget);
+				}
+			});
+		}
+		
+		void doReAdjustRanks(int dragSource , int dropTarget) {
+			Category sourceObj = getItem(dragSource);
+			Category targetObj = getItem(dropTarget); 
+			if (sourceObj.mRank < targetObj.mRank) {
+				for (int i = dragSource; i < dropTarget; i++) {
+					Category category = getItem(i);
+					category.mRank -= 1;
+				}
+				sourceObj.mRank = targetObj.mRank;	
+			} else if (sourceObj.mRank > targetObj.mRank) {
+				for (int i = dropTarget; i < dragSource; i++) {
+					Category category = getItem(i);
+					category.mRank += 1;
+				}
+				sourceObj.mRank = targetObj.mRank;	
+			}
 		}
 	}
+	
 	
 	static final int QA_ID_EDIT 	= 0;
 	static final int QA_ID_DELETE	= 1;
@@ -328,7 +363,7 @@ public class CategoryListActivity
 				public void onDialogOK(String categoryName) {
 					
 					NoteItApplication 	app = (NoteItApplication) getApplication();
-					Category 			category = app.new Category(0, categoryName, app.getUserID());
+					Category 			category = app.new Category(0, categoryName, app.getUserID(), 0);
 					
 					((NoteItApplication) getApplication()).addCategory(
 						category,
@@ -345,4 +380,6 @@ public class CategoryListActivity
 				}
 		});
     }
+    
+    
 }

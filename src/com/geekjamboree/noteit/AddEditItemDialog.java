@@ -408,7 +408,7 @@ public class AddEditItemDialog extends Dialog {
         
         // Set the selection to the "Uncategorized" category  
         // which has a hard coded id = 1
-        int index = categories.indexOf(mApplication.new Category(1, "", mApplication.getUserID()));
+        int index = categories.indexOf(mApplication.new Category(1));
         if (index >= 0)
         	mSpinCategories.setSelection(index);        
     }
@@ -434,7 +434,7 @@ public class AddEditItemDialog extends Dialog {
     	
     	ArrayAdapter<Category> adapter = (ArrayAdapter<Category>)mSpinCategories.getAdapter();
     	if (adapter != null){
-    		int position = adapter.getPosition(mApplication.new Category(item.mCategoryID, "", 0));
+    		int position = adapter.getPosition(mApplication.new Category(item.mCategoryID));
     		if (position >=0 && position < adapter.getCount())
     			mSpinCategories.setSelection(position);
     	}

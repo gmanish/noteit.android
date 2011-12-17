@@ -222,7 +222,9 @@ public class DragDropListView extends ListView {
 			wm.removeView(mDragView);
 			mDragView.setImageDrawable(null);
 			mDragView = null;
-			if (mDragDropListener != null && position != INVALID_POSITION) {
+			if (mDragDropListener != null && 
+					position != INVALID_POSITION && 
+					mStartPosition != position) {
 				mDragDropListener.onDrop(mStartPosition, position);
 				invalidateViews();
 			}

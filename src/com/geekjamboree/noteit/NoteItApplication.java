@@ -83,17 +83,24 @@ public class NoteItApplication extends Application {
 		public String 	mName = "";
 		public long 	mID = 0;
 		public long 	mUserID = 0;
+		public long 	mRank = 0;
 		
-		public Category(long categoryID, String categoryName, long userID){
+		public Category(long categoryID) {
+			mID = categoryID;
+		}
+		
+		public Category(long categoryID, String categoryName, long userID, long rank){
 			mName = categoryName;
 			mID = categoryID;
 			mUserID = userID;
+			mRank = rank;
 		}
 
 		public Category(Category category) {
 			this.mID = category.mID;
 			this.mName = category.mName;
 			this.mUserID = category.mUserID;
+			this.mRank = category.mRank;
 		}
 		
 		public String toString(){
@@ -549,7 +556,8 @@ public class NoteItApplication extends Application {
 				        		Category thisCategory = new Category(
 				        				Long.parseLong(thisObj.getString("listID")),
 										thisObj.getString("listName"),
-										thisObj.getLong("listID"));
+										thisObj.getLong("listID"),
+										thisObj.getLong("categoryRank"));
 				        		
 				        		mCategories.add(thisCategory);
 				        	}
@@ -605,7 +613,8 @@ public class NoteItApplication extends Application {
 								Category category = new Category(
 										json.getLong("arg1"), 
 										json.getString("arg2"), 
-										getUserID());
+										getUserID(),
+										json.getLong("arg3"));
 								mCategories.add(category);
 								mListener.onPostExecute(retVal, category, "");
 							} else 
@@ -668,6 +677,40 @@ public class NoteItApplication extends Application {
 		}
 	}
 	
+	public void reorderCategory(Category category, long newRank, final OnMethodExecuteListerner listener) {
+		
+		class ReorderCategoryListener implements AsyncInvokeURLTask.OnPostExecuteListener {
+			
+			public void onPostExecute(JSONObject json) {
+				
+				long retVal = -1;
+				try {
+					 retVal = json.getLong("JSONRetVal");
+					 listener.onPostExecute(retVal, json.getString("JSONRetMessage"));
+				} catch (JSONException e) {
+					Log.e("NoteItApplication.reorderCategory", e.getMessage());
+					listener.onPostExecute(retVal, e.getMessage());
+				}
+			}
+		}
+		
+		try {
+			ArrayList<NameValuePair> 	nameValuePairs = new ArrayList<NameValuePair>(5);
+			nameValuePairs.add(new BasicNameValuePair("command", "do_reorder_category"));
+	        nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(category.mID)));
+	        nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(category.mRank)));
+	        nameValuePairs.add(new BasicNameValuePair("arg3", String.valueOf(newRank)));
+	        nameValuePairs.add(new BasicNameValuePair("arg4", String.valueOf(getUserID())));
+	        
+	        ReorderCategoryListener reorderListener = new ReorderCategoryListener();
+	        AsyncInvokeURLTask task;
+			task = new AsyncInvokeURLTask(nameValuePairs, reorderListener );
+	        task.execute();
+		} catch (Exception e) {
+			Log.e("NoteItApplication.reorderCategory", e.getMessage());
+		}
+	}
+
 	public void deleteCategory(final int index, OnMethodExecuteListerner listener) {
 
 		class DeleteCategoryListener implements AsyncInvokeURLTask.OnPostExecuteListener {
@@ -718,7 +761,7 @@ public class NoteItApplication extends Application {
 	}
 	
 	public Category getCategory(long categoryID){
-		Category category = new Category(categoryID, "", 0); // dummy created to use indexOf
+		Category category = new Category(categoryID); // dummy created to use indexOf
 		int index = mCategories.indexOf(category);
 		if (index < mCategories.size() && index >= 0)
 			return mCategories.get(index);
