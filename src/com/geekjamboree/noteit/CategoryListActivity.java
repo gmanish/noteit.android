@@ -58,45 +58,19 @@ public class CategoryListActivity
 
 		public void onDrop(final int dragSource, final int dropTarget) {
 			Log.i("CategoryListAdapter.onDrop", "Dropping: " + dragSource + " @ " + dropTarget);
-			final Category sourceCategory = getItem(dragSource);
-			final Category targetCategory = getItem(dropTarget);
 			
 			NoteItApplication app = (NoteItApplication) getApplication();
-			app.reorderCategory(sourceCategory, targetCategory.mRank, new OnMethodExecuteListerner() {
+			app.reorderCategory(dragSource, dropTarget, new OnMethodExecuteListerner() {
 				
 				public void onPostExecute(long resultCode, String message) {
-					// [TODO] The backend would have adjusted the ranking of all
-					// items between (dragSource, dropTarget). In order to
-					// obtain the adjusted ranks, we can refresh our category
-					// list. However, that seems far from ideal. Even if the back
-					// end were to implement this functionality, we'd need to
-					// make two queries still. We're reproducing the logic 
-					// used in the backend below.
-					doReAdjustRanks(dragSource, dropTarget);
-					// Now adjust what's visible to the user
-					remove(sourceCategory);
-					insert(sourceCategory, dropTarget);
+					if (resultCode == 0) {
+						notifyDataSetChanged();
+					} else
+						Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
 				}
 			});
 		}
 		
-		void doReAdjustRanks(int dragSource , int dropTarget) {
-			Category sourceObj = getItem(dragSource);
-			Category targetObj = getItem(dropTarget); 
-			if (sourceObj.mRank < targetObj.mRank) {
-				for (int i = dragSource; i < dropTarget; i++) {
-					Category category = getItem(i);
-					category.mRank -= 1;
-				}
-				sourceObj.mRank = targetObj.mRank;	
-			} else if (sourceObj.mRank > targetObj.mRank) {
-				for (int i = dropTarget; i < dragSource; i++) {
-					Category category = getItem(i);
-					category.mRank += 1;
-				}
-				sourceObj.mRank = targetObj.mRank;	
-			}
-		}
 	}
 	
 	

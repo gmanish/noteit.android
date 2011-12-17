@@ -104,7 +104,7 @@ public class NoteItApplication extends Application {
 		}
 		
 		public String toString(){
-			return mName;
+			return mName + "(" + String.valueOf(mRank) + ")";
 		}
 
 		public boolean equals(Object obj){
@@ -610,11 +610,16 @@ public class NoteItApplication extends Application {
 						try {
 							long retVal = json.getLong("JSONRetVal");
 							if (retVal == 0) {
+								long newRank = 0;
+								for (Category category : mCategories) {
+									if (category.mRank > newRank)
+										newRank = category.mRank;
+								}
 								Category category = new Category(
 										json.getLong("arg1"), 
 										json.getString("arg2"), 
 										getUserID(),
-										json.getLong("arg3"));
+										newRank + 1);
 								mCategories.add(category);
 								mListener.onPostExecute(retVal, category, "");
 							} else 
@@ -677,8 +682,11 @@ public class NoteItApplication extends Application {
 		}
 	}
 	
-	public void reorderCategory(Category category, long newRank, final OnMethodExecuteListerner listener) {
+	public void reorderCategory(final int source, final int target, final OnMethodExecuteListerner listener) {
 		
+		final Category sourceCategory = mCategories.get(source);
+		final Category targetCategory = mCategories.get(target);
+
 		class ReorderCategoryListener implements AsyncInvokeURLTask.OnPostExecuteListener {
 			
 			public void onPostExecute(JSONObject json) {
@@ -686,6 +694,19 @@ public class NoteItApplication extends Application {
 				long retVal = -1;
 				try {
 					 retVal = json.getLong("JSONRetVal");
+					 if (retVal == 0) {
+						// [TODO] The backend would have adjusted the ranking of all
+						// items between (dragSource, dropTarget). In order to
+						// obtain the adjusted ranks, we can refresh our category
+						// list. However, that seems far from ideal. Even if the back
+						// end were to implement this functionality, we'd need to
+						// make two queries still. We're reproducing the logic 
+						// used in the backend below.
+						doReAdjustRanks(source, target);
+						// Now adjust what's visible to the user
+						mCategories.remove(sourceCategory);
+						mCategories.add(target, sourceCategory);
+					 }
 					 listener.onPostExecute(retVal, json.getString("JSONRetMessage"));
 				} catch (JSONException e) {
 					Log.e("NoteItApplication.reorderCategory", e.getMessage());
@@ -697,9 +718,9 @@ public class NoteItApplication extends Application {
 		try {
 			ArrayList<NameValuePair> 	nameValuePairs = new ArrayList<NameValuePair>(5);
 			nameValuePairs.add(new BasicNameValuePair("command", "do_reorder_category"));
-	        nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(category.mID)));
-	        nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(category.mRank)));
-	        nameValuePairs.add(new BasicNameValuePair("arg3", String.valueOf(newRank)));
+	        nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(sourceCategory.mID)));
+	        nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(sourceCategory.mRank)));
+	        nameValuePairs.add(new BasicNameValuePair("arg3", String.valueOf(targetCategory.mRank)));
 	        nameValuePairs.add(new BasicNameValuePair("arg4", String.valueOf(getUserID())));
 	        
 	        ReorderCategoryListener reorderListener = new ReorderCategoryListener();
@@ -711,6 +732,7 @@ public class NoteItApplication extends Application {
 		}
 	}
 
+	
 	public void deleteCategory(final int index, OnMethodExecuteListerner listener) {
 
 		class DeleteCategoryListener implements AsyncInvokeURLTask.OnPostExecuteListener {
@@ -1187,4 +1209,23 @@ public class NoteItApplication extends Application {
 			e.printStackTrace();
 		}		
 	}
+
+	void doReAdjustRanks(int dragSource , int dropTarget) {
+		Category sourceObj = mCategories.get(dragSource);
+		Category targetObj = mCategories.get(dropTarget); 
+		if (sourceObj.mRank < targetObj.mRank) {
+			sourceObj.mRank = targetObj.mRank;	
+			for (int i = dragSource + 1; i <= dropTarget; i++) {
+				Category category = mCategories.get(i);
+				category.mRank -= 1;
+			}
+		} else if (sourceObj.mRank > targetObj.mRank) {
+			sourceObj.mRank = targetObj.mRank;	
+			for (int i = dropTarget; i < dragSource; i++) {
+				Category category = mCategories.get(i);
+				category.mRank += 1;
+			}
+		}
+	}
+	
 }
