@@ -1,7 +1,6 @@
 package com.geekjamboree.noteit;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
@@ -843,7 +842,7 @@ public class NoteItApplication extends Application {
 	        	        		mItems.add(thisItem);
 	        	        	}
 	        	        	
-	        	        	Collections.sort(mItems);
+	        	        	//Collections.sort(mItems);
 	        	        	mListener.onPostExecute(retval, mItems, message);
 	                	} else 
 	                		mListener.onPostExecute(retval, null, json.getString("JSONRetMessage"));
