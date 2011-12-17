@@ -50,11 +50,16 @@
 	<string name="itemlist_alldone">All Done</string>
 	<string name="itemlist_emailIntro">The sender shared a Shopping List with you:</string>
 	<string name="itemlist_emailsig">Sent from Note It! | www.noteitweb.com</string>
-	
+	<string name="itemlist_movetolist">Move to Shopping List</string>
+	<string name="itemlist_copytolist">Copy to Shopping List</string>
+	<string name="itemlist_copytolistsuccess">Item Copied</string>
+	    	    	
 	<string name="itemlistqe_edit">Edit</string>
 	<string name="itemlistqe_delete">Delete</string>
 	<string name="itemlistqe_bought">Done</string>
-	    	
+	<string name="itemlistqe_copy">Copy</string>
+	<string name="itemlistqe_move">Move</string>
+	    	    	
 	<string name="addedit_Title">Add Item</string> 
 	<string name="addedit_EditTitle">Edit Item</string>   
 	<string name="addedit_Name">Name:</string>

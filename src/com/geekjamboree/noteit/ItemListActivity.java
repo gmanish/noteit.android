@@ -7,7 +7,6 @@ import com.geekjamboree.noteit.ActionItem;
 import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
 import com.geekjamboree.noteit.NoteItApplication.ShoppingList;
 import com.geekjamboree.noteit.QuickAction;
-//import net.londatiga.android.R;
 
 import com.geekjamboree.noteit.NoteItApplication.Category;
 import com.geekjamboree.noteit.NoteItApplication.Item;
@@ -67,6 +66,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	static final int QA_ID_EDIT 	= 0;
 	static final int QA_ID_DELETE	= 1;
 	static final int QA_ID_BOUGHT	= 2;
+	static final int QA_ID_COPY		= 3;
+	static final int QA_ID_MOVE 	= 4;
 	
 	static final int ITEM_FONT_LARGE 	= 0;
 	static final int ITEM_FONT_MEDIUM	= 1;
@@ -454,7 +455,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
         ActionItem boughtItem 	= new ActionItem(
 					        		QA_ID_BOUGHT, 
 					        		getResources().getString(R.string.itemlistqe_bought), 
-					        		getResources().getDrawable(R.drawable.ok));
+					        		getResources().getDrawable(R.drawable.tick));
         ActionItem editItem 	= new ActionItem(
 									QA_ID_EDIT,
 									getResources().getString(R.string.itemlistqe_edit),
@@ -463,11 +464,22 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 									QA_ID_DELETE,
 									getResources().getString(R.string.itemlistqe_delete),
 									getResources().getDrawable(R.drawable.delete));
+        ActionItem copyItem 	= new ActionItem(
+									QA_ID_COPY,
+									getResources().getString(R.string.itemlistqe_copy),
+									getResources().getDrawable(R.drawable.copy));
+        ActionItem moveItem 	= new ActionItem(
+									QA_ID_MOVE,
+									getResources().getString(R.string.itemlistqe_move),
+									getResources().getDrawable(R.drawable.move));
+        
 
 		mQuickAction = new QuickAction(this);
 		mQuickAction.addActionItem(boughtItem);
 		mQuickAction.addActionItem(editItem);
 		mQuickAction.addActionItem(deleteItem);
+		mQuickAction.addActionItem(copyItem);
+		mQuickAction.addActionItem(moveItem);
 		
 		//setup the action item click listener
 		mQuickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
@@ -483,6 +495,12 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 						break;
 					case QA_ID_DELETE:
 						doDeleteItem();
+						break;
+					case QA_ID_COPY:
+						doCopyItem();
+						break;
+					case QA_ID_MOVE:
+						doMoveItem();
 						break;
 				}
 			}
@@ -779,6 +797,109 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	}
     }
 
+	protected void doCopyItem() {
+		
+		if (mSelectedGroup.get() < mAdapter.getGroupCount() &&
+		    mSelectedGroup.get() >= 0 &&
+		    mSelectedChild.get() < mAdapter.getChildrenCount(mSelectedGroup.get()) &&
+		    mSelectedChild.get() >= 0) {
+			
+	    	final NoteItApplication 	app = (NoteItApplication) getApplication();
+	    	ArrayList<ShoppingList> 	shoppingList = app.getShoppingList();
+	    	ArrayAdapter<ShoppingList> 	adapter = new ArrayAdapter<ShoppingList>(
+				this, 
+				android.R.layout.simple_dropdown_item_1line,
+				shoppingList);
+	    	AlertDialog shoppingLists = new AlertDialog.Builder(this)
+	    		.setTitle(getResources().getString(R.string.itemlist_copytolist))
+	    		.setAdapter(adapter, new DialogInterface.OnClickListener() {
+					
+					public void onClick(DialogInterface dialog, int which) {
+
+						final Item selItem = (Item) mAdapter.getChild(
+								mSelectedGroup.get(), 
+								mSelectedChild.get());
+				    	ShoppingList targetList = app.getShoppingList().get(which);
+				    	
+						if (selItem != null && 
+				    			targetList.mID != selItem.mListID) {
+				    		
+				    		app.copyItem(
+			    				selItem.mID,
+			    				targetList.mID,
+			        			new OnMethodExecuteListerner() {
+			    					public void onPostExecute(long resultCode, String message) {
+			    						
+			    						if (resultCode == 0) {
+			    							Toast.makeText(
+			    								ItemListActivity.this, 
+			    								getResources().getString(R.string.itemlist_copytolistsuccess), 
+			    								Toast.LENGTH_LONG).show();	
+			    						}
+			    						else
+			    							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+			    					}
+			    				});
+				    	}
+					}
+				})
+				.create();
+	    	shoppingLists.show();
+		}
+	}
+	
+	protected void doMoveItem() {
+		
+		if (mSelectedGroup.get() < mAdapter.getGroupCount() &&
+		    mSelectedGroup.get() >= 0 &&
+		    mSelectedChild.get() < mAdapter.getChildrenCount(mSelectedGroup.get()) &&
+		    mSelectedChild.get() >= 0) {
+			
+	    	final NoteItApplication 	app = (NoteItApplication) getApplication();
+	    	ArrayList<ShoppingList> 	shoppingList = app.getShoppingList();
+	    	ArrayAdapter<ShoppingList> 	adapter = new ArrayAdapter<ShoppingList>(
+				this, 
+				android.R.layout.simple_dropdown_item_1line,
+				shoppingList);
+	    	AlertDialog shoppingLists = new AlertDialog.Builder(this)
+	    		.setTitle(getResources().getString(R.string.itemlist_movetolist))
+	    		.setAdapter(adapter, new DialogInterface.OnClickListener() {
+					
+					public void onClick(DialogInterface dialog, int which) {
+
+						final Item selItem = (Item) mAdapter.getChild(
+								mSelectedGroup.get(), 
+								mSelectedChild.get());
+				    	ShoppingList targetList = app.getShoppingList().get(which);
+				    	
+						if (selItem != null && 
+				    			targetList.mID != selItem.mListID) {
+				    		
+				    		final int	editBitmask = Item.ITEM_LISTID;
+				        	final Item	newItem = app.new Item(selItem);
+				        	newItem.mListID = targetList.mID;
+				    		app.editItem(
+				    				editBitmask, 
+				    				newItem, 
+				        			new OnMethodExecuteListerner() {
+				    					public void onPostExecute(long resultCode, String message) {
+				    						
+				    						if (resultCode == 0) {
+				    							mAdapter.DeleteItem(selItem);
+				    							mAdapter.notifyDataSetChanged();
+				    						}
+				    						else
+				    							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+				    					}
+				    			});
+				    	}
+					}
+				})
+				.create();
+	    	shoppingLists.show();
+		}
+	}
+	
     void doToggleMarkDone() {
     	
     	final Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup.get(), mSelectedChild.get());

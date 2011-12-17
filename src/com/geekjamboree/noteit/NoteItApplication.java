@@ -103,7 +103,7 @@ public class NoteItApplication extends Application {
 		}
 		
 		public String toString(){
-			return mName + "(" + String.valueOf(mRank) + ")";
+			return mName + " (" + String.valueOf(mRank) + ")";
 		}
 
 		public boolean equals(Object obj){
@@ -1016,6 +1016,43 @@ public class NoteItApplication extends Application {
 		}		
 	}
 	
+	public void copyItem(
+			final long instanceID, 
+			final long targetListId, 
+			OnMethodExecuteListerner listener) {
+		
+		class CopyItemTask  implements AsyncInvokeURLTask.OnPostExecuteListener {
+        	OnMethodExecuteListerner mListener;
+
+        	public CopyItemTask(OnMethodExecuteListerner inListener) {
+        		mListener = inListener;
+			}
+        	
+        	public void onPostExecute(JSONObject json) {
+        		try {
+        			long retVal = json.getLong("JSONRetVal");
+                	mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
+        		} catch (JSONException e){
+        			mListener.onPostExecute(-1, e.getMessage());
+        		}
+        	}
+        }
+
+        try {
+	        ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+	        nameValuePairs.add(new BasicNameValuePair("command", "do_copy_item"));
+	        nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(instanceID)));
+	        nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(targetListId)));
+	        nameValuePairs.add(new BasicNameValuePair("arg3", String.valueOf(getUserID())));
+	        
+	        CopyItemTask myTask = new CopyItemTask(listener);
+	        AsyncInvokeURLTask 	task = new AsyncInvokeURLTask(nameValuePairs, myTask);
+	        task.execute();
+        } catch (Exception e) {
+        	Log.e("NoteItApplication.copyItem", e.getMessage());
+        }
+	}
+	
 	public void editItem(final int bitMask, final Item item, OnMethodExecuteListerner inListener) {
         
 		class EditItemTask  implements AsyncInvokeURLTask.OnPostExecuteListener {
@@ -1040,7 +1077,10 @@ public class NoteItApplication extends Application {
 	        ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 	        nameValuePairs.add(new BasicNameValuePair("command", "do_edit_shop_item"));
 	        nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(item.mID)));
-//	        nameValuePairs.add(new BasicNameValuePair("arg2", value))  // List ID
+	        
+	        if ((bitMask & Item.ITEM_LISTID) > 0)
+	        	nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(item.mListID)));  // List ID
+	        	
 	        if ((bitMask & Item.ITEM_CATEGORYID) > 0)
 	        	nameValuePairs.add(new BasicNameValuePair("arg3", String.valueOf(item.mCategoryID)));
 
