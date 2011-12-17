@@ -97,8 +97,8 @@ public class DragDropListView extends ListView {
 					if (position != INVALID_POSITION && 
 						firstVisible != INVALID_POSITION && 
 						lastVisible != INVALID_POSITION) {
-						
-						View child = getChildAt(position - firstVisible);
+ 						View child = getChildAt(position - firstVisible);
+/*						
 						if (child != null) {
 							// Ensure that this child is properly visible
 							requestChildRectangleOnScreen(
@@ -110,7 +110,7 @@ public class DragDropListView extends ListView {
 										child.getBottom()), 
 									true);
 						}
-						
+*/						
 						drag(x, (int)ev.getRawY(), position);
 						if (mDragDropListener != null) {
 							mDragDropListener.onDrag(mStartPosition, position);
@@ -128,7 +128,7 @@ public class DragDropListView extends ListView {
 							if (child == null)
 								setSelection(position + 1);
 							else 
-								setSelectionFromTop(position + 1, child.getTop() + child.getHeight());
+								setSelectionFromTop(position + 1, child.getTop());
 						}
 					}
 					return true;
