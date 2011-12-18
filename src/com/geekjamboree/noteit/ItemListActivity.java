@@ -408,9 +408,11 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	protected SharedPreferences.OnSharedPreferenceChangeListener mPrefChangeListener = 
 			new SharedPreferences.OnSharedPreferenceChangeListener() {
 			
-			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+			public void onSharedPreferenceChanged(
+					SharedPreferences sharedPreferences,
 					String key) {
-				if (key == "Display_Price_Quantity" || key == "Item_Font_Size") {
+				if (key.compareTo("Display_Price_Quantity") == 0 || 
+						key.compareTo("Item_Font_Size") == 0) {
 					Log.i("ItemListActivity.onSharedPreferenceChanged", "Display_Price_Quantity preference changed");
 					mDisplayExtras = sharedPreferences.getBoolean("Display_Price_Quantity", true);
 					mDisplayCategoryExtras = sharedPreferences.getBoolean("Display_Category_Totals", true);

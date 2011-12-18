@@ -8,7 +8,8 @@
 	    <EditTextPreference 
 	        android:title="Email"
 	        android:key="email"
-	        android:summary="The email ID registered with Note It! This email ID will also be used in case you forget your password."
+	        android:summary="The email ID registered with Note It! This email ID 
+	        				will also be used in case you forget your password."
 	        android:dialogTitle="Email ID"
 	        android:dialogMessage="Please enter the email ID"
 	        android:defaultValue="you@email.com" />
@@ -16,8 +17,10 @@
 	    <CheckBoxPreference
 	    	android:title="Remember Me"
 	    	android:key="Remember_Me"
-	    	android:summaryOff="Note It! will not remember your login information. You will have to sign in everytime."
-	    	android:summaryOn="Note It! will remember your login infotmation and sign you in automatically."
+	    	android:summaryOff="Note It! will not remember your login information. 
+	    						You will have to sign in everytime."
+	    	android:summaryOn="Note It! will remember your login infotmation and
+	    						 sign you in automatically."
 	    	android:defaultValue="true" />
 
 	    <CheckBoxPreference
@@ -36,7 +39,7 @@
 		<ListPreference 
 			android:title="Currency"
 			android:key="currency"
-			android:summary="The default currency you want to use."/>
+			android:summary="The currency you want to use."/>
 			
 	    <ListPreference
 	    	android:title="Measurement Units"
@@ -59,20 +62,23 @@
 	</PreferenceCategory>
 		
 	<PreferenceCategory
-		android:title="Items in Shopping Lists"
+		android:title="Items"
 		android:key="Items_List" >
 	    
 	    <CheckBoxPreference
 	    	android:title="Show Category Extras"
 	    	android:key="Display_Category_Totals"
-	    	android:summaryOff="Extra information like number of remaining and total Items will not be displayed with each Category."
-	    	android:summaryOn="Display extra information like number of remaining and total Items with each Category."
+	    	android:summaryOff="Extra information like number of remaining and total Items will 
+	    						not be displayed with each Category."
+	    	android:summaryOn="Display extra information like number of remaining and total Items 
+	    						with each Category."
 	    	android:defaultValue="true" />
 
 	    <CheckBoxPreference
 	    	android:title="Show Item Extras"
 	    	android:key="Display_Price_Quantity"
-	    	android:summaryOff="Extra information like Price, Quantity and Total will not be displayed with items."
+	    	android:summaryOff="Extra information like Price, Quantity and Total will not 
+	    						be displayed with items."
 	    	android:summaryOn="Display extra information like Price, Quantity and Total with each Item."
 	    	android:defaultValue="true" />
 	    		    

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.geekjamboree.noteit.NoteItApplication.Category;
 import com.geekjamboree.noteit.NoteItApplication.OnFetchCategoriesListener;
+import com.geekjamboree.noteit.NoteItApplication.Preference;
 import com.geekjamboree.noteit.NoteItApplication.ShoppingList;
 import com.geekjamboree.noteit.NoteItApplication.Unit;
 import com.geekjamboree.noteit.R;
@@ -66,15 +67,27 @@ public class LoginActivity
             }
 
         });
+/*        
+        android.telephony.TelephonyManager telephonyManager = (android.telephony.TelephonyManager)getSystemService(TELEPHONY_SERVICE);
+        String nativeCountry = telephonyManager.getSimCountryIso();
+        Locale india = new Locale("en", "in");
+        Log.i("LoginActivity.onCreate", "Native Currency Code:" + Currency.getInstance(india).getCurrencyCode());
+        Log.i("LoginActivity.onCreate", "Native Currency Symbol: " + Currency.getInstance(india).getSymbol());
+        Currency currency = Currency.getInstance(india);
+*/
     }
     
 	@Override
 	protected void onPause() {
-    	EditText emailID = (EditText)findViewById(R.id.editEmailID);
+    	EditText emailID = (EditText) findViewById(R.id.editEmailID);
     	if (emailID != null) {
     		SharedPreferences.Editor editor = mPrefs.edit();
     		String email = emailID.getText().toString();
     		editor.putString("email", email);
+    		NoteItApplication app = (NoteItApplication) getApplication();
+    		if (app.getUserPrefs() != null) {
+    			editor.putString("currency", app.getUserPrefs().mCurrencyCode);
+    		}
     		editor.commit();
     	}
 		super.onPause();
@@ -92,13 +105,19 @@ public class LoginActivity
 	        	long retval = json.getLong("JSONRetVal");
 	        	if (retval == 0){
 		        	// We're set to rock and roll
-	            	if (!json.isNull("arg1")){
+	            	if (!json.isNull("arg1")) {
 	            		
 						long 					userID = json.getLong("arg1");
 						final NoteItApplication app = (NoteItApplication) getApplication();
 						
 						app.setUserID(userID);
 	            		Toast.makeText(this, "You are logged in.", Toast.LENGTH_SHORT).show();
+	            		
+	            		// Read the user preferences
+	            		if (!json.isNull("arg2")) {
+	            			Preference prefs = app.new Preference(json.getJSONObject("arg2"));
+	            			app.setUserPrefs(prefs);
+	            		}
 	            		
 	            		app.fetchUnits(Unit.METRIC, new NoteItApplication.OnMethodExecuteListerner() {
 	            			

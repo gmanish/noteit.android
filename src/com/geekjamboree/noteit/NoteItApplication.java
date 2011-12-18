@@ -18,6 +18,36 @@ import com.geekjamboree.noteit.AsyncInvokeURLTask.OnPostExecuteListener;
 
 public class NoteItApplication extends Application {
 
+	public class Country {
+		public String 	mCountryCode = "";
+		public String 	mCurrencyCode = "";
+		public String 	mCurrencySymbol = "";
+		public String 	mCurrencyName = "";
+		public int 		mCurrencyIsRight = 0;
+		
+		public Country(
+			String countryCode, 
+			String currencyCode, 
+			String currencySymbol, 
+			int currencyIsRight, 
+			String currencyName) {
+			
+			mCountryCode = countryCode;
+			mCurrencyCode = currencyCode;
+			mCurrencySymbol = currencySymbol;
+			mCurrencyName = currencyName;
+			mCurrencyIsRight = currencyIsRight;
+		}
+		
+		public Country(JSONObject json) throws JSONException {
+			mCountryCode = json.getString("countryCode");
+			mCurrencyCode = json.getString("currencyCode"); 
+			mCurrencySymbol = json.getString("currencySymbol");
+			mCurrencyIsRight = json.getInt("currencyIsRight");
+			mCurrencyName = json.getString("currencyName");
+		}
+	}
+	
 	public class Unit {
 		static final int METRIC = 1;
 		static final int IMPERIAL = 2;
@@ -43,6 +73,28 @@ public class NoteItApplication extends Application {
 				return (mID == ((Unit)obj).mID);
 			else
 				return false;
+		}
+	}
+	
+	public class Preference {
+		public String 	mCountryCode = "";
+		public String 	mCurrencyCode = "";
+		
+		public Preference(String countryCode, String currencyCode) {
+			mCountryCode = countryCode;
+			mCurrencyCode = currencyCode;
+		}
+		
+		public Preference(JSONObject json) throws JSONException {
+			mCountryCode = json.getString("countryCode");
+			mCurrencyCode = json.getString("currencyCode");
+		}
+		
+		public JSONObject getJSON() throws JSONException {
+			JSONObject json = new JSONObject();
+			json.put("countryCode", mCountryCode);
+			json.put("currencyCode", mCurrencyCode);
+			return json;
 		}
 	}
 	
@@ -250,6 +302,31 @@ public class NoteItApplication extends Application {
 	private ArrayList<Category>			mCategories = new ArrayList<Category>();
 	private ArrayList<Item>				mItems = new ArrayList<Item>();
 	private ArrayList<Unit>				mUnits = new ArrayList<Unit>();
+	private ArrayList<Country>			mCountries = new ArrayList<Country>();
+	private Country						mDefaultCountry = new Country("US", "USD","$", 0, "US Dollar");
+	private Preference					mUserPrefs;
+	
+	@Override
+	public void onCreate() {
+		fetchCountries(null);
+		super.onCreate();
+	}
+
+	public ArrayList<Country> getCountries() {
+		return mCountries;
+	}
+	
+	public Country getDefaultCountry () {
+		return mDefaultCountry;
+	}
+	
+	public Preference getUserPrefs() {
+		return mUserPrefs;
+	}
+	
+	public void setUserPrefs(Preference prefs) {
+		mUserPrefs = prefs;
+	}
 	
 	public void loginUser(String userEmail, AsyncInvokeURLTask.OnPostExecuteListener inPostExecute){
 		try {
@@ -277,6 +354,45 @@ public class NoteItApplication extends Application {
 	
 	public void setUserID(long userID){
 		mUserID = userID;
+	}
+	
+	public void saveUserPreferences(final OnMethodExecuteListerner listener) {
+		
+		if (mUserPrefs != null) {
+			ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(3);
+			
+			try {
+				args.add(new BasicNameValuePair("command", "do_save_prefs"));
+				args.add(new BasicNameValuePair("arg1", mUserPrefs.getJSON().toString()));
+				args.add(new BasicNameValuePair("arg2", String.valueOf(mUserID)));
+				
+				AsyncInvokeURLTask task = new AsyncInvokeURLTask(args, new OnPostExecuteListener() {
+					
+					public void onPostExecute(JSONObject result) {
+						if (listener != null) {
+							try {
+								listener.onPostExecute(
+									result.getLong("JSONRetVal"), 
+									result.getString("JSONRetMessage"));
+							} catch (JSONException e) {
+								listener.onPostExecute(-1, e.getMessage());
+							}
+						}
+					}
+				});
+				
+				task.execute();
+				
+			} catch (JSONException e) {
+				if (listener != null)
+					listener.onPostExecute(-1, "Unexpected Error");
+				e.printStackTrace();
+			} catch (Exception e) {
+				if (listener != null)
+					listener.onPostExecute(-1, "Unexpected Error");
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public void fetchShoppingLists(boolean isFetchCount, OnFetchShoppingListsListener inPostExecute){
@@ -1201,6 +1317,43 @@ public class NoteItApplication extends Application {
 			Log.e("NoteItApplication.suggestItems", e.getMessage());
 			e.printStackTrace();
 		}		
+	}
+	
+	public void fetchCountries(final OnMethodExecuteListerner listener) {
+		
+		ArrayList<NameValuePair>	nameValuePairs = new ArrayList<NameValuePair>(1);
+		nameValuePairs.add(new BasicNameValuePair("command", "do_get_countries"));
+
+		AsyncInvokeURLTask myTask;
+		try {
+			myTask = new AsyncInvokeURLTask(
+					nameValuePairs, 
+					new OnPostExecuteListener() {
+				
+				public void onPostExecute(JSONObject result) {
+					try {
+						long retVal = result.getLong("JSONRetVal");
+						if (retVal == 0){
+							JSONArray jsonCountries = result.getJSONArray("arg3");
+							for (int i = 0; i < jsonCountries.length(); i++) {
+								mCountries.add(new Country(jsonCountries.getJSONObject(i)));
+							}
+							
+							if (result.has("arg2"))
+								mDefaultCountry = new Country(result.getJSONObject("arg2"));
+						}
+						if (listener != null)
+							listener.onPostExecute(retVal, result.getString("JSONRetMessage"));
+					} catch (JSONException e) {
+						if (listener != null)
+							listener.onPostExecute(-1, e.getMessage());
+					}
+				}
+			});
+			myTask.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void fetchUnits(int unitType, OnMethodExecuteListerner listener) {
