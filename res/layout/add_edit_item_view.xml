@@ -54,22 +54,14 @@
 	    android:layout_width="fill_parent"
         android:layout_marginBottom="5dp"
         android:selectAllOnFocus="true"
-        android:layout_below="@+id/addedit_titlebar" />
-   
-	<TextView
-	    android:id="@+id/addedit_labelQuantity"
-	    style="@style/AddEdit_TextViewStyle"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/addedit_editName"
-	    android:layout_marginBottom="2dp"
-	    android:text="@string/addedit_quantity" />
-	
+        android:layout_below="@+id/addedit_titlebar"
+        android:hint="@string/addedit_Name_Hint" />
+   	
 	<LinearLayout
        android:id="@+id/addedit_updowncontrol"
        android:layout_width="fill_parent"
        android:layout_height="wrap_content"
-       android:layout_below="@+id/addedit_labelQuantity"
+       android:layout_below="@+id/addedit_editName"
        android:layout_marginBottom="5dp" 
        android:gravity="center_vertical"
   	   android:orientation="horizontal">
@@ -92,7 +84,8 @@
 		    android:layout_weight="0.4"
 		    android:layout_alignParentTop="true"
         	android:selectAllOnFocus="true"
-		    android:inputType="numberDecimal" />
+		    android:inputType="numberDecimal"
+		    android:hint="@string/addedit_quantityHint" />
 		
 		<Button
 		    android:id="@+id/addedit_btnIncrement"
@@ -114,32 +107,11 @@
 	    		
 	</LinearLayout>
 
-	<TextView
-	    android:id="@+id/addedit_labelPrice"
-	    style="@style/AddEdit_TextViewStyle"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/addedit_updowncontrol"
-	    android:layout_marginBottom="2dp"
-	    android:text="@string/addedit_price" />
-
-	<TextView
-	    android:id="@+id/addedit_labelTotal"
-	    style="@style/AddEdit_TextViewStyle"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/addedit_updowncontrol"
-	    android:layout_toRightOf="@+id/addedit_labelPrice"
-	    android:layout_alignParentRight="true"
-	    android:layout_marginBottom="2dp"
-	    android:gravity="right|center_vertical"
-	    android:text="Total: $39.99" />
-	
 	<LinearLayout
        android:id="@+id/layout_price"
        android:layout_width="fill_parent"
        android:layout_height="wrap_content"
-       android:layout_below="@+id/addedit_labelPrice"
+       android:layout_below="@+id/addedit_updowncontrol"
        android:layout_marginBottom="5dp" 
        android:gravity="center_vertical"
   	   android:orientation="horizontal">
@@ -153,7 +125,8 @@
 		    android:layout_gravity="center_vertical"
 		    android:gravity="left|center_vertical"
 	        android:selectAllOnFocus="true"
-		    android:inputType="numberDecimal" />
+		    android:inputType="numberDecimal"
+		    android:hint="@string/addedit_priceHint" />
 		
 		<CheckBox
 		    android:id="@+id/addedit_AskLater"
@@ -175,43 +148,50 @@
 
 	</LinearLayout>
 		
-	<TextView
-	    android:id="@+id/textView4"
-	    style="@style/AddEdit_TextViewStyle"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/layout_price"
-	    android:layout_marginBottom="2dp"
-	    android:text="@string/addedit_category" />
-		    
 	<Spinner
 	    android:id="@+id/addedit_spinCategories"
 	    style="@style/AddEdit_Widget"
 	    android:layout_width="fill_parent"
-	    android:layout_below="@+id/textView4"
+	    android:layout_below="@+id/layout_price"
 	    android:layout_marginBottom="5dp" />
 
 	<LinearLayout 
-	    android:layout_width="wrap_content"
+	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content" 
-	    android:layout_alignParentRight="true"
 	    android:layout_below="@+id/addedit_spinCategories"
-	    android:gravity="right"
-	    android:layout_marginTop="10dp">
+	    android:gravity="center_vertical"
+	    android:layout_marginTop="10dp"
+	    android:orientation="horizontal">
 
+		<TextView
+		    android:id="@+id/addedit_labelTotal"
+		    style="@style/AddEdit_TextViewStyle"
+		    android:layout_width="0dip"
+		    android:layout_height="wrap_content"
+		    android:layout_marginBottom="2dp"
+		    android:layout_weight="1"
+		    android:gravity="left|center_vertical"
+		    android:text="Total: $39.99" />
+		
 		<Button
 		    android:id="@+id/addedit_btnContinue"
-		    style="@style/App_TextButtonStyle"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="right|center_vertical"
 		    android:text="@string/addedit_Continue" />
 
 		<Button
 		    android:id="@+id/addedit_btnDone"
-		    style="@style/App_TextButtonStyle"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="right|center_vertical"
 		    android:text="@string/addedit_Done" />
 		
 		<Button
 		    android:id="@+id/addedit_btnCancel"
-		    style="@style/App_TextButtonStyle"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="right|center_vertical"
 		    android:text="@string/Cancel" />
 		
 	</LinearLayout>

@@ -65,8 +65,10 @@
 	<string name="addedit_Name">Name:</string>
 	<string name="addedit_Name_Hint">Item Name</string>
 	<string name="addedit_quantity">Quantity:</string>
+	<string name="addedit_quantityHint">Quantity</string>
 	<string name="addedit_unit">Unit:</string>
 	<string name="addedit_price">Unit Price:</string>
+	<string name="addedit_priceHint">Unit Price</string>
 	<string name="addedit_category">Category:</string>
 	<string name="addedit_Done">Done</string>
 	<string name="addedit_Continue">Add More</string>
