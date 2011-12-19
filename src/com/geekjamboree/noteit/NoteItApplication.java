@@ -304,7 +304,7 @@ public class NoteItApplication extends Application {
 	private ArrayList<Unit>				mUnits = new ArrayList<Unit>();
 	private ArrayList<Country>			mCountries = new ArrayList<Country>();
 	private Country						mDefaultCountry = new Country("US", "USD","$", 0, "US Dollar");
-	private Preference					mUserPrefs;
+	private Preference					mUserPrefs = new Preference("US", "USD");
 	
 	@Override
 	public void onCreate() {
@@ -363,8 +363,9 @@ public class NoteItApplication extends Application {
 			
 			try {
 				args.add(new BasicNameValuePair("command", "do_save_prefs"));
-				args.add(new BasicNameValuePair("arg1", mUserPrefs.getJSON().toString()));
-				args.add(new BasicNameValuePair("arg2", String.valueOf(mUserID)));
+				args.add(new BasicNameValuePair("arg1", mUserPrefs.mCountryCode));
+				args.add(new BasicNameValuePair("arg2", mUserPrefs.mCurrencyCode));
+				args.add(new BasicNameValuePair("arg3", String.valueOf(mUserID)));
 				
 				AsyncInvokeURLTask task = new AsyncInvokeURLTask(args, new OnPostExecuteListener() {
 					

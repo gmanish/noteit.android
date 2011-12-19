@@ -22,7 +22,7 @@ public class MainPreferenceActivity extends PreferenceActivity {
 		public void onSharedPreferenceChanged(
 				SharedPreferences sharedPreferences,
 				String key) {
-			if (key.compareTo("currency") == 0) {
+			if (key.equals("currency")) {
 				NoteItApplication app = (NoteItApplication) getApplication();
 				if (app != null) {
 					Preference appPrefs = app.getUserPrefs();
@@ -70,15 +70,19 @@ public class MainPreferenceActivity extends PreferenceActivity {
 			CharSequence[] currencies = new String[countries.size()];
 			CharSequence[] currencyIds = new String[countries.size()];
 			
+			int selIndex = -1;
+			Country defaultCountry = app.getDefaultCountry();
 			for (int index = 0; index < countries.size(); index++) {
 				currencies[index] = countries.get(index).mCurrencyName + " (" + countries.get(index).mCurrencySymbol + ")";
 				currencyIds[index] = countries.get(index).mCurrencyCode;
+				if (defaultCountry != null && currencyIds[index].equals(defaultCountry.mCurrencyCode))
+					selIndex = index;
 			}
 			
 			currenciesPref.setEntries(currencies);
 			currenciesPref.setEntryValues(currencyIds);
-			if (app.getDefaultCountry() != null)
-				currenciesPref.setDefaultValue(app.getDefaultCountry().mCurrencyCode);
+			if (selIndex >= 0)
+				currenciesPref.setValueIndex(selIndex);
 		}
 		mPrefs.registerOnSharedPreferenceChangeListener(mPrefChangeListener);
 		toolbar.SetTitle(getResources().getText(R.string.preference_activity_title));

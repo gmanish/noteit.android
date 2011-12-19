@@ -84,7 +84,7 @@ public class CategoryListActivity
 			
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 					String key) {
-				if (key == "Item_Font_Size") {
+				if (key.equals("Item_Font_Size")) {
 					mListView.invalidateViews();
 				}
 				
