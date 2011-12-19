@@ -71,11 +71,11 @@ public class MainPreferenceActivity extends PreferenceActivity {
 			CharSequence[] currencyIds = new String[countries.size()];
 			
 			int selIndex = -1;
-			Country defaultCountry = app.getDefaultCountry();
+			Preference prefs = app.getUserPrefs();
 			for (int index = 0; index < countries.size(); index++) {
 				currencies[index] = countries.get(index).mCurrencyName + " (" + countries.get(index).mCurrencySymbol + ")";
 				currencyIds[index] = countries.get(index).mCurrencyCode;
-				if (defaultCountry != null && currencyIds[index].equals(defaultCountry.mCurrencyCode))
+				if (prefs != null && currencyIds[index].equals(prefs.mCurrencyCode))
 					selIndex = index;
 			}
 			

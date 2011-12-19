@@ -46,20 +46,22 @@ import android.widget.Toast;
 public class ItemListActivity extends ExpandableListActivity implements NoteItApplication.OnFetchItemsListener {
 	
 	ExpandableLVRightIndicator		mListView;
-	ItemsExpandableListAdapter 				mAdapter;
-	ProgressDialog							mProgressDialog = null;
-	QuickAction 							mQuickAction = null;
-	AtomicInteger							mSelectedGroup = new AtomicInteger();
-	AtomicInteger							mSelectedChild = new AtomicInteger();
-	long									mSelectedItemID = 0;
-	boolean									mDisplayExtras = true;
-	boolean									mDisplayCategoryExtras = true;
-	Integer									mFontSize = 3;
-	boolean									mHideDoneItems = false;
-	CustomTitlebarWrapper					mToolbar;
-	Button									mShoppingListButton;
-	boolean									mIsItemListFetched = false;
-	SharedPreferences						mPrefs;
+	ItemsExpandableListAdapter 		mAdapter;
+	ProgressDialog					mProgressDialog = null;
+	QuickAction 					mQuickAction = null;
+	AtomicInteger					mSelectedGroup = new AtomicInteger();
+	AtomicInteger					mSelectedChild = new AtomicInteger();
+	long							mSelectedItemID = 0;
+	boolean							mDisplayExtras = true;
+	boolean							mDisplayCategoryExtras = true;
+	Integer							mFontSize = 3;
+	boolean							mHideDoneItems = false;
+	CustomTitlebarWrapper			mToolbar;
+	Button							mShoppingListButton;
+	boolean							mIsItemListFetched = false;
+	SharedPreferences				mPrefs;
+	String							mCurrencyFormat = new String();
+	
 	
 	static final int ADD_ITEM_REQUEST = 0;	
 	
@@ -342,8 +344,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	        				app.getUnitFromID(thisItem.mUnitID).mAbbreviation);
 	        		quantity.setVisibility(View.VISIBLE);
 		        	if (price != null && thisItem.mUnitPrice > 0){
-		        		price.setText(String.valueOf(thisItem.mUnitPrice));
-		        		total.setText(String.valueOf(thisItem.mUnitPrice * thisItem.mQuantity));
+		        		String strPrice = String.format(mCurrencyFormat, thisItem.mUnitPrice);
+		        		String strTotal = String.format(mCurrencyFormat, thisItem.mUnitPrice * thisItem.mQuantity);
+		        		price.setText(strPrice);
+		        		total.setText(strTotal);
 		        		price.setVisibility(View.VISIBLE);
 		        		total.setVisibility(View.VISIBLE);
 		        	} else {
@@ -627,6 +631,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		mHideDoneItems = mPrefs.getBoolean("Delete_Bought_Items", false);
         mFontSize = Integer.valueOf(mPrefs.getString("Item_Font_Size", "3"));
 		mListView.invalidateViews();
+		mCurrencyFormat = ((NoteItApplication) getApplication()).getCurrencyFormat();
 		super.onResume();
 	}
 
@@ -1188,8 +1193,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		if (statusBar != null) {
 			if (total > 0 || remaining > 0) {
 				statusBar.setVisibility(View.VISIBLE);
-				String strTotal = String.format(totalFormat, total);
-				String strRemaining = String.format(remainingFormat, remaining);
+				String strTotal = String.format(totalFormat, String.format(mCurrencyFormat, total));
+				String strRemaining = String.format(remainingFormat, String.format(mCurrencyFormat, remaining));
 				TextView textViewTotal = (TextView) statusBar.findViewById(R.id.bottom_total);
 				TextView textViewRemaining = (TextView) statusBar.findViewById(R.id.bottom_remaining);
 				if (textViewTotal != null) textViewTotal.setText(strTotal);

@@ -26,6 +26,14 @@ public class NoteItApplication extends Application {
 		public int 		mCurrencyIsRight = 0;
 		
 		public Country(
+			String countryCode,
+			String currencyCode) {
+			
+			mCountryCode = countryCode;
+			mCurrencyCode = currencyCode;
+		}
+		
+		public Country(
 			String countryCode, 
 			String currencyCode, 
 			String currencySymbol, 
@@ -45,6 +53,14 @@ public class NoteItApplication extends Application {
 			mCurrencySymbol = json.getString("currencySymbol");
 			mCurrencyIsRight = json.getInt("currencyIsRight");
 			mCurrencyName = json.getString("currencyName");
+		}
+
+		public boolean equals(Object obj){
+			if (obj instanceof Country)
+				return (mCountryCode.equals(((Country) obj).mCountryCode) &&
+						mCurrencyCode.equals(((Country) obj).mCurrencyCode));
+			else
+				return false;
 		}
 	}
 	
@@ -294,8 +310,6 @@ public class NoteItApplication extends Application {
 		void onPostExecute(long resultCode, Item item, String message);
 	}
 	
-	
-
 	private long						mUserID = 0;
 	private long						mCurrentShoppingListID = 0;
 	private ArrayList<ShoppingList>		mShoppingLists = new ArrayList<ShoppingList>();
@@ -354,6 +368,24 @@ public class NoteItApplication extends Application {
 	
 	public void setUserID(long userID){
 		mUserID = userID;
+	}
+	
+	public String getCurrencyFormat() {
+		
+		String currencyFormat = null;
+        if (mCountries != null && mUserPrefs!= null) {
+        	int index = mCountries.indexOf(new Country(mUserPrefs.mCountryCode, mUserPrefs.mCurrencyCode));
+        	if (index >= 0) {
+        		if (mCountries.get(index).mCurrencyIsRight > 0) {
+        			currencyFormat = new String("%1$.2f " + mCountries.get(index).mCurrencySymbol);
+        		}
+        		else { 
+        			currencyFormat = new String(mCountries.get(index).mCurrencySymbol + " %1$.2f");
+        		}
+        	}
+        }
+        
+        return currencyFormat != null ? currencyFormat : "%1$.2f";
 	}
 	
 	public void saveUserPreferences(final OnMethodExecuteListerner listener) {
