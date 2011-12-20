@@ -5,33 +5,18 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="5dp" >
+    android:padding="10dp" >
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/category"
-        android:background="@android:color/transparent" />
-    
     <TextView
         android:id="@+id/categorylists_item_name"
-        android:layout_width="0dip"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
        	android:layout_gravity="center_vertical"
-		android:layout_weight="1"
        	android:gravity="center_vertical"
 		android:singleLine="true"
 		android:ellipsize="end"
-		android:paddingLeft="5dip"
+        android:drawableLeft="@drawable/category"
+        android:drawableRight="@drawable/hand"
         android:text="@+id/categorylists_item_name" />
     
-    <ImageView
-        android:id="@+id/imageDrag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/hand"
-        android:paddingRight="5dip"
-        android:background="@android:color/transparent" />
-
 </LinearLayout>

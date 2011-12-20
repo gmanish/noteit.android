@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class DashBoardActivity extends Activity {
@@ -75,15 +74,13 @@ public class DashBoardActivity extends Activity {
 	            view = (ViewGroup) convertView;
 	        }
 
-        	ImageView 	image = (ImageView) view.findViewById(R.id.dashboard_item_image);
         	TextView 	text = (TextView) view.findViewById(R.id.dashboard_item_text);
 	        
 	        text.setText(mItems.get(position).mText);
-	        image.setImageResource(mItems.get(position).mImageResourceID);
+	        text.setCompoundDrawablesWithIntrinsicBounds(0, mItems.get(position).mImageResourceID, 0, 0);
 	        final float scale = getResources().getDisplayMetrics().density; 
 	        view.setLayoutParams(new GridView.LayoutParams((int)(128 * scale + 0.5), (int)(128 * scale + 0.5)));
         	view.setPadding(10, 10, 10, 10);
-        	image.setScaleType(ImageView.ScaleType.CENTER);
 	        return view;
 	    }
 		

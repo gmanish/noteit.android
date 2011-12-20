@@ -1305,6 +1305,35 @@ public class NoteItApplication extends Application {
         }
     }
 	
+	public void markAllItemsDone(long list_ID, boolean done, final OnMethodExecuteListerner listener) {
+		try {
+			ArrayList<NameValuePair> 	args = new ArrayList<NameValuePair>(4);
+
+			args.add(new BasicNameValuePair("command", "do_mark_all_done"));
+			args.add(new BasicNameValuePair("arg1", String.valueOf(list_ID)));
+			args.add(new BasicNameValuePair("arg2", String.valueOf(done ? 1 : 0)));
+			args.add(new BasicNameValuePair("arg3", String.valueOf(getUserID())));
+			
+			AsyncInvokeURLTask setItemsDone = new AsyncInvokeURLTask(args, new OnPostExecuteListener() {
+				
+				public void onPostExecute(JSONObject result) {
+					if (listener != null)
+						try {
+							listener.onPostExecute(
+								result.getLong("JSONRetVal"), 
+								result.getString("JSONRetMessage"));
+						} catch (JSONException e) {
+							listener.onPostExecute(-1, e.getMessage());
+						}
+				}
+			});
+			
+			setItemsDone.execute();
+		} catch (Exception e) {
+			listener.onPostExecute(-1, e.getMessage());
+		}
+	}
+	
 	public void suggestItems(String subString, OnSuggestItemsListener inListener) {
 		
 		class SuggestItemsTask implements OnPostExecuteListener {

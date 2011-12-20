@@ -579,6 +579,9 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		case R.id.itemlist_email:
 			doEmail();
 			break;
+		case R.id.itemlist_alldone:
+			doAllDone();
+			break;
 		case R.id.itemlist_settings:
 			startActivity(new Intent(this, MainPreferenceActivity.class));
 			break;
@@ -1214,6 +1217,30 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     			app.getShoppingList().get(app.getCurrentShoppingListIndex()).mName);
     	emailIntent.putExtra(Intent.EXTRA_TEXT, formatItemsList());
     	startActivity(Intent.createChooser(emailIntent, getResources().getString(R.string.itemlist_emailPrompt)));
+    }
+
+    protected void doAllDone() {
+    	NoteItApplication app = (NoteItApplication) getApplication();
+    	if (app != null) {
+    		app.markAllItemsDone(app.getCurrentShoppingListID(), true, new OnMethodExecuteListerner() {
+				
+				public void onPostExecute(long resultCode, String message) {
+					if (resultCode == 0) {
+						ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
+						for (int group = 0; group < adapter.getGroupCount(); group++)
+							for (int child = 0; child < adapter.getChildrenCount(group); child++)
+							{
+								Item item = (Item) adapter.getChild(group, child);
+								if (item != null && item.mIsPurchased <= 0) {
+									item.mIsPurchased = 1;
+								}
+							}
+						adapter.notifyDataSetChanged();
+					} else
+						Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+				}
+			});
+    	}
     }
     
     protected String formatItemsList() {

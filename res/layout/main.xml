@@ -9,12 +9,12 @@
         android:id="@+id/buttonLogin"
         android:layout_width="148dp"
         android:layout_height="wrap_content"
-        android:text="Login..." />
+        android:text="@string/login_login" />
 
     <Button
         android:id="@+id/buttonRegister"
         android:layout_width="148dp"
         android:layout_height="wrap_content"
-        android:text="Register..." />
+        android:text="@string/register" />
 
 </LinearLayout>

@@ -3,52 +3,38 @@
     android:id="@+id/listitems_group_root"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="0dip" 
+    android:orientation="horizontal"
+    android:paddingLeft="5dip"
+    android:paddingRight="10dip"
+    android:paddingTop="5dip"
+    android:paddingBottom="5dip" 
     android:background="@android:color/transparent" >
 
-    <LinearLayout
-        android:id="@+id/lisitems_group_root"
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
+    <TextView
+        android:id="@+id/itemslist_categoryName"
+        style="@style/ItemList_TextAppearance.GroupsItem.Small"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp"
-        android:paddingTop="2dip"
-        android:paddingBottom="2dip"
-        android:paddingRight="5dip" >
+        android:background="@android:color/transparent"
+        android:ellipsize="end"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="5dip"
+        android:singleLine="true"
+        android:drawableLeft="@drawable/category"
+        android:text="@+id/itemslist_categoryName" />
 
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:src="@drawable/category" />
-
-        <TextView
-            android:id="@+id/itemslist_categoryName"
-            style="@style/ItemList_TextAppearance.GroupsItem.Small"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:ellipsize="end"
-            android:gravity="left|center_vertical"
-            android:paddingLeft="5dip"
-            android:singleLine="true"
-            android:text="Item Text" />
-
-        <TextView
-            android:id="@+id/itemslist_categoryTotals"
-            style="@style/ItemList_TextAppearance.GroupsItem.Small"
-            android:layout_width="80dip"
-            android:layout_height="fill_parent"
-            android:layout_gravity="right|center_vertical"
-            android:gravity="right|center_vertical"
-            android:background="@android:color/transparent"
-            android:ellipsize="end"
-            android:paddingLeft="5dip"
-            android:singleLine="true"
-            android:text="(0/10)" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/itemslist_categoryTotals"
+        style="@style/ItemList_TextAppearance.GroupsItem.Small"
+        android:layout_width="80dip"
+        android:layout_height="fill_parent"
+        android:layout_gravity="right|center_vertical"
+        android:gravity="right|center_vertical"
+        android:background="@android:color/transparent"
+        android:ellipsize="end"
+        android:paddingLeft="5dip"
+        android:singleLine="true"
+        android:text="@+id/itemslist_categoryTotals" />
 
 </LinearLayout>

@@ -4,7 +4,7 @@
     <string name="Cancel">Cancel</string>
     <string name="Skip">Skip</string>
     
-    <string name="hello">Hello World, MainActivity!</string>
+    <string name="hello"> </string>
     <string name="app_name">Note It!</string>
 	<string name="app_home">Dashboard</string>
 		
@@ -12,17 +12,21 @@
         
     <string name="category_uncategorized">Uncategorized</string>
     <string name="server_error">The server seems to be out of its mind. Please try later.</string>
+    
+    <string name="register">Register</string>
+    
     <string name="login_activity_title">Please log in</string>
+    <string name="login_login">Login</string>
 	<string name="login_email">Email:</string>
 	<string name="login_emailhint">you@email.com</string>
     <string name="login_password">Password:</string>
-    <string name="Login_Authenticating_message">Authenticating...</string>
+    <string name="Login_Authenticating_message">Authenticating</string>
 
     <string name="categorylist_title">Categories</string>
     <string name="categorylists_add">Add Category</string>
     <string name="categorylists_edit">Edit Category</string>
         
-	<string name="progress_message">Please wait...</string>
+	<string name="progress_message">Please wait</string>
         
 	<string name="shoplistsactivity_title">Shopping Lists</string>
 	<string name="empty_shoppinglists">You do not have any shopping lists. Please add a list by clicking the \"Add\" button.</string>
@@ -37,6 +41,7 @@
 	    		
 	<string name="categoriesactivity_title">Categories</string>
 	<string name="categoriesactivity_empty_list">You have not added any Categories. You can add new Categories by clicking the Add button.</string>
+	<string name="categories_drag">Hand</string>
 	
 	<string name="itemlistactivity_title">Items To Shop</string>
 	<string name="empty_shoppingitems">You do not have any items in this list. You can add new items by clicking the Add button.</string>
@@ -53,6 +58,8 @@
 	<string name="itemlist_movetolist">Move to Shopping List</string>
 	<string name="itemlist_copytolist">Copy to Shopping List</string>
 	<string name="itemlist_copytolistsuccess">Item Copied</string>
+	<string name="itemlist_previous">Previous</string>
+	<string name="itemlist_next">Next</string>
 	    	    	
 	<string name="itemlistqe_edit">Edit</string>
 	<string name="itemlistqe_delete">Delete</string>
@@ -79,6 +86,8 @@
 	<string name="addedit_asklaterhelp">"If you do not know the price of the item, please check 'Ask Later'. You will be prompted for price when you mark the item 'Done'."</string>
 	<string name="addedit_total">Total: %1$.2f</string>
 	<string name="addedit_asklater_price">Total Price</string>
+	<string name="addedit_increment">+</string>
+	<string name="addedit_decrement">-</string>
 
 	<string name="preference_activity_title">Note It! Settings</string>
 	<string-array name="itemFontSize">

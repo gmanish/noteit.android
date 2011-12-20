@@ -13,28 +13,19 @@
         android:gravity="center"
         android:orientation="horizontal" >
         
-        <LinearLayout 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-	    
-		    <ImageView
-		        android:id="@+id/imageView1"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:src="@drawable/ic_launcher_noteit1" />
-	
-		    <TextView
-		        android:id="@+id/textView1"
-		        android:layout_width="fill_parent"
-		        android:layout_height="wrap_content"
-		        android:layout_gravity="center"
-		        android:paddingLeft="10dip"
-		        android:paddingRight="10dip"
-		        android:text="@string/app_name"
-		        android:textAppearance="?android:attr/textAppearanceLarge" />
-		
-	    </LinearLayout>
-	    
+	    <TextView
+	        android:id="@+id/textView1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"
+	        android:paddingLeft="10dip"
+	        android:paddingRight="10dip"
+	        android:text="@string/app_name"
+	        android:gravity="center"
+	        android:drawableLeft="@drawable/ic_launcher_noteit1"
+	        android:drawablePadding="10dip"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+			    
     </LinearLayout>
 
     <TextView
@@ -47,7 +38,8 @@
     <EditText
         android:id="@+id/editEmailID"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress" >
         <requestFocus />
     </EditText>
 
@@ -67,9 +59,8 @@
         android:id="@+id/buttonLogin"
         android:layout_width="148dp"
         android:layout_height="wrap_content"
-        android:layout_span="3"
         android:layout_gravity="right"
         android:layout_marginTop="10dip"
-        android:text="Login" />
+        android:text="@string/login_login" />
     
 </LinearLayout>

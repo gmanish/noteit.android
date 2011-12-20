@@ -9,36 +9,20 @@
     <com.geekjamboree.noteit.CategoryListView
         android:id="@+android:id/list"
         android:layout_width="fill_parent"
-        android:layout_height="0dp" 
-        android:layout_weight="1"
+        android:layout_height="fill_parent" 
         android:divider="@drawable/listview_item_separator"
-        android:dividerHeight="2px"
+        android:dividerHeight="2dip"
         android:cacheColorHint="#00000000"
         android:fadingEdge="vertical" />
     
-    <LinearLayout 
+    <TextView
         android:id="@android:id/empty"
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:padding="10dip">
-        
-        <TextView
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="center"
-	        android:layout_weight="1"
-	        android:padding="10dp"
-	        android:text="@string/categoriesactivity_empty_list" />
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_gravity="center_vertical"
+	    android:gravity="center_vertical"
+	    android:padding="10dp"
+	    android:drawableRight="@drawable/add"
+	    android:text="@string/categoriesactivity_empty_list" />
 
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/add" />
-        
-    </LinearLayout>
-
- </LinearLayout>
+</LinearLayout>

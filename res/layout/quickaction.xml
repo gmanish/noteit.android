@@ -21,6 +21,7 @@
         android:background="@drawable/quickaction_top_frame"/>
         
   	<ImageView
+  	    android:contentDescription="@string/hello"
         android:id="@+id/arrow_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"	
@@ -45,11 +46,13 @@
             android:orientation="horizontal">
         
             <ImageView
+                android:contentDescription="@string/hello"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/quickaction_slider_grip_left" />
 
             <ImageView
+                android:contentDescription="@string/hello"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/quickaction_slider_grip_right" />
@@ -66,6 +69,7 @@
         android:background="@drawable/quickaction_bottom_frame" />
 
     <ImageView
+        android:contentDescription="@string/hello"
         android:id="@+id/arrow_down"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

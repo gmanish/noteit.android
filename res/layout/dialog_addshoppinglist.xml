@@ -9,7 +9,8 @@
     <EditText
         android:id="@+id/dialog_addshoppinglist_editTextName"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
+        android:inputType="text" 
         android:paddingTop="5dp">
 
         <requestFocus />

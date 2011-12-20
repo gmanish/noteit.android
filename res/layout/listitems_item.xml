@@ -17,7 +17,7 @@
         android:ellipsize="end"
         android:gravity="left|center_vertical"
         style="@style/ItemList_TextAppearance.PendingItem.Small"
-        android:text="Item Text" />
+        android:text="@+id/itemlist_name" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/itemList_details"
@@ -31,7 +31,7 @@
 	        android:layout_width="0dip"
 	        android:layout_weight="1"
 	        android:gravity="left|center_vertical"
-	        android:text="Quantity"
+	        android:text="@+id/itemlist_quantity"
 			style="@style/ItemsList_TextAppearance.Quantity" />
 	
 		<TextView
@@ -40,7 +40,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
 	        android:gravity="center"
-	        android:text="Price" 
+	        android:text="@+id/itemlist_price" 
 	        style="@style/ItemsList_TextAppearance.Price" />
 		
 	    <TextView
@@ -49,7 +49,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
 	        android:gravity="right|center_vertical"
-	        android:text="Total" 
+	        android:text="@+id/itemlist_Total" 
 	        style="@style/ItemsList_TextAppearance.Total" />
     
     </LinearLayout>
