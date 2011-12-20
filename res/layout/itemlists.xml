@@ -23,7 +23,7 @@
 	    android:layout_height="4dip"
 	    android:background="@drawable/application_statusbar_border" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/bottom_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -36,24 +36,20 @@
 
         <TextView
 	        android:id="@+id/bottom_remaining"
-	        android:layout_width="0dip"
+	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_gravity="left|center_vertical"
-	        android:layout_weight="1"
 	        android:text="@+id/bottom_remaining"
+	        android:layout_alignParentLeft="true"
 	        android:textAppearance="@style/ItemList_TextAppearance.Footer" />
 
         <TextView
 	        android:id="@+id/bottom_total"
-	        style="@style/ItemList_TextAppearance.Footer"
-	        android:layout_width="0dip"
+	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_gravity="center_vertical|right"
-	        android:layout_weight="1"
-	        android:gravity="center_vertical|right"
 	        android:text="@+id/bottom_total"
+	        android:layout_alignParentRight="true"
 	        android:textAppearance="@style/ItemList_TextAppearance.Footer" />
-    </LinearLayout>
+    </RelativeLayout>
 		
 	<TextView
 		android:id="@android:id/empty"

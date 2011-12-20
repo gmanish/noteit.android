@@ -38,8 +38,8 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -1192,7 +1192,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 
 		mListView.setAdapter(mAdapter);
 		
-		LinearLayout statusBar = (LinearLayout) findViewById(R.id.bottom_bar);
+		RelativeLayout statusBar = (RelativeLayout) findViewById(R.id.bottom_bar);
 		if (statusBar != null) {
 			if (total > 0 || remaining > 0) {
 				statusBar.setVisibility(View.VISIBLE);

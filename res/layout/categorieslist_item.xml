@@ -17,6 +17,7 @@
 		android:ellipsize="end"
         android:drawableLeft="@drawable/category"
         android:drawableRight="@drawable/hand"
+        android:drawablePadding="5dip"
         android:text="@+id/categorylists_item_name" />
     
 </LinearLayout>
