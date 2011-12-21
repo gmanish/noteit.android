@@ -319,6 +319,9 @@ public class NoteItApplication extends Application {
 	private ArrayList<Country>			mCountries = new ArrayList<Country>();
 	private Country						mDefaultCountry = new Country("US", "USD","$", 0, "US Dollar");
 	private Preference					mUserPrefs = new Preference("US", "USD");
+	private int 						mItemsStartPos = 0;
+	private int 						mItemsBatchSize = 20;
+	private boolean						mItemsMorePending = false;
 	
 	@Override
 	public void onCreate() {
@@ -656,7 +659,9 @@ public class NoteItApplication extends Application {
 	public void setCurrentShoppingListIndex(int index){
 		ShoppingList thisList = getShoppingList(index);
 		if (thisList != null){
+			mItemsStartPos = 0;
 			mCurrentShoppingListID = thisList.mID;
+			mItems.clear();
 		}
 	}
 	
@@ -942,22 +947,39 @@ public class NoteItApplication extends Application {
 		return mCategories;
 	}
 	
+	public boolean isMoreItemsPending() {
+		return mItemsMorePending;
+	}
+	
 	public void fetchItems(
 			boolean showPurchased, 
 			boolean movePurchasedToBottom, 
 			OnFetchItemsListener inPostExecute){
 		try {
 			
-			mItems.clear();
+			final ArrayList<Item> items = new ArrayList<Item>();
+			
+			if (mItemsStartPos < 0) {
+				if (inPostExecute != null)
+					inPostExecute.onPostExecute(0, items, "");
+				return;
+			}
+			else if (mItemsStartPos == 0) {
+				mItems.clear();
+			}
 			
 			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 	        nameValuePairs.add(new BasicNameValuePair("command", "do_list_shop_items"));
 	        nameValuePairs.add(new BasicNameValuePair("arg1", showPurchased ? "1" : "0")); // Show Purchased Items
 	        nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(mCurrentShoppingListID))); // Shopping List ID
-	        nameValuePairs.add(new BasicNameValuePair("arg3", "0")); // Start @ index
+	        nameValuePairs.add(new BasicNameValuePair("arg3", String.valueOf(mItemsStartPos)));
 	        nameValuePairs.add(new BasicNameValuePair("arg4", String.valueOf(getUserID())));
 	        nameValuePairs.add(new BasicNameValuePair("arg5", movePurchasedToBottom ? "1" : "0"));
+	        nameValuePairs.add(new BasicNameValuePair("arg6", String.valueOf(mItemsBatchSize)));
 	        
+	        Log.i("NoteItApplication.fetchItems", "StartPos=" + mItemsStartPos + " Batch: " + mItemsBatchSize);
+	        // We might get lesser than we asked for, will account for this in onPostExecute below
+	        mItemsStartPos += mItemsBatchSize;
 	        class FetchItemsTask implements AsyncInvokeURLTask.OnPostExecuteListener {
 	        	
 	        	OnFetchItemsListener	mListener;
@@ -971,8 +993,20 @@ public class NoteItApplication extends Application {
 	                	long 	retval = json.getLong("JSONRetVal");
 	         			String 	message = json.getString("JSONRetMessage");
 	         			
+	         			// to prevent re-entrance
+	         			mItemsStartPos -= mItemsBatchSize;
 	                	if (retval == 0){
 	        	        	JSONArray jsonArr = json.getJSONArray("arg1");
+	        	        	
+	        	        	if (jsonArr.length() >= 0)
+	        	        		mItemsStartPos += jsonArr.length(); // There may be more
+	        	        	else
+	        	        		mItemsStartPos = -1; // We're done fetching items
+	        	        	
+	        	        	if (jsonArr.length() < mItemsBatchSize)
+	        	        		mItemsMorePending = false;
+	        	        	else 
+	        	        		mItemsMorePending = true;
 	        	        	
 	        	        	for (int index = 0; index < jsonArr.length(); index++){
 	        	        		JSONObject thisObj = jsonArr.getJSONObject(index);
@@ -992,11 +1026,12 @@ public class NoteItApplication extends Application {
 	        	        		thisItem.mIsPurchased = thisObj.getInt("isPurchased");
 	        	        		thisItem.mIsAskLater = thisObj.getInt("isAskLater");
 	        	        		
+	        	        		items.add(thisItem);
 	        	        		mItems.add(thisItem);
 	        	        	}
 	        	        	
 	        	        	//Collections.sort(mItems);
-	        	        	mListener.onPostExecute(retval, mItems, message);
+	        	        	mListener.onPostExecute(retval, items, message);
 	                	} else 
 	                		mListener.onPostExecute(retval, null, json.getString("JSONRetMessage"));
 	        		} catch (JSONException e){

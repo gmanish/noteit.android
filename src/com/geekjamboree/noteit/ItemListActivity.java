@@ -411,6 +411,41 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	    }
 	}
 	
+	protected AbsListView.OnScrollListener mScrollListener = new AbsListView.OnScrollListener() {
+		
+		boolean mScrolling = false;
+		
+		public void onScrollStateChanged(
+				AbsListView view, 
+				int scrollState) {
+		}
+		
+		public void onScroll(
+				AbsListView view, 
+				int firstVisibleItem,
+				int visibleItemCount, 
+				int totalItemCount) {
+			
+//			if (!mScrolling) {
+//				mScrolling = true;
+				Log.i("ItemsListView.onScrollListener", 
+					"FirstVisible: " + firstVisibleItem + 
+					" VisibleItemCount: " + visibleItemCount + 
+					" TotalItemsCount:" + totalItemCount);
+				NoteItApplication app = (NoteItApplication) getApplication();
+				if (firstVisibleItem + visibleItemCount >= totalItemCount && 
+						app != null && 
+						app.isMoreItemsPending()) {
+					app.fetchItems(
+						!mPrefs.getBoolean("Delete_Bought_Items", true),
+	   					mPrefs.getBoolean("Shuffle_Done_Items", true),
+	   					ItemListActivity.this);
+				}
+//				mScrolling = false;
+//			}
+		}
+	};
+	
 	protected SharedPreferences.OnSharedPreferenceChangeListener mPrefChangeListener = 
 			new SharedPreferences.OnSharedPreferenceChangeListener() {
 			
@@ -524,6 +559,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		mAdapter = new ItemsExpandableListAdapter(this);
 		mListView.setAdapter(mAdapter);
 		mListView.setTextFilterEnabled(true);
+		mListView.setOnScrollListener(mScrollListener);
     	mListView.setOnChildClickListener(new OnChildClickListener() {
 			
 			public boolean onChildClick(ExpandableListView parent, View v,
@@ -1160,11 +1196,16 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 					if (shoppingList != null) {
 						mShoppingListButton.setText(shoppingList.mName);
 					}
+					// we're changing Shopping Lists, clear the current view
 					app.setCurrentShoppingListIndex(which);
+					ItemsExpandableListAdapter adapter;
+					if ((adapter = new ItemsExpandableListAdapter(ItemListActivity.this)) != null) {
+						mListView.setAdapter(mAdapter = adapter);
+					}
 					app.fetchItems(
-							!mPrefs.getBoolean("Delete_Bought_Items", true), 
-							mPrefs.getBoolean("Shuffle_Done_Items", true),
-							ItemListActivity.this);
+						!mPrefs.getBoolean("Delete_Bought_Items", true), 
+						mPrefs.getBoolean("Shuffle_Done_Items", true),
+						ItemListActivity.this);
 				}
 			})
 			.create();
@@ -1173,7 +1214,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     
     protected void doDisplayItems(ArrayList<Item> items) {
 		
-    	mAdapter = new ItemsExpandableListAdapter(this);
+//    	mAdapter = new ItemsExpandableListAdapter(this);
     	for (int index = 0; index < items.size(); index++){
     		Item 	thisItem = items.get(index);
     		if (thisItem.mIsPurchased <= 0 || ((thisItem.mIsPurchased > 0) && !mHideDoneItems)) {
@@ -1181,7 +1222,9 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	    		mAdapter.AddItem(thisItem, category);
     		}
     	}
-		mListView.setAdapter(mAdapter);
+//		mListView.setAdapter(mAdapter);
+    	mAdapter.notifyDataSetChanged();
+    	Log.i("NoteItApplication.doDisplayItems", "Notified Adapter of change");
 		doDisplayTotals();
 		doExpandPending();
     }
