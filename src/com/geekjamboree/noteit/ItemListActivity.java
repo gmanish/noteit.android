@@ -61,6 +61,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	boolean							mIsItemListFetched = false;
 	SharedPreferences				mPrefs;
 	String							mCurrencyFormat = new String();
+	boolean							mLoadingMore = false;
 	
 	
 	static final int ADD_ITEM_REQUEST = 0;	
@@ -111,7 +112,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			mItems = new ArrayList<ArrayList<Item>>();
 			mUnitPriceFormat = getResources().getString(R.string.itemlist_unitpriceformat);
 			for (int i = 0; i < mCategories.size(); i++){
-				// Initialize the mItems arraylist
+				// Initialize the mItems ArrayList
 				mItems.add(new ArrayList<Item>());
 			}
 		}
@@ -413,36 +414,43 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	
 	protected AbsListView.OnScrollListener mScrollListener = new AbsListView.OnScrollListener() {
 		
-		boolean mScrolling = false;
-		
 		public void onScrollStateChanged(
 				AbsListView view, 
 				int scrollState) {
 		}
 		
 		public void onScroll(
-				AbsListView view, 
-				int firstVisibleItem,
-				int visibleItemCount, 
-				int totalItemCount) {
-			
-//			if (!mScrolling) {
-//				mScrolling = true;
+			AbsListView view, 
+			int firstVisibleItem,
+			int visibleItemCount, 
+			int totalItemCount) {
+		
+			NoteItApplication app = (NoteItApplication) getApplication();
+			if (firstVisibleItem + visibleItemCount >= totalItemCount && 
+				app != null &&
+				!mLoadingMore) {
+				
 				Log.i("ItemsListView.onScrollListener", 
-					"FirstVisible: " + firstVisibleItem + 
-					" VisibleItemCount: " + visibleItemCount + 
-					" TotalItemsCount:" + totalItemCount);
-				NoteItApplication app = (NoteItApplication) getApplication();
-				if (firstVisibleItem + visibleItemCount >= totalItemCount && 
-						app != null && 
-						app.isMoreItemsPending()) {
-					app.fetchItems(
-						!mPrefs.getBoolean("Delete_Bought_Items", true),
-	   					mPrefs.getBoolean("Shuffle_Done_Items", true),
-	   					ItemListActivity.this);
+						"FirstVisible: " + firstVisibleItem + 
+						" VisibleItemCount: " + visibleItemCount + 
+						" TotalItemsCount:" + totalItemCount);
+
+				Log.i("ItemsListView.onScrollListener", "App Items: " + app.getItems().size());
+				if (totalItemCount >= app.getItems().size()) {
+					if (app.isMoreItemsPending()) {
+						mLoadingMore = true;
+						app.fetchItems(
+							!mPrefs.getBoolean("Delete_Bought_Items", true),
+		   					mPrefs.getBoolean("Shuffle_Done_Items", true),
+		   					ItemListActivity.this);
+					}
+					else
+						Log.i("ItemListActivity.onScroll", "NOP");
+				} else {
+					Log.i("ItemListActivity.onScroll", "Displaying Cached Items");
+					doDisplayItems(app.getItems());
 				}
-//				mScrolling = false;
-//			}
+			}
 		}
 	};
 	
@@ -577,7 +585,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			}
 		});
 		
-		if (app.getShoppingListCount() > 0 && !mIsItemListFetched) {
+    	// Populating of the list with items is handled in OnScrollListener for the list view
+/*		if (app.getShoppingListCount() > 0 && !mIsItemListFetched) {
 			mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message));
  	   		app.fetchItems(
  	   				!mPrefs.getBoolean("Delete_Bought_Items", true),
@@ -587,7 +596,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			Log.i("ItemListActivity.onCreate", "Skipping fetchItems");
 			doDisplayItems(app.getItems());
 		}
-    }
+*/    }
 
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -679,21 +688,23 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	public void onPostExecute(long retval, ArrayList<Item> items, String message) {
     	
     	try {
-		if (mProgressDialog != null && mProgressDialog.isShowing()) {
-    		mProgressDialog.dismiss();
-    		mProgressDialog = null;
-    	}
-    	
-    	if (retval == 0) {
-        	mIsItemListFetched = true;
-        	doDisplayItems(items);
-    	}
-    	else {
-			Toast.makeText(getApplicationContext(), "The server seems to be out of its mind. Please try later.", Toast.LENGTH_SHORT).show();
-    	}
+			if (mProgressDialog != null && mProgressDialog.isShowing()) {
+	    		mProgressDialog.dismiss();
+	    		mProgressDialog = null;
+	    	}
+	    	
+	    	if (retval == 0) {
+	        	mIsItemListFetched = true;
+	        	doDisplayItems(items);
+	    	}
+	    	else {
+				Toast.makeText(getApplicationContext(), "The server seems to be out of its mind. Please try later.", Toast.LENGTH_SHORT).show();
+	    	}
     	} catch (Exception e) {
     		Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
     	}
+		if (mLoadingMore) 
+			mLoadingMore = false;
 	}
     
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1197,15 +1208,16 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 						mShoppingListButton.setText(shoppingList.mName);
 					}
 					// we're changing Shopping Lists, clear the current view
+					mIsItemListFetched = false;
 					app.setCurrentShoppingListIndex(which);
 					ItemsExpandableListAdapter adapter;
 					if ((adapter = new ItemsExpandableListAdapter(ItemListActivity.this)) != null) {
 						mListView.setAdapter(mAdapter = adapter);
 					}
-					app.fetchItems(
-						!mPrefs.getBoolean("Delete_Bought_Items", true), 
-						mPrefs.getBoolean("Shuffle_Done_Items", true),
-						ItemListActivity.this);
+//					app.fetchItems(
+//						!mPrefs.getBoolean("Delete_Bought_Items", true), 
+//						mPrefs.getBoolean("Shuffle_Done_Items", true),
+//						ItemListActivity.this);
 				}
 			})
 			.create();

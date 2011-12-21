@@ -321,7 +321,7 @@ public class NoteItApplication extends Application {
 	private Preference					mUserPrefs = new Preference("US", "USD");
 	private int 						mItemsStartPos = 0;
 	private int 						mItemsBatchSize = 20;
-	private boolean						mItemsMorePending = false;
+	private boolean						mItemsMorePending = true;
 	
 	@Override
 	public void onCreate() {
@@ -660,6 +660,7 @@ public class NoteItApplication extends Application {
 		ShoppingList thisList = getShoppingList(index);
 		if (thisList != null){
 			mItemsStartPos = 0;
+			mItemsMorePending = true;
 			mCurrentShoppingListID = thisList.mID;
 			mItems.clear();
 		}
