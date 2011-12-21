@@ -1214,10 +1214,11 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 					if ((adapter = new ItemsExpandableListAdapter(ItemListActivity.this)) != null) {
 						mListView.setAdapter(mAdapter = adapter);
 					}
-//					app.fetchItems(
-//						!mPrefs.getBoolean("Delete_Bought_Items", true), 
-//						mPrefs.getBoolean("Shuffle_Done_Items", true),
-//						ItemListActivity.this);
+					mLoadingMore = true;
+					app.fetchItems(
+						!mPrefs.getBoolean("Delete_Bought_Items", true),
+	   					mPrefs.getBoolean("Shuffle_Done_Items", true),
+	   					ItemListActivity.this);
 				}
 			})
 			.create();

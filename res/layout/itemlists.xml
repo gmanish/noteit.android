@@ -17,6 +17,17 @@
         android:divider="@drawable/listview_group_separator"
         android:dividerHeight="2dip" />
 
+	<TextView
+		android:id="@android:id/empty"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_vertical"
+		android:gravity="center_vertical"
+		android:layout_weight="1"
+		android:padding="10dp"
+		android:drawableRight="@drawable/add"
+		android:text="@string/empty_shoppingitems" />
+        
 	<ImageView
 	    android:contentDescription="@string/hello"
 	    android:layout_width="fill_parent"
@@ -51,15 +62,4 @@
 	        android:textAppearance="@style/ItemList_TextAppearance.Footer" />
     </RelativeLayout>
 		
-	<TextView
-		android:id="@android:id/empty"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_gravity="center_vertical"
-		android:gravity="center_vertical"
-		android:layout_weight="1"
-		android:padding="10dp"
-		android:drawableRight="@drawable/add"
-		android:text="@string/empty_shoppingitems" />
-        
 </LinearLayout>
