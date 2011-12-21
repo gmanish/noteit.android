@@ -387,6 +387,9 @@ public class AddEditItemDialog extends Dialog {
 	    	}
     }
     
+    public void initDialog() {
+    }
+    
     protected void populateCategories() {
     	
     	ArrayList<Category> categories = mApplication.getCategories();

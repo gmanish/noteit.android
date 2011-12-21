@@ -373,7 +373,7 @@ public class NoteItApplication extends Application {
 	public String getCurrencyFormat() {
 		
 		String currencyFormat = null;
-        if (mCountries != null && mUserPrefs!= null) {
+        if (mCountries != null && mUserPrefs != null) {
         	int index = mCountries.indexOf(new Country(mUserPrefs.mCountryCode, mUserPrefs.mCurrencyCode));
         	if (index >= 0) {
         		if (mCountries.get(index).mCurrencyIsRight > 0) {

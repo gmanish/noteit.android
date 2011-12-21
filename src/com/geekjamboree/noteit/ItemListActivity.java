@@ -102,13 +102,14 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		  -------------------------------------------*/
 		private ArrayList<ArrayList<Item>>		mItems;
 		private Context							mContext = null;
+		private String							mUnitPriceFormat;
 		
 		ItemsExpandableListAdapter(Context context){
 			
 			mContext = context;
 			mCategories = new ArrayList<Category>();
 			mItems = new ArrayList<ArrayList<Item>>();
-			
+			mUnitPriceFormat = getResources().getString(R.string.itemlist_unitpriceformat);
 			for (int i = 0; i < mCategories.size(); i++){
 				// Initialize the mItems arraylist
 				mItems.add(new ArrayList<Item>());
@@ -337,14 +338,15 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	        	}
 	        	
 	        	if (mDisplayExtras && quantity != null && thisItem.mQuantity > 0 ) {
-	        		NoteItApplication app = (NoteItApplication) getApplication();
-	        		quantity.setText(
-	        				String.valueOf(thisItem.mQuantity) + 
-	        				" " + 
-	        				app.getUnitFromID(thisItem.mUnitID).mAbbreviation);
+	        		NoteItApplication 	app = (NoteItApplication) getApplication();
+	        		String 				unit = app.getUnitFromID(thisItem.mUnitID).mAbbreviation; 
+	        		quantity.setText(String.valueOf(thisItem.mQuantity) + " " + unit); 
 	        		quantity.setVisibility(View.VISIBLE);
 		        	if (price != null && thisItem.mUnitPrice > 0){
-		        		String strPrice = String.format(mCurrencyFormat, thisItem.mUnitPrice);
+		        		String strPrice = String.format(
+		        				mUnitPriceFormat, 
+		        				String.format(mCurrencyFormat, thisItem.mUnitPrice),
+		        				unit);
 		        		String strTotal = String.format(mCurrencyFormat, thisItem.mUnitPrice * thisItem.mQuantity);
 		        		price.setText(strPrice);
 		        		total.setText(strTotal);
@@ -1094,6 +1096,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 								adapter.DeleteItem(item);
 								adapter.AddItem(item, app.getCategory(item.mCategoryID));
 							}
+							doDisplayTotals();
 							adapter.notifyDataSetChanged();
 						}
 						else
@@ -1169,33 +1172,50 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     }
     
     protected void doDisplayItems(ArrayList<Item> items) {
-		float total = 0f;
-		float remaining = 0f;
 		
-		final String totalFormat = getResources().getString(R.string.itemlist_total);
-		final String remainingFormat = getResources().getString(R.string.itemlist_remaining);
-		
-		mAdapter = new ItemsExpandableListAdapter(this);
-    	
+    	mAdapter = new ItemsExpandableListAdapter(this);
     	for (int index = 0; index < items.size(); index++){
     		Item 	thisItem = items.get(index);
-    		float 	itemPrice = thisItem.mQuantity * thisItem.mUnitPrice;
-    		
-    		total += itemPrice;
-    		remaining += thisItem.mIsPurchased > 0 ? 0 : itemPrice;
-    		
     		if (thisItem.mIsPurchased <= 0 || ((thisItem.mIsPurchased > 0) && !mHideDoneItems)) {
 	    		NoteItApplication.Category category = ((NoteItApplication)getApplication()).getCategory(thisItem.mCategoryID);
 	    		mAdapter.AddItem(thisItem, category);
     		}
     	}
-
 		mListView.setAdapter(mAdapter);
+		doDisplayTotals();
+		doExpandPending();
+    }
+    
+    void doDisplayTotals() {
+		
+    	float total = 0f;
+		float remaining = 0f;
+		final String totalFormat = getResources().getString(R.string.itemlist_total);
+		final String remainingFormat = getResources().getString(R.string.itemlist_remaining);
+
+		for (int group = 0; group < mAdapter.getGroupCount(); group++)
+	    	for (int child = 0; child < mAdapter.getChildrenCount(group); child++){
+	    		Item 	thisItem = (Item) mAdapter.getChild(group, child);
+	    		float 	itemPrice = thisItem.mQuantity * thisItem.mUnitPrice;
+	    		
+	    		total += itemPrice;
+	    		remaining += thisItem.mIsPurchased > 0 ? 0 : itemPrice;
+	    	}
+
+		float taxes = 0f;
+		try {
+			taxes = Float.valueOf(mPrefs.getString("taxes", "0"));
+		} catch (Exception e) {
+		}
 		
 		RelativeLayout statusBar = (RelativeLayout) findViewById(R.id.bottom_bar);
 		if (statusBar != null) {
 			if (total > 0 || remaining > 0) {
 				statusBar.setVisibility(View.VISIBLE);
+				if (taxes > 0) {
+					total += (taxes / 100f) * total;
+					remaining += (taxes / 100f) * remaining;
+				}
 				String strTotal = String.format(totalFormat, String.format(mCurrencyFormat, total));
 				String strRemaining = String.format(remainingFormat, String.format(mCurrencyFormat, remaining));
 				TextView textViewTotal = (TextView) statusBar.findViewById(R.id.bottom_total);
@@ -1205,7 +1225,6 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			} else
 				statusBar.setVisibility(View.GONE);
 		}
-		doExpandPending();
     }
     
     protected void doEmail() {

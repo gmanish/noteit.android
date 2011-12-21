@@ -32,6 +32,8 @@
 	        android:layout_weight="1"
 	        android:gravity="left|center_vertical"
 	        android:text="@+id/itemlist_quantity"
+	        android:singleLine="true"
+	        android:ellipsize="end"
 			style="@style/ItemsList_TextAppearance.Quantity" />
 	
 		<TextView
@@ -41,6 +43,8 @@
 	        android:layout_weight="1"
 	        android:gravity="center"
 	        android:text="@+id/itemlist_price" 
+	        android:singleLine="true"
+	        android:ellipsize="end"
 	        style="@style/ItemsList_TextAppearance.Price" />
 		
 	    <TextView
@@ -50,6 +54,8 @@
 	        android:layout_weight="1"
 	        android:gravity="right|center_vertical"
 	        android:text="@+id/itemlist_Total" 
+	        android:singleLine="true"
+	        android:ellipsize="end"
 	        style="@style/ItemsList_TextAppearance.Total" />
     
     </LinearLayout>
