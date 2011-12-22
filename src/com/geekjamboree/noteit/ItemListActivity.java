@@ -65,6 +65,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	String							mCurrencyFormat = new String();
 	boolean							mLoadingMore = false;
 	ProgressBar						mProgressBar;
+	float							mPendingTotal = 0f;
 	
 	static final int ADD_ITEM_REQUEST = 0;	
 	
@@ -598,6 +599,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			}
 		});
         
+    	doFetchAndDisplayPendingTotal();
+
     	// Populating of the list with items is handled in OnScrollListener for the list view
 /*		if (app.getShoppingListCount() > 0 && !mIsItemListFetched) {
 			mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message));
@@ -729,6 +732,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
         mFontSize = Integer.valueOf(mPrefs.getString("Item_Font_Size", "3"));
 		mListView.invalidateViews();
 		mCurrencyFormat = ((NoteItApplication) getApplication()).getCurrencyFormat();
+		doDisplayPendingTotal();
 		super.onResume();
 	}
 
@@ -817,6 +821,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	    				Category category = ((NoteItApplication) getApplication()).getCategory(item.mCategoryID);
     	    				adapter.AddItem(item, category);
     						adapter.notifyDataSetChanged();
+    						doAddToPendingTotal(item.mUnitID * item.mUnitPrice);
+    						doDisplayPendingTotal();
     					}
     				});
     		return addDialog;
@@ -835,6 +841,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
         				if ((bitMask & Item.ITEM_CATEGORYID) > 0 || (bitMask & Item.ITEM_NAME) > 0) {
     	    				adapter.DeleteItem(oldItem);
     	    				adapter.AddItem(newItem, category);
+    	    				doAddToPendingTotal(newItem.mUnitPrice * newItem.mQuantity - oldItem.mUnitPrice * oldItem.mQuantity);
+    	    				doDisplayPendingTotal();
         				} else {
         					Item selItem = (Item) mListView.getExpandableListAdapter().getChild(
         							mSelectedGroup.get(), 
@@ -910,6 +918,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 						ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
 						adapter.DeleteItem(selItem);
 						adapter.notifyDataSetChanged();
+						doDeductFromPendingTotal(selItem.mUnitPrice * selItem.mQuantity);
+						doDisplayPendingTotal();
 					} else
 						Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
 				}
@@ -1207,7 +1217,11 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 								adapter.DeleteItem(item);
 								adapter.AddItem(item, app.getCategory(item.mCategoryID));
 							}
-							doDisplayTotals();
+							if (item.mIsPurchased > 0)
+								doDeductFromPendingTotal(item.mUnitPrice * item.mQuantity);
+							else
+								doAddToPendingTotal(item.mUnitPrice * item.mQuantity);
+							doDisplayPendingTotal();
 							adapter.notifyDataSetChanged();
 						}
 						else
@@ -1278,6 +1292,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 						mListView.setAdapter(adapter);
 					}
 					fetchItems(ItemListActivity.this);
+					doFetchAndDisplayPendingTotal();
 				}
 			})
 			.create();
@@ -1297,52 +1312,65 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 //		mListView.setAdapter(mAdapter);
     	adapter.notifyDataSetChanged();
     	Log.i("NoteItApplication.doDisplayItems", "Notified Adapter of change");
-		doDisplayTotals();
+//		doDisplayTotals();
 		doExpandPending();
     }
     
-    void doDisplayTotals() {
-		
-    	float 						total = 0f;
-		float 						remaining = 0f;
-		final String 				totalFormat = getResources().getString(R.string.itemlist_total);
-		final String 				remainingFormat = getResources().getString(R.string.itemlist_remaining);
-		ItemsExpandableListAdapter 	adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
-		
-		for (int group = 0; group < adapter.getGroupCount(); group++)
-	    	for (int child = 0; child < adapter.getChildrenCount(group); child++){
-	    		Item 	thisItem = (Item) adapter.getChild(group, child);
-	    		float 	itemPrice = thisItem.mQuantity * thisItem.mUnitPrice;
-	    		
-	    		total += itemPrice;
-	    		remaining += thisItem.mIsPurchased > 0 ? 0 : itemPrice;
-	    	}
-
-		float taxes = 0f;
-		try {
-			taxes = Float.valueOf(mPrefs.getString("taxes", "0"));
-		} catch (Exception e) {
-		}
-		
-		RelativeLayout statusBar = (RelativeLayout) findViewById(R.id.bottom_bar);
-		if (statusBar != null) {
-			if (total > 0 || remaining > 0) {
-				statusBar.setVisibility(View.VISIBLE);
-				if (taxes > 0) {
-					total += (taxes / 100f) * total;
-					remaining += (taxes / 100f) * remaining;
+    void doFetchAndDisplayPendingTotal() {
+    	NoteItApplication app = (NoteItApplication) getApplication();
+    	app.getPendingTotal(
+    		app.getCurrentShoppingListID(), 
+    		new NoteItApplication.OnGetPendingTotalListener() {
+			
+			public void onPostExecute(long resultCode, float total, String message) {
+				if (resultCode == 0) {
+					mPendingTotal = total;
+					doDisplayPendingTotal();
 				}
-				String strTotal = String.format(totalFormat, String.format(mCurrencyFormat, total));
-				String strRemaining = String.format(remainingFormat, String.format(mCurrencyFormat, remaining));
-				TextView textViewTotal = (TextView) statusBar.findViewById(R.id.bottom_total);
-				TextView textViewRemaining = (TextView) statusBar.findViewById(R.id.bottom_remaining);
-				if (textViewTotal != null) textViewTotal.setText(strTotal);
-				if (textViewRemaining != null) textViewRemaining.setText(strRemaining);
-			} else
-				statusBar.setVisibility(View.GONE);
-		}
+				else {
+					mPendingTotal = 0f;
+					doDisplayPendingTotal();
+				}
+			}
+		});
     }
     
+    void doAddToPendingTotal(float add) {
+    	mPendingTotal += add;
+    }
+    
+    void doDeductFromPendingTotal(float deduct) {
+    	mPendingTotal -= deduct;
+    }
+    
+    void doDisplayPendingTotal() {
+		final String 	remainingFormat = getResources().getString(R.string.itemlist_remaining);
+		RelativeLayout 	statusBar = (RelativeLayout) findViewById(R.id.bottom_bar);
+
+		if (statusBar != null && mPendingTotal > 0) {
+			statusBar.setVisibility(View.VISIBLE);
+
+			float taxes = 0f;
+			try {
+				taxes = Float.valueOf(mPrefs.getString("taxes", "0"));
+			} catch (Exception e) {
+			}
+			
+			float total = mPendingTotal;
+			if (taxes > 0) {
+				total += (taxes / 100f) * total;
+			}
+			
+			String strRemaining = String.format(remainingFormat, String.format(mCurrencyFormat, total));
+			TextView textViewRemaining = (TextView) statusBar.findViewById(R.id.bottom_remaining);
+			if (textViewRemaining != null) 
+				textViewRemaining.setText(strRemaining);
+			
+		} else if (statusBar != null && mPendingTotal <= 0) {
+			statusBar.setVisibility(View.GONE);
+		}
+    }
+        
     protected void doEmail() {
     	NoteItApplication	app = (NoteItApplication) getApplication();
     	final Intent 		emailIntent = new Intent(Intent.ACTION_SEND);

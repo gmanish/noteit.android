@@ -310,6 +310,10 @@ public class NoteItApplication extends Application {
 		void onPostExecute(long resultCode, Item item, String message);
 	}
 	
+	public static interface OnGetPendingTotalListener {
+		void onPostExecute(long resultCode, float total, String message);
+	}
+	
 	private long						mUserID = 0;
 	private long						mCurrentShoppingListID = 0;
 	private ArrayList<ShoppingList>		mShoppingLists = new ArrayList<ShoppingList>();
@@ -1367,6 +1371,42 @@ public class NoteItApplication extends Application {
 			setItemsDone.execute();
 		} catch (Exception e) {
 			listener.onPostExecute(-1, e.getMessage());
+		}
+	}
+	
+	public void getPendingTotal(long listId, final OnGetPendingTotalListener listener) {
+		
+		try {
+			ArrayList<NameValuePair> 	args = new ArrayList<NameValuePair>(3);
+			
+			args.add(new BasicNameValuePair("command", "do_get_pending_cost"));
+			args.add(new BasicNameValuePair("arg1", String.valueOf(listId)));
+			args.add(new BasicNameValuePair("arg2", String.valueOf(getUserID())));
+
+			AsyncInvokeURLTask getPendingTotal = new AsyncInvokeURLTask(args, new OnPostExecuteListener() {
+				
+				public void onPostExecute(JSONObject result) {
+					if (listener != null) {
+						try {
+							long retVal = result.getLong("JSONRetVal");
+							if (retVal == 0) {
+								listener.onPostExecute(
+									result.getLong("JSONRetVal"), 
+									result.getLong("arg1"), 
+									"");
+							} else 
+								listener.onPostExecute(retVal, 0, result.getString("JSONRetMessage"));
+						} catch (JSONException e) {
+							listener.onPostExecute(-1, 0, e.getMessage());
+						}
+					}
+				}
+			});
+			getPendingTotal.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (listener != null)
+				listener.onPostExecute(-1, 0, e.getMessage());
 		}
 	}
 	

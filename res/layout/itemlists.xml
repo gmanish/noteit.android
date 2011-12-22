@@ -53,13 +53,6 @@
 	        android:layout_alignParentLeft="true"
 	        android:textAppearance="@style/ItemList_TextAppearance.Footer" />
 
-        <TextView
-	        android:id="@+id/bottom_total"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="@+id/bottom_total"
-	        android:layout_alignParentRight="true"
-	        android:textAppearance="@style/ItemList_TextAppearance.Footer" />
     </RelativeLayout>
 		
 </LinearLayout>
