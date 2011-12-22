@@ -40,7 +40,7 @@
 	        android:id="@+id/itemlist_price"
 	        android:layout_width="0dip"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="1"
+	        android:layout_weight="2"
 	        android:gravity="center"
 	        android:text="@+id/itemlist_price" 
 	        android:singleLine="true"
