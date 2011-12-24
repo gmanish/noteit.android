@@ -1,5 +1,6 @@
 package com.geekjamboree.noteit;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import com.geekjamboree.noteit.NoteItApplication.Category;
@@ -19,6 +20,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,6 +32,7 @@ public class LoginActivity
 	
 	ProgressDialog		mProgressDialog = null;
 	SharedPreferences	mPrefs;
+	boolean				mIsHashedPassword = false;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -42,11 +45,26 @@ public class LoginActivity
         // Read the email id from the preference
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRememberMe = mPrefs.getBoolean("Remember_Me", true);
+
         String emailID = mPrefs.getString("email", "");
         if (emailID != "" && isRememberMe) {
-	        EditText editTextEmail = (EditText)findViewById(R.id.editEmailID);
+	        EditText editTextEmail = (EditText) findViewById(R.id.editEmailID);
 	        editTextEmail.setText(emailID);
         }
+        
+        String 		password = mPrefs.getString("password", "");
+    	EditText 	editPassword = (EditText) findViewById(R.id.editPassword);
+        if (password != "" && isRememberMe) {
+    		editPassword.setText(password);
+    		mIsHashedPassword = true;
+        }
+        editPassword.setOnKeyListener(new View.OnKeyListener() {
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				// Perhaps we should ignore non-alpha numeric key presses?
+				mIsHashedPassword = false;
+				return false;
+			}
+		});
         
         Button next = (Button) findViewById(R.id.buttonLogin);
         next.setOnClickListener(new View.OnClickListener() {
@@ -60,9 +78,12 @@ public class LoginActivity
 
             	// Try to authenticate the user with the supplied credentials.
             	// If authentication succeedes, switch to the shopping list view
-            	EditText emailID = (EditText)findViewById(R.id.editEmailID);
+            	EditText emailID = (EditText) findViewById(R.id.editEmailID);
+            	EditText password = (EditText) findViewById(R.id.editPassword); 
             	((NoteItApplication) getApplication()).loginUser(
     				emailID.getText().toString(), 
+    				password.getText().toString(),
+    				mIsHashedPassword,
     				LoginActivity.this);
             }
 
@@ -79,17 +100,35 @@ public class LoginActivity
     
 	@Override
 	protected void onPause() {
-    	EditText emailID = (EditText) findViewById(R.id.editEmailID);
-    	if (emailID != null) {
-    		SharedPreferences.Editor editor = mPrefs.edit();
+        boolean isRememberMe = mPrefs.getBoolean("Remember_Me", true);
+		SharedPreferences.Editor editor = mPrefs.edit();
+    	
+		EditText emailID = (EditText) findViewById(R.id.editEmailID);
+    	if (emailID != null && isRememberMe) {
     		String email = emailID.getText().toString();
     		editor.putString("email", email);
-    		NoteItApplication app = (NoteItApplication) getApplication();
-    		if (app.getUserPrefs() != null) {
-    			editor.putString("currency", app.getUserPrefs().mCurrencyCode);
-    		}
-    		editor.commit();
-    	}
+    	} else
+    		editor.remove("email");
+    	
+    	EditText password = (EditText) findViewById(R.id.editPassword);
+    	if (password != null && isRememberMe) {
+			if (!mIsHashedPassword) {
+				try {
+					editor.putString("password", NoteItApplication.hashString(password.getText().toString()));
+				} catch (NoSuchAlgorithmException e) {
+				}
+			} else {
+				editor.putString("password", password.getText().toString());
+			}
+    	} else 
+    		editor.remove("password");
+    	
+		NoteItApplication app = (NoteItApplication) getApplication();
+    	if (app.getUserPrefs() != null) {
+			editor.putString("currency", app.getUserPrefs().mCurrencyCode);
+		}
+
+    	editor.commit();
 		super.onPause();
 	}
 

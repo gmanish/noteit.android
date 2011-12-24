@@ -1,5 +1,7 @@
 package com.geekjamboree.noteit;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -171,7 +173,7 @@ public class NoteItApplication extends Application {
 		}
 		
 		public String toString(){
-			return mName + " (" + String.valueOf(mRank) + ")";
+			return mName;
 		}
 
 		public boolean equals(Object obj){
@@ -348,12 +350,18 @@ public class NoteItApplication extends Application {
 	public void setUserPrefs(Preference prefs) {
 		mUserPrefs = prefs;
 	}
-	
-	public void loginUser(String userEmail, AsyncInvokeURLTask.OnPostExecuteListener inPostExecute){
+	     
+	public void loginUser(
+			String userEmail, 
+			String password, 
+			boolean isHashedPassword,
+			AsyncInvokeURLTask.OnPostExecuteListener inPostExecute){
 		try {
-	    	ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+	        ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 	        nameValuePairs.add(new BasicNameValuePair("command", "do_login_json"));
 	        nameValuePairs.add(new BasicNameValuePair("email_ID", userEmail));
+	        nameValuePairs.add(new BasicNameValuePair("password", password));
+	        nameValuePairs.add(new BasicNameValuePair("isHashedPassword", String.valueOf(isHashedPassword ? 1 : 0)));
 
 			AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs, inPostExecute);
 			task.execute();
@@ -1560,6 +1568,22 @@ public class NoteItApplication extends Application {
 				category.mRank += 1;
 			}
 		}
+	}
+	
+	public static String hashString(String clearText) throws NoSuchAlgorithmException {
+    	String salt = "G3480BFA037EE";
+    	MessageDigest sha1 = MessageDigest.getInstance("SHA-1");
+    	if (sha1 != null) {
+    		byte[] saltedText = sha1.digest((salt + clearText).getBytes());
+    		StringBuffer hex = new StringBuffer(saltedText.length * 2);
+    		for (int i = 0; i < saltedText.length; i++) {
+    			char[] hexArray = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    			hex.append(hexArray[(0xF0 & (int) saltedText[i]) >> 4]);
+    			hex.append(hexArray[(0x0F & (int) saltedText[i])]);
+    		}
+        	return hex.toString();
+    	} else
+    		return clearText;
 	}
 	
 }

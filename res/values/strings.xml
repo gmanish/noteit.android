@@ -46,7 +46,7 @@
 	<string name="itemlistactivity_title">Items To Shop</string>
 	<string name="empty_shoppingitems">You do not have any items in this list. You can add new items by clicking the Add button.</string>
 	<string name="itemlist_select_shoppinglist">Choose Shopping List</string>
-	<string name="itemlist_unitpriceformat">\@ %1$s / %2$s</string>
+	<string name="itemlist_unitpriceformat">\@ %1$s/%2$s</string>
 	<string name="itemlist_total">Total: %1$s</string>
 	<string name="itemlist_remaining">Remaining: %1$s</string>
 	<string name="itemlist_expandall">Expand All</string>
