@@ -1,5 +1,5 @@
-package com.geekjamboree.noteit;
 
+package com.geekjamboree.noteit;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -447,7 +447,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 
 				ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
 				Log.i("ItemsListView.onScrollListener", "App Items: " + app.getItems().size());
-				if (totalItemCount - adapter.getGroupCount() >= adapter.getTotalChildrenCount()) {
+				if (totalItemCount - mListView.getGroupCount() >= adapter.getTotalChildrenCount()) {
 					if (app.isMoreItemsPending()) {
 						fetchItems(ItemListActivity.this);
 					}

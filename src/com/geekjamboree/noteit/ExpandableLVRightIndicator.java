@@ -43,4 +43,14 @@ public class ExpandableLVRightIndicator extends ExpandableListView {
 	public int getRightMargin() {
 		return mRightMargin;
 	}
+	
+	public int getGroupCount() {
+		int groupCount = 0;
+		for (int index = getFirstVisiblePosition(); index <= getLastVisiblePosition(); index++) {
+			long packedPosition = super.getExpandableListPosition(index);
+			if (ExpandableListView.getPackedPositionType(packedPosition) == PACKED_POSITION_TYPE_GROUP)
+				groupCount++;
+		}
+		return groupCount;
+	}
 }
