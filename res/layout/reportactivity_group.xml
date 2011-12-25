@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/listitems_group_root"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="5dip"
+    android:paddingRight="10dip"
+    android:paddingTop="5dip"
+    android:paddingBottom="5dip" 
+    android:background="@android:color/transparent" >
+
+    <TextView
+        android:id="@+id/reportactivity_group_name"
+        style="@style/ItemList_TextAppearance.GroupsItem.Small"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@android:color/transparent"
+        android:ellipsize="end"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="5dip"
+        android:singleLine="true"
+        android:text="@+id/itemslist_categoryName" />
+
+</LinearLayout>

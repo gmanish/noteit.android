@@ -2,7 +2,9 @@ package com.geekjamboree.noteit;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
@@ -211,6 +213,7 @@ public class NoteItApplication extends Application {
 		public int		mUnitID			= 1; // default to "unit"
 		public int		mIsPurchased	= 0; // SMALLINT at the backend
 		public int 		mIsAskLater 	= 0; // SMALLINT at the backend
+		public Date		mDateAdded;
 
 		public Item() {
 			
@@ -280,6 +283,30 @@ public class NoteItApplication extends Application {
 		}
 	}
 	
+	class CategoryReportItem {
+		long 			mCategoryId = 0;
+		String			mCategoryName = "";
+		float			mPrice = 0f;
+		
+		public CategoryReportItem(long id, String name, float price) {
+			mCategoryId = id;
+			mCategoryName = name;
+			mPrice = price;
+		}
+	}
+
+	class ItemReportItem {
+		long 			mItemID = 0;
+		String			mItemName = "";
+		float			mPrice = 0f;
+		
+		public ItemReportItem(long id, String name, float price) {
+			mItemID = id;
+			mItemName = name;
+			mPrice = price;
+		}
+	}
+
 	public static interface OnMethodExecuteListerner {
 		void onPostExecute(long resultCode, String message);
 	}
@@ -314,6 +341,14 @@ public class NoteItApplication extends Application {
 	
 	public static interface OnGetPendingTotalListener {
 		void onPostExecute(long resultCode, float total, String message);
+	}
+	
+	public static interface OnGetCategoryReportListener {
+		void onPostExecute(long resultCode, ArrayList<CategoryReportItem> items, String message);
+	}
+	
+	public static interface OnGetItemReportListener {
+		void onPostExecute(long resultCode, ArrayList<ItemReportItem> items, String message);
 	}
 	
 	private long						mUserID = 0;
@@ -385,22 +420,22 @@ public class NoteItApplication extends Application {
 		mUserID = userID;
 	}
 	
-	public String getCurrencyFormat() {
+	public String getCurrencyFormat(boolean formatString) {
 		
 		String currencyFormat = null;
         if (mCountries != null && mUserPrefs != null) {
         	int index = mCountries.indexOf(new Country(mUserPrefs.mCountryCode, mUserPrefs.mCurrencyCode));
         	if (index >= 0) {
         		if (mCountries.get(index).mCurrencyIsRight > 0) {
-        			currencyFormat = new String("%1$.2f " + mCountries.get(index).mCurrencySymbol);
+        			currencyFormat = new String((formatString ? "%1$s " : "%1$.2f ") + mCountries.get(index).mCurrencySymbol);
         		}
         		else { 
-        			currencyFormat = new String(mCountries.get(index).mCurrencySymbol + " %1$.2f");
+        			currencyFormat = new String(mCountries.get(index).mCurrencySymbol + (formatString ? " %1$s " : " %1$.2f"));
         		}
         	}
         }
         
-        return currencyFormat != null ? currencyFormat : "%1$.2f";
+        return currencyFormat != null ? currencyFormat : (formatString ? "%1$s" : "%1$.2f");
 	}
 	
 	public void saveUserPreferences(final OnMethodExecuteListerner listener) {
@@ -1295,8 +1330,10 @@ public class NoteItApplication extends Application {
 	        
 	        nameValuePairs.add(new BasicNameValuePair("arg8", String.valueOf(getUserID())));
 	        
-	        if ((bitMask & Item.ITEM_ISPURCHASED) > 0)
+	        if ((bitMask & Item.ITEM_ISPURCHASED) > 0) {
 	        	nameValuePairs.add(new BasicNameValuePair("arg9", String.valueOf(item.mIsPurchased)));
+	        	nameValuePairs.add(new BasicNameValuePair("arg11", new Date(Calendar.getInstance().getTimeInMillis()).toString()));
+	        }
 	        
 	        if ((bitMask & Item.ITEM_ISASKLATER) > 0)
 	        	nameValuePairs.add(new BasicNameValuePair("arg10", String.valueOf(item.mIsAskLater)));
@@ -1586,4 +1623,99 @@ public class NoteItApplication extends Application {
     		return clearText;
 	}
 	
+	public void getReport(
+			boolean isPurchased,
+			Date from,
+			Date to,
+			final OnGetCategoryReportListener listener) {
+		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(5);
+		args.add(new BasicNameValuePair("command", "do_category_report"));
+		args.add(new BasicNameValuePair("arg1", from.toString()));
+		args.add(new BasicNameValuePair("arg2", to.toString()));
+		args.add(new BasicNameValuePair("arg3", String.valueOf(isPurchased ? 1 : 0)));
+		args.add(new BasicNameValuePair("arg4", String.valueOf(getUserID())));
+		try {
+			AsyncInvokeURLTask getReportTask = new AsyncInvokeURLTask(args, new OnPostExecuteListener() {
+				
+				public void onPostExecute(JSONObject result) {
+					try {
+						long retVal = result.getLong("JSONRetVal");
+						if (retVal == 0) {
+							JSONArray jsonItems = result.getJSONArray("arg1");
+							ArrayList<CategoryReportItem> items = new ArrayList<CategoryReportItem>();
+							for (int index = 0; index < jsonItems.length(); index++) {
+								JSONObject jsonItem = jsonItems.getJSONObject(index);
+								CategoryReportItem item = new CategoryReportItem(
+										jsonItem.getLong("categoryID"), 
+										jsonItem.getString("categoryName"), 
+										(float)jsonItem.getDouble("price"));
+								items.add(item);
+							}
+							if (listener != null)
+								listener.onPostExecute(retVal, items, "");
+						} else if (listener != null)
+							listener.onPostExecute(-1, null, result.getString("JSONRetMessage"));
+					} catch (JSONException e) {
+						e.printStackTrace();
+						if (listener != null)
+							listener.onPostExecute(-1, null, e.getMessage());
+					}
+				}
+			});
+			getReportTask.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (listener != null) {
+				listener.onPostExecute(-1,null, e.getMessage());
+			}
+		}
+	}
+
+	public void getReport(
+			boolean isPurchased,
+			Date from,
+			Date to,
+			final OnGetItemReportListener listener) {
+		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(5);
+		args.add(new BasicNameValuePair("command", "do_item_report"));
+		args.add(new BasicNameValuePair("arg1", from.toString()));
+		args.add(new BasicNameValuePair("arg2", to.toString()));
+		args.add(new BasicNameValuePair("arg3", String.valueOf(isPurchased ? 1 : 0)));
+		args.add(new BasicNameValuePair("arg4", String.valueOf(getUserID())));
+		try {
+			AsyncInvokeURLTask getReportTask = new AsyncInvokeURLTask(args, new OnPostExecuteListener() {
+				
+				public void onPostExecute(JSONObject result) {
+					try {
+						long retVal = result.getLong("JSONRetVal");
+						if (retVal == 0) {
+							JSONArray jsonItems = result.getJSONArray("arg1");
+							ArrayList<ItemReportItem> items = new ArrayList<ItemReportItem>();
+							for (int index = 0; index < jsonItems.length(); index++) {
+								JSONObject jsonItem = jsonItems.getJSONObject(index);
+								ItemReportItem item = new ItemReportItem(
+										jsonItem.getLong("itemID"), 
+										jsonItem.getString("itemName"), 
+										(float)jsonItem.getDouble("price"));
+								items.add(item);
+							}
+							if (listener != null)
+								listener.onPostExecute(retVal, items, "");
+						} else if (listener != null)
+							listener.onPostExecute(-1, null, result.getString("JSONRetMessage"));
+					} catch (JSONException e) {
+						e.printStackTrace();
+						if (listener != null)
+							listener.onPostExecute(-1, null, e.getMessage());
+					}
+				}
+			});
+			getReportTask.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (listener != null) {
+				listener.onPostExecute(-1,null, e.getMessage());
+			}
+		}
+	}
 }

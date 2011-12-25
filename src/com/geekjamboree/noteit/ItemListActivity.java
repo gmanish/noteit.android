@@ -731,7 +731,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		mHideDoneItems = mPrefs.getBoolean("Delete_Bought_Items", false);
         mFontSize = Integer.valueOf(mPrefs.getString("Item_Font_Size", "3"));
 		mListView.invalidateViews();
-		mCurrencyFormat = ((NoteItApplication) getApplication()).getCurrencyFormat();
+		mCurrencyFormat = ((NoteItApplication) getApplication()).getCurrencyFormat(false);
 		doDisplayPendingTotal();
 		super.onResume();
 	}
@@ -786,18 +786,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	}
     
     protected void doAddItem() {
-    	ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
-    	int groupCount = adapter.getGroupCount();
-    	for (int group = 0; group < groupCount; group++) {
-    		int childCount = adapter.getChildrenCount(group);
-    		for (int child = 0; child < childCount; child++) {
-    			Log.i("ItemListActvity.doAddItem", 
-    					"Group> " + adapter.getGroup(group).toString() + 
-    					" Child > " + adapter.getChild(group, child));
-    		}
-    	}
-    		
- //   	showDialog(DIALOG_ADD_ITEM);
+    	showDialog(DIALOG_ADD_ITEM);
     }
     
     protected void doEditItem() {

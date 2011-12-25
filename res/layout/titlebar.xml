@@ -12,7 +12,8 @@
    <TextView
         android:id="@+id/textView_titlebar"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
+        android:layout_width="0dip"
+        android:layout_weight="1"
         android:layout_gravity="center_vertical"
         android:paddingLeft="10dip"
         android:paddingRight="10dip"

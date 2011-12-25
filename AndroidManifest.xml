@@ -27,7 +27,9 @@
         <activity android:name="ItemListActivity"></activity>
         <activity android:name="CategoryListActivity"></activity>
         <activity android:name="AddEditItemActivity"></activity>
-    
+        <activity android:name="ReportMenuActivity"></activity>
+        <activity android:name="ReportActivity"></activity>
+        
     </application>
 
 </manifest>

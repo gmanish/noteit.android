@@ -89,7 +89,76 @@
 	<string name="addedit_asklater_price">Total Price</string>
 	<string name="addedit_increment">+</string>
 	<string name="addedit_decrement">-</string>
-
+	
+	<string name="reporting_title">Reports</string>
+	<string name="reporting_purchased_group">Purchase Reports</string>
+	<string name="reporting_pending_group">Pending Reports</string>
+	<string name="reporting_putchased_today">Today</string>
+	<string name="reporting_purchased_today_desc">Display a Report of all Items Purchased Today</string>
+	<string name="reporting_putchased_yesterday">Yesterday</string>
+	<string name="reporting_purchased_yesterday_desc">Display a Report of all Items Purchased Yesterday</string>
+	<string name="reporting_purchased_thisweek">This Week</string>
+	<string name="reporting_purchased_thisweek_desc">Display a Report of all Items Purchased This Week</string>
+	<string name="reporting_purchased_lastweek">Last Week</string>
+	<string name="reporting_purchased_lastweek_desc">Report of all Items Purchased Last Week</string>
+	<string name="reporting_purchased_thisMonth">This Month</string>
+	<string name="reporting_purchased_thisMonth_desc">Display a Report of Items Purchased This Month by Category</string>
+	<string name="reporting_purchased_lastMonth">Last Month</string>
+	<string name="reporting_purchased_lastMonth_desc">Display a Report of Items Purchased Last Month by Category</string>
+	<string name="reporting_purchased_All">So far</string>
+	<string name="reporting_pending_all">All</string>
+	<string name="reporting_item_name">Item Name</string>
+	<string name="reporting_category_category">Category</string>
+	<string name="reporting_category_price">Price</string>
+	<string name="reporting_category_percentage">Percentage</string>
+	<string name="reporting_category_head">
+	    <![CDATA[
+	    	<html>
+	    	<head>
+	    	<style type=\"text/css\">
+				table {padding-top:5px; padding-bottom:5px; padding-left:10px; padding-right: 10px; color: #808080;}
+				tr.top-border {border-top: thin solid #808080;}
+				tr.border-bottom {border-bottom: thin solid #808080;}
+				th {
+					font-weight: bold; 
+					padding-bottom:10px;
+					border-bottom: thin solid #808080; 	
+				}
+				th.la {text-align: left;}
+				th.ra {text-align: right;}
+				th.ca {text-align: center;}
+				td.la {text-align: left;}
+				td.ra {text-align: right;}
+				td.ca {text-align: center;}
+				td#footer {border-top: thin solid #808080; padding-top: 10px}
+	    	</style>
+	    	</head>
+	    	<body>
+	    	<table width=\'100%\'>
+	    ]]>
+	</string>
+	<string name="reporting_category_report_item">
+	    <![CDATA[
+	    	<tr>
+	    		<td class=\"la\">%1$s</td>
+	    		<td class=\"ra\">%2$s</td>
+	    		<td class=\"ra\">%3$s %%</td>
+	    	</tr>
+	    	]]>
+	</string>
+	<string name="reporting_category_footer">
+	    <![CDATA[
+	    	<tr>
+	    		<td id=\"footer\" class=\"la\">Total:</td>
+	    		<td id=\"footer\" class=\"ra\">%1$s</td>
+	    		<td id=\"footer\" class=\"ra\">100 %%</td>
+	    	</tr>
+	    	</table>
+	    	</body>
+	    	</html>
+	    	]]>
+	</string>
+		
 	<string name="preference_activity_title">Note It! Settings</string>
 	<string-array name="itemFontSize">
 	    <item>Large</item>

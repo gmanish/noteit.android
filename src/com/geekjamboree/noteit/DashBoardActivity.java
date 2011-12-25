@@ -24,6 +24,7 @@ public class DashBoardActivity extends Activity {
 	
 	protected final int DASHBOARD_SHOPPINGLISTS = 0;
 	protected final int DASHBOARD_CATEGORIES = 1;
+	protected final int DASHBOARD_REPORTS = 2;
 	
 	public class DashboardItem {
 		public String 		mText;
@@ -98,7 +99,7 @@ public class DashBoardActivity extends Activity {
         DashBoardAdapter adapter = new DashBoardAdapter(/*this*/);
         adapter.addItem("Shopping Lists", R.drawable.cart_big, DASHBOARD_SHOPPINGLISTS);
         adapter.addItem("Categories", R.drawable.category_large, DASHBOARD_CATEGORIES);
-        
+        adapter.addItem("Reports", R.drawable.reports_large, DASHBOARD_REPORTS);
         mGridView = (GridView) findViewById(R.id.category_gridview);
         mGridView.setAdapter(adapter);
         
@@ -112,6 +113,9 @@ public class DashBoardActivity extends Activity {
         			break;
         		case DASHBOARD_CATEGORIES:
         			doDashboardCategories();
+        			break;
+        		case DASHBOARD_REPORTS:
+        			doDashboardReports();
         			break;
         		}
         	}
@@ -149,6 +153,11 @@ public class DashBoardActivity extends Activity {
 		
         Intent intent = new Intent(this, CategoryListActivity.class);
         startActivity(intent);
+	}
+
+	protected void doDashboardReports() {
+		Intent intent = new Intent(this, ReportMenuActivity.class);
+		startActivity(intent);
 	}
 	
 	protected void doSetupToolbarButton() {
