@@ -128,4 +128,17 @@
 
 	</PreferenceCategory>
 		
+	<PreferenceCategory
+		android:title="Reports"
+		android:key="Items_Reporting" >
+	    
+	    <CheckBoxPreference
+	    	android:title="Attach HTML Reports"
+	    	android:key="Attach_html_reports"
+	    	android:summaryOff="Send Only Plain Text Reports While Sharing."
+	    	android:summaryOn="Attach an HTML version of Reports when Sharing."
+	    	android:defaultValue="true" />
+	    		    
+	</PreferenceCategory>
+
 </PreferenceScreen>

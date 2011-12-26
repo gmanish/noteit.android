@@ -424,13 +424,18 @@ public class NoteItApplication extends Application {
 		
 		String currencyFormat = null;
         if (mCountries != null && mUserPrefs != null) {
-        	int index = mCountries.indexOf(new Country(mUserPrefs.mCountryCode, mUserPrefs.mCurrencyCode));
+        	int index = mCountries.indexOf(
+        			new Country(mUserPrefs.mCountryCode, mUserPrefs.mCurrencyCode));
         	if (index >= 0) {
         		if (mCountries.get(index).mCurrencyIsRight > 0) {
-        			currencyFormat = new String((formatString ? "%1$s " : "%1$.2f ") + mCountries.get(index).mCurrencySymbol);
+        			currencyFormat = new String(
+        					(formatString ? "%1$s " : "%1$.2f ") + 
+        					mCountries.get(index).mCurrencySymbol);
         		}
         		else { 
-        			currencyFormat = new String(mCountries.get(index).mCurrencySymbol + (formatString ? " %1$s " : " %1$.2f"));
+        			currencyFormat = new String(
+        					mCountries.get(index).mCurrencySymbol + 
+        					(formatString ? " %1$s " : " %1$.2f"));
         		}
         	}
         }
@@ -449,21 +454,20 @@ public class NoteItApplication extends Application {
 				args.add(new BasicNameValuePair("arg2", mUserPrefs.mCurrencyCode));
 				args.add(new BasicNameValuePair("arg3", String.valueOf(mUserID)));
 				
-				AsyncInvokeURLTask task = new AsyncInvokeURLTask(args, new OnPostExecuteListener() {
-					
-					public void onPostExecute(JSONObject result) {
-						if (listener != null) {
-							try {
-								listener.onPostExecute(
-									result.getLong("JSONRetVal"), 
-									result.getString("JSONRetMessage"));
-							} catch (JSONException e) {
-								listener.onPostExecute(-1, e.getMessage());
+				AsyncInvokeURLTask task = new AsyncInvokeURLTask(args, 
+						new OnPostExecuteListener() {
+							public void onPostExecute(JSONObject result) {
+								if (listener != null) {
+									try {
+										listener.onPostExecute(
+											result.getLong("JSONRetVal"), 
+											result.getString("JSONRetMessage"));
+									} catch (JSONException e) {
+										listener.onPostExecute(-1, e.getMessage());
+									}
+								}
 							}
-						}
-					}
-				});
-				
+						});
 				task.execute();
 				
 			} catch (JSONException e) {

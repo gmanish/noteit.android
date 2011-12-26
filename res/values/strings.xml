@@ -111,6 +111,8 @@
 	<string name="reporting_category_category">Category</string>
 	<string name="reporting_category_price">Price</string>
 	<string name="reporting_category_percentage">Percentage</string>
+	<string name="reporting_emailIntro">The sender shared a Shopping Report with you:</string>
+	<string name="reporting_sharemessage">Share Report Via</string>
 	<string name="reporting_category_head">
 	    <![CDATA[
 	    	<html>

@@ -40,6 +40,10 @@ public class CustomTitlebarWrapper {
         	mTitleText.setText(charSequence);
          }
     }
+    
+    public String GetTitle() {
+    	return mTitleText.getText().toString();
+    }
 
     static final int BUTTON_DIMENSION = 50; //dip
     public void addCenterFillButton(Button button) {

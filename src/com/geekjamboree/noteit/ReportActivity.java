@@ -1,5 +1,9 @@
 package com.geekjamboree.noteit;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Date;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -10,7 +14,11 @@ import com.geekjamboree.noteit.NoteItApplication.ItemReportItem;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
@@ -50,6 +58,9 @@ public class ReportActivity extends Activity {
 
 	ToolbarWrapper			mToolbar;
 	WebView					mTextView;
+	String					mCurrentReportText = "";
+	String 					mCurrentReportHtml = "";
+	boolean					mAttachHTML = true;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +80,13 @@ public class ReportActivity extends Activity {
 		}
 	}
 
+	@Override
+	protected void onResume() {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		mAttachHTML = prefs.getBoolean("Attach_html_reports", true);
+		super.onResume();
+	}
+
 	class onDisplayItemReportListener implements NoteItApplication.OnGetItemReportListener {
 		public void onPostExecute(long resultCode, ArrayList<ItemReportItem> items, String message) {
 			if (resultCode == 0) {
@@ -83,6 +101,8 @@ public class ReportActivity extends Activity {
 				text += "<th class='ra'>" + getString(R.string.reporting_category_price) + "</th>";
 				text += "<th class='ra'>" + getString(R.string.reporting_category_percentage) + "</th>";
 				text += "</tr>";
+				mCurrentReportText = getString(R.string.reporting_emailIntro);
+				mCurrentReportText += "\n" + mToolbar.GetTitle().toString() + ":\n\n";
 				String categoryItemFormat = getString(R.string.reporting_category_report_item);
 				NoteItApplication app = (NoteItApplication) getApplication();
 				NumberFormat numberFormat = NumberFormat.getInstance();
@@ -103,12 +123,15 @@ public class ReportActivity extends Activity {
 								item.mItemName, 
 								price,
 								percentage);
+						mCurrentReportText += item.mItemName.trim() + ", \t\t" + price + ",  \t\t" + percentage + "\n";
 						text += row;
 					}
 				}
 				String categoryFooter = getString(R.string.reporting_category_footer);
 				String strTotal = String.format(currencyFormat, numberFormat.format(total));
 				text += String.format(categoryFooter, strTotal);
+				mCurrentReportText += "\n\n\n" + getString(R.string.itemlist_emailsig);
+				mCurrentReportHtml = text;
 				mTextView.loadDataWithBaseURL(null, text, "text/html", "UTF-8", null);
 			} else 
 				Toast.makeText(ReportActivity.this, message, Toast.LENGTH_LONG).show();		}
@@ -124,12 +147,16 @@ public class ReportActivity extends Activity {
 					CategoryReportItem item = items.get(index);
 					total += item.mPrice;
 				}
+				
+				
 				String text = getString(R.string.reporting_category_head); 
 				text += "<tr>";
 				text += "<th class='la'>" + getString(R.string.reporting_category_category) + "</th>";
 				text += "<th class='ra'>" + getString(R.string.reporting_category_price) + "</th>";
 				text += "<th class='ra'>" + getString(R.string.reporting_category_percentage) + "</th>";
 				text += "</tr>";
+				mCurrentReportText = getString(R.string.reporting_emailIntro);
+				mCurrentReportText += "\n" + mToolbar.GetTitle().toString() + ":\n\n";
 				String categoryItemFormat = getString(R.string.reporting_category_report_item);
 				NoteItApplication app = (NoteItApplication) getApplication();
 				NumberFormat numberFormat = NumberFormat.getInstance();
@@ -150,12 +177,15 @@ public class ReportActivity extends Activity {
 								item.mCategoryName, 
 								price,
 								percentage);
+						mCurrentReportText += item.mCategoryName.trim() + ",  \t\t" + price + ",  \t\t" + percentage + "\n";
 						text += row;
 					}
 				}
 				String categoryFooter = getString(R.string.reporting_category_footer);
 				String strTotal = String.format(currencyFormat, numberFormat.format(total));
-				text += String.format(categoryFooter, strTotal);
+				mCurrentReportText += getString(R.string.itemlist_emailsig);
+				text += "\n\n\n" + String.format(categoryFooter, strTotal);
+				mCurrentReportHtml = text;
 				mTextView.loadDataWithBaseURL(null, text, "text/html", "UTF-8", null);
 			} else 
 				Toast.makeText(ReportActivity.this, message, Toast.LENGTH_LONG).show();		
@@ -266,9 +296,103 @@ public class ReportActivity extends Activity {
 				finish();
 			}
 		});
+    	
+    	ImageButton shareButton = new ImageButton(this);
+    	shareButton.setImageResource(R.drawable.email);
+    	shareButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				doEmail();
+			}
+		});
 
     	mToolbar.addLeftAlignedButton(homeButton, false, true);
+    	mToolbar.addRightAlignedButton(shareButton, true, false);
     	mToolbar.addRightAlignedButton(settingsButton, true, false);
     }
+
+    protected void doEmail() {
+    	final Intent emailIntent = new Intent(Intent.ACTION_SEND);
+//    	emailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    	emailIntent.setType("text/plain");
+    	emailIntent.putExtra(Intent.EXTRA_SUBJECT, mToolbar.GetTitle());
+    	emailIntent.putExtra(Intent.EXTRA_TEXT, mCurrentReportText);
+    	Uri attachment = null;
+    	if (mAttachHTML && (attachment = writeToExternalStoragePublic()) != null) {
+    		emailIntent.putExtra(Intent.EXTRA_STREAM, attachment);
+     	}
+    	startActivity(Intent.createChooser(emailIntent, getString(R.string.reporting_sharemessage)));
+    }
+    
+    protected String doExportHtml() {
+    	FileOutputStream outStream = null;
+    	try {
+	    	String fileName = mToolbar.GetTitle() + ".html";
 	
-}
+			try {
+				File outDir = Environment.getDataDirectory();
+				File outFile = File.createTempFile(fileName, ".html", outDir);
+				outStream = new FileOutputStream(outFile);
+				outStream = openFileOutput(
+						fileName, 
+						MODE_WORLD_READABLE | MODE_WORLD_WRITEABLE);
+		    	if (outStream != null) {
+		    		byte[] buffer = mCurrentReportHtml.getBytes();
+		    		outStream.write(buffer, 0, buffer.length);
+		    	}
+				return outFile.toString();
+			} catch (FileNotFoundException e) {
+	    		Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+			} catch (IOException e) {
+	    		Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+			}
+			return "";
+    	} finally {
+    		if (outStream != null) {
+    			try {
+					outStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+    		}
+    	}
+    }
+    
+    public Uri writeToExternalStoragePublic() {
+    	final String 		filename 		= mToolbar.GetTitle() + ".html"; 
+        final String 		packageName 	= this.getPackageName();
+        final String 		folderpath 		= Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" + packageName + "/files/";
+        File 				folder			= new File(folderpath);
+        File 			 	file			= null;
+        FileOutputStream 	fOut 			= null;
+        
+        try {
+            try {
+            	if (folder != null) {
+	                boolean exists = folder.exists();
+	                if (!exists) 
+	                	folder.mkdirs();	                
+	                file = new File(folder.toString(), filename);
+	                if (file != null) {
+	                	fOut = new FileOutputStream(file, true);
+		                if (fOut != null) {
+			                fOut.write(mCurrentReportHtml.getBytes());
+		                }
+	                }
+            	}
+            } catch (IOException e) {
+	    		Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+            return Uri.fromFile(file);
+        } finally {
+        	if (fOut != null) {
+	            try {
+					fOut.flush();
+		            fOut.close();
+				} catch (IOException e) {
+		    		Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+				}
+        	}
+        }
+    }
+}	
