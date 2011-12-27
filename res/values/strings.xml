@@ -106,7 +106,9 @@
 	<string name="reporting_purchased_lastMonth">Last Month</string>
 	<string name="reporting_purchased_lastMonth_desc">Display a Report of Items Purchased Last Month by Category</string>
 	<string name="reporting_purchased_All">So far</string>
-	<string name="reporting_pending_all">All</string>
+	<string name="reporting_pending_all_menu">All</string>
+	<string name="reporting_pending_all_desc">Display a Report of all Pending Items.</string>
+	<string name="reporting_pending_all_title">All Items Pending</string>
 	<string name="reporting_item_name">Item Name</string>
 	<string name="reporting_category_category">Category</string>
 	<string name="reporting_category_price">Price</string>

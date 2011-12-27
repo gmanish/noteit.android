@@ -1,7 +1,6 @@
 package com.geekjamboree.noteit;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Date;
@@ -33,7 +32,7 @@ public class ReportActivity extends Activity {
 //	public static final int REPORT_PURCHASED_YESTERDAY 				= 2;
 //	public static final int REPORT_PURCHASED_THISWEEK 				= 3;
 //	public static final int REPORT_PURCHASED_LASTWEEK				= 4;
-	public static final int REPORT_CATEGORY_PURCHASED_THISMONTH				= 5;
+	public static final int REPORT_CATEGORY_PURCHASED_THISMONTH		= 5;
 	public static final int REPORT_CATEGORY_PURCHASED_LASTMONTH		= 6;
 	public static final int REPORT_PURCHASED_ALL					= 7;
 	
@@ -43,6 +42,8 @@ public class ReportActivity extends Activity {
 	public static final int REPORT_ITEM_PURCHASED_YESTERDAY	= 9;
 	public static final int REPORT_ITEM_PURCHASED_THISWEEK	= 10;
 	public static final int REPORT_ITEM_PURCHASED_LASTWEEK	= 11;
+	
+	public static final int REPORT_ITEM_PENDING_ALL			= 12;
 	
 	class ToolbarWrapper extends CustomTitlebarWrapper {
 
@@ -260,6 +261,14 @@ public class ReportActivity extends Activity {
 					from.toString() + " " + to.toString() + ")");
 			app.getReport(true, from, to, new onDisplayCategoryReportListener());
 			break;
+		case REPORT_ITEM_PENDING_ALL:
+			Calendar pendingTillToday = Calendar.getInstance();
+			to = new Date(pendingTillToday.getTimeInMillis());
+			mToolbar.SetTitle(
+					getString(R.string.reporting_pending_all_title) + " (" +
+					to.toString() + ")");
+			app.getReport(false, null, to, new onDisplayItemReportListener());
+			break;
 		}
 
 	}
@@ -305,7 +314,7 @@ public class ReportActivity extends Activity {
 				doEmail();
 			}
 		});
-
+    	
     	mToolbar.addLeftAlignedButton(homeButton, false, true);
     	mToolbar.addRightAlignedButton(shareButton, true, false);
     	mToolbar.addRightAlignedButton(settingsButton, true, false);
@@ -323,41 +332,7 @@ public class ReportActivity extends Activity {
      	}
     	startActivity(Intent.createChooser(emailIntent, getString(R.string.reporting_sharemessage)));
     }
-    
-    protected String doExportHtml() {
-    	FileOutputStream outStream = null;
-    	try {
-	    	String fileName = mToolbar.GetTitle() + ".html";
-	
-			try {
-				File outDir = Environment.getDataDirectory();
-				File outFile = File.createTempFile(fileName, ".html", outDir);
-				outStream = new FileOutputStream(outFile);
-				outStream = openFileOutput(
-						fileName, 
-						MODE_WORLD_READABLE | MODE_WORLD_WRITEABLE);
-		    	if (outStream != null) {
-		    		byte[] buffer = mCurrentReportHtml.getBytes();
-		    		outStream.write(buffer, 0, buffer.length);
-		    	}
-				return outFile.toString();
-			} catch (FileNotFoundException e) {
-	    		Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-			} catch (IOException e) {
-	    		Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-			}
-			return "";
-    	} finally {
-    		if (outStream != null) {
-    			try {
-					outStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-    		}
-    	}
-    }
-    
+
     public Uri writeToExternalStoragePublic() {
     	final String 		filename 		= mToolbar.GetTitle() + ".html"; 
         final String 		packageName 	= this.getPackageName();
@@ -374,7 +349,7 @@ public class ReportActivity extends Activity {
 	                	folder.mkdirs();	                
 	                file = new File(folder.toString(), filename);
 	                if (file != null) {
-	                	fOut = new FileOutputStream(file, true);
+	                	fOut = new FileOutputStream(file, false);
 		                if (fOut != null) {
 			                fOut.write(mCurrentReportHtml.getBytes());
 		                }

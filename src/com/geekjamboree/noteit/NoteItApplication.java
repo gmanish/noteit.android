@@ -1634,8 +1634,10 @@ public class NoteItApplication extends Application {
 			final OnGetCategoryReportListener listener) {
 		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(5);
 		args.add(new BasicNameValuePair("command", "do_category_report"));
-		args.add(new BasicNameValuePair("arg1", from.toString()));
-		args.add(new BasicNameValuePair("arg2", to.toString()));
+		if (from != null)
+			args.add(new BasicNameValuePair("arg1", from.toString()));
+		if (to != null)
+			args.add(new BasicNameValuePair("arg2", to.toString()));
 		args.add(new BasicNameValuePair("arg3", String.valueOf(isPurchased ? 1 : 0)));
 		args.add(new BasicNameValuePair("arg4", String.valueOf(getUserID())));
 		try {
@@ -1682,8 +1684,10 @@ public class NoteItApplication extends Application {
 			final OnGetItemReportListener listener) {
 		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(5);
 		args.add(new BasicNameValuePair("command", "do_item_report"));
-		args.add(new BasicNameValuePair("arg1", from.toString()));
-		args.add(new BasicNameValuePair("arg2", to.toString()));
+		if (from != null)
+			args.add(new BasicNameValuePair("arg1", from.toString()));
+		if (to != null)
+			args.add(new BasicNameValuePair("arg2", to.toString()));
 		args.add(new BasicNameValuePair("arg3", String.valueOf(isPurchased ? 1 : 0)));
 		args.add(new BasicNameValuePair("arg4", String.valueOf(getUserID())));
 		try {

@@ -5,14 +5,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.geekjamboree.noteit.ItemListActivity.ItemType;
+
 import android.app.ExpandableListActivity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.SimpleExpandableListAdapter;
+import android.widget.TextView;
 
 public class ReportMenuActivity extends ExpandableListActivity {
 
@@ -24,6 +31,75 @@ public class ReportMenuActivity extends ExpandableListActivity {
 	// Report IDs
 	protected ExpandableLVRightIndicator 	mListView;
 	protected CustomTitlebarWrapper 		mToolbar;
+	protected SharedPreferences				mPrefs = null;
+	protected int 							mFontSize = 3;
+	
+	
+	class SimpleExpandaleAdapterWithFontSize extends SimpleExpandableListAdapter {
+		
+		protected int 		mGroupTo[];
+		protected int 		mChildTo[];
+		protected Context	mContext;
+		
+		public SimpleExpandaleAdapterWithFontSize(
+				Context context,
+				List<? extends Map<String, ?>> groupData, 
+				int groupLayout,
+				String[] groupFrom, 
+				int[] groupTo,
+				List<? extends List<? extends Map<String, ?>>> childData,
+				int childLayout, 
+				String[] childFrom, 
+				int[] childTo) {
+			super(
+				context, 
+				groupData, 
+				groupLayout, 
+				groupFrom, 
+				groupTo, 
+				childData,
+				childLayout, 
+				childFrom, 
+				childTo);
+			mGroupTo = groupTo;
+			mChildTo = childTo;
+			mContext = context;
+		}
+
+		@Override
+		public View getChildView(
+				int groupPosition, 
+				int childPosition,
+				boolean isLastChild, 
+				View convertView, 
+				ViewGroup parent) {
+			View view = super.getChildView(groupPosition, childPosition, isLastChild,
+					convertView, parent);
+			if (view != null) {
+				TextView textView = (TextView) view.findViewById(mChildTo[0]);
+				if (textView != null) {
+					textView.setTextAppearance(mContext, getPreferredTextAppearance(ItemType.PENDING));
+				}
+			}
+			return view;
+		}
+
+		@Override
+		public View getGroupView(
+				int groupPosition, 
+				boolean isExpanded,
+				View convertView, 
+				ViewGroup parent) {
+			View view = super.getGroupView(groupPosition, isExpanded, convertView, parent);
+			if (view != null) {
+				TextView textView = (TextView) view.findViewById(mGroupTo[0]);
+				if (textView != null) {
+					textView.setTextAppearance(mContext, getPreferredTextAppearance(ItemType.GROUP));
+				}
+			}
+			return view;
+		}
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +127,18 @@ public class ReportMenuActivity extends ExpandableListActivity {
 				}
 			});
         }
+        
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         mToolbar.SetTitle(getString(R.string.reporting_title));
         doSetupToolbarButtons();
         populateReporingOptions();
+	}
+
+	@Override
+	protected void onResume() {
+        mFontSize = Integer.valueOf(mPrefs.getString("Item_Font_Size", "3"));
+        mListView.invalidateViews();
+		super.onResume();
 	}
 
 	void populateReporingOptions() {
@@ -113,13 +198,15 @@ public class ReportMenuActivity extends ExpandableListActivity {
 //		purchasedReports.add(purchasedAll);
 
 		Map<String, String>				pendingAll = new HashMap<String, String>();
-		pendingAll.put(REPORT_NAME, getString(R.string.reporting_pending_all));
+		pendingAll.put(REPORT_NAME, getString(R.string.reporting_pending_all_menu));
+		pendingAll.put(REPORT_ID, String.valueOf(ReportActivity.REPORT_ITEM_PENDING_ALL));
+		pendingAll.put(REPORT_DESCRIPTION, getString(R.string.reporting_pending_all_desc));
 		pendingReports.add(pendingAll);
 
 		children.add(purchasedReports);
 		children.add(pendingReports);
 		
-		SimpleExpandableListAdapter	adapter = new SimpleExpandableListAdapter(
+		SimpleExpandaleAdapterWithFontSize	adapter = new SimpleExpandaleAdapterWithFontSize(
 			this, 
 			groups, 
 			R.layout.reportactivity_group,
@@ -200,5 +287,41 @@ public class ReportMenuActivity extends ExpandableListActivity {
     		mListView.collapseGroup(i);
     	}        	
     	
+    }
+    
+    protected int getPreferredTextAppearance(ItemType type) {
+    	
+    	int appearance = 0;
+    	switch (type) {
+    	
+    	case PENDING:
+        	if (mFontSize == 3)
+        		appearance = R.style.ItemList_TextAppearance_PendingItem_Small;
+        	else if (mFontSize == 2)
+        		appearance = R.style.ItemList_TextAppearance_PendingItem_Medium;
+        	else
+        		appearance = R.style.ItemList_TextAppearance_PendingItem_Large;
+    		break;
+    	
+    	case DONE:
+        	if (mFontSize == 3)
+        		appearance = R.style.ItemList__TextAppearance_DoneItem_Small;
+        	else if (mFontSize == 2)
+        		appearance = R.style.ItemList__TextAppearance_DoneItem_Medium;
+        	else
+        		appearance = R.style.ItemList__TextAppearance_DoneItem_Large;
+    		break;
+
+    	case GROUP:
+    		if (mFontSize == 3)
+    			appearance = R.style.ItemList_TextAppearance_GroupsItem_Small;
+    		else if (mFontSize == 2)
+    			appearance = R.style.ItemList_TextAppearance_GroupsItem_Medium;
+    		else 
+    			appearance = R.style.ItemList_TextAppearance_GroupsItem_Large;
+    		break;
+    	}
+    	
+    	return appearance;
     }
 }
