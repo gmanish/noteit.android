@@ -62,6 +62,7 @@ public class LoginActivity
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				// Perhaps we should ignore non-alpha numeric key presses?
 				mIsHashedPassword = false;
+				Log.i("editPassword.onKey", "Setting Password Hashed to: " + mIsHashedPassword);
 				return false;
 			}
 		});
@@ -114,11 +115,14 @@ public class LoginActivity
     	if (password != null && isRememberMe) {
 			if (!mIsHashedPassword) {
 				try {
-					editor.putString("password", NoteItApplication.hashString(password.getText().toString()));
+					String clearPassword = password.getText().toString();
+					String hashedPassword = NoteItApplication.hashString(clearPassword);
+					editor.putString("password", hashedPassword);
 				} catch (NoSuchAlgorithmException e) {
 				}
 			} else {
-				editor.putString("password", password.getText().toString());
+				String hashedPassword = password.getText().toString();
+				editor.putString("password", hashedPassword);
 			}
     	} else 
     		editor.remove("password");

@@ -1,5 +1,6 @@
 package com.geekjamboree.noteit;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
@@ -15,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Application;
+import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -397,7 +399,9 @@ public class NoteItApplication extends Application {
 	        nameValuePairs.add(new BasicNameValuePair("email_ID", userEmail));
 	        nameValuePairs.add(new BasicNameValuePair("password", password));
 	        nameValuePairs.add(new BasicNameValuePair("isHashedPassword", String.valueOf(isHashedPassword ? 1 : 0)));
-
+	        
+	        Log.i("NoteItApplication.loginUser", "Email: " + userEmail);
+	        Log.i("NoteItApplication.loginUser", "Password: " + password);
 			AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs, inPostExecute);
 			task.execute();
 			
@@ -1615,14 +1619,21 @@ public class NoteItApplication extends Application {
     	String salt = "G3480BFA037EE";
     	MessageDigest sha1 = MessageDigest.getInstance("SHA-1");
     	if (sha1 != null) {
-    		byte[] saltedText = sha1.digest((salt + clearText).getBytes());
-    		StringBuffer hex = new StringBuffer(saltedText.length * 2);
-    		for (int i = 0; i < saltedText.length; i++) {
-    			char[] hexArray = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-    			hex.append(hexArray[(0xF0 & (int) saltedText[i]) >> 4]);
-    			hex.append(hexArray[(0x0F & (int) saltedText[i])]);
-    		}
-        	return hex.toString();
+    		byte[] saltedText;
+			try {
+				saltedText = sha1.digest((salt + clearText).getBytes("UTF-8"));
+	    		Log.i("NoteItApplication.hashString", "Clear Text: " + salt + clearText + " Digest:" + sha1.digest((salt + clearText).getBytes()));
+	    		StringBuffer hex = new StringBuffer(saltedText.length * 2);
+	    		for (int i = 0; i < saltedText.length; i++) {
+	    			char[] hexArray = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+	    			hex.append(hexArray[(0xF0 & (int) saltedText[i]) >> 4]);
+	    			hex.append(hexArray[(0x0F & (int) saltedText[i])]);
+	    		}
+	        	return hex.toString();
+			} catch (UnsupportedEncodingException e) {
+				Log.e("NoteItApplication.hashString", e.getMessage());
+				return clearText;
+			}
     	} else
     		return clearText;
 	}
