@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 /*
  *  A wrapper over customizing the toolbar in an activity. Note that the order of 
@@ -19,14 +20,17 @@ import android.widget.TextView;
  */
 public class CustomTitlebarWrapper {
 
-    boolean 	mCustomTitleSupported = false;
-	Activity	mParent;
-	TextView 	mTitleText;
-	int			index = 0;
+    boolean 		mCustomTitleSupported = false;
+	Activity		mParent;
+	ViewFlipper		mFlipper;
+	TextView 		mTitleText;
+	int				index = 0;
+	boolean			mProgressShowing = false;
 	
     public CustomTitlebarWrapper(Activity parent) {
     	mParent = parent;
 		mCustomTitleSupported = parent.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		
 	}
     
     public void SetTitle(CharSequence charSequence){
@@ -35,7 +39,8 @@ public class CustomTitlebarWrapper {
         	mParent.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.titlebar);
         }
 
-    	mTitleText = (TextView) mParent.findViewById(R.id.textView_titlebar);
+    	mFlipper = (ViewFlipper) mParent.findViewById(R.id.titlebar_flipper);
+    	mTitleText = (TextView) mFlipper.findViewById(R.id.titlebar_title);
         if (mTitleText != null) {
         	mTitleText.setText(charSequence);
          }
@@ -43,6 +48,26 @@ public class CustomTitlebarWrapper {
     
     public String GetTitle() {
     	return mTitleText.getText().toString();
+    }
+    
+    public void showInderminateProgress(String title) {
+    	
+    	if (!mProgressShowing && mFlipper != null) {
+	    	TextView titleText = (TextView) mParent.findViewById(R.id.titlebar_progress_title);
+	    	if (titleText != null) {
+	    		titleText.setText(title);
+	    	}
+	    	
+    		mFlipper.showNext();
+	    	mProgressShowing = true;
+    	}
+    }
+    
+    public void hideIndeterminateProgress() {
+    	if (mFlipper != null && mProgressShowing) {
+    		mFlipper.showPrevious();
+    		mProgressShowing = false;
+    	}
     }
 
     static final int BUTTON_DIMENSION = 50; //dip

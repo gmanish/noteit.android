@@ -8,7 +8,6 @@ import com.geekjamboree.noteit.NoteItApplication.ShoppingList;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,7 +38,6 @@ public class ShoppingListActivity
 	implements NoteItApplication.OnFetchShoppingListsListener {
 
 	ListView 				mListView;
-	ProgressDialog			mProgressDialog = null;
 	ShoppingListAdapter		mAdapter;
 	CustomTitlebarWrapper 	mToolbar;
 	int						mFontSize = 3;
@@ -138,8 +136,8 @@ public class ShoppingListActivity
         
 		Log.i("ShoppingListActivity.onCreate", "onCreate called");
 		if (!mIsShoppingListFetched) {
+			mToolbar.showInderminateProgress(getString(R.string.progress_message));
         	((NoteItApplication) getApplication()).fetchShoppingLists(mIsDisplayCount, this);
-            mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message), true);
 		}
         else {
         	Log.i("ShoppingListActivity:onCreate", "Skipping fetchShoppingLists()");
@@ -154,13 +152,6 @@ public class ShoppingListActivity
 
 	protected void onPause() {
 		Log.i("ShoppingListActivity.onPause", "onPause called");
-		if (mProgressDialog != null) {
-			if (mProgressDialog.isShowing()) {
-				Log.i("ShoppingListActivity.onPause", "onPause called while progress is showing");
-				mProgressDialog.dismiss();
-			}
-			mProgressDialog = null;
-		}
 		PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(mPrefChangeListener);
 		super.onPause();
 	}
@@ -227,12 +218,7 @@ public class ShoppingListActivity
     public void onPostExecute(long retval, ArrayList<ShoppingList> shopList, String errMsg) {
     	
 		Log.i("ShoppingListActivity.onPostExecute", "onPostExecute called");
-    	if (mProgressDialog != null && mProgressDialog.isShowing()) {
-    		Log.i("ShoppingListActivity.onPostExecute", "Destroyed the progress bar");
-    		mProgressDialog.dismiss();
-    		mProgressDialog = null;
-    	}
-
+		mToolbar.hideIndeterminateProgress();
     	if (retval == 0){ // success
     		// [TODO]: Since we're directly passing a reference to the NoteItApplication.getShoppingList
     		// to the ListView as it's adapter and since NoteItApplication takes care of add/deleting items
@@ -276,6 +262,7 @@ public class ShoppingListActivity
 						NoteItApplication app = (NoteItApplication)getApplication();
 						ShoppingList	  list = (ShoppingList) mListView.getItemAtPosition(index);
 						// Create a new list with the name
+						mToolbar.showInderminateProgress(getString(R.string.progress_message));
 						app.editShoppingList(
 								app.new ShoppingList(
 									list.mID, 
@@ -284,11 +271,15 @@ public class ShoppingListActivity
 							new NoteItApplication.OnMethodExecuteListerner() {
 								
 								public void onPostExecute(long resultCode, String message) {
-									if (resultCode != 0) {
-										Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-									} else {
-										// refresh the listView
-										mAdapter.notifyDataSetChanged();
+									try {
+										if (resultCode != 0) {
+											Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+										} else {
+											// refresh the listView
+											mAdapter.notifyDataSetChanged();
+										}
+									} finally {
+										mToolbar.hideIndeterminateProgress();
 									}
 								}
 							}
@@ -322,16 +313,21 @@ public class ShoppingListActivity
 					dialog.dismiss();
 				
 					Log.i("deleteShoppingList", "Called with index=" + index);
+					mToolbar.showInderminateProgress(getString(R.string.progress_message));
 					((NoteItApplication)getApplication()).deleteShoppingList(
 						((ShoppingList)mListView.getItemAtPosition(index)).mID,
 						new NoteItApplication.OnMethodExecuteListerner() {
-							
+						
 							public void onPostExecute(long resultCode, String message) {
-								if (resultCode != 0) {
-									Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-								} else {
-									// Delete this item from the view
-									mAdapter.notifyDataSetChanged();
+								try {
+									if (resultCode != 0) {
+										Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+									} else {
+										// Delete this item from the view
+										mAdapter.notifyDataSetChanged();
+									}
+								} finally {
+									mToolbar.hideIndeterminateProgress();
 								}
 						}
 					});

@@ -37,13 +37,13 @@ import android.widget.Toast;
  *
  */
 public class CategoryListActivity 
-	extends ListActivity {
+	extends ListActivity implements DragDropListener {
 	
-	CategoryListAdapter 	mAdapter;
-	CategoryListView		mListView;
-	CustomTitlebarWrapper 	mToolbar;
-	QuickAction				mQuickAction;
-	int						mSelectedCategory = 0;
+	ArrayAdapterWithFontSize<Category> 	mAdapter;
+	CategoryListView					mListView;
+	CustomTitlebarWrapper 				mToolbar;
+	QuickAction							mQuickAction;
+	int									mSelectedCategory = 0;
 	
 	protected class CategoryListAdapter extends ArrayAdapterWithFontSize<Category> implements DragDropListener {
 
@@ -110,7 +110,7 @@ public class CategoryListActivity
     			R.id.categorylists_item_name, 
     			((NoteItApplication) getApplication()).getCategories());
     	mListView.setAdapter(mAdapter);
-    	mListView.setDragDropListener(mAdapter);
+    	mListView.setDragDropListener(this);
     	mListView.setTextFilterEnabled(true);
     	mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
     		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -208,6 +208,34 @@ public class CategoryListActivity
 		super.onPause();
 	}
 
+	public void onDrag(int dragSource, int dropTarget) {
+		// I don't want to do anything here
+	}
+
+	public void onDrop(final int dragSource, final int dropTarget) {
+		Log.i("CategoryListAdapter.onDrop", "Dropping: " + dragSource + " @ " + dropTarget);
+		
+		NoteItApplication app = (NoteItApplication) getApplication();
+		mToolbar.showInderminateProgress(getString(R.string.progress_message));
+		try {
+			app.reorderCategory(dragSource, dropTarget, new OnMethodExecuteListerner() {
+				
+				public void onPostExecute(long resultCode, String message) {
+					try {
+						if (resultCode == 0) {
+							mAdapter.notifyDataSetChanged();
+						} else
+							Toast.makeText(CategoryListActivity.this, message, Toast.LENGTH_LONG).show();
+					} finally {
+						mToolbar.hideIndeterminateProgress();
+					}
+				}
+			});
+		} catch (Exception e) {
+			mToolbar.hideIndeterminateProgress();
+		}
+	}
+
 	protected void doSetupToolbarButtons() {
 
     	ImageButton addButton = new ImageButton(this);
@@ -255,17 +283,26 @@ public class CategoryListActivity
 		    	Category 			category = app.new Category(app.getCategories().get(position));
 		    	
 		    	category.mName = categoryName;
-		    	app.editCategory(Category.CATEGORY_NAME, category, new OnMethodExecuteListerner() {
-					
-					public void onPostExecute(long resultCode, String message) {
-						if (resultCode != 0)
-							Toast.makeText(CategoryListActivity.this, message, Toast.LENGTH_LONG).show();
-						else {
-							mAdapter.getItem(position).mName = categoryName;
-							mAdapter.notifyDataSetChanged();
+		    	mToolbar.showInderminateProgress(getString(R.string.progress_message));
+		    	try {
+			    	app.editCategory(Category.CATEGORY_NAME, category, new OnMethodExecuteListerner() {
+						
+						public void onPostExecute(long resultCode, String message) {
+							try {
+								if (resultCode != 0)
+									Toast.makeText(CategoryListActivity.this, message, Toast.LENGTH_LONG).show();
+								else {
+									mAdapter.getItem(position).mName = categoryName;
+									mAdapter.notifyDataSetChanged();
+								}
+							} finally {
+								mToolbar.hideIndeterminateProgress();
+							}
 						}
-					}
-				});
+					});
+		    	} catch (Exception e){
+		    		mToolbar.hideIndeterminateProgress();
+		    	}
 			}
 		});
     	
@@ -274,15 +311,24 @@ public class CategoryListActivity
     protected void doDeleteCategory(int position) {
     	
     	NoteItApplication app = (NoteItApplication) getApplication();
-    	app.deleteCategory(position, new NoteItApplication.OnMethodExecuteListerner() {
-			
-			public void onPostExecute(long resultCode, String message) {
-				if (resultCode != 0)
-					Toast.makeText(CategoryListActivity.this, message, Toast.LENGTH_LONG).show();
-				else
-					mAdapter.notifyDataSetChanged();
-			}
-		});
+    	mToolbar.showInderminateProgress(getString(R.string.progress_message));
+    	try {
+	    	app.deleteCategory(position, new NoteItApplication.OnMethodExecuteListerner() {
+				
+				public void onPostExecute(long resultCode, String message) {
+					try {
+						if (resultCode != 0)
+							Toast.makeText(CategoryListActivity.this, message, Toast.LENGTH_LONG).show();
+						else
+							mAdapter.notifyDataSetChanged();
+					} finally {
+						mToolbar.hideIndeterminateProgress();
+					}
+				}
+			});
+    	} catch (Exception e) {
+    		mToolbar.hideIndeterminateProgress();
+    	}
     }
     
     static interface CategoryNameDialogListener {
@@ -339,21 +385,28 @@ public class CategoryListActivity
 					NoteItApplication 	app = (NoteItApplication) getApplication();
 					Category 			category = app.new Category(0, categoryName, app.getUserID(), 0);
 					
-					((NoteItApplication) getApplication()).addCategory(
-						category,
-						new NoteItApplication.OnAddCategoryListener() {
-							
-							public void onPostExecute(long result, Category category, String message) {
-								if (result != 0) {
-									Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-								} else {
-						    		mAdapter.notifyDataSetChanged();
+					mToolbar.showInderminateProgress(getString(R.string.progress_message));
+					try {
+						((NoteItApplication) getApplication()).addCategory(
+							category,
+							new NoteItApplication.OnAddCategoryListener() {
+								
+								public void onPostExecute(long result, Category category, String message) {
+									try {
+										if (result != 0) {
+											Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+										} else {
+								    		mAdapter.notifyDataSetChanged();
+										}
+									} finally {
+										mToolbar.hideIndeterminateProgress();
+									}
 								}
-							}
-						});
+							});
+					} catch (Exception e) {
+						mToolbar.hideIndeterminateProgress();
+					}
 				}
 		});
     }
-    
-    
 }

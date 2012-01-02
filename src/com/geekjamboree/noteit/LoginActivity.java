@@ -14,7 +14,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -30,17 +29,17 @@ public class LoginActivity
 	extends Activity 
 	implements AsyncInvokeURLTask.OnPostExecuteListener {
 	
-	ProgressDialog		mProgressDialog = null;
-	SharedPreferences	mPrefs;
-	boolean				mIsHashedPassword = false;
+	SharedPreferences		mPrefs;
+	boolean					mIsHashedPassword = false;
+	CustomTitlebarWrapper	mToolbar;
 	
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CustomTitlebarWrapper toolbar = new CustomTitlebarWrapper(this);
+        mToolbar = new CustomTitlebarWrapper(this);
         setContentView(R.layout.login);
-        toolbar.SetTitle(getResources().getText(R.string.login_activity_title));
+        mToolbar.SetTitle(getResources().getText(R.string.login_activity_title));
    
         // Read the email id from the preference
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -70,22 +69,20 @@ public class LoginActivity
         Button next = (Button) findViewById(R.id.buttonLogin);
         next.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-            	// show a progress dialog
-                mProgressDialog = ProgressDialog.show(
-                		LoginActivity.this, 
-                		"", 
-                		getResources().getString(R.string.Login_Authenticating_message), 
-                		true);
-
+            	mToolbar.showInderminateProgress(getString(R.string.Login_Authenticating_message));
             	// Try to authenticate the user with the supplied credentials.
-            	// If authentication succeedes, switch to the shopping list view
+            	// If authentication succeeds, switch to the shopping list view
             	EditText emailID = (EditText) findViewById(R.id.editEmailID);
-            	EditText password = (EditText) findViewById(R.id.editPassword); 
-            	((NoteItApplication) getApplication()).loginUser(
-    				emailID.getText().toString(), 
-    				password.getText().toString(),
-    				mIsHashedPassword,
-    				LoginActivity.this);
+            	EditText password = (EditText) findViewById(R.id.editPassword);
+            	try {
+	            	((NoteItApplication) getApplication()).loginUser(
+	    				emailID.getText().toString(), 
+	    				password.getText().toString(),
+	    				mIsHashedPassword,
+	    				LoginActivity.this);
+            	} catch (Exception e) {
+            		mToolbar.hideIndeterminateProgress();
+            	}
             }
 
         });
@@ -138,11 +135,6 @@ public class LoginActivity
 
 	public void onPostExecute(JSONObject json) {
 		try {
-			if (mProgressDialog != null && mProgressDialog.isShowing()) {
-				Log.i("LoginActivity.onPostExecute", "Destroying Progressbar");
-				mProgressDialog.dismiss();
-				mProgressDialog = null;
-			}
 			if (json.has("JSONRetVal")) {
 				// The server is up and running 
 	        	long retval = json.getLong("JSONRetVal");
@@ -154,73 +146,12 @@ public class LoginActivity
 						final NoteItApplication app = (NoteItApplication) getApplication();
 						
 						app.setUserID(userID);
-	            		Toast.makeText(this, "You are logged in.", Toast.LENGTH_SHORT).show();
-	            		
-	            		// Read the user preferences
 	            		if (!json.isNull("arg2")) {
 	            			Preference prefs = app.new Preference(json.getJSONObject("arg2"));
 	            			app.setUserPrefs(prefs);
 	            		}
 	            		
-	            		app.fetchUnits(Unit.METRIC, new NoteItApplication.OnMethodExecuteListerner() {
-	            			
-	            			public void onPostExecute(long resultCode, String message) {
-	    	            		
-	            				if (resultCode == 0) {
-		            				// Fetch the categories. This is a one time activity
-		    	            		app.fetchCategories(new OnFetchCategoriesListener() {
-		    							
-		    							public void onPostExecute(long resultCode, ArrayList<Category> categories,
-		    									String message) {
-	
-		    								if (resultCode == 0) {
-		    									final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-		    									boolean 				startDashboard = prefs.getBoolean("Start_Dashboard", true);
-		    									
-		    									if (startDashboard) {
-		    										//Intent myIntent = new Intent(this, ShoppingListActivity.class);
-		    					            		Intent myIntent = new Intent(LoginActivity.this, DashBoardActivity.class);
-		    					                    startActivity(myIntent);
-		    					                    finish();
-		    									} else {
-		    										final NoteItApplication app = (NoteItApplication) getApplication();
-		    										boolean					fetchCount = prefs.getBoolean("Display_Pending_Item_Count", true);
-		    										app.fetchShoppingLists(fetchCount, new NoteItApplication.OnFetchShoppingListsListener() {
-		    											
-		    											public void onPostExecute(long resultCode,
-		    													ArrayList<ShoppingList> categories, 
-		    													String message) {
-		    												
-		    												if (resultCode == 0) {
-		    			  										
-		    													long lastUsedShoppingListID = prefs.getLong("LastUsedShoppingListID", 0);
-		    													if (app.getShoppingListCount() > 0 && lastUsedShoppingListID != 0) {
-		    														int index = app.getShoppingList().indexOf((app.new ShoppingList(lastUsedShoppingListID)));
-		    														if (index >= 0)
-		    															app.setCurrentShoppingListIndex(index);
-		    														else
-		    															app.setCurrentShoppingListIndex(0);
-		    													} else if (app.getShoppingListCount() > 0) {
-		    														app.setCurrentShoppingListIndex(0);
-		    													}
-		    									                Intent myIntent = new Intent(LoginActivity.this, ItemListActivity.class);
-		    									                startActivity(myIntent);
-		    									                finish();
-		    												} else
-		    													Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
-		    											}
-		    										});
-		    									}
-		    								} else {
-		    				            		Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
-		    								}
-		    							}
-		    						});
-								} else {
-				            		Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
-								}
-	    	            	}
-	            		});
+	            		doFetchUnits();
 	            	} else
 	            		throw new Exception("Invalid email or password");
 	        	} else 
@@ -230,10 +161,96 @@ public class LoginActivity
 		} catch (JSONException e) {
 			Toast.makeText(getApplicationContext(), "The server seems to be out of its mind. Please try later.", Toast.LENGTH_SHORT).show();
 			Log.e("NoteItApplication.loginUser", e.getMessage());
+			mToolbar.hideIndeterminateProgress();
 		} catch (Exception e) {
     		Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
 			Log.e("NoteItApplication.loginUser", e.getMessage());
+			mToolbar.hideIndeterminateProgress();
 		}
+	}
+	
+	protected void doFetchUnits() {
+		final NoteItApplication app = (NoteItApplication) getApplication();
+		app.fetchUnits(Unit.METRIC, new NoteItApplication.OnMethodExecuteListerner() {
+			
+			public void onPostExecute(long resultCode, String message) {
+				if (resultCode == 0) {
+					// Fetch the categories. This is a one time activity
+					doFetchCategories();
+				} else {
+            		Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+					mToolbar.hideIndeterminateProgress();
+				}
+        	}
+		});
+	}
+	
+	protected void doFetchCategories() {
+		final NoteItApplication app = (NoteItApplication) getApplication();
+		app.fetchCategories(new OnFetchCategoriesListener() {
+			
+			public void onPostExecute(long resultCode, ArrayList<Category> categories,
+					String message) {
+
+				if (resultCode == 0) {
+					boolean startDashboard = mPrefs.getBoolean("Start_Dashboard", true);
+					
+					if (startDashboard) {
+						//Intent myIntent = new Intent(this, ShoppingListActivity.class);
+	            		Intent myIntent = new Intent(LoginActivity.this, DashBoardActivity.class);
+	                    startActivity(myIntent);
+	                    finish();
+	                    mToolbar.hideIndeterminateProgress();
+	            		Toast.makeText(
+	            			LoginActivity.this, 
+	            			getString(R.string.login_success), 
+	            			Toast.LENGTH_SHORT).show();
+					} else {
+						doFetchShoppingLists();
+					}
+				} else {
+            		Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+					mToolbar.hideIndeterminateProgress();
+				}
+			}
+		});
+	}
+	
+	protected void doFetchShoppingLists() {
+		final NoteItApplication app = (NoteItApplication) getApplication();
+		boolean					fetchCount = mPrefs.getBoolean("Display_Pending_Item_Count", true);
 		
+		app.fetchShoppingLists(fetchCount, new NoteItApplication.OnFetchShoppingListsListener() {
+			
+			public void onPostExecute(long resultCode,
+					ArrayList<ShoppingList> categories, 
+					String message) {
+				
+				if (resultCode == 0) {
+						
+					long lastUsedShoppingListID = mPrefs.getLong("LastUsedShoppingListID", 0);
+					if (app.getShoppingListCount() > 0 && lastUsedShoppingListID != 0) {
+						int index = app.getShoppingList().indexOf((app.new ShoppingList(lastUsedShoppingListID)));
+						if (index >= 0)
+							app.setCurrentShoppingListIndex(index);
+						else
+							app.setCurrentShoppingListIndex(0);
+					} else if (app.getShoppingListCount() > 0) {
+						app.setCurrentShoppingListIndex(0);
+					}
+	                Intent myIntent = new Intent(LoginActivity.this, ItemListActivity.class);
+	                startActivity(myIntent);
+	                finish();
+	                mToolbar.hideIndeterminateProgress();
+            		Toast.makeText(
+            			LoginActivity.this, 
+            			getString(R.string.login_success), 
+            			Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+					mToolbar.hideIndeterminateProgress();
+				}
+			}
+		});
 	}
 }

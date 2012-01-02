@@ -43,49 +43,54 @@ public class MainPreferenceActivity extends PreferenceActivity {
         
 		CustomTitlebarWrapper toolbar = new CustomTitlebarWrapper(this);
         super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.prefs);
-
-		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-		ListPreference measurementUnits = (ListPreference)findPreference("MeasurementUnits");
-		if (measurementUnits != null) {
-			CharSequence[] measurementsystem = {"US", "Imperial", "Metric/SI"};
-			CharSequence[] measurementsystemIDs = {"1", "2", "3" };
-			
-			measurementUnits.setEntries(measurementsystem);
-			measurementUnits.setEntryValues(measurementsystemIDs);
-		}
-		
-		ListPreference itemTextSize = (ListPreference)findPreference("Item_Font_Size");
-		if (itemTextSize != null) {
-			CharSequence[] fontSizeIDs = {"1", "2", "3"}; // Large, Medium, Small
-			itemTextSize.setEntryValues(fontSizeIDs);
-			itemTextSize.setDefaultValue(fontSizeIDs[2]); // default small
-		}
-		
-		NoteItApplication 	app = (NoteItApplication) getApplication();
-		ListPreference 		currenciesPref = (ListPreference) findPreference("currency");
-		ArrayList<Country> 	countries = app.getCountries(); 
-		
-		if (currenciesPref != null &&  countries != null && countries.size() > 0){
-			CharSequence[] currencies = new String[countries.size()];
-			CharSequence[] currencyIds = new String[countries.size()];
-			
-			int selIndex = -1;
-			Preference prefs = app.getUserPrefs();
-			for (int index = 0; index < countries.size(); index++) {
-				currencies[index] = countries.get(index).mCurrencyName + " (" + countries.get(index).mCurrencySymbol + ")";
-				currencyIds[index] = countries.get(index).mCurrencyCode;
-				if (prefs != null && currencyIds[index].equals(prefs.mCurrencyCode))
-					selIndex = index;
+		toolbar.SetTitle(getResources().getText(R.string.preference_activity_title));
+		toolbar.showInderminateProgress(getString(R.string.progress_message));
+		try {
+			addPreferencesFromResource(R.xml.prefs);
+	
+			mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+			ListPreference measurementUnits = (ListPreference)findPreference("MeasurementUnits");
+			if (measurementUnits != null) {
+				CharSequence[] measurementsystem = {"US", "Imperial", "Metric/SI"};
+				CharSequence[] measurementsystemIDs = {"1", "2", "3" };
+				
+				measurementUnits.setEntries(measurementsystem);
+				measurementUnits.setEntryValues(measurementsystemIDs);
 			}
 			
-			currenciesPref.setEntries(currencies);
-			currenciesPref.setEntryValues(currencyIds);
-			if (selIndex >= 0)
-				currenciesPref.setValueIndex(selIndex);
+			ListPreference itemTextSize = (ListPreference)findPreference("Item_Font_Size");
+			if (itemTextSize != null) {
+				CharSequence[] fontSizeIDs = {"1", "2", "3"}; // Large, Medium, Small
+				itemTextSize.setEntryValues(fontSizeIDs);
+				itemTextSize.setDefaultValue(fontSizeIDs[2]); // default small
+			}
+			
+			NoteItApplication 	app = (NoteItApplication) getApplication();
+			ListPreference 		currenciesPref = (ListPreference) findPreference("currency");
+			ArrayList<Country> 	countries = app.getCountries(); 
+			
+			if (currenciesPref != null &&  countries != null && countries.size() > 0){
+				CharSequence[] currencies = new String[countries.size()];
+				CharSequence[] currencyIds = new String[countries.size()];
+				
+				int selIndex = -1;
+				Preference prefs = app.getUserPrefs();
+				for (int index = 0; index < countries.size(); index++) {
+					currencies[index] = countries.get(index).mCurrencyName + " (" + countries.get(index).mCurrencySymbol + ")";
+					currencyIds[index] = countries.get(index).mCurrencyCode;
+					if (prefs != null && currencyIds[index].equals(prefs.mCurrencyCode))
+						selIndex = index;
+				}
+				
+				currenciesPref.setEntries(currencies);
+				currenciesPref.setEntryValues(currencyIds);
+				if (selIndex >= 0)
+					currenciesPref.setValueIndex(selIndex);
+			}
+			mPrefs.registerOnSharedPreferenceChangeListener(mPrefChangeListener);
+		} finally {
+			toolbar.hideIndeterminateProgress();
 		}
-		mPrefs.registerOnSharedPreferenceChangeListener(mPrefChangeListener);
-		toolbar.SetTitle(getResources().getText(R.string.preference_activity_title));
 	}
 
 	@Override

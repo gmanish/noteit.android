@@ -3,7 +3,8 @@
     android:id="@+id/itemlist_more_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="5dip">
+    android:padding="5dip"
+    >
     
   <Button 
         android:id="@+id/itemlist_morebuttom"

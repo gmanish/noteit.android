@@ -90,109 +90,120 @@ public class ReportActivity extends Activity {
 
 	class onDisplayItemReportListener implements NoteItApplication.OnGetItemReportListener {
 		public void onPostExecute(long resultCode, ArrayList<ItemReportItem> items, String message) {
-			if (resultCode == 0) {
-				float total = 0f;
-				for (int index = 0; index < items.size(); index++) {
-					ItemReportItem item = items.get(index);
-					total += item.mPrice;
-				}
-				String text = getString(R.string.reporting_category_head); 
-				text += "<tr>";
-				text += "<th class='la'>" + getString(R.string.reporting_item_name) + "</th>";
-				text += "<th class='ra'>" + getString(R.string.reporting_category_price) + "</th>";
-				text += "<th class='ra'>" + getString(R.string.reporting_category_percentage) + "</th>";
-				text += "</tr>";
-				mCurrentReportText = getString(R.string.reporting_emailIntro);
-				mCurrentReportText += "\n" + mToolbar.GetTitle().toString() + ":\n\n";
-				String categoryItemFormat = getString(R.string.reporting_category_report_item);
-				NoteItApplication app = (NoteItApplication) getApplication();
-				NumberFormat numberFormat = NumberFormat.getInstance();
-				String currencyFormat = app.getCurrencyFormat(true);
-				numberFormat.setMinimumFractionDigits(2);
-				numberFormat.setMaximumFractionDigits(2);
-				for (int index = 0; index < items.size(); index++) {
-					ItemReportItem item = items.get(index);
-					if (item != null) {
-						String price = String.format(currencyFormat, numberFormat.format(item.mPrice));
-						String percentage = null;
-						if (total > 0)
-							percentage = numberFormat.format(item.mPrice / total * 100);
-						else
-							percentage = "";
-						String row = String.format(
-								categoryItemFormat.toString(), 
-								item.mItemName, 
-								price,
-								percentage);
-						mCurrentReportText += item.mItemName.trim() + ", \t\t" + price + ",  \t\t" + percentage + "\n";
-						text += row;
+			
+			try {
+				if (resultCode == 0) {
+					float total = 0f;
+					for (int index = 0; index < items.size(); index++) {
+						ItemReportItem item = items.get(index);
+						total += item.mPrice;
 					}
-				}
-				String categoryFooter = getString(R.string.reporting_category_footer);
-				String strTotal = String.format(currencyFormat, numberFormat.format(total));
-				text += String.format(categoryFooter, strTotal);
-				mCurrentReportText += "\n\n\n" + getString(R.string.itemlist_emailsig);
-				mCurrentReportHtml = text;
-				mTextView.loadDataWithBaseURL(null, text, "text/html", "UTF-8", null);
-			} else 
-				Toast.makeText(ReportActivity.this, message, Toast.LENGTH_LONG).show();		}
+					String text = getString(R.string.reporting_category_head); 
+					text += "<tr>";
+					text += "<th class='la'>" + getString(R.string.reporting_item_name) + "</th>";
+					text += "<th class='ra'>" + getString(R.string.reporting_category_price) + "</th>";
+					text += "<th class='ra'>" + getString(R.string.reporting_category_percentage) + "</th>";
+					text += "</tr>";
+					mCurrentReportText = getString(R.string.reporting_emailIntro);
+					mCurrentReportText += "\n" + mToolbar.GetTitle().toString() + ":\n\n";
+					String categoryItemFormat = getString(R.string.reporting_category_report_item);
+					NoteItApplication app = (NoteItApplication) getApplication();
+					NumberFormat numberFormat = NumberFormat.getInstance();
+					String currencyFormat = app.getCurrencyFormat(true);
+					numberFormat.setMinimumFractionDigits(2);
+					numberFormat.setMaximumFractionDigits(2);
+					for (int index = 0; index < items.size(); index++) {
+						ItemReportItem item = items.get(index);
+						if (item != null) {
+							String price = String.format(currencyFormat, numberFormat.format(item.mPrice));
+							String percentage = null;
+							if (total > 0)
+								percentage = numberFormat.format(item.mPrice / total * 100);
+							else
+								percentage = numberFormat.format(0f);
+							String row = String.format(
+									categoryItemFormat.toString(), 
+									item.mItemName, 
+									price,
+									percentage);
+							mCurrentReportText += item.mItemName.trim() + ", \t\t" + price + ",  \t\t" + percentage + "\n";
+							text += row;
+						}
+					}
+					String categoryFooter = getString(R.string.reporting_category_footer);
+					String strTotal = String.format(currencyFormat, numberFormat.format(total));
+					text += String.format(categoryFooter, strTotal);
+					mCurrentReportText += "\n\n\n" + getString(R.string.itemlist_emailsig);
+					mCurrentReportHtml = text;
+					mTextView.loadDataWithBaseURL(null, text, "text/html", "UTF-8", null);
+				} else 
+					Toast.makeText(ReportActivity.this, message, Toast.LENGTH_LONG).show();		
+			} finally {
+				mToolbar.hideIndeterminateProgress();
+			}
+		}
 	}
 	
 	class onDisplayCategoryReportListener implements NoteItApplication.OnGetCategoryReportListener {
 		
 		public void onPostExecute(long resultCode,
 				ArrayList<CategoryReportItem> items, String message) {
-			if (resultCode == 0) {
-				float total = 0f;
-				for (int index = 0; index < items.size(); index++) {
-					CategoryReportItem item = items.get(index);
-					total += item.mPrice;
-				}
-				
-				
-				String text = getString(R.string.reporting_category_head); 
-				text += "<tr>";
-				text += "<th class='la'>" + getString(R.string.reporting_category_category) + "</th>";
-				text += "<th class='ra'>" + getString(R.string.reporting_category_price) + "</th>";
-				text += "<th class='ra'>" + getString(R.string.reporting_category_percentage) + "</th>";
-				text += "</tr>";
-				mCurrentReportText = getString(R.string.reporting_emailIntro);
-				mCurrentReportText += "\n" + mToolbar.GetTitle().toString() + ":\n\n";
-				String categoryItemFormat = getString(R.string.reporting_category_report_item);
-				NoteItApplication app = (NoteItApplication) getApplication();
-				NumberFormat numberFormat = NumberFormat.getInstance();
-				String currencyFormat = app.getCurrencyFormat(true);
-				numberFormat.setMinimumFractionDigits(2);
-				numberFormat.setMaximumFractionDigits(2);
-				for (int index = 0; index < items.size(); index++) {
-					CategoryReportItem item = items.get(index);
-					if (item != null) {
-						String price = String.format(currencyFormat, numberFormat.format(item.mPrice));
-						String percentage = null;
-						if (total > 0)
-							percentage = numberFormat.format(item.mPrice / total * 100);
-						else
-							percentage = "";
-						String row = String.format(
-								categoryItemFormat.toString(), 
-								item.mCategoryName, 
-								price,
-								percentage);
-						mCurrentReportText += item.mCategoryName.trim() + ",  \t\t" + price + ",  \t\t" + percentage + "\n";
-						text += row;
+			
+			try {
+				if (resultCode == 0) {
+					float total = 0f;
+					for (int index = 0; index < items.size(); index++) {
+						CategoryReportItem item = items.get(index);
+						total += item.mPrice;
 					}
-				}
-				String categoryFooter = getString(R.string.reporting_category_footer);
-				String strTotal = String.format(currencyFormat, numberFormat.format(total));
-				mCurrentReportText += getString(R.string.itemlist_emailsig);
-				text += "\n\n\n" + String.format(categoryFooter, strTotal);
-				mCurrentReportHtml = text;
-				mTextView.loadDataWithBaseURL(null, text, "text/html", "UTF-8", null);
-			} else 
-				Toast.makeText(ReportActivity.this, message, Toast.LENGTH_LONG).show();		
+					
+					
+					String text = getString(R.string.reporting_category_head); 
+					text += "<tr>";
+					text += "<th class='la'>" + getString(R.string.reporting_category_category) + "</th>";
+					text += "<th class='ra'>" + getString(R.string.reporting_category_price) + "</th>";
+					text += "<th class='ra'>" + getString(R.string.reporting_category_percentage) + "</th>";
+					text += "</tr>";
+					mCurrentReportText = getString(R.string.reporting_emailIntro);
+					mCurrentReportText += "\n" + mToolbar.GetTitle().toString() + ":\n\n";
+					String categoryItemFormat = getString(R.string.reporting_category_report_item);
+					NoteItApplication app = (NoteItApplication) getApplication();
+					NumberFormat numberFormat = NumberFormat.getInstance();
+					String currencyFormat = app.getCurrencyFormat(true);
+					numberFormat.setMinimumFractionDigits(2);
+					numberFormat.setMaximumFractionDigits(2);
+					for (int index = 0; index < items.size(); index++) {
+						CategoryReportItem item = items.get(index);
+						if (item != null) {
+							String price = String.format(currencyFormat, numberFormat.format(item.mPrice));
+							String percentage = null;
+							if (total > 0)
+								percentage = numberFormat.format(item.mPrice / total * 100);
+							else
+								percentage = numberFormat.format(0f);
+							String row = String.format(
+									categoryItemFormat.toString(), 
+									item.mCategoryName, 
+									price,
+									percentage);
+							mCurrentReportText += item.mCategoryName.trim() + ",  \t\t" + price + ",  \t\t" + percentage + "\n";
+							text += row;
+						}
+					}
+					String categoryFooter = getString(R.string.reporting_category_footer);
+					String strTotal = String.format(currencyFormat, numberFormat.format(total));
+					mCurrentReportText += getString(R.string.itemlist_emailsig);
+					text += "\n\n\n" + String.format(categoryFooter, strTotal);
+					mCurrentReportHtml = text;
+					mTextView.loadDataWithBaseURL(null, text, "text/html", "UTF-8", null);
+				} else 
+					Toast.makeText(ReportActivity.this, message, Toast.LENGTH_LONG).show();
+			} finally {
+				mToolbar.hideIndeterminateProgress();
+			}
 		}
 	}
-		
+			
 	protected void doReport(int reportId) {
 		Date from = null;
 		Date to = null;
@@ -269,8 +280,10 @@ public class ReportActivity extends Activity {
 					to.toString() + ")");
 			app.getReport(false, null, to, new onDisplayItemReportListener());
 			break;
+		default:
+			return;
 		}
-
+		mToolbar.showInderminateProgress(getString(R.string.progress_message));
 	}
 	
 	protected String getTitle(int reportType) {

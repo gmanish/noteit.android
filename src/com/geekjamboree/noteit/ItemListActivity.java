@@ -15,7 +15,6 @@ import com.geekjamboree.noteit.NoteItApplication.Item;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ExpandableListActivity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -48,7 +47,6 @@ import android.widget.ViewFlipper;
 public class ItemListActivity extends ExpandableListActivity implements NoteItApplication.OnFetchItemsListener {
 	
 	ExpandableLVRightIndicator		mListView;
-	ProgressDialog					mProgressDialog = null;
 	QuickAction 					mQuickAction = null;
 	AtomicInteger					mSelectedGroup = new AtomicInteger();
 	AtomicInteger					mSelectedChild = new AtomicInteger();
@@ -63,7 +61,6 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	SharedPreferences				mPrefs;
 	String							mCurrencyFormat = new String();
 	boolean							mLoadingMore = false;
-//	ProgressBar						mProgressBar;
 	float							mPendingTotal = 0f;
 	ViewFlipper						mLoadMoreFlipper;
 	LayoutInflater					mLayoutInflater;
@@ -567,13 +564,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			public void onDismiss() {
 			}
 		});    
-				
-//    	mProgressBar = new ProgressBar(this);
-//    	AbsListView.LayoutParams lp = new AbsListView.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-//    	mProgressBar.setLayoutParams(lp);
-//    	mProgressBar.setIndeterminate(true);
-//    	mProgressBar.setVisibility(View.VISIBLE);
-    	
+		
+		
         ItemsExpandableListAdapter adapter = new ItemsExpandableListAdapter(this);
 		mListView = (ExpandableLVRightIndicator) getExpandableListView();
 		mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE); 
@@ -616,8 +608,6 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			}
 		});
         
-    	doFetchAndDisplayPendingTotal();
-
     	// Populating of the list with items is handled in OnScrollListener for the list view
 		if (app.getShoppingListCount() > 0 && !mIsItemListFetched) {
 			fetchItems(this);
@@ -625,6 +615,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			Log.i("ItemListActivity.onCreate", "Skipping fetchItems");
 			doDisplayItems(app.getItems());
 		}
+		
+    	doFetchAndDisplayPendingTotal();
     }
 
     @Override
@@ -641,6 +633,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     
     public void fetchItems(OnFetchItemsListener listener) {
     	NoteItApplication app = (NoteItApplication) getApplication();
+    	mToolbar.showInderminateProgress(getString(R.string.progress_message));
     	mLoadMoreFlipper.showNext();
 		mLoadingMore = true;
 		app.fetchItems(
@@ -702,14 +695,6 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 
 	@Override
 	protected void onPause() {
-		Log.i("ItemListActivity.onPause", "onPause called");
-		if (mProgressDialog != null) {
-			if (mProgressDialog.isShowing()) {
-				Log.i("ItemListActivity.onPause", "onPause called while progress is showing");
-				mProgressDialog.dismiss();
-			}
-			mProgressDialog = null;
-		}
 		SharedPreferences.Editor editor = mPrefs.edit(); 
 		editor.putLong("LastUsedShoppingListID", ((NoteItApplication)getApplication()).getCurrentShoppingListID());
 		editor.commit();
@@ -734,10 +719,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	public void onPostExecute(long retval, ArrayList<Item> items, String message) {
     	
     	try {
-			if (mProgressDialog != null && mProgressDialog.isShowing()) {
-	    		mProgressDialog.dismiss();
-	    		mProgressDialog = null;
-	    	}
+    		mToolbar.hideIndeterminateProgress();
 			mLoadMoreFlipper.showPrevious();
 	    	if (retval == 0) {
 	        	mIsItemListFetched = true;
@@ -906,18 +888,23 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	
     	final Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup.get(), mSelectedChild.get());
     	if (selItem != null) {
+    		mToolbar.showInderminateProgress(getString(R.string.progress_message));
     		((NoteItApplication) getApplication()).deleteItem(selItem.mID, new OnMethodExecuteListerner() {
 				
 				public void onPostExecute(long resultCode, String message) {
-					if (resultCode == 0) {
-						// Remove the item from our adapter
-						ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
-						adapter.DeleteItem(selItem);
-						adapter.notifyDataSetChanged();
-						doDeductFromPendingTotal(selItem.mUnitPrice * selItem.mQuantity);
-						doDisplayPendingTotal();
-					} else
-						Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+					try {
+						if (resultCode == 0) {
+							// Remove the item from our adapter
+							ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
+							adapter.DeleteItem(selItem);
+							adapter.notifyDataSetChanged();
+							doDeductFromPendingTotal(selItem.mUnitPrice * selItem.mQuantity);
+							doDisplayPendingTotal();
+						} else
+							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+					} finally {
+						mToolbar.hideIndeterminateProgress();
+					}
 				}
 			});
     	}
@@ -951,20 +938,24 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 						if (selItem != null && 
 				    			targetList.mID != selItem.mListID) {
 				    		
+				    		mToolbar.showInderminateProgress(getString(R.string.progress_message));
 				    		app.copyItem(
 			    				selItem.mID,
 			    				targetList.mID,
 			        			new OnMethodExecuteListerner() {
 			    					public void onPostExecute(long resultCode, String message) {
-			    						
-			    						if (resultCode == 0) {
-			    							Toast.makeText(
-			    								ItemListActivity.this, 
-			    								getResources().getString(R.string.itemlist_copytolistsuccess), 
-			    								Toast.LENGTH_LONG).show();	
+			    						try {
+				    						if (resultCode == 0) {
+				    							Toast.makeText(
+				    								ItemListActivity.this, 
+				    								getResources().getString(R.string.itemlist_copytolistsuccess), 
+				    								Toast.LENGTH_SHORT).show();	
+				    						}
+				    						else
+				    							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_SHORT).show();
+			    						} finally {
+			    							mToolbar.hideIndeterminateProgress();
 			    						}
-			    						else
-			    							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
 			    					}
 			    				});
 				    	}
@@ -1006,18 +997,22 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 				    		final int	editBitmask = Item.ITEM_LISTID;
 				        	final Item	newItem = app.new Item(selItem);
 				        	newItem.mListID = targetList.mID;
+				    		mToolbar.showInderminateProgress(getString(R.string.progress_message));
 				    		app.editItem(
 				    				editBitmask, 
 				    				newItem, 
 				        			new OnMethodExecuteListerner() {
 				    					public void onPostExecute(long resultCode, String message) {
-				    						
-				    						if (resultCode == 0) {
-				    							adapter.DeleteItem(selItem);
-				    							adapter.notifyDataSetChanged();
+				    						try {
+					    						if (resultCode == 0) {
+					    							adapter.DeleteItem(selItem);
+					    							adapter.notifyDataSetChanged();
+					    						}
+					    						else
+					    							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+				    						} finally {
+				    				    		mToolbar.hideIndeterminateProgress();
 				    						}
-				    						else
-				    							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
 				    					}
 				    			});
 				    	}
@@ -1196,6 +1191,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     			newItem.mUnitPrice = newPrice;
     	}
     	
+    	mToolbar.showInderminateProgress(getString(R.string.progress_message));
 		app.editItem(
 				editBitmask, 
     			newItem, 
@@ -1203,24 +1199,28 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 				
 					public void onPostExecute(long resultCode, String message) {
 						
-						if (resultCode == 0) {
-							item.mIsPurchased = newItem.mIsPurchased;
-							item.mIsAskLater = newItem.mIsAskLater;
-							item.mUnitPrice = newItem.mUnitPrice; 
-							ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
-							if (item.mIsPurchased > 0 && mPrefs.getBoolean("Shuffle_Done_Items", true)) {
-								adapter.DeleteItem(item);
-								adapter.AddItem(item, app.getCategory(item.mCategoryID));
+						try {
+							if (resultCode == 0) {
+								item.mIsPurchased = newItem.mIsPurchased;
+								item.mIsAskLater = newItem.mIsAskLater;
+								item.mUnitPrice = newItem.mUnitPrice; 
+								ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
+								if (item.mIsPurchased > 0 && mPrefs.getBoolean("Shuffle_Done_Items", true)) {
+									adapter.DeleteItem(item);
+									adapter.AddItem(item, app.getCategory(item.mCategoryID));
+								}
+								if (item.mIsPurchased > 0)
+									doDeductFromPendingTotal(item.mUnitPrice * item.mQuantity);
+								else
+									doAddToPendingTotal(item.mUnitPrice * item.mQuantity);
+								doDisplayPendingTotal();
+								adapter.notifyDataSetChanged();
 							}
-							if (item.mIsPurchased > 0)
-								doDeductFromPendingTotal(item.mUnitPrice * item.mQuantity);
 							else
-								doAddToPendingTotal(item.mUnitPrice * item.mQuantity);
-							doDisplayPendingTotal();
-							adapter.notifyDataSetChanged();
+								Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+						} finally {
+							mToolbar.hideIndeterminateProgress();
 						}
-						else
-							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
 					}
 			});
     }
@@ -1308,10 +1308,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	    		adapter.AddItem(thisItem, category);
     		}
     	}
-//		mListView.setAdapter(mAdapter);
     	adapter.notifyDataSetChanged();
     	Log.i("NoteItApplication.doDisplayItems", "Notified Adapter of change");
-//		doDisplayTotals();
 		doExpandPending();
     }
     
@@ -1384,22 +1382,27 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     protected void doAllDone() {
     	NoteItApplication app = (NoteItApplication) getApplication();
     	if (app != null) {
+    		mToolbar.showInderminateProgress(getString(R.string.progress_message));
     		app.markAllItemsDone(app.getCurrentShoppingListID(), true, new OnMethodExecuteListerner() {
 				
 				public void onPostExecute(long resultCode, String message) {
-					if (resultCode == 0) {
-						ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
-						for (int group = 0; group < adapter.getGroupCount(); group++)
-							for (int child = 0; child < adapter.getChildrenCount(group); child++)
-							{
-								Item item = (Item) adapter.getChild(group, child);
-								if (item != null && item.mIsPurchased <= 0) {
-									item.mIsPurchased = 1;
+					try {
+						if (resultCode == 0) {
+							ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
+							for (int group = 0; group < adapter.getGroupCount(); group++)
+								for (int child = 0; child < adapter.getChildrenCount(group); child++)
+								{
+									Item item = (Item) adapter.getChild(group, child);
+									if (item != null && item.mIsPurchased <= 0) {
+										item.mIsPurchased = 1;
+									}
 								}
-							}
-						adapter.notifyDataSetChanged();
-					} else
-						Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+							adapter.notifyDataSetChanged();
+						} else
+							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+					} finally {
+						mToolbar.hideIndeterminateProgress();
+					}
 				}
 			});
     	}

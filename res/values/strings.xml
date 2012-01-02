@@ -21,12 +21,13 @@
 	<string name="login_emailhint">you@email.com</string>
     <string name="login_password">Password:</string>
     <string name="Login_Authenticating_message">Authenticating</string>
+    <string name="login_success">Login Successful</string>
 
     <string name="categorylist_title">Categories</string>
     <string name="categorylists_add">Add Category</string>
     <string name="categorylists_edit">Edit Category</string>
         
-	<string name="progress_message">Please wait</string>
+	<string name="progress_message">Please wait &#8230;</string>
         
 	<string name="shoplistsactivity_title">Shopping Lists</string>
 	<string name="empty_shoppinglists">You do not have any shopping lists. Please add a list by clicking the \"Add\" button.</string>
