@@ -40,15 +40,14 @@ import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 public class ItemListActivity extends ExpandableListActivity implements NoteItApplication.OnFetchItemsListener {
 	
 	ExpandableLVRightIndicator		mListView;
-//	ItemsExpandableListAdapter 		mAdapter;
 	ProgressDialog					mProgressDialog = null;
 	QuickAction 					mQuickAction = null;
 	AtomicInteger					mSelectedGroup = new AtomicInteger();
@@ -64,8 +63,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	SharedPreferences				mPrefs;
 	String							mCurrencyFormat = new String();
 	boolean							mLoadingMore = false;
-	ProgressBar						mProgressBar;
+//	ProgressBar						mProgressBar;
 	float							mPendingTotal = 0f;
+	ViewFlipper						mLoadMoreFlipper;
+	LayoutInflater					mLayoutInflater;
 	
 	static final int ADD_ITEM_REQUEST = 0;	
 	
@@ -274,9 +275,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 
 	    public View getView(ViewGroup parent) {
 	    	
-	    	LayoutInflater li = (LayoutInflater) getApplication().getSystemService(LAYOUT_INFLATER_SERVICE);
-	    	if (li != null) {
-	    		return li.inflate(R.layout.listitems_item, parent, false);
+	    	if (mLayoutInflater != null) {
+	    		return mLayoutInflater.inflate(R.layout.listitems_item, parent, false);
 	    	} else
 	    		return null;
 	    }
@@ -384,9 +384,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	    	
 	    	ViewGroup viewGroup = null;
 	    	if (convertView == null) {
-		    	LayoutInflater li = (LayoutInflater) getApplication().getSystemService(LAYOUT_INFLATER_SERVICE);
-		    	if (li != null) {
-		    		viewGroup = (ViewGroup) li.inflate(R.layout.listitems_group, parent, false);
+		    	if (mLayoutInflater != null) {
+		    		viewGroup = (ViewGroup) mLayoutInflater.inflate(R.layout.listitems_group, parent, false);
 		    	}
 	    	} else {
 	    		viewGroup = (ViewGroup) convertView;
@@ -565,23 +564,41 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		});
 		
 		mQuickAction.setOnDismissListener(new PopupWindow.OnDismissListener() {			
-			
 			public void onDismiss() {
 			}
 		});    
-		
+				
 //    	mProgressBar = new ProgressBar(this);
 //    	AbsListView.LayoutParams lp = new AbsListView.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 //    	mProgressBar.setLayoutParams(lp);
 //    	mProgressBar.setIndeterminate(true);
 //    	mProgressBar.setVisibility(View.VISIBLE);
     	
-		mListView = (ExpandableLVRightIndicator) findViewById(android.R.id.list);
         ItemsExpandableListAdapter adapter = new ItemsExpandableListAdapter(this);
-		mListView.setAdapter(adapter);
-//    	mListView.addFooterView(mProgressBar);
+		mListView = (ExpandableLVRightIndicator) getExpandableListView();
+		mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE); 
+		mLoadMoreFlipper = (ViewFlipper) mLayoutInflater.inflate(
+			R.layout.itemlist_moreswitcher, 
+			(ViewGroup) findViewById(R.id.itemlist_more_root), 
+			false);
 		mListView.setTextFilterEnabled(true);
-		mListView.setOnScrollListener(mScrollListener);
+//		mListView.setOnScrollListener(mScrollListener);
+		if (mLoadMoreFlipper != null) {
+			// Note: There seems to be a bug in android. If I don't call
+			// addFooterView before setting the adapter, the footer view
+			// is never added. Go Figure!
+			mListView.addFooterView(mLoadMoreFlipper);
+			Button moreButton = (Button) mLoadMoreFlipper.findViewById(R.id.itemlist_morebuttom);
+			if (moreButton != null) {
+				moreButton.setOnClickListener(new View.OnClickListener() {
+					
+					public void onClick(View v) {
+						fetchItems(ItemListActivity.this);
+					}
+				});
+			}
+		}
+		mListView.setAdapter(adapter);
     	mListView.setOnChildClickListener(new OnChildClickListener() {
 			
 			public boolean onChildClick(ExpandableListView parent, View v,
@@ -602,51 +619,29 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	doFetchAndDisplayPendingTotal();
 
     	// Populating of the list with items is handled in OnScrollListener for the list view
-/*		if (app.getShoppingListCount() > 0 && !mIsItemListFetched) {
-			mProgressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.progress_message));
- 	   		app.fetchItems(
- 	   				!mPrefs.getBoolean("Delete_Bought_Items", true),
- 	   				mPrefs.getBoolean("Shuffle_Done_Items", true),
- 	   				this);
+		if (app.getShoppingListCount() > 0 && !mIsItemListFetched) {
+			fetchItems(this);
 		} else {
 			Log.i("ItemListActivity.onCreate", "Skipping fetchItems");
 			doDisplayItems(app.getItems());
 		}
-*/    }
+    }
 
     @Override
+	protected void onDestroy() {
+		super.onDestroy();
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
     	MenuInflater inflater = getMenuInflater();
     	inflater.inflate(R.menu.itemlist_menu, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
     
-    public void showInderminateProgress() {
-//    	if (mProgressBar != null) {
-//    		AbsListView.LayoutParams lp =  (AbsListView.LayoutParams)mProgressBar.getLayoutParams();
-//    		lp.height = AbsListView.LayoutParams.WRAP_CONTENT;
-//    		mProgressBar.setLayoutParams(lp);
-//    		mProgressBar.setVisibility(View.VISIBLE);
-//    		if (mListView.getFooterViewsCount() <= 0)
-//    			mListView.addFooterView(mProgressBar);
-//    	}
-    }
-
-    public void hideIndeterminateProgress() {
-//    	if (mProgressBar != null) {
-//    		/*
-//    		AbsListView.LayoutParams lp =  (AbsListView.LayoutParams)mProgressBar.getLayoutParams();
-//    		lp.height = 0;
-//    		mProgressBar.setLayoutParams(lp);
-//    		mProgressBar.setVisibility(View.GONE);*/
-//    		if (mProgressBar != null && mListView.getFooterViewsCount() > 0)
-//    			mListView.removeFooterView(mProgressBar);
-//    	}
-    }
-    
     public void fetchItems(OnFetchItemsListener listener) {
     	NoteItApplication app = (NoteItApplication) getApplication();
-    	showInderminateProgress();
+    	mLoadMoreFlipper.showNext();
 		mLoadingMore = true;
 		app.fetchItems(
 			!mPrefs.getBoolean("Delete_Bought_Items", true),
@@ -743,16 +738,28 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	    		mProgressDialog.dismiss();
 	    		mProgressDialog = null;
 	    	}
-			
-			hideIndeterminateProgress();
-//	    	mListView.removeFooterView(mProgressBar);
-	    	
+			mLoadMoreFlipper.showPrevious();
 	    	if (retval == 0) {
 	        	mIsItemListFetched = true;
 	        	doDisplayItems(items);
+				NoteItApplication app = (NoteItApplication) getApplication();
+				if (app != null) { 
+					if (mListView.getFooterViewsCount() > 0) {
+						if  (!app.isMoreItemsPending()) {
+							mListView.removeFooterView(mLoadMoreFlipper);
+						}
+					} else {
+						if (app.isMoreItemsPending()){
+							mListView.addFooterView(mLoadMoreFlipper);
+						}
+					}
+				}
 	    	}
 	    	else {
-				Toast.makeText(getApplicationContext(), "The server seems to be out of its mind. Please try later.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(
+					getApplicationContext(), 
+					"The server seems to be out of its mind. Please try later.", 
+					Toast.LENGTH_SHORT).show();
 	    	}
     	} catch (Exception e) {
     		Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -1117,8 +1124,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     protected float doAskForPriceAndSave(final Item item) {
 
 		// inflate the view from resource layout
-		LayoutInflater	inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		final View dialogView = inflater.inflate(R.layout.dialog_addshoppinglist, (ViewGroup) findViewById(R.id.dialog_addshoppinglist_root));
+		final View dialogView = mLayoutInflater.inflate(R.layout.dialog_addshoppinglist, (ViewGroup) findViewById(R.id.dialog_addshoppinglist_root));
 		String text = String.format(
 				getResources().getString(R.string.addedit_askLaterPrompt), 
 				item.mQuantity,
@@ -1278,6 +1284,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 					mIsItemListFetched = false;
 					ItemsExpandableListAdapter adapter;
 					if ((adapter = new ItemsExpandableListAdapter(ItemListActivity.this)) != null) {
+						// Note: There seems to be a bug in android. If I don't call
+						// addFooterView before setting the adapter, the footer view
+						// is never added. Go Figure!
+						mListView.addFooterView(mLoadMoreFlipper);
 						mListView.setAdapter(adapter);
 					}
 					fetchItems(ItemListActivity.this);

@@ -16,7 +16,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Application;
-import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -363,7 +362,7 @@ public class NoteItApplication extends Application {
 	private Country						mDefaultCountry = new Country("US", "USD","$", 0, "US Dollar");
 	private Preference					mUserPrefs = new Preference("US", "USD");
 	private int 						mItemsStartPos = 0;
-	private int 						mItemsBatchSize = 20;
+	private int 						mItemsBatchSize = 10;
 	private boolean						mItemsMorePending = true;
 	
 	@Override

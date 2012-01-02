@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/itemlist_more_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="5dip">
+    
+  <Button 
+        android:id="@+id/itemlist_morebuttom"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_vertical"
+        android:padding="5dip"
+        android:gravity="center"
+        android:text="@string/itemlist_loadmorebutton"
+        android:textColor="#AAAAAA"
+        android:textSize="15sp"
+        android:textAppearance="@style/ItemList_TextAppearance.PendingItem.Medium"
+		android:background="@color/app_button_background" />
+ 
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ProgressBar 
+	       android:id="@+id/itemlist_moreprogress"
+	       android:layout_width="wrap_content"
+	       android:layout_height="wrap_content"
+	       android:indeterminate="true" />
+
+        <TextView
+            android:id="@+id/itemlist_loading"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/itemlist_loadingmore"
+	        android:textSize="15sp"
+            android:textAppearance="@style/ItemList_TextAppearance.PendingItem.Medium"
+            android:background="@android:color/transparent" />
+        
+    </LinearLayout>
+    
+    
+</ViewFlipper>
