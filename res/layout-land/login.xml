@@ -13,16 +13,17 @@
         android:layout_height="fill_parent"
         android:gravity="center"
         android:orientation="horizontal"
-        android:background="@color/noteit_trademark_dark" >
+        android:background="@color/noteit_trademark_dark"
+        android:paddingTop="10dip"
+        android:paddingLeft="20dip"
+        android:paddingRight="20dip" >
  
         <TextView
-	        android:drawableTop="@drawable/ic_launcher_noteit1"
+	        android:drawableTop="@drawable/noteit_logo"
 	        android:id="@+id/textView1"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="center_horizontal|top"
-	        android:padding="40dip"
-	        android:text="@string/app_name"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	</LinearLayout>

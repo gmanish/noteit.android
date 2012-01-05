@@ -10,9 +10,10 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal"
         android:background="@color/noteit_trademark_dark"
-        android:padding="20dip" >
+        android:padding="10dip" >
 
 	    <TextView
 	        android:id="@+id/textView1"
@@ -20,9 +21,8 @@
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="center"
 	        android:gravity="center"
-	        android:text="@string/app_name"
 	        android:textAppearance="?android:attr/textAppearanceLarge" 
-	        android:drawableLeft="@drawable/ic_launcher_noteit1"
+	        android:drawableLeft="@drawable/noteit_logo"
 	        android:drawablePadding="10dip" />
         
 	</LinearLayout>
