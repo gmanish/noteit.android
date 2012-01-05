@@ -44,6 +44,10 @@ public class ReportActivity extends Activity {
 	public static final int REPORT_ITEM_PURCHASED_LASTWEEK	= 11;
 	
 	public static final int REPORT_ITEM_PENDING_ALL			= 12;
+
+	public static final String TEXT_REPORT 	= "TEXT_REPORT";
+	public static final String HTML_REPORT 	= "HTML_REPORT";
+	public static final String TEXT_TITLE	= "TEXT_TITLE";
 	
 	class ToolbarWrapper extends CustomTitlebarWrapper {
 
@@ -71,14 +75,29 @@ public class ReportActivity extends Activity {
 		mTextView = (WebView) findViewById(R.id.webview);
 		mTextView.setBackgroundColor(0);
 		
-		Intent intent = getIntent();
-		if (intent != null) {
-			Bundle bundle = intent.getExtras();
-			if (bundle != null) {
-				int reportId = bundle.getInt(REPORT_TYPE);
-				doReport(reportId);
+		if (savedInstanceState != null) {
+			mCurrentReportHtml = savedInstanceState.getString(HTML_REPORT);
+			mCurrentReportText = savedInstanceState.getString(TEXT_REPORT);
+			mToolbar.SetTitle(savedInstanceState.getString(TEXT_TITLE));
+			mTextView.loadDataWithBaseURL(null, mCurrentReportHtml, "text/html", "UTF-8", null);
+		} else {
+			Intent intent = getIntent();
+			if (intent != null) {
+				Bundle bundle = intent.getExtras();
+				if (bundle != null) {
+					int reportId = bundle.getInt(REPORT_TYPE);
+					doReport(reportId);
+				}
 			}
 		}
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putString(HTML_REPORT,mCurrentReportHtml);
+		outState.putString(TEXT_REPORT, mCurrentReportText);
+		outState.putString(TEXT_TITLE, mToolbar.GetTitle());
+		super.onSaveInstanceState(outState);
 	}
 
 	@Override
