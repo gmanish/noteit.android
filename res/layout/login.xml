@@ -3,65 +3,102 @@
     android:id="@+id/TableLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="10dp"
     android:orientation="vertical" 
-    android:background="@drawable/application_background_normal">
+    android:baselineAligned="false"
+    android:background="@color/noteit_trademark_light">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal" >
-        
+        android:orientation="horizontal"
+        android:background="@color/noteit_trademark_dark"
+        android:padding="20dip" >
+
 	    <TextView
 	        android:id="@+id/textView1"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="center"
-	        android:paddingLeft="10dip"
-	        android:paddingRight="10dip"
-	        android:text="@string/app_name"
 	        android:gravity="center"
+	        android:text="@string/app_name"
+	        android:textAppearance="?android:attr/textAppearanceLarge" 
 	        android:drawableLeft="@drawable/ic_launcher_noteit1"
-	        android:drawablePadding="10dip"
-	        android:textAppearance="?android:attr/textAppearanceLarge" />
-			    
+	        android:drawablePadding="10dip" />
+        
+	</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+	    android:padding="10dp"
+        android:orientation="vertical" >
+	    
+	    <TextView
+	        android:id="@+id/textEmailID"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/login_email"
+	        android:layout_marginTop="10dip" 
+	        style="@style/TextAppearance.TradeMarkDark"/>
+	
+	    <EditText
+	        android:id="@+id/editEmailID"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+		    android:selectAllOnFocus="true"
+	        android:inputType="textEmailAddress" >
+	        <requestFocus />
+	    </EditText>
+	
+	    <TextView
+	        android:id="@+id/textPassword"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/login_password"
+	        android:paddingTop="10dip"
+	        style="@style/TextAppearance.TradeMarkDark" />
+	
+		<EditText
+		    android:id="@+id/editPassword"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:inputType="textPassword" />
+	
+	    <Button
+	        android:id="@+id/buttonLogin"
+	        android:layout_width="148dp"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="right"
+	        android:layout_marginTop="10dip"
+	        android:text="@string/login_login" />
+
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textEmailID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/login_email"
-        android:layout_marginTop="10dip" />
+    <LinearLayout 
+        android:id="@+id/login_progress"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:padding="10dp"
+		android:layout_gravity="bottom"
+		android:gravity="bottom"
+		android:orientation="horizontal" 
+		android:visibility="visible">
 
-    <EditText
-        android:id="@+id/editEmailID"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-	    android:selectAllOnFocus="true"
-        android:inputType="textEmailAddress" >
-        <requestFocus />
-    </EditText>
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
 
-    <TextView
-        android:id="@+id/textPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/login_password" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="@string/Login_Authenticating_message"
+            android:textAppearance="@style/TextAppearance.TradeMarkDark.Small" />
 
-	<EditText
-	    android:id="@+id/editPassword"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:inputType="textPassword" />
-
-    <Button
-        android:id="@+id/buttonLogin"
-        android:layout_width="148dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="10dip"
-        android:text="@string/login_login" />
-    
+    </LinearLayout>
+   
 </LinearLayout>

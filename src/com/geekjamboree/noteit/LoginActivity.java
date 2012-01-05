@@ -21,8 +21,10 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class LoginActivity 
@@ -31,15 +33,17 @@ public class LoginActivity
 	
 	SharedPreferences		mPrefs;
 	boolean					mIsHashedPassword = false;
-	CustomTitlebarWrapper	mToolbar;
+//	CustomTitlebarWrapper	mToolbar;
 	
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mToolbar = new CustomTitlebarWrapper(this);
+//        mToolbar = new CustomTitlebarWrapper(this);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.login);
-        mToolbar.SetTitle(getResources().getText(R.string.login_activity_title));
+        hideIndeterminateProgress();
+//        mToolbar.SetTitle(getResources().getText(R.string.login_activity_title));
    
         // Read the email id from the preference
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -69,7 +73,7 @@ public class LoginActivity
         Button next = (Button) findViewById(R.id.buttonLogin);
         next.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-            	mToolbar.showInderminateProgress(getString(R.string.Login_Authenticating_message));
+            	showIndeterminateProgress();
             	// Try to authenticate the user with the supplied credentials.
             	// If authentication succeeds, switch to the shopping list view
             	EditText emailID = (EditText) findViewById(R.id.editEmailID);
@@ -81,7 +85,7 @@ public class LoginActivity
 	    				mIsHashedPassword,
 	    				LoginActivity.this);
             	} catch (Exception e) {
-            		mToolbar.hideIndeterminateProgress();
+            		hideIndeterminateProgress();
             	}
             }
 
@@ -161,11 +165,11 @@ public class LoginActivity
 		} catch (JSONException e) {
 			Toast.makeText(getApplicationContext(), "The server seems to be out of its mind. Please try later.", Toast.LENGTH_SHORT).show();
 			Log.e("NoteItApplication.loginUser", e.getMessage());
-			mToolbar.hideIndeterminateProgress();
+			hideIndeterminateProgress();
 		} catch (Exception e) {
     		Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
 			Log.e("NoteItApplication.loginUser", e.getMessage());
-			mToolbar.hideIndeterminateProgress();
+			hideIndeterminateProgress();
 		}
 	}
 	
@@ -179,7 +183,7 @@ public class LoginActivity
 					doFetchCategories();
 				} else {
             		Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
-					mToolbar.hideIndeterminateProgress();
+					hideIndeterminateProgress();
 				}
         	}
 		});
@@ -200,7 +204,7 @@ public class LoginActivity
 	            		Intent myIntent = new Intent(LoginActivity.this, DashBoardActivity.class);
 	                    startActivity(myIntent);
 	                    finish();
-	                    mToolbar.hideIndeterminateProgress();
+	                    hideIndeterminateProgress();
 	            		Toast.makeText(
 	            			LoginActivity.this, 
 	            			getString(R.string.login_success), 
@@ -210,7 +214,7 @@ public class LoginActivity
 					}
 				} else {
             		Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
-					mToolbar.hideIndeterminateProgress();
+					hideIndeterminateProgress();
 				}
 			}
 		});
@@ -241,16 +245,30 @@ public class LoginActivity
 	                Intent myIntent = new Intent(LoginActivity.this, ItemListActivity.class);
 	                startActivity(myIntent);
 	                finish();
-	                mToolbar.hideIndeterminateProgress();
+	                hideIndeterminateProgress();
             		Toast.makeText(
             			LoginActivity.this, 
             			getString(R.string.login_success), 
             				Toast.LENGTH_SHORT).show();
 				} else {
 					Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
-					mToolbar.hideIndeterminateProgress();
+					hideIndeterminateProgress();
 				}
 			}
 		});
+	}
+	
+	protected void showIndeterminateProgress() {
+		LinearLayout progressLayout = (LinearLayout) findViewById(R.id.login_progress);
+		if (progressLayout != null) {
+			progressLayout.setVisibility(View.VISIBLE);
+		}
+	}
+	
+	protected void hideIndeterminateProgress() {
+		LinearLayout progressLayout = (LinearLayout) findViewById(R.id.login_progress);
+		if (progressLayout != null) {
+			progressLayout.setVisibility(View.GONE);
+		}
 	}
 }

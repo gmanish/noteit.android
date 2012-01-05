@@ -1,5 +1,8 @@
 <resources>
 
+    <color name="noteit_trademark_dark">#67593A</color>
+    <color name="noteit_trademark_light">#E7C681</color>
+    
     <style name="App_ButtonStyle">
         <item name="android:layout_width">50dp</item>
         <item name="android:layout_height">50dp</item>
@@ -27,6 +30,26 @@
 		<item name="android:background">@drawable/application_titlebar</item>
     </style>
 
+	<style name="TextAppearance.TradeMarkDark" parent="@android:style/TextAppearance">
+	    <item name="android:background">@android:color/transparent</item>
+	    <item name="android:textColor">@color/noteit_trademark_dark</item>
+    </style>
+	
+	<style name="TextAppearance.TradeMarkLight" parent="@android:style/TextAppearance.Small">
+	    <item name="android:background">@color/noteit_trademark_light</item>
+	    <item name="android:textColor">#808080</item>
+    </style>
+   
+	<style name="TextAppearance.TradeMarkDark.Small" parent="@android:style/TextAppearance.Small">
+	    <item name="android:background">@android:color/transparent</item>
+	    <item name="android:textColor">@color/noteit_trademark_dark</item>
+    </style>
+	
+	<style name="TextAppearance.TradeMarkLight.Small" parent="@android:style/TextAppearance.Small">
+	    <item name="android:background">@color/noteit_trademark_light</item>
+	    <item name="android:textColor">#808080</item>
+    </style>
+	
 	<style name="ItemList_TextAppearance.Footer" parent="@android:style/TextAppearance.Small">
 	    <item name="android:background">@android:color/transparent</item>
 	    <item name="android:textColor">#808080</item>
