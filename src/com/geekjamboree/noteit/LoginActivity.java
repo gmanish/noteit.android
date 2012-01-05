@@ -245,7 +245,7 @@ public class LoginActivity
             		Toast.makeText(
             			LoginActivity.this, 
             			getString(R.string.login_success), 
-            			Toast.LENGTH_SHORT).show();
+            				Toast.LENGTH_SHORT).show();
 				} else {
 					Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
 					mToolbar.hideIndeterminateProgress();

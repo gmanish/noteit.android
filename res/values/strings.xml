@@ -20,7 +20,7 @@
 	<string name="login_email">Email:</string>
 	<string name="login_emailhint">you@email.com</string>
     <string name="login_password">Password:</string>
-    <string name="Login_Authenticating_message">Authenticating</string>
+    <string name="Login_Authenticating_message">Authenticating &#8230;</string>
     <string name="login_success">Login Successful</string>
 
     <string name="categorylist_title">Categories</string>
