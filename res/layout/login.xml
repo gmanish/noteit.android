@@ -7,26 +7,17 @@
     android:baselineAligned="false"
     android:background="@color/noteit_trademark_light">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/imageviewLogo"
         android:layout_width="fill_parent"
+        android:contentDescription="@string/app_name"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:gravity="center"
-        android:orientation="horizontal"
+        android:padding="10dip"
         android:background="@color/noteit_trademark_dark"
-        android:padding="10dip" >
-
-	    <TextView
-	        android:id="@+id/textView1"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="center"
-	        android:gravity="center"
-	        android:textAppearance="?android:attr/textAppearanceLarge" 
-	        android:drawableLeft="@drawable/noteit_logo"
-	        android:drawablePadding="10dip" />
+        android:src="@drawable/noteit_logo"/>
         
-	</LinearLayout>
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="0dip"

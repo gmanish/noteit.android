@@ -1,7 +1,9 @@
 package com.geekjamboree.noteit;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.text.TextUtils.TruncateAt;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -142,9 +144,12 @@ public class CustomTitlebarWrapper {
     	ImageView imageSep = new ImageView(root.getContext());
     	separatorLP.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
     	imageSep.setLayoutParams(separatorLP);
-    	imageSep.setImageResource(R.drawable.vertical_separator);
+		Resources.Theme theme = mParent.getTheme();
+		TypedValue 		imageID = new TypedValue();
+		if (theme.resolveAttribute(R.attr.NI_VerticalSeparator, imageID, true)) {
+	    	imageSep.setImageResource(imageID.resourceId);
+		}
     	imageSep.setPadding(0, 1, 0, 1);
-    	
     	return imageSep;
     }
     

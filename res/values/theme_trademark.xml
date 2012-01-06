@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!--  Style Definitions for Trademark Theme -->
+    <style name="NI_AppBackgroundNormal.Trademark">
+        <item name="android:background">@drawable/application_background_trademark</item>
+    </style>
+
+	<style name="App_TitleBackground_Trademark">
+		<item name="android:background">@drawable/application_titlebar_trademark</item>
+    </style>
+    
+	<style name="App_StatusBackground_Trademark">
+	    <item name="android:background">@drawable/application_statusbar_trademark</item>
+	</style>
+	
+	<style name="AppCustomDialog_Trademark" parent="android:style/Theme.Dialog">
+	    <item name="android:windowBackground">@drawable/filled_roundededges_box_dark</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowSoftInputMode">stateVisible</item>
+    </style>
+    
+	<style name="App_StatusBorder_Trademark">
+	    <item name="android:background">@drawable/application_statusbar_border_trademark</item>
+	</style>
+	
+	<style name="AddEdit_Widget_Trademark">
+	    <item name="android:layout_height">45dip</item>
+	    <item name="android:textColor">#000000</item>
+	</style>
+	
+	<style name="TextAppearance_Trademark" parent="@android:style/TextAppearance">
+	    <item name="android:background">@android:color/transparent</item>
+	    <item name="android:textColor">#333333</item>
+    </style>
+    
+   	<style name="TextAppearance_Trademark.GroupsItem_Small" parent="@android:style/TextAppearance.WindowTitle">
+	    <item name="android:textColor">#463a26</item>
+    </style>
+	
+	<style name="TextAppearance_Trademark.GroupsItem_Medium" parent="@android:style/TextAppearance.WindowTitle">
+	    <item name="android:textColor">#463a26</item>
+    </style>
+	
+	<style name="TextAppearance_Trademark.GroupsItem_Large" parent="@android:style/TextAppearance.WindowTitle">
+	    <item name="android:textColor">#463a26</item>
+	</style>
+	
+	<style name="TextAppearance_Trademark.PendingItem_Small" parent="@android:style/TextAppearance.Small">
+	    <item name="android:textColor">#463a26</item>
+   	</style>
+
+	<style name="TextAppearance_Trademark.PendingItem_Medium" parent="@android:style/TextAppearance.Medium">
+	    <item name="android:textColor">#463a26</item>
+	</style>
+
+	<style name="TextAppearance_Trademark.PendingItem_Large" parent="@android:style/TextAppearance.Large">
+	    <item name="android:textColor">#463a26</item>
+	</style>
+
+	<style name="TextAppearance_Trademark.DoneItem_Small" parent="@android:style/TextAppearance.Small">
+	    <item name="android:textColor">#463a26</item>
+   	</style>
+
+	<style name="TextAppearance_Trademark.DoneItem_Medium" parent="@android:style/TextAppearance.Medium">
+	    <item name="android:textColor">#463a26</item>
+	</style>
+	
+	<style name="TextAppearance_Trademark.DoneItem_Large" parent="@android:style/TextAppearance.Large">
+	    <item name="android:textColor">#463a26</item>
+	</style>
+
+	<style name="TextAppearance_Trademark.SubItem" parent="@android:style/TextAppearance.Small">
+		<item name="android:textColor">#5e4e32</item>
+	</style>
+	    
+	<style name="Footer_Trademark" parent="@android:style/TextAppearance.Small">
+	    <item name="android:textColor">#808080</item>
+    </style>
+
+    <style name="NI_ListViewAttr_Trademark" parent="@android:style/Widget.AbsListView">
+        <item name="android:divider">@drawable/listview_group_separator_trademark</item>
+        <item name="android:childDivider">@drawable/listview_item_separator_trademark</item>
+        <item name="android:background">@drawable/application_background_trademark</item>
+        <item name="android:groupIndicator">@color/listitem_group_indicator</item>
+        <item name="android:dividerHeight">2dip</item>
+		<item name="android:cacheColorHint">#00000000</item>
+        <item name="android:fadingEdge">vertical</item>
+  	</style>
+    
+    <style name="NI_AppTheme.Trademark">
+        <item name="android:windowTitleBackgroundStyle">@style/App_TitleBackground_Trademark</item>
+	    <item name="NI_ButtonStyle">@style/App_ButtonStyle</item>
+        <item name="NI_EditTextStyle">@style/App_EditTextStyle</item>
+        <item name="NI_TitleBackground">@style/App_TitleBackground_Trademark</item>
+        <item name="NI_StatusBackground">@style/App_StatusBackground_Trademark</item>
+        <item name="NI_StatusBorder">@style/App_StatusBorder_Trademark</item>
+        <item name="NI_AppBackgroundNormal">@style/NI_AppBackgroundNormal.Trademark</item>
+        <item name="NI_CustomDialog">@style/AppCustomDialog_Trademark</item>
+        <item name="NI_ListViewAttr">@style/NI_ListViewAttr_Trademark</item>
+        <item name="NI_VerticalSeparator">@drawable/vertical_separator_trademark</item>
+        <item name="AddEdit_Widget">@style/AddEdit_Widget_Trademark</item>
+		
+		<item name="TextAppearance_Group_Small">@style/TextAppearance_Trademark.GroupsItem_Small</item>
+		<item name="TextAppearance_Group_Medium">@style/TextAppearance_Trademark.GroupsItem_Medium</item>
+		<item name="TextAppearance_Group_Large">@style/TextAppearance_Trademark.GroupsItem_Large</item>
+				
+        <item name="TextAppearance_Item_Small">@style/TextAppearance_Trademark.PendingItem_Small</item>
+		<item name="TextAppearance_Item_Medium">@style/TextAppearance_Trademark.PendingItem_Medium</item>
+		<item name="TextAppearance_Item_Large">@style/TextAppearance_Trademark.PendingItem_Large</item>
+		
+		<item name="TextAppearance_Item_Done_Small">@style/TextAppearance_Trademark.DoneItem_Small</item>
+		<item name="TextAppearance_Item_Done_Medium">@style/TextAppearance_Trademark.DoneItem_Medium</item>
+		<item name="TextAppearance_Item_Done_Large">@style/TextAppearance_Trademark.DoneItem_Large</item>
+		
+		<item name="TextAppearance_Item_SubItem_Small">@style/TextAppearance_Trademark.SubItem</item>
+		<item name="TextAppearance_Item_SubItem_Medium">@style/TextAppearance_Trademark.SubItem</item>
+		<item name="TextAppearance_Item_SubItem_Large">@style/TextAppearance_Trademark.SubItem</item>
+		
+		<item name="TextAppearance_Footer">@style/Footer</item>
+    </style>
+    			
+</resources>

@@ -2,6 +2,8 @@ package com.geekjamboree.noteit;
 
 import java.util.ArrayList;
 
+import com.geekjamboree.noteit.ItemListActivity.ItemType;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -12,8 +14,9 @@ import android.widget.TextView;
 
 public class ArrayAdapterWithFontSize<T> extends ArrayAdapter<T> {
 
-	protected int mFontSize = 3;
-	protected int mTextViewResId = 0;
+	protected int 		mFontSize 		= 3;
+	protected int 		mTextViewResId 	= 0;
+	protected Context	mContext;
 	
 	public ArrayAdapterWithFontSize(
 			Context context, 
@@ -23,6 +26,7 @@ public class ArrayAdapterWithFontSize<T> extends ArrayAdapter<T> {
 
 		super(context, resource, textViewResourceId, objects);
 		mTextViewResId = textViewResourceId;
+		mContext = context;
 	}
 
 	@Override
@@ -44,13 +48,8 @@ public class ArrayAdapterWithFontSize<T> extends ArrayAdapter<T> {
 		SharedPreferences 	prefs = PreferenceManager.getDefaultSharedPreferences(getContext()); 
         
 		mFontSize = Integer.valueOf(prefs.getString("Item_Font_Size", "3"));
-    	if (mFontSize == 1)
-    		appearance = R.style.ItemList_TextAppearance_PendingItem_Large;
-    	else if (mFontSize == 2)
-    		appearance = R.style.ItemList_TextAppearance_PendingItem_Medium;
-    	else
-    		appearance = R.style.ItemList_TextAppearance_PendingItem_Small;
-    	
+		appearance = NoteItApplication.getPreferredTextAppearance(
+				mContext, mFontSize, ItemType.PENDING);
     	return appearance;
     }
 }

@@ -14,6 +14,6 @@
         android:text="@+id/dashboard_item_text"
         android:gravity="center"
         android:drawableTop="@drawable/cart_big"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?TextAppearance_Item_SubItem_Small" />
 
 </LinearLayout>

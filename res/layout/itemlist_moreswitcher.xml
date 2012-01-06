@@ -16,7 +16,7 @@
         android:text="@string/itemlist_loadmorebutton"
         android:textColor="#AAAAAA"
         android:textSize="15sp"
-        android:textAppearance="@style/ItemList_TextAppearance.PendingItem.Medium"
+        android:textAppearance="?TextAppearance_Item_Medium"
 		android:background="@color/app_button_background" />
  
     <LinearLayout 
@@ -39,7 +39,7 @@
             android:gravity="center"
             android:text="@string/itemlist_loadingmore"
 	        android:textSize="15sp"
-            android:textAppearance="@style/ItemList_TextAppearance.PendingItem.Medium"
+            android:textAppearance="?TextAppearance_Item_Medium"
             android:background="@android:color/transparent" />
         
     </LinearLayout>

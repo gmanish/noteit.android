@@ -105,7 +105,7 @@ public class CategoryListActivity
         
         mListView = (CategoryListView) findViewById(android.R.id.list);
         mAdapter = new CategoryListAdapter(
-    			getBaseContext(), 
+    			this, 
     			R.layout.categorieslist_item, 
     			R.id.categorylists_item_name, 
     			((NoteItApplication) getApplication()).getCategories());

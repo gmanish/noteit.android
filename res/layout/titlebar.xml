@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:inAnimation="@anim/titlebar_flipper_in"
-    android:background="@drawable/application_titlebar">
+    style="?NI_TitleBackground">
 
    	<LinearLayout
 	    android:id="@+id/titlebar_root"

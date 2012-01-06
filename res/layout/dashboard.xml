@@ -8,5 +8,5 @@
     android:verticalSpacing="20dip"
     android:horizontalSpacing="20dip"
     android:gravity="center" 
-    android:background="@drawable/application_background_normal" 
-    android:cacheColorHint="#00000000"/>
+    android:cacheColorHint="#00000000"
+    style="?NI_ListViewAttr"/>

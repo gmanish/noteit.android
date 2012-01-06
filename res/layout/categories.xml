@@ -3,17 +3,13 @@
     android:id="@+id/layout_categories"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/application_background_normal"
     android:orientation="vertical">
 
     <com.geekjamboree.noteit.CategoryListView
         android:id="@+android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" 
-        android:divider="@drawable/listview_item_separator"
-        android:dividerHeight="2dip"
-        android:cacheColorHint="#00000000"
-        android:fadingEdge="vertical" />
+        style="?NI_ListViewAttr" />
     
     <TextView
         android:id="@android:id/empty"

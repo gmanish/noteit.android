@@ -3,7 +3,6 @@
     android:id="@+id/layout_itemslist"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/application_background_normal"
     android:orientation="vertical" >
 
     <com.geekjamboree.noteit.ExpandableLVRightIndicator
@@ -12,10 +11,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:cacheColorHint="#00000000"
-        android:groupIndicator="@color/listitem_group_indicator"
-        android:childDivider="@drawable/listview_item_separator"
-        android:divider="@drawable/listview_group_separator"
-        android:dividerHeight="2dip" />
+        style="?NI_ListViewAttr"/>
 
 	<TextView
 		android:id="@android:id/empty"
@@ -26,13 +22,14 @@
 		android:layout_weight="1"
 		android:padding="10dp"
 		android:drawableRight="@drawable/add"
+		android:background="@android:color/transparent"
 		android:text="@string/empty_shoppingitems" />
         
 	<ImageView
 	    android:contentDescription="@string/hello"
 	    android:layout_width="fill_parent"
 	    android:layout_height="4dip"
-	    android:background="@drawable/application_statusbar_border" />
+	    style="?NI_StatusBorder" />
 
     <RelativeLayout
         android:id="@+id/bottom_bar"
@@ -42,7 +39,7 @@
         android:paddingRight="10dip"
         android:paddingTop="5dip"
         android:paddingBottom="5dip"
-        android:background="@drawable/application_statusbar"
+        style="?NI_StatusBackground"
         android:orientation="horizontal" >
 
         <TextView
@@ -51,7 +48,7 @@
 	        android:layout_height="wrap_content"
 	        android:text="@+id/bottom_remaining"
 	        android:layout_alignParentLeft="true"
-	        android:textAppearance="@style/ItemList_TextAppearance.Footer" />
+	        android:textAppearance="?TextAppearance_Footer" />
 
     </RelativeLayout>
 		

@@ -12,7 +12,6 @@
 
     <TextView
         android:id="@+id/reportactivity_group_name"
-        style="@style/ItemList_TextAppearance.GroupsItem.Small"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@android:color/transparent"
@@ -20,6 +19,7 @@
         android:gravity="left|center_vertical"
         android:paddingLeft="5dip"
         android:singleLine="true"
+        style="?TextAppearance_Group_Small"
         android:text="@+id/itemslist_categoryName" />
 
 </LinearLayout>

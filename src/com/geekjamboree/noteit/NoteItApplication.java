@@ -16,10 +16,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
+import android.util.TypedValue;
 import android.widget.Toast;
 
 import com.geekjamboree.noteit.AsyncInvokeURLTask.OnPostExecuteListener;
+import com.geekjamboree.noteit.ItemListActivity.ItemType;
 
 public class NoteItApplication extends Application {
 
@@ -1736,4 +1740,53 @@ public class NoteItApplication extends Application {
 			}
 		}
 	}
+
+    static int getPreferredTextAppearance(Context context, int fontSize, ItemType type) {
+    	
+    	int appearance = 0;
+    	switch (type) {
+    	
+    	case PENDING:
+        	if (fontSize == 3)
+    			appearance = R.attr.TextAppearance_Item_Small;
+        	else if (fontSize == 2)
+    			appearance = R.attr.TextAppearance_Item_Medium;
+        	else
+    			appearance = R.attr.TextAppearance_Item_Large;
+    		break;
+    	
+    	case DONE:
+        	if (fontSize == 3) {
+       			appearance = R.attr.TextAppearance_Item_Done_Small;
+        	}
+        	else if (fontSize == 2) {
+       			appearance = R.attr.TextAppearance_Item_Done_Medium;
+        	}
+        	else {
+       			appearance = R.attr.TextAppearance_Item_Done_Large;
+        	}
+    		break;
+
+    	case GROUP:
+    		if (fontSize == 3) {
+    			appearance = R.attr.TextAppearance_Group_Small;
+    		}
+    		else if (fontSize == 2) {
+    			appearance = R.attr.TextAppearance_Group_Medium;
+    		}
+    		else {
+       			appearance = R.attr.TextAppearance_Group_Large;
+    		}
+    		break;
+    	}
+    	
+    	if (appearance > 0) {
+    		Resources.Theme theme = context.getTheme();
+    		TypedValue 		styleID = new TypedValue();
+    		if (theme.resolveAttribute(appearance, styleID, true)) {
+    		     return styleID.data;
+    		}
+    	}
+    	return appearance;
+    }
 }

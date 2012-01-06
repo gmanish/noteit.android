@@ -78,7 +78,10 @@ public class ReportMenuActivity extends ExpandableListActivity {
 			if (view != null) {
 				TextView textView = (TextView) view.findViewById(mChildTo[0]);
 				if (textView != null) {
-					textView.setTextAppearance(mContext, getPreferredTextAppearance(ItemType.PENDING));
+					textView.setTextAppearance(
+						mContext, 
+						NoteItApplication.getPreferredTextAppearance(
+								mContext, mFontSize, ItemType.PENDING));
 				}
 			}
 			return view;
@@ -94,7 +97,10 @@ public class ReportMenuActivity extends ExpandableListActivity {
 			if (view != null) {
 				TextView textView = (TextView) view.findViewById(mGroupTo[0]);
 				if (textView != null) {
-					textView.setTextAppearance(mContext, getPreferredTextAppearance(ItemType.GROUP));
+					textView.setTextAppearance(
+						mContext, 
+						NoteItApplication.getPreferredTextAppearance(
+							mContext, mFontSize, ItemType.GROUP));
 				}
 			}
 			return view;
@@ -287,41 +293,5 @@ public class ReportMenuActivity extends ExpandableListActivity {
     		mListView.collapseGroup(i);
     	}        	
     	
-    }
-    
-    protected int getPreferredTextAppearance(ItemType type) {
-    	
-    	int appearance = 0;
-    	switch (type) {
-    	
-    	case PENDING:
-        	if (mFontSize == 3)
-        		appearance = R.style.ItemList_TextAppearance_PendingItem_Small;
-        	else if (mFontSize == 2)
-        		appearance = R.style.ItemList_TextAppearance_PendingItem_Medium;
-        	else
-        		appearance = R.style.ItemList_TextAppearance_PendingItem_Large;
-    		break;
-    	
-    	case DONE:
-        	if (mFontSize == 3)
-        		appearance = R.style.ItemList__TextAppearance_DoneItem_Small;
-        	else if (mFontSize == 2)
-        		appearance = R.style.ItemList__TextAppearance_DoneItem_Medium;
-        	else
-        		appearance = R.style.ItemList__TextAppearance_DoneItem_Large;
-    		break;
-
-    	case GROUP:
-    		if (mFontSize == 3)
-    			appearance = R.style.ItemList_TextAppearance_GroupsItem_Small;
-    		else if (mFontSize == 2)
-    			appearance = R.style.ItemList_TextAppearance_GroupsItem_Medium;
-    		else 
-    			appearance = R.style.ItemList_TextAppearance_GroupsItem_Large;
-    		break;
-    	}
-    	
-    	return appearance;
     }
 }

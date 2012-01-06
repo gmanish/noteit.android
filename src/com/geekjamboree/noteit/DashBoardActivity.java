@@ -34,11 +34,11 @@ public class DashBoardActivity extends Activity {
 
 	public class DashBoardAdapter extends BaseAdapter {
 	    
-//		private Context 					mContext;
+		private LayoutInflater				mLayoutInflater;
 		private ArrayList<DashboardItem> 	mItems = new ArrayList<DashboardItem>();
 		
 	    public DashBoardAdapter(/*Context c*/) {
-	        //mContext = c;
+	    	mLayoutInflater = (LayoutInflater) getApplication().getSystemService(LAYOUT_INFLATER_SERVICE);
 	    }
 
 	    public void addItem(String text, int resourceID, int itemID) {
@@ -69,8 +69,7 @@ public class DashBoardActivity extends Activity {
 	        
 	    	ViewGroup view;
 	        if (convertView == null) {  // if it's not recycled, initialize some attributes
-	        	LayoutInflater li = (LayoutInflater) getApplication().getSystemService(LAYOUT_INFLATER_SERVICE);
-	        	view = (ViewGroup) li.inflate(R.layout.dashboard_item, parent, false);
+	        	view = (ViewGroup) mLayoutInflater.inflate(R.layout.dashboard_item, parent, false);
 	        } else {
 	            view = (ViewGroup) convertView;
 	        }

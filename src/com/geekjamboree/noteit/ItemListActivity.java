@@ -334,10 +334,14 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 
 			        if (thisItem.mIsPurchased > 0) {
 			        	textView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
-			        	textView.setTextAppearance(mContext, getPreferredTextAppearance(ItemType.DONE));
+			        	textView.setTextAppearance(
+			        			mContext, 
+			        			NoteItApplication.getPreferredTextAppearance(mContext, mFontSize, ItemType.PENDING));
 			        }
 			        else { 
-			        	textView.setTextAppearance(mContext, getPreferredTextAppearance(ItemType.PENDING));
+			        	textView.setTextAppearance(
+			        			mContext, 
+			        			NoteItApplication.getPreferredTextAppearance(mContext, mFontSize, ItemType.PENDING));
 			        	textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
 			        }
 			        
@@ -393,13 +397,19 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		    	TextView  	totals = (TextView) viewGroup.findViewById(R.id.itemslist_categoryTotals);
 		    	
 		        textView.setText(getGroup(groupPosition).toString());
-		        textView.setTextAppearance(mContext, getPreferredTextAppearance(ItemType.GROUP));
+		        textView.setTextAppearance(
+		        	mContext, 
+		        	NoteItApplication.getPreferredTextAppearance(
+		        			mContext, mFontSize, ItemType.GROUP));
 
 		        if (mDisplayCategoryExtras) {
 			    	String 		totalsText;
 			    	totalsText = "(" + getUnpurchasedChildrenCount(groupPosition) + ")";
 			        totals.setText(totalsText);
-			        totals.setTextAppearance(mContext, getPreferredTextAppearance(ItemType.GROUP));
+			        totals.setTextAppearance(
+			        	mContext, 
+			        	NoteItApplication.getPreferredTextAppearance(
+			        		mContext, mFontSize, ItemType.GROUP));
 			        totals.setPadding(0, 0, mListView.getRightMargin(), 0);
 			        totals.setVisibility(View.VISIBLE);
 		        } else {
@@ -1223,42 +1233,6 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 						}
 					}
 			});
-    }
-    
-    protected int getPreferredTextAppearance(ItemType type) {
-    	
-    	int appearance = 0;
-    	switch (type) {
-    	
-    	case PENDING:
-        	if (mFontSize == 3)
-        		appearance = R.style.ItemList_TextAppearance_PendingItem_Small;
-        	else if (mFontSize == 2)
-        		appearance = R.style.ItemList_TextAppearance_PendingItem_Medium;
-        	else
-        		appearance = R.style.ItemList_TextAppearance_PendingItem_Large;
-    		break;
-    	
-    	case DONE:
-        	if (mFontSize == 3)
-        		appearance = R.style.ItemList__TextAppearance_DoneItem_Small;
-        	else if (mFontSize == 2)
-        		appearance = R.style.ItemList__TextAppearance_DoneItem_Medium;
-        	else
-        		appearance = R.style.ItemList__TextAppearance_DoneItem_Large;
-    		break;
-
-    	case GROUP:
-    		if (mFontSize == 3)
-    			appearance = R.style.ItemList_TextAppearance_GroupsItem_Small;
-    		else if (mFontSize == 2)
-    			appearance = R.style.ItemList_TextAppearance_GroupsItem_Medium;
-    		else 
-    			appearance = R.style.ItemList_TextAppearance_GroupsItem_Large;
-    		break;
-    	}
-    	
-    	return appearance;
     }
     
     protected void doDisplayShoppingLists() {

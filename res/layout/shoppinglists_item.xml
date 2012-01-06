@@ -26,7 +26,7 @@
 		android:ellipsize="end"
 		android:paddingLeft="5dip"
         android:text="@+id/list_name"
-        style="@style/ItemList_TextAppearance.PendingItem.Small" />
+        style="?TextAppearance_Item_Small" />
 
     <TextView
         android:id="@+id/shoppinglist_itemCount"
@@ -38,7 +38,7 @@
 		android:paddingLeft="5dip"
 		android:layout_marginRight="5dip"
         android:text="@+id/list_itemCount"
-        style="@style/ItemList_TextAppearance.PendingItem.Small" />
+        style="?TextAppearance_Item_Small" />
     
     <ImageView
         android:contentDescription="@string/hello"

@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="@drawable/application_background_normal">
+    android:orientation="vertical" >
 
     <com.geekjamboree.noteit.ExpandableLVRightIndicator
         android:id="@+android:id/list"
@@ -11,9 +10,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:cacheColorHint="#00000000"
-        android:groupIndicator="@color/listitem_group_indicator"
-        android:childDivider="@drawable/listview_item_separator"
-        android:divider="@drawable/listview_group_separator"
-        android:dividerHeight="2dip" />
+        style="?NI_ListViewAttr" />
 
 </LinearLayout>
