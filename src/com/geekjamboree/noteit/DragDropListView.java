@@ -14,7 +14,7 @@ import android.widget.ListView;
 
 public class DragDropListView extends ListView {
 
-	protected boolean			mIsDown = true;
+	protected boolean			mIsDown = false;
 	protected boolean 			mIsDragging = false;
 	protected int				mStartPosition = INVALID_POSITION;
 	protected int 				mEndPosition = INVALID_POSITION;
