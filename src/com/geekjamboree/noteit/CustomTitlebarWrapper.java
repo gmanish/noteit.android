@@ -149,7 +149,7 @@ public class CustomTitlebarWrapper {
 		if (theme.resolveAttribute(R.attr.NI_VerticalSeparator, imageID, true)) {
 	    	imageSep.setImageResource(imageID.resourceId);
 		}
-    	imageSep.setPadding(0, 1, 0, 1);
+//    	imageSep.setPadding(0, 1, 0, 1);
     	return imageSep;
     }
     

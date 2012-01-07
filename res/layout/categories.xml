@@ -3,22 +3,24 @@
     android:id="@+id/layout_categories"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    style="?NI_AppBackgroundNormal" >
 
     <com.geekjamboree.noteit.CategoryListView
         android:id="@+android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" 
-        style="?NI_ListViewAttr" />
+         />
     
     <TextView
         android:id="@android:id/empty"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
 	    android:layout_gravity="center_vertical"
-	    android:gravity="center_vertical"
+	    android:gravity="center"
 	    android:padding="10dp"
 	    android:drawableRight="@drawable/add"
-	    android:text="@string/categoriesactivity_empty_list" />
+	    android:text="@string/categoriesactivity_empty_list"
+	    style="?TextAppearance_Item_Small" />
 
 </LinearLayout>

@@ -30,5 +30,9 @@
 	<attr name="TextAppearance_Item_SubItem_Large" format="reference"></attr>
 	
 	<attr name="TextAppearance_Footer" format="reference"></attr>
-		
+	
+	<attr name="Report_Header_HTML" format="reference"></attr>
+	<attr name="Report_Item_HTML" format="reference"></attr>
+	<attr name="Report_Footer_HTML" format="reference"></attr>
+			
 </resources>

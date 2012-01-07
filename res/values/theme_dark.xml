@@ -83,6 +83,7 @@
     </style>
     
     <style name="NI_ListViewAttr_Dark" parent="@android:style/Widget.AbsListView">
+        
         <item name="android:divider">@drawable/listview_group_separator_dark</item>
         <item name="android:childDivider">@drawable/listview_item_separator_dark</item>
         <item name="android:background">@drawable/application_background_dark</item>
@@ -90,12 +91,14 @@
         <item name="android:dividerHeight">2dip</item>
 		<item name="android:cacheColorHint">#00000000</item>
         <item name="android:fadingEdge">vertical</item>
+    
     </style>
     
     <style name="TA_Item_Small.Dark" parent="@android:style/TextAppearance.Small">
     </style>
 		
     <style name="NI_AppTheme.Dark">
+        
         <item name="android:windowTitleBackgroundStyle">@style/App_TitleBackground</item>
 	    <item name="NI_ButtonStyle">@style/App_ButtonStyle</item>
         <item name="NI_EditTextStyle">@style/App_EditTextStyle</item>
@@ -125,6 +128,11 @@
 		<item name="TextAppearance_Item_SubItem_Large">@style/TextAppearance_Dark.SubItem</item>
 		
 		<item name="TextAppearance_Footer">@style/Footer</item>
-    </style>
+		
+		<item name="Report_Header_HTML" format="reference">@string/reporting_category_head_dark</item>
+		<item name="Report_Item_HTML" format="reference">@string/reporting_category_report_item_dark</item>
+		<item name="Report_Footer_HTML" format="reference">@string/reporting_category_footer_dark</item>
+
+	</style>
     
 </resources>

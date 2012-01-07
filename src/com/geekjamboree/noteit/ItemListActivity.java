@@ -38,8 +38,8 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -1316,7 +1316,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     
     void doDisplayPendingTotal() {
 		final String 	remainingFormat = getResources().getString(R.string.itemlist_remaining);
-		RelativeLayout 	statusBar = (RelativeLayout) findViewById(R.id.bottom_bar);
+		LinearLayout 	statusBar = (LinearLayout) findViewById(R.id.bottom_bar);
 
 		if (statusBar != null && mPendingTotal > 0) {
 			statusBar.setVisibility(View.VISIBLE);

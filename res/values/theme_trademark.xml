@@ -29,57 +29,64 @@
 	    <item name="android:layout_height">45dip</item>
 	    <item name="android:textColor">#000000</item>
 	</style>
-	
+
+	<!-- Dark Text Colors  -->
+	<color name="TextColor_Primary_Trademark">#433a26</color>
+	<color name="TextColor_Secondary_Trademark">#665839</color>
+	<!-- Light Text Colors  -->
+	<color name="TextColor_Primary_Trademark_Light">#a2881b</color>
+				
 	<style name="TextAppearance_Trademark" parent="@android:style/TextAppearance">
 	    <item name="android:background">@android:color/transparent</item>
-	    <item name="android:textColor">#333333</item>
+	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
     </style>
     
    	<style name="TextAppearance_Trademark.GroupsItem_Small" parent="@android:style/TextAppearance.WindowTitle">
-	    <item name="android:textColor">#463a26</item>
-    </style>
+	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
+   	</style>
 	
 	<style name="TextAppearance_Trademark.GroupsItem_Medium" parent="@android:style/TextAppearance.WindowTitle">
-	    <item name="android:textColor">#463a26</item>
-    </style>
+	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
+	</style>
 	
 	<style name="TextAppearance_Trademark.GroupsItem_Large" parent="@android:style/TextAppearance.WindowTitle">
-	    <item name="android:textColor">#463a26</item>
+	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
 	</style>
 	
 	<style name="TextAppearance_Trademark.PendingItem_Small" parent="@android:style/TextAppearance.Small">
-	    <item name="android:textColor">#463a26</item>
-   	</style>
+	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
+	</style>
 
 	<style name="TextAppearance_Trademark.PendingItem_Medium" parent="@android:style/TextAppearance.Medium">
-	    <item name="android:textColor">#463a26</item>
+	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
 	</style>
 
 	<style name="TextAppearance_Trademark.PendingItem_Large" parent="@android:style/TextAppearance.Large">
-	    <item name="android:textColor">#463a26</item>
+	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
 	</style>
 
 	<style name="TextAppearance_Trademark.DoneItem_Small" parent="@android:style/TextAppearance.Small">
-	    <item name="android:textColor">#463a26</item>
-   	</style>
+	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
+	</style>
 
 	<style name="TextAppearance_Trademark.DoneItem_Medium" parent="@android:style/TextAppearance.Medium">
-	    <item name="android:textColor">#463a26</item>
+	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
 	</style>
 	
 	<style name="TextAppearance_Trademark.DoneItem_Large" parent="@android:style/TextAppearance.Large">
-	    <item name="android:textColor">#463a26</item>
+	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
 	</style>
 
 	<style name="TextAppearance_Trademark.SubItem" parent="@android:style/TextAppearance.Small">
-		<item name="android:textColor">#5e4e32</item>
+	    <item name="android:textColor">@color/TextColor_Secondary_Trademark</item>
 	</style>
 	    
-	<style name="Footer_Trademark" parent="@android:style/TextAppearance.Small">
-	    <item name="android:textColor">#808080</item>
-    </style>
+	<style name="TextAppearance_Trademark.Footer" parent="@android:style/TextAppearance.Small">
+	    <item name="android:textColor">@color/TextColor_Primary_Trademark_Light</item>
+	</style>
 
     <style name="NI_ListViewAttr_Trademark" parent="@android:style/Widget.AbsListView">
+        
         <item name="android:divider">@drawable/listview_group_separator_trademark</item>
         <item name="android:childDivider">@drawable/listview_item_separator_trademark</item>
         <item name="android:background">@drawable/application_background_trademark</item>
@@ -87,9 +94,11 @@
         <item name="android:dividerHeight">2dip</item>
 		<item name="android:cacheColorHint">#00000000</item>
         <item name="android:fadingEdge">vertical</item>
+        
   	</style>
     
     <style name="NI_AppTheme.Trademark">
+        
         <item name="android:windowTitleBackgroundStyle">@style/App_TitleBackground_Trademark</item>
 	    <item name="NI_ButtonStyle">@style/App_ButtonStyle</item>
         <item name="NI_EditTextStyle">@style/App_EditTextStyle</item>
@@ -118,7 +127,11 @@
 		<item name="TextAppearance_Item_SubItem_Medium">@style/TextAppearance_Trademark.SubItem</item>
 		<item name="TextAppearance_Item_SubItem_Large">@style/TextAppearance_Trademark.SubItem</item>
 		
-		<item name="TextAppearance_Footer">@style/Footer</item>
-    </style>
+		<item name="TextAppearance_Footer">@style/TextAppearance_Trademark.Footer</item>
+		<item name="Report_Header_HTML" format="reference">@string/reporting_category_head_trademark</item>
+		<item name="Report_Item_HTML" format="reference">@string/reporting_category_report_item_trademark</item>
+		<item name="Report_Footer_HTML" format="reference">@string/reporting_category_footer_trademark</item>
+
+	</style>
     			
 </resources>

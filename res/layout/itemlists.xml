@@ -3,53 +3,61 @@
     android:id="@+id/layout_itemslist"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    style="?NI_AppBackgroundNormal" >
 
     <com.geekjamboree.noteit.ExpandableLVRightIndicator
         android:id="@+android:id/list"
+        style="?NI_ListViewAttr"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:cacheColorHint="#00000000"
-        style="?NI_ListViewAttr"/>
+        android:cacheColorHint="#00000000" />
 
-	<TextView
-		android:id="@android:id/empty"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_gravity="center_vertical"
-		android:gravity="center_vertical"
-		android:layout_weight="1"
-		android:padding="10dp"
-		android:drawableRight="@drawable/add"
-		android:background="@android:color/transparent"
-		android:text="@string/empty_shoppingitems" />
-        
-	<ImageView
-	    android:contentDescription="@string/hello"
-	    android:layout_width="fill_parent"
-	    android:layout_height="4dip"
-	    style="?NI_StatusBorder" />
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:background="@android:color/transparent"
+        android:drawableRight="@drawable/add"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/empty_shoppingitems"
+        style="?TextAppearance_Item_Small" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/bottom_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip"
-        android:paddingTop="5dip"
-        android:paddingBottom="5dip"
-        style="?NI_StatusBackground"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
-        <TextView
-	        android:id="@+id/bottom_remaining"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="@+id/bottom_remaining"
-	        android:layout_alignParentLeft="true"
-	        android:textAppearance="?TextAppearance_Footer" />
+        <ImageView
+            style="?NI_StatusBorder"
+            android:layout_width="fill_parent"
+            android:layout_height="4dip"
+            android:contentDescription="@string/hello" />
 
-    </RelativeLayout>
-		
+        <RelativeLayout
+            android:id="@+id/bottom_bar_main"
+            style="?NI_StatusBackground"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="5dip"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip"
+            android:paddingTop="5dip" >
+
+            <TextView
+                android:id="@+id/bottom_remaining"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="@+id/bottom_remaining"
+                android:textAppearance="?TextAppearance_Footer" />
+        </RelativeLayout>
+    </LinearLayout>
+
 </LinearLayout>

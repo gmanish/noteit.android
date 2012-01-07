@@ -118,7 +118,7 @@
 	<string name="reporting_category_percentage">Percentage</string>
 	<string name="reporting_emailIntro">The sender shared a Shopping Report with you:</string>
 	<string name="reporting_sharemessage">Share Report Via</string>
-	<string name="reporting_category_head">
+	<string name="reporting_category_head_dark">
 	    <![CDATA[
 	    	<html>
 	    	<head>
@@ -144,7 +144,7 @@
 	    	<table width=\'100%\'>
 	    ]]>
 	</string>
-	<string name="reporting_category_report_item">
+	<string name="reporting_category_report_item_dark">
 	    <![CDATA[
 	    	<tr>
 	    		<td class=\"la\">%1$s</td>
@@ -153,7 +153,7 @@
 	    	</tr>
 	    	]]>
 	</string>
-	<string name="reporting_category_footer">
+	<string name="reporting_category_footer_dark">
 	    <![CDATA[
 	    	<tr>
 	    		<td id=\"footer\" class=\"la\">Total:</td>
@@ -165,7 +165,55 @@
 	    	</html>
 	    	]]>
 	</string>
-		
+	<string name="reporting_category_head_trademark">
+	    <![CDATA[
+	    	<html>
+	    	<head>
+	    	<style type=\"text/css\">
+				table {padding-top:5px; padding-bottom:5px; padding-left:10px; padding-right: 10px; color: #433a26;}
+				tr.top-border {border-top: thin solid #808080;}
+				tr.border-bottom {border-bottom: thin solid #808080;}
+				th {
+					font-weight: bold; 
+					padding-bottom:10px;
+					border-bottom: thin solid #808080; 	
+				}
+				th.la {text-align: left;}
+				th.ra {text-align: right;}
+				th.ca {text-align: center;}
+				td.la {text-align: left;}
+				td.ra {text-align: right;}
+				td.ca {text-align: center;}
+				td#footer {border-top: thin solid #808080; padding-top: 10px}
+	    	</style>
+	    	</head>
+	    	<body>
+	    	<table width=\'100%\'>
+	    ]]>
+	</string>
+	<string name="reporting_category_report_item_trademark">
+	    <![CDATA[
+	    	<tr>
+	    		<td class=\"la\">%1$s</td>
+	    		<td class=\"ra\">%2$s</td>
+	    		<td class=\"ra\">%3$s %%</td>
+	    	</tr>
+	    	]]>
+	</string>
+	<string name="reporting_category_footer_trademark">
+	    <![CDATA[
+	    	<tr>
+	    		<td id=\"footer\" class=\"la\">Total:</td>
+	    		<td id=\"footer\" class=\"ra\">%1$s</td>
+	    		<td id=\"footer\" class=\"ra\">100 %%</td>
+	    	</tr>
+	    	</table>
+	    	</body>
+	    	</html>
+	    	]]>
+	</string>
+	<string name="reporting_resource_missing">A resource required to generate reports is missing. Try reinstalling the application. </string>
+
 	<string name="preference_activity_title">Note It! Settings</string>
 	<string-array name="itemFontSize">
 	    <item>Large</item>

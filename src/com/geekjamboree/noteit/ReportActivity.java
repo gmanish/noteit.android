@@ -14,10 +14,12 @@ import com.geekjamboree.noteit.NoteItApplication.ItemReportItem;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
@@ -65,10 +67,14 @@ public class ReportActivity extends Activity {
 	WebView					mTextView;
 	String					mCurrentReportText = "";
 	String 					mCurrentReportHtml = "";
+	int						mReportHeaderId = 0;
+	int						mReportItemId = 0;
+	int						mReportFooterId = 0;
 	boolean					mAttachHTML = true;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
         mToolbar = new ToolbarWrapper(this);
 		setContentView(R.layout.reportactvity);
@@ -89,6 +95,19 @@ public class ReportActivity extends Activity {
 					doReport(reportId);
 				}
 			}
+		}
+		
+		Resources.Theme theme = getTheme();
+		TypedValue 		resID = new TypedValue();
+		theme.resolveAttribute(R.attr.Report_Header_HTML, resID, false);
+		mReportHeaderId = resID.data;
+		theme.resolveAttribute(R.attr.Report_Item_HTML, resID, false);
+		mReportItemId = resID.data;
+		theme.resolveAttribute(R.attr.Report_Footer_HTML, resID, false);
+		mReportFooterId = resID.data;
+		
+		if (mReportHeaderId <= 0 || mReportItemId <= 0 || mReportFooterId <= 0) {
+			Toast.makeText(this, getString(R.string.reporting_resource_missing), Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -117,7 +136,7 @@ public class ReportActivity extends Activity {
 						ItemReportItem item = items.get(index);
 						total += item.mPrice;
 					}
-					String text = getString(R.string.reporting_category_head); 
+					String text = getString(mReportHeaderId); 
 					text += "<tr>";
 					text += "<th class='la'>" + getString(R.string.reporting_item_name) + "</th>";
 					text += "<th class='ra'>" + getString(R.string.reporting_category_price) + "</th>";
@@ -125,7 +144,7 @@ public class ReportActivity extends Activity {
 					text += "</tr>";
 					mCurrentReportText = getString(R.string.reporting_emailIntro);
 					mCurrentReportText += "\n" + mToolbar.GetTitle().toString() + ":\n\n";
-					String categoryItemFormat = getString(R.string.reporting_category_report_item);
+					String categoryItemFormat = getString(mReportItemId);
 					NoteItApplication app = (NoteItApplication) getApplication();
 					NumberFormat numberFormat = NumberFormat.getInstance();
 					String currencyFormat = app.getCurrencyFormat(true);
@@ -149,7 +168,7 @@ public class ReportActivity extends Activity {
 							text += row;
 						}
 					}
-					String categoryFooter = getString(R.string.reporting_category_footer);
+					String categoryFooter = getString(mReportFooterId);
 					String strTotal = String.format(currencyFormat, numberFormat.format(total));
 					text += String.format(categoryFooter, strTotal);
 					mCurrentReportText += "\n\n\n" + getString(R.string.itemlist_emailsig);
@@ -177,7 +196,7 @@ public class ReportActivity extends Activity {
 					}
 					
 					
-					String text = getString(R.string.reporting_category_head); 
+					String text = getString(mReportHeaderId); 
 					text += "<tr>";
 					text += "<th class='la'>" + getString(R.string.reporting_category_category) + "</th>";
 					text += "<th class='ra'>" + getString(R.string.reporting_category_price) + "</th>";
@@ -185,7 +204,7 @@ public class ReportActivity extends Activity {
 					text += "</tr>";
 					mCurrentReportText = getString(R.string.reporting_emailIntro);
 					mCurrentReportText += "\n" + mToolbar.GetTitle().toString() + ":\n\n";
-					String categoryItemFormat = getString(R.string.reporting_category_report_item);
+					String categoryItemFormat = getString(mReportItemId);
 					NoteItApplication app = (NoteItApplication) getApplication();
 					NumberFormat numberFormat = NumberFormat.getInstance();
 					String currencyFormat = app.getCurrencyFormat(true);
@@ -209,7 +228,7 @@ public class ReportActivity extends Activity {
 							text += row;
 						}
 					}
-					String categoryFooter = getString(R.string.reporting_category_footer);
+					String categoryFooter = getString(mReportFooterId);
 					String strTotal = String.format(currencyFormat, numberFormat.format(total));
 					mCurrentReportText += getString(R.string.itemlist_emailsig);
 					text += "\n\n\n" + String.format(categoryFooter, strTotal);

@@ -3,7 +3,8 @@
     android:id="@+id/layout_shoppinglists"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    style="?NI_AppBackgroundNormal" >
 
     <ListView
         android:id="@+android:id/list"
@@ -17,10 +18,11 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:layout_gravity="center_vertical"
-		android:gravity="center_vertical"
+		android:gravity="center"
 		android:layout_weight="1"
 		android:padding="10dp"
 		android:drawableRight="@drawable/add"
-		android:text="@string/empty_shoppinglists" />
+		android:text="@string/empty_shoppinglists"
+		style="?TextAppearance_Item_Small" />
         
 </LinearLayout>

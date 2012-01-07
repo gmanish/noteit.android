@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="noteit_trademark_dark">#67593A</color>
-    <color name="noteit_trademark_light">#E7C681</color>
+    <!-- #67593A -->
+    <color name="noteit_trademark_dark">#483e29</color>
+    <color name="noteit_trademark_light">#fcd42a</color>
     
     <style name="App_ButtonStyle">
         <item name="android:layout_width">40dp</item>

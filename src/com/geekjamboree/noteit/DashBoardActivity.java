@@ -2,7 +2,10 @@ package com.geekjamboree.noteit;
 
 import java.util.ArrayList;
 
+import com.geekjamboree.noteit.ItemListActivity.ItemType;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -36,8 +39,10 @@ public class DashBoardActivity extends Activity {
 	    
 		private LayoutInflater				mLayoutInflater;
 		private ArrayList<DashboardItem> 	mItems = new ArrayList<DashboardItem>();
+		private Context						mContext;
 		
-	    public DashBoardAdapter(/*Context c*/) {
+	    public DashBoardAdapter(Context c) {
+	    	mContext = c;
 	    	mLayoutInflater = (LayoutInflater) getApplication().getSystemService(LAYOUT_INFLATER_SERVICE);
 	    }
 
@@ -77,9 +82,11 @@ public class DashBoardActivity extends Activity {
         	TextView 	text = (TextView) view.findViewById(R.id.dashboard_item_text);
 	        
 	        text.setText(mItems.get(position).mText);
+	        text.setTextAppearance(mContext, NoteItApplication.getPreferredTextAppearance(mContext, 3, ItemType.PENDING));
 	        text.setCompoundDrawablesWithIntrinsicBounds(0, mItems.get(position).mImageResourceID, 0, 0);
 	        final float scale = getResources().getDisplayMetrics().density; 
-	        view.setLayoutParams(new GridView.LayoutParams((int)(128 * scale + 0.5), (int)(128 * scale + 0.5)));
+	        GridView.LayoutParams lp = new GridView.LayoutParams((int)(128 * scale + 0.5), (int)(128 * scale + 0.5));
+	        view.setLayoutParams(lp);
         	view.setPadding(10, 10, 10, 10);
 	        return view;
 	    }
@@ -95,7 +102,7 @@ public class DashBoardActivity extends Activity {
         mToolbar.SetTitle(getResources().getText(R.string.app_name));
 		doSetupToolbarButton();
 		
-        DashBoardAdapter adapter = new DashBoardAdapter(/*this*/);
+        DashBoardAdapter adapter = new DashBoardAdapter(this);
         adapter.addItem("Shopping Lists", R.drawable.cart_big, DASHBOARD_SHOPPINGLISTS);
         adapter.addItem("Categories", R.drawable.category_large, DASHBOARD_CATEGORIES);
         adapter.addItem("Reports", R.drawable.reports_large, DASHBOARD_REPORTS);

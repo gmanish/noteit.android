@@ -5,7 +5,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" 
     android:baselineAligned="false"
-    android:background="@color/noteit_trademark_light">
+    style="?NI_AppBackgroundNormal">
 
     <ImageView
         android:id="@+id/imageviewLogo"

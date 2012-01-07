@@ -17,16 +17,19 @@ public class ArrayAdapterWithFontSize<T> extends ArrayAdapter<T> {
 	protected int 		mFontSize 		= 3;
 	protected int 		mTextViewResId 	= 0;
 	protected Context	mContext;
+	protected ItemType	mItemType;
 	
 	public ArrayAdapterWithFontSize(
 			Context context, 
 			int resource, 
 			int textViewResourceId, 
-			ArrayList<T> objects) {
+			ArrayList<T> objects,
+			ItemType itemType) {
 
 		super(context, resource, textViewResourceId, objects);
 		mTextViewResId = textViewResourceId;
 		mContext = context;
+		mItemType = itemType;
 	}
 
 	@Override
@@ -49,7 +52,7 @@ public class ArrayAdapterWithFontSize<T> extends ArrayAdapter<T> {
         
 		mFontSize = Integer.valueOf(prefs.getString("Item_Font_Size", "3"));
 		appearance = NoteItApplication.getPreferredTextAppearance(
-				mContext, mFontSize, ItemType.PENDING);
+				mContext, mFontSize, mItemType);
     	return appearance;
     }
 }

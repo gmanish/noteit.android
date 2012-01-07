@@ -4,6 +4,7 @@ import java.util.ArrayList;
  
 import com.geekjamboree.noteit.R;
 import com.geekjamboree.noteit.NoteItApplication;
+import com.geekjamboree.noteit.ItemListActivity.ItemType;
 import com.geekjamboree.noteit.NoteItApplication.ShoppingList;
 
 import android.app.AlertDialog;
@@ -52,7 +53,7 @@ public class ShoppingListActivity
 				int resource, 
 				int textViewResourceId, 
 				ArrayList<ShoppingList> objects) {
-			super(context, resource, textViewResourceId, objects);
+			super(context, resource, textViewResourceId, objects, ItemType.GROUP);
 		}
 		
 		public View getView(int position, View convertView, ViewGroup parent){

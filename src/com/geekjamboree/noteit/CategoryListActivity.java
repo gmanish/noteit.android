@@ -5,6 +5,7 @@ package com.geekjamboree.noteit;
 
 import java.util.ArrayList;
 
+import com.geekjamboree.noteit.ItemListActivity.ItemType;
 import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
 import com.geekjamboree.noteit.R;
 import com.geekjamboree.noteit.NoteItApplication;
@@ -49,7 +50,7 @@ public class CategoryListActivity
 
 		public CategoryListAdapter(Context context, int resource,
 				int textViewResourceId, ArrayList<Category> objects) {
-			super(context, resource, textViewResourceId, objects);
+			super(context, resource, textViewResourceId, objects, ItemType.GROUP);
 		}
 
 		public void onDrag(int dragSource, int dropTarget) {

@@ -5,18 +5,17 @@
     android:layout_height="fill_parent"
     android:orientation="horizontal"
     android:layout_gravity="center_vertical"
-    android:baselineAligned="false"
-    android:background="@color/noteit_trademark_light">
+    android:baselineAligned="false">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:gravity="center"
         android:orientation="horizontal"
-        android:background="@color/noteit_trademark_dark"
         android:paddingTop="10dip"
         android:paddingLeft="20dip"
-        android:paddingRight="20dip" >
+        android:paddingRight="20dip"
+        android:background="@color/noteit_trademark_dark" >
  
         <ImageView
 	        android:id="@+id/textView1"
@@ -36,7 +35,8 @@
         android:padding="10dip"
         android:gravity="left|center_vertical"
         android:baselineAligned="false"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        style="?NI_AppBackgroundNormal" >
         
 	    <LinearLayout 
 			android:layout_width="fill_parent"
@@ -53,7 +53,7 @@
 		        android:layout_height="wrap_content"
 		        android:text="@string/login_email"
 		        android:layout_marginTop="10dip"
-		        android:textAppearance="?TextAppearance_Footer" />
+		        style="@style/TextAppearance.TradeMarkDark" />
 		
 		    <EditText
 		        android:id="@+id/editEmailID"
