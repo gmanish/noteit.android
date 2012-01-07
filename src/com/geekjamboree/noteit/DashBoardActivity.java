@@ -82,7 +82,7 @@ public class DashBoardActivity extends Activity {
         	TextView 	text = (TextView) view.findViewById(R.id.dashboard_item_text);
 	        
 	        text.setText(mItems.get(position).mText);
-	        text.setTextAppearance(mContext, NoteItApplication.getPreferredTextAppearance(mContext, 3, ItemType.PENDING));
+	        text.setTextAppearance(mContext, NoteItApplication.getPreferredTextAppearance(mContext, 3, ItemType.GROUP));
 	        text.setCompoundDrawablesWithIntrinsicBounds(0, mItems.get(position).mImageResourceID, 0, 0);
 	        final float scale = getResources().getDisplayMetrics().density; 
 	        GridView.LayoutParams lp = new GridView.LayoutParams((int)(128 * scale + 0.5), (int)(128 * scale + 0.5));

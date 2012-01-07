@@ -31,26 +31,34 @@
 	</style>
 
 	<!-- Dark Text Colors  -->
-	<color name="TextColor_Primary_Trademark">#433a26</color>
+	<color name="TextColor_Primary_Trademark">@color/textcolor_primary_trademark</color>
 	<color name="TextColor_Secondary_Trademark">#665839</color>
+	
 	<!-- Light Text Colors  -->
 	<color name="TextColor_Primary_Trademark_Light">#a2881b</color>
 				
+	<!-- ListView Selector Colors -->
+	<color name="ListViewSelectorPressed">#997e0c</color>
+	<color name="ListViewSelectorFocussed">#997e0c</color>
+		
 	<style name="TextAppearance_Trademark" parent="@android:style/TextAppearance">
 	    <item name="android:background">@android:color/transparent</item>
 	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
     </style>
     
-   	<style name="TextAppearance_Trademark.GroupsItem_Small" parent="@android:style/TextAppearance.WindowTitle">
+   	<style name="TextAppearance_Trademark.GroupsItem_Small" parent="@android:style/TextAppearance.Small">
 	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
+	    <item name="android:textStyle">italic|bold</item>
    	</style>
 	
-	<style name="TextAppearance_Trademark.GroupsItem_Medium" parent="@android:style/TextAppearance.WindowTitle">
+	<style name="TextAppearance_Trademark.GroupsItem_Medium" parent="@android:style/TextAppearance.Medium">
 	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
+	    <item name="android:textStyle">italic|bold</item>
 	</style>
 	
-	<style name="TextAppearance_Trademark.GroupsItem_Large" parent="@android:style/TextAppearance.WindowTitle">
+	<style name="TextAppearance_Trademark.GroupsItem_Large" parent="@android:style/TextAppearance.Large">
 	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
+	    <item name="android:textStyle">italic|bold</item>
 	</style>
 	
 	<style name="TextAppearance_Trademark.PendingItem_Small" parent="@android:style/TextAppearance.Small">
@@ -65,16 +73,31 @@
 	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
 	</style>
 
-	<style name="TextAppearance_Trademark.DoneItem_Small" parent="@android:style/TextAppearance.Small">
+	<style name="TextAppearance_Trademark.Item_Bold_Small" parent="@android:style/TextAppearance.Small">
 	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
+	    <item name="android:textStyle">bold</item>
+	</style>
+
+	<style name="TextAppearance_Trademark.Item_Bold_Medium" parent="@android:style/TextAppearance.Medium">
+	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
+	    <item name="android:textStyle">bold</item>
+	</style>
+
+	<style name="TextAppearance_Trademark.Item_Bold_Large" parent="@android:style/TextAppearance.Large">
+	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
+	    <item name="android:textStyle">bold</item>
+	</style>
+	
+	<style name="TextAppearance_Trademark.DoneItem_Small" parent="@android:style/TextAppearance.Small">
+	    <item name="android:textColor">@color/TextColor_Secondary_Trademark</item>
 	</style>
 
 	<style name="TextAppearance_Trademark.DoneItem_Medium" parent="@android:style/TextAppearance.Medium">
-	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
+	    <item name="android:textColor">@color/TextColor_Secondary_Trademark</item>
 	</style>
 	
 	<style name="TextAppearance_Trademark.DoneItem_Large" parent="@android:style/TextAppearance.Large">
-	    <item name="android:textColor">@color/TextColor_Primary_Trademark</item>
+	    <item name="android:textColor">@color/TextColor_Secondary_Trademark</item>
 	</style>
 
 	<style name="TextAppearance_Trademark.SubItem" parent="@android:style/TextAppearance.Small">
@@ -94,6 +117,7 @@
         <item name="android:dividerHeight">2dip</item>
 		<item name="android:cacheColorHint">#00000000</item>
         <item name="android:fadingEdge">vertical</item>
+        <item name="android:listSelector">@color/listview_selector_trademark</item> 
         
   	</style>
     
@@ -118,6 +142,10 @@
         <item name="TextAppearance_Item_Small">@style/TextAppearance_Trademark.PendingItem_Small</item>
 		<item name="TextAppearance_Item_Medium">@style/TextAppearance_Trademark.PendingItem_Medium</item>
 		<item name="TextAppearance_Item_Large">@style/TextAppearance_Trademark.PendingItem_Large</item>
+		
+        <item name="TextAppearance_Item_Bold_Small">@style/TextAppearance_Trademark.Item_Bold_Small</item>
+		<item name="TextAppearance_Item_Bold_Medium">@style/TextAppearance_Trademark.Item_Bold_Medium</item>
+		<item name="TextAppearance_Item_Bold_Large">@style/TextAppearance_Trademark.Item_Bold_Large</item>
 		
 		<item name="TextAppearance_Item_Done_Small">@style/TextAppearance_Trademark.DoneItem_Small</item>
 		<item name="TextAppearance_Item_Done_Medium">@style/TextAppearance_Trademark.DoneItem_Medium</item>

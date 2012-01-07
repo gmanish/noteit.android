@@ -50,7 +50,7 @@ public class CategoryListActivity
 
 		public CategoryListAdapter(Context context, int resource,
 				int textViewResourceId, ArrayList<Category> objects) {
-			super(context, resource, textViewResourceId, objects, ItemType.GROUP);
+			super(context, resource, textViewResourceId, objects, ItemType.BOLD);
 		}
 
 		public void onDrag(int dragSource, int dropTarget) {

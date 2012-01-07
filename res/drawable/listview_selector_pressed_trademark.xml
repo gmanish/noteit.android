@@ -8,8 +8,8 @@
     -->
     
     <gradient 
-     	android:startColor="@color/theme_offwhite_presseditem_background"
-     	android:endColor="@color/theme_offwhite_presseditem_background" 
+     	android:startColor="@color/ListViewSelectorPressed"
+     	android:endColor="@color/ListViewSelectorPressed" 
      	android:angle="90" />
     
 </shape>

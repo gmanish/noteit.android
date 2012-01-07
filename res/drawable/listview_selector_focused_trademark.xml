@@ -7,8 +7,8 @@
      -->
      
      <gradient 
-     	android:startColor="@color/theme_offwhite_focusseditem_background"
-     	android:endColor="@color/theme_offwhite_focusseditem_background" 
+     	android:startColor="@color/ListViewSelectorFocussed"
+     	android:endColor="@color/ListViewSelectorFocussed" 
      	android:angle="90" />
      
  </shape>

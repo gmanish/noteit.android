@@ -53,7 +53,7 @@ public class ShoppingListActivity
 				int resource, 
 				int textViewResourceId, 
 				ArrayList<ShoppingList> objects) {
-			super(context, resource, textViewResourceId, objects, ItemType.GROUP);
+			super(context, resource, textViewResourceId, objects, ItemType.BOLD);
 		}
 		
 		public View getView(int position, View convertView, ViewGroup parent){

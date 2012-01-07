@@ -21,6 +21,10 @@
 	<attr name="TextAppearance_Item_Medium" format="reference"></attr>
 	<attr name="TextAppearance_Item_Large" format="reference"></attr>
 	
+	<attr name="TextAppearance_Item_Bold_Small" format="reference"></attr>
+	<attr name="TextAppearance_Item_Bold_Medium" format="reference"></attr>
+	<attr name="TextAppearance_Item_Bold_Large" format="reference"></attr>
+
 	<attr name="TextAppearance_Item_Done_Small" format="reference"></attr>
 	<attr name="TextAppearance_Item_Done_Medium" format="reference"></attr>
 	<attr name="TextAppearance_Item_Done_Large" format="reference"></attr>

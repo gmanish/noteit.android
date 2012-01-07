@@ -14,21 +14,22 @@
         android:padding="5dip"
         android:gravity="center"
         android:text="@string/itemlist_loadmorebutton"
-        android:textColor="#AAAAAA"
-        android:textSize="15sp"
-        android:textAppearance="?TextAppearance_Item_Medium"
+        style="?TextAppearance_Item_Bold_Small"
 		android:background="@color/app_button_background" />
  
     <LinearLayout 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:padding="10dip"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <ProgressBar 
 	       android:id="@+id/itemlist_moreprogress"
 	       android:layout_width="wrap_content"
 	       android:layout_height="wrap_content"
-	       android:indeterminate="true" />
+	       android:indeterminate="true"
+	       style="?android:attr/progressBarStyleSmall" />
 
         <TextView
             android:id="@+id/itemlist_loading"
@@ -38,8 +39,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/itemlist_loadingmore"
-	        android:textSize="15sp"
-            android:textAppearance="?TextAppearance_Item_Medium"
+            android:textAppearance="?TextAppearance_Item_Bold_Small"
             android:background="@android:color/transparent" />
         
     </LinearLayout>

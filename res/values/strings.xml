@@ -62,7 +62,7 @@
 	<string name="itemlist_copytolistsuccess">Item Copied</string>
 	<string name="itemlist_previous">Previous</string>
 	<string name="itemlist_next">Next</string>
-	<string name="itemlist_loadmorebutton">Load More Items</string>
+	<string name="itemlist_loadmorebutton">Load More Items &#8230;</string>
 	<string name="itemlist_loadingmore">Loading More Items &#8230;</string>
 	    	    	
 	<string name="itemlistqe_edit">Edit</string>

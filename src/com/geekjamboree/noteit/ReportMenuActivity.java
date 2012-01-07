@@ -81,7 +81,7 @@ public class ReportMenuActivity extends ExpandableListActivity {
 					textView.setTextAppearance(
 						mContext, 
 						NoteItApplication.getPreferredTextAppearance(
-								mContext, mFontSize, ItemType.PENDING));
+								mContext, mFontSize, ItemType.BOLD));
 				}
 			}
 			return view;

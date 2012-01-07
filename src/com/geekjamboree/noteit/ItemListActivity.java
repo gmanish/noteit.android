@@ -88,7 +88,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     protected enum ItemType {
     	PENDING, 
     	DONE, 
-    	GROUP
+    	GROUP,
+    	BOLD
     }
     
 	// Custom adapter for my shopping items
@@ -336,7 +337,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			        	textView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
 			        	textView.setTextAppearance(
 			        			mContext, 
-			        			NoteItApplication.getPreferredTextAppearance(mContext, mFontSize, ItemType.PENDING));
+			        			NoteItApplication.getPreferredTextAppearance(mContext, mFontSize, ItemType.DONE));
 			        }
 			        else { 
 			        	textView.setTextAppearance(
@@ -354,12 +355,24 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	        		String 				unit = app.getUnitFromID(thisItem.mUnitID).mAbbreviation; 
 	        		quantity.setText(String.valueOf(thisItem.mQuantity) + " " + unit); 
 	        		quantity.setVisibility(View.VISIBLE);
+	        		quantity.setPaintFlags(
+	        			thisItem.mIsPurchased > 0 ?
+	        					Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG :
+	        					textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);	
 		        	if (price != null && thisItem.mUnitPrice > 0){
 		        		String strPrice = String.format(
 		        				mUnitPriceFormat, 
 		        				String.format(mCurrencyFormat, thisItem.mUnitPrice),
 		        				unit);
 		        		String strTotal = String.format(mCurrencyFormat, thisItem.mUnitPrice * thisItem.mQuantity);
+			        	price.setPaintFlags(
+			        			thisItem.mIsPurchased > 0 ?
+	        					Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG :
+		        				textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);	
+			        	total.setPaintFlags(	        			
+			        			thisItem.mIsPurchased > 0 ?
+	        					Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG :
+		        				textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);	
 		        		price.setText(strPrice);
 		        		total.setText(strTotal);
 		        		price.setVisibility(View.VISIBLE);

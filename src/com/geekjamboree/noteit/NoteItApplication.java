@@ -1754,7 +1754,16 @@ public class NoteItApplication extends Application {
         	else
     			appearance = R.attr.TextAppearance_Item_Large;
     		break;
-    	
+
+    	case BOLD:
+        	if (fontSize == 3)
+    			appearance = R.attr.TextAppearance_Item_Bold_Small;
+        	else if (fontSize == 2)
+    			appearance = R.attr.TextAppearance_Item_Bold_Medium;
+        	else
+    			appearance = R.attr.TextAppearance_Item_Bold_Large;
+    		break;
+    		
     	case DONE:
         	if (fontSize == 3) {
        			appearance = R.attr.TextAppearance_Item_Done_Small;
