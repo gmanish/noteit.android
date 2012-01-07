@@ -27,7 +27,7 @@
 		    android:layout_weight="1"
 		    android:text="@string/addedit_Title"
 		    android:gravity="center_vertical"
-		    android:textAppearance="?android:attr/textAppearanceLarge" />
+		    style="?TextAppearance_Item_Bold_Large" />
 
 		<ImageButton
 	        android:id="@+id/addedit_btnPrev"
@@ -128,7 +128,8 @@
 		    android:layout_weight="1"
 		    android:layout_gravity="center_vertical"
 		    android:gravity="left|center_vertical"
-		    android:text="@string/addedit_askLater" />
+		    android:text="@string/addedit_askLater"
+		    style="?TextAppearance_Item_Small" />
 		
 		<ImageButton
 		    android:id="@+id/addedit_asklater_help"
@@ -162,7 +163,8 @@
 		    android:layout_marginBottom="2dp"
 		    android:layout_weight="1"
 		    android:gravity="left|center_vertical"
-		    android:text="@+id/addedit_labelTotal" />
+		    android:text="@+id/addedit_labelTotal"
+		    style="?TextAppearance_Item_Small" />
 		
 		<Button
 		    android:id="@+id/addedit_btnContinue"

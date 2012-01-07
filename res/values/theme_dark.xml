@@ -12,14 +12,7 @@
 	<style name="App_StatusBorder">
 	    <item name="android:background">@drawable/application_statusbar_border_dark</item>
 	</style>
-	
-	<style name="AppCustomDialog_Dark" parent="android:style/Theme.Dialog">
-	    <item name="android:windowBackground">@drawable/filled_roundededges_box_dark</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowSoftInputMode">stateVisible</item>
-    </style>
-    
+	   
 	<style name="AddEdit_Widget_Dark">
 	    <item name="android:layout_height">45dip</item>
 	    <item name="android:textColor">#000000</item>
@@ -124,7 +117,6 @@
         <item name="NI_StatusBackground">@style/App_StatusBackground</item>
         <item name="NI_StatusBorder">@style/App_StatusBorder</item>
         <item name="NI_AppBackgroundNormal">@style/NI_AppBackgroundNormal.Dark</item>
-        <item name="NI_CustomDialog">@style/AppCustomDialog_Dark</item>
         <item name="NI_ListViewAttr">@style/NI_ListViewAttr_Dark</item>
         <item name="NI_VerticalSeparator">@drawable/vertical_separator_dark</item>
 		<item name="AddEdit_Widget">@style/AddEdit_Widget_Dark</item>

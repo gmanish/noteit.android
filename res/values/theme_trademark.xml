@@ -13,14 +13,7 @@
 	<style name="App_StatusBackground_Trademark">
 	    <item name="android:background">@drawable/application_statusbar_trademark</item>
 	</style>
-	
-	<style name="AppCustomDialog_Trademark" parent="android:style/Theme.Dialog">
-	    <item name="android:windowBackground">@drawable/filled_roundededges_box_dark</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowSoftInputMode">stateVisible</item>
-    </style>
-    
+	    
 	<style name="App_StatusBorder_Trademark">
 	    <item name="android:background">@drawable/application_statusbar_border_trademark</item>
 	</style>
@@ -130,7 +123,6 @@
         <item name="NI_StatusBackground">@style/App_StatusBackground_Trademark</item>
         <item name="NI_StatusBorder">@style/App_StatusBorder_Trademark</item>
         <item name="NI_AppBackgroundNormal">@style/NI_AppBackgroundNormal.Trademark</item>
-        <item name="NI_CustomDialog">@style/AppCustomDialog_Trademark</item>
         <item name="NI_ListViewAttr">@style/NI_ListViewAttr_Trademark</item>
         <item name="NI_VerticalSeparator">@drawable/vertical_separator_trademark</item>
         <item name="AddEdit_Widget">@style/AddEdit_Widget_Trademark</item>

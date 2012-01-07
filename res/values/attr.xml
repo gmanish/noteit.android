@@ -6,7 +6,6 @@
 	<attr name="NI_StatusBorder" format="reference"></attr>
 	<attr name="NI_ButtonStyle" format="reference"></attr>
 	<attr name="NI_EditTextStyle" format="reference"></attr>
-	<attr name="NI_CustomDialog" format="reference"></attr>
 	<attr name="NI_VerticalSeparator" format="reference"></attr>
 	
 	<attr name="NI_ListViewAttr" format="reference"></attr>
