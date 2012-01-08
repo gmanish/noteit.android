@@ -205,10 +205,6 @@ public class LoginActivity
 	                    startActivity(myIntent);
 	                    finish();
 	                    hideIndeterminateProgress();
-	            		Toast.makeText(
-	            			LoginActivity.this, 
-	            			getString(R.string.login_success), 
-	            			Toast.LENGTH_SHORT).show();
 					} else {
 						doFetchShoppingLists();
 					}

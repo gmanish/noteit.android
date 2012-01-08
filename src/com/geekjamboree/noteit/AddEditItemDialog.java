@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -137,6 +138,7 @@ public class AddEditItemDialog extends Dialog {
 			String partialName = mEditName.getEditableText().toString();
 			partialName = partialName.trim();
 			if (!partialName.equals("") && !mIsAutoCompleting){
+				Log.i("AddEditItemDialog.OnKeyListener", "Requesting Suggestions: " + partialName);
 				mApplication.suggestItems(partialName, new OnSuggestItemsListener() {
 					
 					public void onPostExecute(
@@ -155,6 +157,8 @@ public class AddEditItemDialog extends Dialog {
 					}
 				});
 				mIsAutoCompleting = true;
+			} else {
+				Log.i("AddEditItemDialog.OnKeyListener", "Ignoring Keypress, autocomplete in progress.");
 			}
 			return false;
 		}

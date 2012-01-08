@@ -1380,6 +1380,16 @@ public class NoteItApplication extends Application {
         	public void onPostExecute(JSONObject json) {
         		try {
         			long retVal = json.getLong("JSONRetVal");
+        			if (retVal == 0 && (bitMask & Item.ITEM_ISPURCHASED) > 0) {
+        				// Item is being marked purchased, decrease count
+						int listIndex = mShoppingLists.indexOf(new ShoppingList(item.mListID));
+						if (listIndex >= 0) {
+							if (item.mIsPurchased > 0)
+								mShoppingLists.get(listIndex).mItemCount--;
+							else
+								mShoppingLists.get(listIndex).mItemCount++;
+						}
+        			} 
                 	mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
         		} catch (JSONException e){
         			mListener.onPostExecute(-1, e.getMessage());
@@ -1443,13 +1453,15 @@ public class NoteItApplication extends Application {
         			long retVal = json.getLong("JSONRetVal");
         			if (retVal == 0) {
         				// Success
-        				mItems.remove(new Item(itemID));
-        				
-						// Decrease itemCount on the parent list
-						int index = mShoppingLists.indexOf(new ShoppingList(itemID));
-						if (index >= 0) {
-							mShoppingLists.get(index).mItemCount--;
-						}
+        				int index = mItems.indexOf(new Item(itemID));
+        				if (index != -1) {
+        					Item item = mItems.remove(index);
+    						// Decrease itemCount on the parent list
+    						int listIndex = mShoppingLists.indexOf(new ShoppingList(item.mListID));
+    						if (listIndex >= 0) {
+    							mShoppingLists.get(listIndex).mItemCount--;
+    						}
+        				}
         			}
                 	mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
         		} catch (JSONException e){
@@ -1472,7 +1484,7 @@ public class NoteItApplication extends Application {
         }
     }
 	
-	public void markAllItemsDone(long list_ID, boolean done, final OnMethodExecuteListerner listener) {
+	public void markAllItemsDone(final long list_ID, boolean done, final OnMethodExecuteListerner listener) {
 		try {
 			ArrayList<NameValuePair> 	args = new ArrayList<NameValuePair>(4);
 
@@ -1486,6 +1498,14 @@ public class NoteItApplication extends Application {
 				public void onPostExecute(JSONObject result) {
 					if (listener != null)
 						try {
+							long retVal = result.getLong("JSONRetVal");
+							if (retVal == 0) {
+	    						// Decrease itemCount on the parent list
+	    						int listIndex = mShoppingLists.indexOf(new ShoppingList(list_ID));
+	    						if (listIndex >= 0) {
+	    							mShoppingLists.get(listIndex).mItemCount = 0;
+	    						}
+							}
 							listener.onPostExecute(
 								result.getLong("JSONRetVal"), 
 								result.getString("JSONRetMessage"));
