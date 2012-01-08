@@ -7,6 +7,7 @@ import com.geekjamboree.noteit.NoteItApplication.Category;
 import com.geekjamboree.noteit.NoteItApplication.OnAddItemListener;
 import com.geekjamboree.noteit.NoteItApplication.OnSuggestItemsListener;
 import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
+import com.geekjamboree.noteit.NoteItApplication.SuggestedItem;
 import com.geekjamboree.noteit.NoteItApplication.Unit;
 
 import android.app.Dialog;
@@ -14,9 +15,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -89,16 +87,16 @@ public class AddEditItemDialog extends Dialog {
 	static final int 		UNITS_METRIC = 1;
 	static final int		UNITS_IMPERIAL = 2;
 	
-	NoteItApplication		mApplication;
-	baseListener			mListener;
-	boolean					mIsAddItem = true;
-	long					mItemID = 0; // Holds only for edit mode
-	Item 					mOriginalItem;
-	navigateItemsListener 	mNavigationListener; 
+	NoteItApplication			mApplication;
+	baseListener				mListener;
+	boolean						mIsAddItem = true;
+	boolean						mIsAutoCompleting = false;
+	long						mItemID = 0; // Holds only for edit mode
+	Item 						mOriginalItem;
+	navigateItemsListener 		mNavigationListener; 
 	
-	ArrayList<String>		mSuggestions = new ArrayList<String>();
-	ArrayAdapter<String>	mAutoCompleteAdapter;
-	AutoCompleteTextView 	mItemName;
+	ArrayAdapter<SuggestedItem> mAutoCompleteAdapter;
+	AutoCompleteTextView 		mItemName;
 
 	// controls
 	EditText				mEditName;
@@ -108,34 +106,57 @@ public class AddEditItemDialog extends Dialog {
 	Spinner					mSpinCategories;
 	Spinner					mSpinUnits;
 	CheckBox				mAskLater;
-		
-	// This one's for the AutoTextComplete
-	final TextWatcher		mTextChecker = new TextWatcher() {
-		
-		public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+	final AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			
-			mApplication.suggestItems(s.toString(), new OnSuggestItemsListener() {
-				
-				public void onPostExecute(long resultCode, ArrayList<String> suggestions,
-						String message) {
-					
-					if (suggestions.size() > 0) {
-						mAutoCompleteAdapter.clear();
-						for (String suggestion : suggestions) {
-							mAutoCompleteAdapter.add(suggestion);
-							Log.i("AutoTextSuggestion: ", suggestion);
+			if (position >= 0 && position < mAutoCompleteAdapter.getCount()) {
+				mApplication.fetchPurchasedInstances(
+					mAutoCompleteAdapter.getItem(position).mItemId, 
+					new NoteItApplication.OnFetchItemsListener() {
+						
+						public void onPostExecute(
+							long resultCode, 
+							ArrayList<Item> items,
+							String message) {
+							
+							if (resultCode == 0 && items != null && items.size() > 0) {
+								populateView(items.get(0), Item.ITEM_ALL & ~Item.ITEM_NAME);
+							}
 						}
-						mAutoCompleteAdapter.notifyDataSetChanged();
 					}
-				}
-			});
+				);
+			}
 		}
+	};
+	
+	final View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
 		
-		public void beforeTextChanged(CharSequence s, int start, int count,
-				int after) {
-		}
-		
-		public void afterTextChanged(Editable s) {
+		public boolean onKey(View v, int keyCode, KeyEvent event) {
+			
+			String partialName = mEditName.getEditableText().toString();
+			partialName = partialName.trim();
+			if (!partialName.equals("") && !mIsAutoCompleting){
+				mApplication.suggestItems(partialName, new OnSuggestItemsListener() {
+					
+					public void onPostExecute(
+							long resultCode, 
+							ArrayList<SuggestedItem> suggestions,
+							String message) {
+
+						mIsAutoCompleting = false;
+						mAutoCompleteAdapter.clear();
+						if (resultCode == 0 && suggestions != null) {
+							for (SuggestedItem suggestion : suggestions) {
+								mAutoCompleteAdapter.add(suggestion);
+							}
+							mAutoCompleteAdapter.notifyDataSetChanged();
+						}
+					}
+				});
+				mIsAutoCompleting = true;
+			}
+			return false;
 		}
 	};
 		
@@ -243,12 +264,16 @@ public class AddEditItemDialog extends Dialog {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean showSuggestions = prefs.getBoolean("Show_Suggestions", true);
         
-        mAutoCompleteAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, mSuggestions);
+        mAutoCompleteAdapter = new ArrayAdapter<SuggestedItem>(
+        	getContext(), 
+        	android.R.layout.simple_dropdown_item_1line, 
+        	new ArrayList<SuggestedItem>());
         AutoCompleteTextView mItemName = (AutoCompleteTextView) findViewById(R.id.addedit_editName);
         mItemName.setAdapter(mAutoCompleteAdapter);
-        
-        if (showSuggestions)
-        	mItemName.addTextChangedListener(mTextChecker);
+        if (showSuggestions) {
+        	mItemName.setOnKeyListener(mOnKeyListener);
+        	mItemName.setOnItemClickListener(mItemClickListener);
+        }
 
         Button continueBtn = (Button) findViewById(R.id.addedit_btnContinue);
         continueBtn.setOnClickListener(new View.OnClickListener() {
@@ -428,9 +453,17 @@ public class AddEditItemDialog extends Dialog {
     }
     
     @SuppressWarnings("unchecked")
-    protected void populateView(Item item) {
+    protected void populateView(Item item, int itemFlags) {
     	
-    	mEditName.setText(item.mName);
+		if ((itemFlags & Item.ITEM_NAME) == Item.ITEM_NAME) {
+			try {
+				mIsAutoCompleting = true;
+				mEditName.setText(item.mName);
+	    	} finally {
+	    		mIsAutoCompleting = false;
+	    	}
+		}
+    	
     	mEditQuantity.setText(String.valueOf(item.mQuantity));
     	mEditCost.setText(String.valueOf(item.mUnitPrice));
     	mAskLater.setChecked(item.mIsAskLater > 0);
@@ -463,7 +496,7 @@ public class AddEditItemDialog extends Dialog {
 				if (resultCode == 0) {
 					// Make a copy and save for later
 					mOriginalItem = mApplication.new Item(item);
-					populateView(item);
+					populateView(item, Item.ITEM_ALL);
 				} else {
 					Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
 					mOriginalItem = null;
@@ -519,9 +552,7 @@ public class AddEditItemDialog extends Dialog {
     	mEditName.setText("");
     	mEditQuantity.setText("");
     	mEditCost.setText("");
-//    	mEditName.setActivated(true);
     	mEditName.requestFocus();
-		//mSpinCategories.setSelection(position);
     }
     
     void doUpdateTotal() {

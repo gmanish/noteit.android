@@ -207,7 +207,10 @@ public class NoteItApplication extends Application {
 		public static final int ITEM_CLASSID		= 1 << 10;
 		public static final int ITEM_ISPURCHASED	= 1 << 11;
 		public static final int ITEM_ISASKLATER		= 1 << 12;
-		
+		public static final int ITEM_ALL			= ITEM_INSTANCEID | ITEM_USERID | ITEM_LISTID | ITEM_CATEGORYID |
+									ITEM_NAME | ITEM_UNITCOST | ITEM_QUANTITY | ITEM_UNITID | 
+									ITEM_DATEADDED | ITEM_DATEPURCHASED | ITEM_CLASSID | 
+									ITEM_ISPURCHASED | ITEM_ISASKLATER;		
 		public String 	mName 			= "";
 		public long		mID				= 0; // the instance id
 		public long 	mClassID		= 0; // the id of the item in the catalog table
@@ -266,6 +269,19 @@ public class NoteItApplication extends Application {
 			mCategoryID = categoryID;
 		}
 		
+		public Item(JSONObject json) throws JSONException {
+			mCategoryID = json.getLong("categoryID_FK");
+			mClassID = json.getLong("itemID_FK");
+			mID = json.getLong("instanceID");
+			mListID = json.getLong("listID_FK");
+			mName = json.getString("itemName");
+			mQuantity = (float) json.getDouble("quantity");
+			mUnitID = json.getInt("unitID_FK");
+			mUnitPrice = (float) json.getDouble("unitCost");
+			mIsPurchased = json.getInt("isPurchased");
+			mIsAskLater = json.getInt("isAskLater");
+		}
+		
 		public String toString(){
 			return mName;
 		}
@@ -285,6 +301,20 @@ public class NoteItApplication extends Application {
 			// Sort on category names, if they're same compare on item name
 			int result = getCategoryName().compareTo(item.getCategoryName());
 			return result == 0 ? mName.compareTo(item.mName) : result;
+		}
+	}
+	
+	class SuggestedItem {
+		long 	mItemId = 0;
+		String	mItemName = "";
+		
+		public SuggestedItem(long itemId, String itemName) {
+			mItemId = itemId;
+			mItemName = itemName;
+		}
+
+		public String toString(){
+			return mItemName;
 		}
 	}
 	
@@ -329,7 +359,7 @@ public class NoteItApplication extends Application {
 	}
 	
 	public static interface OnSuggestItemsListener {
-		void onPostExecute(long resultCode, ArrayList<String> suggestions, String message);
+		void onPostExecute(long resultCode, ArrayList<SuggestedItem> suggestions, String message);
 	}
 
 	public static interface OnGetItemListener {
@@ -1115,6 +1145,47 @@ public class NoteItApplication extends Application {
 			Log.e("NoteItApplication.fetchItems", e.getMessage());		
 		}
 	}
+	
+	public void fetchPurchasedInstances(long classId, final OnFetchItemsListener listener) {
+		
+		try {
+			ArrayList<NameValuePair>	args = new ArrayList<NameValuePair>(4);
+			args.add(new BasicNameValuePair("command", "do_get_instances"));
+			args.add(new BasicNameValuePair("arg1", String.valueOf(classId)));
+			args.add(new BasicNameValuePair("arg2", "1"));
+			args.add(new BasicNameValuePair("arg3", String.valueOf(getUserID())));
+			AsyncInvokeURLTask task = new AsyncInvokeURLTask(args, new OnPostExecuteListener() {
+				
+				public void onPostExecute(JSONObject result) {
+					
+					long retVal = 0;
+					try {
+						retVal = result.getLong("JSONRetVal");
+						if (retVal == 0) {
+							ArrayList<Item> items = new ArrayList<Item>();
+							JSONArray jsonItems = result.getJSONArray("arg1");
+							for (int index = 0; index < jsonItems.length(); index++) {
+								JSONObject jsonObj = jsonItems.getJSONObject(index);
+								items.add(new Item(jsonObj));
+							}
+							if (listener != null) {
+								listener.onPostExecute(retVal, items, "");
+							}
+						} else if (listener != null){
+							listener.onPostExecute(retVal, null, result.getString("JSONRetMessage"));
+						}
+					} catch (JSONException e) {
+						if (listener != null) 
+							listener.onPostExecute(-1, null, e.getMessage());
+					}
+				}
+			});
+			task.execute();
+		} catch (Exception e) {
+			if (listener != null)
+				listener.onPostExecute(-1, null, e.getMessage());
+		}
+	}
 
 	public ArrayList<Item> getItems() {
 		return mItems;
@@ -1477,15 +1548,19 @@ public class NoteItApplication extends Application {
 			}
 			
 	       	public void onPostExecute(JSONObject json) {
-	       		long 				retVal = -1;
-	       		ArrayList<String> 	suggestions = new ArrayList<String>();
+	       		long 						retVal = -1;
+	       		ArrayList<SuggestedItem> 	suggestions = new ArrayList<SuggestedItem>();
 	       		
 				try {
 					if ((retVal = json.getLong("JSONRetVal")) == 0) {
 						
 						JSONArray jsonSuggestions = json.getJSONArray("arg1");
 						for (int i = 0; i < jsonSuggestions.length(); i++) {
-							suggestions.add(jsonSuggestions.getString(i));
+							JSONObject jsonObj = jsonSuggestions.getJSONObject(i);
+							suggestions.add(
+								new SuggestedItem(
+									jsonObj.getLong("itemId"), 
+									jsonObj.getString("itemName")));
 						}
 					}
 					mListener.onPostExecute(retVal, suggestions, json.getString("JSONRetMessage"));
