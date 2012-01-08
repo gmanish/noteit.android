@@ -37,5 +37,15 @@
 	<attr name="Report_Header_HTML" format="reference"></attr>
 	<attr name="Report_Item_HTML" format="reference"></attr>
 	<attr name="Report_Footer_HTML" format="reference"></attr>
-			
+	
+	<attr name="Dashboard_Category" format="reference"></attr>
+	<attr name="Dashboard_ShoppingList" format="reference"></attr>
+	<attr name="Dashboard_Reports" format="reference"></attr>
+	<attr name="ShoppingList_Cart" format="reference"></attr>
+	<attr name="Disclosure" format="reference"></attr>
+	<attr name="Category_Small" format="reference"></attr>
+	<attr name="Hand_Small" format="reference"></attr>
+	<attr name="Prev_Small" format="reference"></attr>
+	<attr name="Next_Small" format="reference"></attr>	
+					
 </resources>

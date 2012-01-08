@@ -106,7 +106,7 @@
         <item name="android:divider">@drawable/listview_group_separator_trademark</item>
         <item name="android:childDivider">@drawable/listview_item_separator_trademark</item>
         <item name="android:background">@drawable/application_background_trademark</item>
-        <item name="android:groupIndicator">@color/listitem_group_indicator</item>
+        <item name="android:groupIndicator">@color/listitem_group_indicator_trademark</item>
         <item name="android:dividerHeight">2dip</item>
 		<item name="android:cacheColorHint">#00000000</item>
         <item name="android:fadingEdge">vertical</item>
@@ -148,10 +148,21 @@
 		<item name="TextAppearance_Item_SubItem_Large">@style/TextAppearance_Trademark.SubItem</item>
 		
 		<item name="TextAppearance_Footer">@style/TextAppearance_Trademark.Footer</item>
-		<item name="Report_Header_HTML" format="reference">@string/reporting_category_head_trademark</item>
-		<item name="Report_Item_HTML" format="reference">@string/reporting_category_report_item_trademark</item>
-		<item name="Report_Footer_HTML" format="reference">@string/reporting_category_footer_trademark</item>
+		<item name="Report_Header_HTML">@string/reporting_category_head_trademark</item>
+		<item name="Report_Item_HTML">@string/reporting_category_report_item_trademark</item>
+		<item name="Report_Footer_HTML">@string/reporting_category_footer_trademark</item>
 
+		<item name="Dashboard_Category">@drawable/category_large_dark</item>
+		<item name="Dashboard_ShoppingList">@drawable/cart_big_dark</item>
+		<item name="Dashboard_Reports">@drawable/reports_large_dark</item>
+
+		<item name="ShoppingList_Cart">@drawable/cart_dark</item>
+		<item name="Disclosure">@drawable/disclosure_dark</item>
+		<item name="Category_Small">@drawable/category_dark</item>
+		<item name="Hand_Small">@drawable/hand_dark</item>
+		<item name="Prev_Small">@drawable/prev_dark</item>
+		<item name="Next_Small">@drawable/next_dark</item>
+			
 	</style>
     			
 </resources>

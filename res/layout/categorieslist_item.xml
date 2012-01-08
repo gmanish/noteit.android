@@ -15,8 +15,8 @@
        	android:gravity="center_vertical"
 		android:singleLine="true"
 		android:ellipsize="end"
-        android:drawableLeft="@drawable/category"
-        android:drawableRight="@drawable/hand"
+        android:drawableLeft="?Category_Small"
+        android:drawableRight="?Hand_Small"
         android:drawablePadding="5dip"
         android:text="@+id/categorylists_item_name" />
     

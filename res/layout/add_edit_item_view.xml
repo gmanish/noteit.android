@@ -34,7 +34,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="center_vertical|right"
-	        android:src="@drawable/left"
+	        android:src="?Prev_Small"
 	        android:contentDescription="@string/itemlist_previous"
 	        style="@style/App_ButtonStyle" />
 
@@ -45,7 +45,7 @@
 		    android:layout_height="wrap_content"
 	        android:layout_gravity="center_vertical|right"
 	        android:contentDescription="@string/itemlist_next"
-		    android:src="@drawable/right" />
+		    android:src="?Next_Small" />
 		
 	</LinearLayout>
 	

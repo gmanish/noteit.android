@@ -20,7 +20,7 @@
         android:gravity="left|center_vertical"
         android:paddingLeft="5dip"
         android:singleLine="true"
-        android:drawableLeft="@drawable/category"
+        android:drawableLeft="?ShoppingList_Cart"
         style="?TextAppearance_Group_Small"
         android:text="@+id/itemslist_categoryName" />
 
