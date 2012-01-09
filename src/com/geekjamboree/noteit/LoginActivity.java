@@ -33,17 +33,22 @@ public class LoginActivity
 	
 	SharedPreferences		mPrefs;
 	boolean					mIsHashedPassword = false;
-//	CustomTitlebarWrapper	mToolbar;
 	
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        mToolbar = new CustomTitlebarWrapper(this);
+        
+    	if (((NoteItApplication) getApplication()).doesSanityPrevail() == false) {
+    		Toast.makeText(this, getString(R.string.app_critical_error), Toast.LENGTH_LONG).show();
+    		finish();
+    		return;
+    	}
+    	
+    	super.onCreate(savedInstanceState);
+    	
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.login);
         hideIndeterminateProgress();
-//        mToolbar.SetTitle(getResources().getText(R.string.login_activity_title));
    
         // Read the email id from the preference
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);

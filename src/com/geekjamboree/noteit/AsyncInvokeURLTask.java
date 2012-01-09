@@ -46,11 +46,11 @@ public class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 			throw new Exception("Param postExecuteListener cannot be null.");
 		if(("sdk".equals(Build.PRODUCT)) || ("google_sdk".equals(Build.PRODUCT)))
 			// We're running in the emulator connect with host loopback
-//			mNoteItWebUrl = "http://geekjamboree.com/noteit/controller/appcontroller.php";
-			mNoteItWebUrl = "http://10.0.2.2/~gmanish/noteit.web/controller/appcontroller.php";
+			mNoteItWebUrl = "http://geekjamboree.com/noteit/controller/appcontroller.php";
+//			mNoteItWebUrl = "http://10.0.2.2/~gmanish/noteit.web/controller/appcontroller.php";
 		else
 //			mNoteItWebUrl = "http://192.168.0.100/noteit.web/controller/appcontroller.php";
-			mNoteItWebUrl = "http://geekjamboree.com/noteit/controller/appcontroller.php";
+			mNoteItWebUrl = "http://geekjamboree.com/controller/appcontroller.php";
 		}
 	
 	@Override

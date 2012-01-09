@@ -86,7 +86,10 @@ public class MainPreferenceActivity extends PreferenceActivity {
 				currenciesPref.setEntryValues(currencyIds);
 				if (selIndex >= 0)
 					currenciesPref.setValueIndex(selIndex);
+			} else {
+				throw new NullPointerException("Server Installation Corrupt");
 			}
+			
 			mPrefs.registerOnSharedPreferenceChangeListener(mPrefChangeListener);
 		} finally {
 			toolbar.hideIndeterminateProgress();

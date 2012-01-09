@@ -398,11 +398,26 @@ public class NoteItApplication extends Application {
 	private int 						mItemsStartPos = 0;
 	private int 						mItemsBatchSize = 10;
 	private boolean						mItemsMorePending = true;
+	private boolean						mSanityPrevails = true;
 	
 	@Override
 	public void onCreate() {
-		fetchCountries(null);
+		fetchCountries(new OnMethodExecuteListerner() {
+			
+			public void onPostExecute(long resultCode, String message) {
+				if (resultCode != 0) {
+					mSanityPrevails = false;
+					// Oopsie dasies! how do I report this error
+					// See http://stackoverflow.com/questions/8793865/how-to-bail-out-from-critical-error-in-application-oncreate-with-message
+					Log.e("NoteItApplication.onCreate", "Critical Error Occurred: " + message);
+				} 
+			}
+		});
 		super.onCreate();
+	}
+	
+	public boolean doesSanityPrevail() {
+		return mSanityPrevails;
 	}
 
 	public ArrayList<Country> getCountries() {

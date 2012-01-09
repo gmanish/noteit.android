@@ -91,7 +91,7 @@ public class AddEditItemDialog extends Dialog {
 	NoteItApplication			mApplication;
 	baseListener				mListener;
 	boolean						mIsAddItem = true;
-	boolean						mIsAutoCompleting = false;
+	int							mIgnoreAutoComplete;
 	long						mItemID = 0; // Holds only for edit mode
 	Item 						mOriginalItem;
 	navigateItemsListener 		mNavigationListener; 
@@ -137,7 +137,7 @@ public class AddEditItemDialog extends Dialog {
 			
 			String partialName = mEditName.getEditableText().toString();
 			partialName = partialName.trim();
-			if (!partialName.equals("") && !mIsAutoCompleting){
+			if (!partialName.equals("") && mIgnoreAutoComplete <= 0){
 				Log.i("AddEditItemDialog.OnKeyListener", "Requesting Suggestions: " + partialName);
 				mApplication.suggestItems(partialName, new OnSuggestItemsListener() {
 					
@@ -146,17 +146,20 @@ public class AddEditItemDialog extends Dialog {
 							ArrayList<SuggestedItem> suggestions,
 							String message) {
 
-						mIsAutoCompleting = false;
-						mAutoCompleteAdapter.clear();
-						if (resultCode == 0 && suggestions != null) {
-							for (SuggestedItem suggestion : suggestions) {
-								mAutoCompleteAdapter.add(suggestion);
+						try {
+							mAutoCompleteAdapter.clear();
+							if (resultCode == 0 && suggestions != null) {
+								for (SuggestedItem suggestion : suggestions) {
+									mAutoCompleteAdapter.add(suggestion);
+								}
+								mAutoCompleteAdapter.notifyDataSetChanged();
 							}
-							mAutoCompleteAdapter.notifyDataSetChanged();
+						} finally {
+							mIgnoreAutoComplete--;
 						}
 					}
 				});
-				mIsAutoCompleting = true;
+				mIgnoreAutoComplete++;
 			} else {
 				Log.i("AddEditItemDialog.OnKeyListener", "Ignoring Keypress, autocomplete in progress.");
 			}
@@ -461,10 +464,10 @@ public class AddEditItemDialog extends Dialog {
     	
 		if ((itemFlags & Item.ITEM_NAME) == Item.ITEM_NAME) {
 			try {
-				mIsAutoCompleting = true;
+				mIgnoreAutoComplete++;
 				mEditName.setText(item.mName);
 	    	} finally {
-	    		mIsAutoCompleting = false;
+	    		mIgnoreAutoComplete--;
 	    	}
 		}
     	
