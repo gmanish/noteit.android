@@ -64,6 +64,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	float							mPendingTotal = 0f;
 	ViewFlipper						mLoadMoreFlipper;
 	LayoutInflater					mLayoutInflater;
+	AlertDialog 					mInstallScanAppDialog = null;
+	Item							mTempItemToPassToDialog = null;
 	
 	static final int ADD_ITEM_REQUEST = 0;	
 	
@@ -90,6 +92,11 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	DONE, 
     	GROUP,
     	BOLD
+    }
+    
+    protected enum ProductSearchMethod {
+    	GOOGLE_SEARCH,
+    	SEARCH_UPC
     }
     
 	// Custom adapter for my shopping items
@@ -692,6 +699,9 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		case R.id.itemlist_settings:
 			startActivity(new Intent(this, MainPreferenceActivity.class));
 			break;
+		case R.id.itemlist_scan:
+			doScanBarcode();
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -722,6 +732,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		editor.putLong("LastUsedShoppingListID", ((NoteItApplication)getApplication()).getCurrentShoppingListID());
 		editor.commit();
 		mPrefs.unregisterOnSharedPreferenceChangeListener(mPrefChangeListener);
+		if (mInstallScanAppDialog != null && mInstallScanAppDialog.isShowing())
+			mInstallScanAppDialog.dismiss();
 		super.onPause();
 	}
 
@@ -776,11 +788,15 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	
     	Log.i("ItemListActivity.onActivityResult", "requestCode:" + requestCode + " resultCode: " + resultCode);
-    	if (requestCode == ADD_ITEM_REQUEST && resultCode == RESULT_OK) {
+    	IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+    	if (scanResult != null) {
+    		// handle scan result
+    		NoteItApplication app = (NoteItApplication) getApplication();
+    		app.searchItemByBarcode(scanResult.getFormatName(), scanResult.getContents(), null);
+    	} else if (requestCode == ADD_ITEM_REQUEST && resultCode == RESULT_OK) {
     		
     		// refresh our view
     		ArrayList<Item> addedItems = new ArrayList<Item>();
-//    		addedItems = data.getParcelableArrayListExtra("com.geekjamboree.noteit.items");
     		if (addedItems.size() > 0) {
     	
     			// New items were added by the called activity, we need to add them to our view
@@ -899,6 +915,9 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		case DIALOG_ADD_ITEM:
 			AddEditItemDialog addDialog = (AddEditItemDialog) dialog;
 			addDialog.clearDialogFields();
+			if (mTempItemToPassToDialog != null) {
+				addDialog.setItem(mTempItemToPassToDialog);
+			}
 			break;
 		case DIALOG_EDIT_ITEM:
         	AddEditItemDialog editDialog = (AddEditItemDialog) dialog;
@@ -1412,5 +1431,26 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	str += "\n\n";
     	str += getResources().getString(R.string.itemlist_emailsig);		
     	return str;
+    }
+    
+    protected void doScanBarcode() {
+    	
+    	final NoteItApplication app = (NoteItApplication) getApplication();
+    	app.searchItemByBarcode("", "602527246949", new NoteItApplication.OnSearchBarcodeListener() {
+			
+			public void onSearchResults(long retVal, Item item, String message) {
+				if (retVal == 0) {
+					// Item found
+				} else {
+					// Not Found
+				}
+				mTempItemToPassToDialog = app.new Item(item);
+				mTempItemToPassToDialog.mBarcode = "602527246949";
+				mTempItemToPassToDialog.mBarcodeFormat = "";
+				showDialog(DIALOG_ADD_ITEM);
+			}
+		});
+//    	IntentIntegrator integrator = new IntentIntegrator(this);
+//    	mInstallScanAppDialog = integrator.initiateScan();
     }
 }

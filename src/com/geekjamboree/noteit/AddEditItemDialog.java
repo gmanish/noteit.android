@@ -192,6 +192,15 @@ public class AddEditItemDialog extends Dialog {
     	} 
 	}
 	
+	// [NOTE] Since we have minSDKVersion set to 7 where we don't have showDialog(int, Bundle)
+	// available we're using this method to pass parameters to the Dialog. Change when we can
+	// move forward. This method is called from the Activity's onPrepareDialog and hence the  
+	// dialog fields are hooked up to the data members already
+	public void setItem(Item item) {
+		mOriginalItem = mApplication.new Item(item);
+		populateView(item, Item.ITEM_ALL);
+	}
+	
     /* (non-Javadoc)
      * @see android.app.Dialog#onCreate(android.os.Bundle)
      */

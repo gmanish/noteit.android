@@ -38,13 +38,13 @@ public class LoginActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         
+    	super.onCreate(savedInstanceState);
+    	
     	if (((NoteItApplication) getApplication()).doesSanityPrevail() == false) {
     		Toast.makeText(this, getString(R.string.app_critical_error), Toast.LENGTH_LONG).show();
     		finish();
     		return;
     	}
-    	
-    	super.onCreate(savedInstanceState);
     	
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.login);

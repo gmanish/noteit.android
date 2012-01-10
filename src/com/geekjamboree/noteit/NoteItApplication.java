@@ -23,7 +23,9 @@ import android.util.TypedValue;
 import android.widget.Toast;
 
 import com.geekjamboree.noteit.AsyncInvokeURLTask.OnPostExecuteListener;
+import com.geekjamboree.noteit.AsyncInvokeURLTask.RequestMethod;
 import com.geekjamboree.noteit.ItemListActivity.ItemType;
+import com.geekjamboree.noteit.ItemListActivity.ProductSearchMethod;
 
 public class NoteItApplication extends Application {
 
@@ -222,6 +224,8 @@ public class NoteItApplication extends Application {
 		public int		mIsPurchased	= 0; // SMALLINT at the backend
 		public int 		mIsAskLater 	= 0; // SMALLINT at the backend
 		public Date		mDateAdded;
+		public String 	mBarcode;
+		public String	mBarcodeFormat;
 
 		public Item() {
 			
@@ -238,6 +242,8 @@ public class NoteItApplication extends Application {
 			this.mUnitPrice = item.mUnitPrice;
 			this.mIsPurchased = item.mIsPurchased;
 			this.mIsAskLater = item.mIsAskLater;
+			this.mBarcode = item.mBarcode;
+			this.mBarcodeFormat = item.mBarcodeFormat;
 		}
 		
 		public void copyFrom(Item item) {
@@ -251,6 +257,8 @@ public class NoteItApplication extends Application {
 			this.mUnitPrice = item.mUnitPrice;
 			this.mIsPurchased = item.mIsPurchased;
 			this.mIsAskLater = item.mIsAskLater;
+			this.mBarcode = item.mBarcode;
+			this.mBarcodeFormat = item.mBarcodeFormat;
 		}
 
 		public Item(long itemID) {
@@ -280,6 +288,8 @@ public class NoteItApplication extends Application {
 			mUnitPrice = (float) json.getDouble("unitCost");
 			mIsPurchased = json.getInt("isPurchased");
 			mIsAskLater = json.getInt("isAskLater");
+			//mBarcode = ;
+			//mBarcodeFormat
 		}
 		
 		public String toString(){
@@ -386,6 +396,10 @@ public class NoteItApplication extends Application {
 		void onPostExecute(long resultCode, ArrayList<ItemReportItem> items, String message);
 	}
 	
+    public static interface OnSearchBarcodeListener {
+    	public void onSearchResults(long retVal, Item item, String message); 
+    }
+    
 	private long						mUserID = 0;
 	private long						mCurrentShoppingListID = 0;
 	private ArrayList<ShoppingList>		mShoppingLists = new ArrayList<ShoppingList>();
@@ -1710,7 +1724,84 @@ public class NoteItApplication extends Application {
 		}		
 	}
 
-	void doReAdjustRanks(int dragSource , int dropTarget) {
+    protected void searchItemByBarcode(String formatName, String contents, final OnSearchBarcodeListener listener) {
+    	
+    	ArrayList<NameValuePair> 	params = new ArrayList<NameValuePair>();
+    	final ProductSearchMethod	searchMethod = ProductSearchMethod.GOOGLE_SEARCH;
+    	String 						searchURL = "";
+    	
+    	if (searchMethod == ProductSearchMethod.SEARCH_UPC) {
+    		
+    		final String searchUPCKey = "96C1B2C5-DB48-4D52-B8E4-50971BAC5F47";
+    		searchURL = "http://www.searchupc.com/handlers/upcsearch.ashx";
+	    	params.add(new BasicNameValuePair("request_type", "3"));
+	    	params.add(new BasicNameValuePair("access_token", searchUPCKey));
+	    	params.add(new BasicNameValuePair("upc", contents));
+    	} else if (searchMethod == ProductSearchMethod.GOOGLE_SEARCH) {
+        	
+    		final String googleAPIKey = "AIzaSyA9IqL-QR5YezowBLgMIwwDvd_lDtWcSlo";
+    		searchURL = "https://www.googleapis.com/shopping/search/v1/public/products";
+    		params.add(new BasicNameValuePair("key", googleAPIKey));
+    		params.add(new BasicNameValuePair("country", "US"));
+    		params.add(new BasicNameValuePair("q", contents));
+    	}
+    	
+    	try {
+	    	AsyncInvokeURLTask task = new AsyncInvokeURLTask(
+	    			RequestMethod.GET,
+	    			searchURL, 
+	    			params, 
+	    			new AsyncInvokeURLTask.OnPostExecuteListener() {
+				
+				public void onPostExecute(JSONObject result) {
+					try {
+						if (result.isNull("JSONRetVal")) {
+							if (searchMethod == ProductSearchMethod.GOOGLE_SEARCH) {
+								Item item = parseItemFromGoogleJSON(result);
+								listener.onSearchResults(0, item, "");
+							}
+						} else if (listener != null){
+							listener.onSearchResults(
+								result.getLong("JSONRetVal"), 
+								null, 
+								result.getString("JSONRetMessage"));
+						}
+					} catch (JSONException e) {
+						e.printStackTrace();
+						listener.onSearchResults(-1, null, e.getMessage());
+					}
+				}
+			});
+	    	task.execute();
+    	} catch (Exception e) {
+    		
+    	}
+    }
+    
+    private Item parseItemFromGoogleJSON(JSONObject items) throws JSONException {
+    	
+    	long 				itemCount 	= items.getLong("totalItems");
+    	Item				item 		= null;
+		JSONArray 			array 		= items.getJSONArray("items");
+    	
+    	for (int index = items.getInt("startIndex"); index < itemCount; index++) {
+    		
+    		JSONObject 	itemJSON 	= array.getJSONObject(index);
+    		JSONObject  product 	= itemJSON.getJSONObject("product");
+    		JSONArray 	inventories = product.getJSONArray("inventories");
+    		
+    		if (inventories.length() > 0) {
+	    		item = new Item(0);
+	    		item.mName = product.getString("title");
+	    		item.mUnitPrice = (float) inventories.getJSONObject(0).getDouble("price");
+	    		break;
+    		}
+    	} 
+    	
+    	return item;
+    }
+    
+    void doReAdjustRanks(int dragSource , int dropTarget) {
 		Category sourceObj = mCategories.get(dragSource);
 		Category targetObj = mCategories.get(dropTarget); 
 		if (sourceObj.mRank < targetObj.mRank) {
