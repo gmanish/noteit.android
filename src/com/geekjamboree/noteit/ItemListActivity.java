@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.geekjamboree.noteit.ActionItem;
+import com.geekjamboree.noteit.NoteItApplication.OnAddItemListener;
 import com.geekjamboree.noteit.NoteItApplication.OnFetchItemsListener;
 import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
 import com.geekjamboree.noteit.NoteItApplication.ShoppingList;
@@ -319,12 +320,6 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			startActivity(intent);
 			finish();
 			break;
-		case R.id.itemlist_expandall:
-			doExpandAll();
-			break;
-		case R.id.itemlist_collapseall:
-			doCollapseAll();
-			break;
 		case R.id.itemlist_email:
 			doEmail();
 			break;
@@ -427,7 +422,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			    				mTempItemToPassToDialog = app.new Item(item);
 			    				mTempItemToPassToDialog.mBarcodeFormat = scanResult.getFormatName();
 			    				mTempItemToPassToDialog.mBarcode = scanResult.getContents(); //"602527246949";
-			    				showDialog(DIALOG_ADD_ITEM);
+			    				doAddItem(mTempItemToPassToDialog);
 	    					} else {
 		    					// Not Found, ask if user wants to add
 		    					final AlertDialog dialog = new AlertDialog.Builder(ItemListActivity.this).create();
@@ -489,7 +484,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     
     @Override
 	protected Dialog onCreateDialog(int id) {
-    	
+
     	switch (id) {
     	case DIALOG_ADD_ITEM:
     		Log.i("ItemListActivity.onCreateDailog", "DIALOG_EDIT_ITEM");
@@ -499,13 +494,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     				new AddEditItemDialog.addItemListener() {
     					
     					public void onAddItem(Item item) {
-    		    			// New items were added by the called activity, we need to add them to our view
-    		    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
-    	    				Category category = ((NoteItApplication) getApplication()).getCategory(item.mCategoryID);
-    	    				adapter.AddItem(item, category);
-    						adapter.notifyDataSetChanged();
-    						doAddToPendingTotal(item.mUnitID * item.mUnitPrice);
-    						doDisplayPendingTotal();
+    						doAddItem(item);
     					}
     				});
     		return addDialog;
@@ -517,22 +506,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     			(NoteItApplication)getApplication(),
     			new AddEditItemDialog.editItemListener() {
     				
-    				public void onEditItem(Item oldItem, Item newItem, int bitMask) {
-    	    			
-    	    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
-        				Category category = ((NoteItApplication) getApplication()).getCategory(newItem.mCategoryID);
-        				if ((bitMask & Item.ITEM_CATEGORYID) > 0 || (bitMask & Item.ITEM_NAME) > 0) {
-    	    				adapter.DeleteItem(oldItem);
-    	    				adapter.AddItem(newItem, category);
-    	    				doAddToPendingTotal(newItem.mUnitPrice * newItem.mQuantity - oldItem.mUnitPrice * oldItem.mQuantity);
-    	    				doDisplayPendingTotal();
-        				} else {
-        					Item selItem = (Item) mListView.getExpandableListAdapter().getChild(
-        							mSelectedGroup.get(), 
-        							mSelectedChild.get());
-        					selItem.copyFrom(newItem);
-        				}
-    					adapter.notifyDataSetChanged();
+    				public void onEditItem(final Item oldItem, final Item newItem, final int bitMask) {
+    					doEditItem(oldItem, newItem, bitMask);
     				}
     			},
     			new AddEditItemDialog.navigateItemsListener() {
@@ -547,7 +522,6 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     							return mSelectedItemID = prevItem.mID;
     						}
     					}
-
     					return 0;
     				}
     				
@@ -561,7 +535,6 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     							return mSelectedItemID = nextItem.mID;
     						}
     					}
-    					
     					return 0;
     				}
     			},
@@ -576,6 +549,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 
 	@Override
 	protected void onPrepareDialog(int id, Dialog dialog) {
+		
 		super.onPrepareDialog(id, dialog);
 		switch(id) {
 		case DIALOG_ADD_ITEM:
@@ -618,6 +592,68 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	}
     }
 
+	protected void doAddItem(Item item) {
+		
+		NoteItApplication app = (NoteItApplication) getApplication();
+		mToolbar.showInderminateProgress(getString(R.string.progress_message));
+		app.addItem(item, new OnAddItemListener() {
+			
+			public void onPostExecute(long resultCode, Item item, String message) {
+				try {
+					if (resultCode == 0){
+				    	ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
+	    				Category category = ((NoteItApplication) getApplication()).getCategory(item.mCategoryID);
+	    				adapter.AddItem(item, category);
+						adapter.notifyDataSetChanged();
+						doAddToPendingTotal(item.mUnitID * item.mUnitPrice);
+						doDisplayPendingTotal();
+					}
+					else {
+						Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+					}
+				} finally {
+		    		mToolbar.hideIndeterminateProgress();
+				}
+			}
+		});
+	}
+	
+	protected void doEditItem(final Item oldItem, final Item newItem, final int bitMask) {
+
+		NoteItApplication app = (NoteItApplication) getApplication();
+		mToolbar.showInderminateProgress(getString(R.string.progress_message));
+		app.editItem(
+				bitMask, 
+    			newItem,  
+    			new OnMethodExecuteListerner() {
+			
+			public void onPostExecute(long resultCode, String message) {
+				try {
+					if (resultCode == 0) {
+		    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
+	    				Category category = ((NoteItApplication) getApplication()).getCategory(newItem.mCategoryID);
+	    				if ((bitMask & Item.ITEM_CATEGORYID) > 0 || (bitMask & Item.ITEM_NAME) > 0) {
+		    				adapter.DeleteItem(oldItem);
+		    				adapter.AddItem(newItem, category);
+		    				doAddToPendingTotal(newItem.mUnitPrice * newItem.mQuantity - oldItem.mUnitPrice * oldItem.mQuantity);
+		    				doDisplayPendingTotal();
+	    				} else {
+	    					Item selItem = (Item) mListView.getExpandableListAdapter().getChild(
+	    							mSelectedGroup.get(), 
+	    							mSelectedChild.get());
+	    					selItem.copyFrom(newItem);
+	    				}
+						adapter.notifyDataSetChanged();
+					}
+					else
+						Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+				} finally {
+		    		mToolbar.hideIndeterminateProgress();
+				}
+			}
+		});
+	}
+	
 	protected void doCopyItem() {
 		
 		final ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
@@ -824,16 +860,16 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		});
     	
     	mExpandCollapseQA = new QuickAction(this);
-    	ActionItem expandAll = new ActionItem(
-							    		QA_EXPAND, 
-							    		getString(R.string.itemlist_expandall), 
-							    		getResources().getDrawable(R.drawable.expand));
     	ActionItem collapseAll = new ActionItem(
     									QA_COLLAPSE,
     									getString(R.string.itemlist_collapseall),
     									getResources().getDrawable(R.drawable.collapse));
-    	mExpandCollapseQA.addActionItem(expandAll);
+    	ActionItem expandAll = new ActionItem(
+	    		QA_EXPAND, 
+	    		getString(R.string.itemlist_expandall), 
+	    		getResources().getDrawable(R.drawable.expand));
     	mExpandCollapseQA.addActionItem(collapseAll);
+    	mExpandCollapseQA.addActionItem(expandAll);
     	mExpandCollapseQA.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
 			
 			public void onItemClick(QuickAction source, int pos, int actionId) {
@@ -847,27 +883,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 					break;
 				}
 			}
-		});
-		
-//    	ImageButton expandAll = new ImageButton(this);
-//    	expandAll.setImageResource(R.drawable.down);
-//    	mToolbar.addRightAlignedButton(expandAll, true, false);
-//    	expandAll.setOnClickListener(new OnClickListener() {
-//			
-//			public void onClick(View v) {
-//				doExpandAll();
-//			}
-//		});
-//    	
-//    	ImageButton collapseAll = new ImageButton(this);
-//    	collapseAll.setImageResource(R.drawable.up);
-//    	mToolbar.addRightAlignedButton(collapseAll, true, false);
-//    	collapseAll.setOnClickListener(new OnClickListener() {
-//			
-//			public void onClick(View v) {
-//				doCollapseAll();
-//			}
-//		});
+		});		
     }
     
     private void addFooterToListView(boolean add) {

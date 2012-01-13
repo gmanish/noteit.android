@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 import com.geekjamboree.noteit.NoteItApplication.Item;
 import com.geekjamboree.noteit.NoteItApplication.Category;
-import com.geekjamboree.noteit.NoteItApplication.OnAddItemListener;
 import com.geekjamboree.noteit.NoteItApplication.OnSuggestItemsListener;
-import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
 import com.geekjamboree.noteit.NoteItApplication.SuggestedItem;
 import com.geekjamboree.noteit.NoteItApplication.Unit;
 
@@ -210,10 +208,12 @@ public class AddEditItemDialog extends Dialog {
         setContentView(R.layout.add_edit_item_view);
 
         String title; 
-        if (mIsAddItem)
+        if (mIsAddItem) {
         	title = getContext().getResources().getString(R.string.addedit_Title);
-        else
+        }
+        else {
         	title = getContext().getResources().getString(R.string.addedit_EditTitle);
+        }
         
     	((TextView) findViewById(R.id.addedit_textview_caption)).setText(title);
     	((ImageButton) findViewById(R.id.addedit_asklater_help)).setOnClickListener(new View.OnClickListener() {
@@ -374,17 +374,7 @@ public class AddEditItemDialog extends Dialog {
     	final Item item = getItemFromView();
 
     	if (mIsAddItem)	{
-    		
-	    	mApplication.addItem(item, new OnAddItemListener() {
-				
-				public void onPostExecute(long resultCode, Item item, String message) {
-					if (resultCode == 0){
-						((addItemListener)mListener).onAddItem(item);
-					}
-					else
-						Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
-				}
-				});
+    		((addItemListener) mListener).onAddItem(item);
     	} else {
     		int bitFlags = 0; 
 
@@ -410,21 +400,8 @@ public class AddEditItemDialog extends Dialog {
     			bitFlags = bitFlags | Item.ITEM_CATEGORYID;
     		
     		final int finalBitFlags = bitFlags;
-    		mApplication.editItem(
-    				finalBitFlags, 
-	    			item,  
-	    			new OnMethodExecuteListerner() {
-				
-				public void onPostExecute(long resultCode, String message) {
-					if (resultCode == 0) {
-						
-						((editItemListener)mListener).onEditItem(mOriginalItem, item, finalBitFlags);
-					}
-					else
-						Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
-				}
-			});
-	    	}
+			((editItemListener) mListener).onEditItem(mOriginalItem, item, finalBitFlags);
+	    }
     }
     
     public void initDialog() {

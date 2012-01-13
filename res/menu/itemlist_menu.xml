@@ -25,12 +25,4 @@
 		android:icon="@drawable/settings"    		
         android:title="@string/noteit_prefs" />
         
-   <item android:id="@+id/itemlist_expandall"
-		android:icon="@drawable/expand"    		
-        android:title="@string/itemlist_expandall" />
-
-   <item android:id="@+id/itemlist_collapseall"
-		android:icon="@drawable/collapse" 		
-        android:title="@string/itemlist_collapseall" />
-
 </menu>

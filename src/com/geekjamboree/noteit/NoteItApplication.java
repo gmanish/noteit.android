@@ -288,7 +288,7 @@ public class NoteItApplication extends Application {
 			mUnitPrice = (float) json.getDouble("unitCost");
 			mIsPurchased = json.getInt("isPurchased");
 			mIsAskLater = json.getInt("isAskLater");
-			mBarcode = json.getString("barcode");
+			mBarcode = json.getString("itemBarcode");
 			//mBarcodeFormat
 		}
 		
