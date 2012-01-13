@@ -30,6 +30,15 @@
 		    style="?TextAppearance_Item_Bold_Large" />
 
 		<ImageButton
+	        android:id="@+id/addedit_scanbarcode"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_vertical|right"
+	        android:src="?Scan_Barcode"
+	        android:contentDescription="@string/itemlist_previous"
+	        style="@style/App_ButtonStyle" />
+
+		<ImageButton
 	        android:id="@+id/addedit_btnPrev"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -37,7 +46,7 @@
 	        android:src="?Prev_Small"
 	        android:contentDescription="@string/itemlist_previous"
 	        style="@style/App_ButtonStyle" />
-
+		
 		<ImageButton
 		    android:id="@+id/addedit_btnNext"
 		    style="@style/App_ButtonStyle"

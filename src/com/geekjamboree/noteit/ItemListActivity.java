@@ -99,355 +99,6 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	SEARCH_UPC
     }
     
-	// Custom adapter for my shopping items
-	public class ItemsExpandableListAdapter extends BaseExpandableListAdapter {
-
-		private ArrayList<Category>				mCategories;
-
-		/* mItems
-		  -------------------------------------------
-	  	  | Category 0   		| ArrayList<Item>	|
-		  ------------------------------------------
-		  | Category n 			| ArrayList<Item>	|
-		  -------------------------------------------*/
-		private ArrayList<ArrayList<Item>>		mItems;
-		private Context							mContext = null;
-		private String							mUnitPriceFormat;
-		
-		ItemsExpandableListAdapter(Context context){
-			
-			mContext = context;
-			mCategories = new ArrayList<Category>();
-			mItems = new ArrayList<ArrayList<Item>>();
-			mUnitPriceFormat = getResources().getString(R.string.itemlist_unitpriceformat);
-			for (int i = 0; i < mCategories.size(); i++){
-				// Initialize the mItems ArrayList
-				mItems.add(new ArrayList<Item>());
-			}
-		}
-		
-		public void AddCategory(Category category){
-			
-			if (!mCategories.contains(category)) {
-				assert(category.mName != "");
-				mCategories.add(category);
-			}
-		}
-		
-		public void AddItem(Item item, Category category){
-			
-			if (category != null){
-				int index = mCategories.indexOf(category);
-				if (index < 0){
-					// Category has not been added, add it.
-					mCategories.add(category);
-					index = mCategories.indexOf(category);
-				}
-				if (index > mItems.size() - 1){
-					mItems.add(new ArrayList<Item>());
-				}
-				mItems.get(index).add(item);
-			}
-		}
-		
-		public void DeleteItem(final Item item) {
-			
-			if (item != null) {
-				Category category = ((NoteItApplication) getApplication()).getCategory(item.mCategoryID);
-				if (category != null) {
-					int categoryIndex = mCategories.indexOf(category);
-					if (categoryIndex >= 0 && categoryIndex < mItems.size()) {
-						mItems.get(categoryIndex).remove(item);
-						// if this is the last item remove the category as well
-						if (mItems.get(categoryIndex).size() == 0) { 
-							mItems.remove(categoryIndex);
-							mCategories.remove(category);
-						}
-					}
-				}
-			}
-		}
-		
-		public Object getChild(int groupPosition, int childPosition) {
-			
-			return mItems.get(groupPosition).get(childPosition);
-		}
-
-		public long getChildId(int groupPosition, int childPosition) {
-			
-			return childPosition;
-		}
-
-		public Object getNextChild(int groupPosition, int childPosition) {
-			
-			if (childPosition < getChildrenCount(groupPosition) - 1) {
-				// There are more next items in the same group
-				return getChild(groupPosition, childPosition + 1);
-			} else  if (groupPosition < getGroupCount() - 1)
-				return getChild(groupPosition + 1, 0);
-			
-			return null;
-		}
-		
-		public Object getPrevChild(int groupPosition, int childPosition) {
-			
-			if (childPosition > 0) {
-				// There are more next items in the same group
-				return getChild(groupPosition, childPosition -1);
-			} else if (groupPosition > 0) {
-				return getChild(
-					groupPosition - 1, 	// The previous group
-					getChildrenCount(groupPosition - 1) -1); // Last child
-			}
-			
-			return null;
-		}
-		
-		public boolean getNextChildPosition(
-				AtomicInteger groupPosition, //[IN/OUT] 
-				AtomicInteger childPosition) //[IN/OUT]
-		{
-			
-			if (childPosition.get() < getChildrenCount(groupPosition.get()) - 1) {
-
-				childPosition.set(childPosition.get() + 1);
-				return true;
-			} else if (groupPosition.get() < getGroupCount() - 1) {
-				
-				groupPosition.set(groupPosition.get() + 1);
-				childPosition.set(0);
-				return true;
-			}
-			
-			return false;
-		}
-
-		public boolean getPrevChildPosition(
-				AtomicInteger groupPosition, //[IN/OUT] 
-				AtomicInteger childPosition) //[IN/OUT]
-		{
-			
-			if (childPosition.get() > 0) {
-
-				childPosition.set(childPosition.get() - 1);
-				return true;
-			} else if (groupPosition.get() > 0) {
-				
-				groupPosition.set(groupPosition.get() - 1);
-				childPosition.set(getChildrenCount(groupPosition.get()) - 1);
-				return true;
-			}
-			
-			return false;
-		}
-
-		public int getTotalChildrenCount() {
-			int count = 0;
-			for (int index = 0; index < mCategories.size(); index++)
-				count += mItems.get(index).size();
-			return count;
-		}
-		
-		public int getChildrenCount(int groupPosition) {
-			
-			return mItems.get(groupPosition).size();
-		}
-
-		public Object getGroup(int groupPosition) {
-			
-			return mCategories.get(groupPosition);
-		}
-
-		public int getGroupCount() {
-			
-			return mCategories.size();
-		}
-
-		public long getGroupId(int groupPosition) {
-			
-			return groupPosition;
-		}
-
-		public boolean hasStableIds() {
-			
-			return true;
-		}
-
-		public boolean isChildSelectable(int groupPosition, int childPosition) {
-			
-			return true;
-		}
-
-	    public View getView(ViewGroup parent) {
-	    	
-	    	if (mLayoutInflater != null) {
-	    		return mLayoutInflater.inflate(R.layout.listitems_item, parent, false);
-	    	} else
-	    		return null;
-	    }
-	    
-		/* From Android Documentation: Makes life interesting
-		 * 
-		 * @param convertView the old view to reuse, if possible. You should check
-		 *            that this view is non-null and of an appropriate type before
-		 *            using. If it is not possible to convert this view to display
-		 *            the correct data, this method can create a new view. It is not
-		 *            guaranteed that the convertView will have been previously
-		 *            created by
-		 *            {@link #getChildView(int, int, boolean, View, ViewGroup)}.
-		 */
-	    public void setViewParams(View view, int height) {
-
-	    	 ViewGroup.LayoutParams params = new AbsListView.LayoutParams(
-		                ViewGroup.LayoutParams.FILL_PARENT, 
-		                height);
-	        
-	        view.setLayoutParams(params);
-	        view.setPadding(height + 10, 0, 0, 0);
-	    }
-	    
-	    public View getChildView(
-	    		int groupPosition, 
-	    		int childPosition,
-				boolean isLastChild, 
-				View convertView, 
-				ViewGroup parent) {
-
-	        Item thisItem = (Item) getChild(groupPosition, childPosition);;
-	        View view;
-	        
-	        if (convertView == null) {
-		        view = getView(parent);
-	        } else {
-	        	view = convertView;
-	        }
-	        
-	        if (view != null) {
-    	        TextView				textView = (TextView) view.findViewById(R.id.itemlist_name);
-    	        TextView 				quantity = (TextView) view.findViewById(R.id.itemlist_quantity);
-    	        TextView 				price = (TextView) view.findViewById(R.id.itemlist_price);
-    	        TextView				total = (TextView) view.findViewById(R.id.itemlist_Total);
-    	        ViewGroup.LayoutParams 	params = (ViewGroup.LayoutParams) parent.getLayoutParams();
-    	        
-    	        if (params != null) {  
-    	            params.width = ViewGroup.LayoutParams.FILL_PARENT;
-    	            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-    	        } else {
-    	        	params = new AbsListView.LayoutParams(
-    		                ViewGroup.LayoutParams.FILL_PARENT, 
-    		                ViewGroup.LayoutParams.WRAP_CONTENT);
-    	        }	
-    	        
-    	        if (textView != null) {
-
-			        if (thisItem.mIsPurchased > 0) {
-			        	textView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
-			        	textView.setTextAppearance(
-			        			mContext, 
-			        			NoteItApplication.getPreferredTextAppearance(mContext, mFontSize, ItemType.DONE));
-			        }
-			        else { 
-			        	textView.setTextAppearance(
-			        			mContext, 
-			        			NoteItApplication.getPreferredTextAppearance(mContext, mFontSize, ItemType.PENDING));
-			        	textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-			        }
-			        
-			        textView.setText(thisItem.mName.toString());
-			        textView.setBackgroundColor(android.R.color.transparent);
-	        	}
-	        	
-	        	if (mDisplayExtras && quantity != null && thisItem.mQuantity > 0 ) {
-	        		NoteItApplication 	app = (NoteItApplication) getApplication();
-	        		String 				unit = app.getUnitFromID(thisItem.mUnitID).mAbbreviation; 
-	        		quantity.setText(String.valueOf(thisItem.mQuantity) + " " + unit); 
-	        		quantity.setVisibility(View.VISIBLE);
-	        		quantity.setPaintFlags(
-	        			thisItem.mIsPurchased > 0 ?
-	        					Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG :
-	        					textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);	
-		        	if (price != null && thisItem.mUnitPrice > 0){
-		        		String strPrice = String.format(
-		        				mUnitPriceFormat, 
-		        				String.format(mCurrencyFormat, thisItem.mUnitPrice),
-		        				unit);
-		        		String strTotal = String.format(mCurrencyFormat, thisItem.mUnitPrice * thisItem.mQuantity);
-			        	price.setPaintFlags(
-			        			thisItem.mIsPurchased > 0 ?
-	        					Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG :
-		        				textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);	
-			        	total.setPaintFlags(	        			
-			        			thisItem.mIsPurchased > 0 ?
-	        					Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG :
-		        				textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);	
-		        		price.setText(strPrice);
-		        		total.setText(strTotal);
-		        		price.setVisibility(View.VISIBLE);
-		        		total.setVisibility(View.VISIBLE);
-		        	} else {
-		        		price.setVisibility(View.GONE);
-		        		total.setVisibility(View.GONE);
-		        	}
-	        	} else {
-	        		quantity.setVisibility(View.GONE);
-	        		price.setVisibility(View.GONE);
-	        		total.setVisibility(View.GONE);
-	        	}
-	        }
-	        return view;
-		}
-
-	    public View getGroupView(
-	    		int groupPosition, 
-	    		boolean isExpanded,
-				View convertView, 
-				ViewGroup parent) {
-	    	
-	    	ViewGroup viewGroup = null;
-	    	if (convertView == null) {
-		    	if (mLayoutInflater != null) {
-		    		viewGroup = (ViewGroup) mLayoutInflater.inflate(R.layout.listitems_group, parent, false);
-		    	}
-	    	} else {
-	    		viewGroup = (ViewGroup) convertView;
-	    	}
-	    	
-    		if (viewGroup != null) {
-		    	TextView  	textView = (TextView) viewGroup.findViewById(R.id.itemslist_categoryName);
-		    	TextView  	totals = (TextView) viewGroup.findViewById(R.id.itemslist_categoryTotals);
-		    	
-		        textView.setText(getGroup(groupPosition).toString());
-		        textView.setTextAppearance(
-		        	mContext, 
-		        	NoteItApplication.getPreferredTextAppearance(
-		        			mContext, mFontSize, ItemType.GROUP));
-
-		        if (mDisplayCategoryExtras) {
-			    	String 		totalsText;
-			    	totalsText = "(" + getUnpurchasedChildrenCount(groupPosition) + ")";
-			        totals.setText(totalsText);
-			        totals.setTextAppearance(
-			        	mContext, 
-			        	NoteItApplication.getPreferredTextAppearance(
-			        		mContext, mFontSize, ItemType.GROUP));
-			        totals.setPadding(0, 0, mListView.getRightMargin(), 0);
-			        totals.setVisibility(View.VISIBLE);
-		        } else {
-			        totals.setVisibility(View.GONE);
-		        }
-    		}
-    		return viewGroup;
-		}
-	    
-	    public int getUnpurchasedChildrenCount(int groupPosition) {
-	    	int count = 0;
-	    	for (Item item : mItems.get(groupPosition)) {
-	    		count += (item.mIsPurchased <= 0 ? 1 : 0);
-	    	}
-	    	return count;
-	    }
-	}
-	
 	protected AbsListView.OnScrollListener mScrollListener = new AbsListView.OnScrollListener() {
 		
 		public void onScrollStateChanged(
@@ -599,27 +250,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
         ItemsExpandableListAdapter adapter = new ItemsExpandableListAdapter(this);
 		mListView = (ExpandableLVRightIndicator) getExpandableListView();
 		mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE); 
-		mLoadMoreFlipper = (ViewFlipper) mLayoutInflater.inflate(
-			R.layout.itemlist_moreswitcher, 
-			(ViewGroup) findViewById(R.id.itemlist_more_root), 
-			false);
 		mListView.setTextFilterEnabled(true);
-//		mListView.setOnScrollListener(mScrollListener);
-		if (mLoadMoreFlipper != null) {
-			// Note: There seems to be a bug in android. If I don't call
-			// addFooterView before setting the adapter, the footer view
-			// is never added. Go Figure!
-			mListView.addFooterView(mLoadMoreFlipper);
-			Button moreButton = (Button) mLoadMoreFlipper.findViewById(R.id.itemlist_morebuttom);
-			if (moreButton != null) {
-				moreButton.setOnClickListener(new View.OnClickListener() {
-					
-					public void onClick(View v) {
-						fetchItems(ItemListActivity.this);
-					}
-				});
-			}
-		}
+		addFooterToListView(true);
 		mListView.setAdapter(adapter);
     	mListView.setOnChildClickListener(new OnChildClickListener() {
 			
@@ -759,18 +391,6 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	    	if (retval == 0) {
 	        	mIsItemListFetched = true;
 	        	doDisplayItems(items);
-				NoteItApplication app = (NoteItApplication) getApplication();
-				if (app != null) { 
-					if (mListView.getFooterViewsCount() > 0) {
-						if  (!app.isMoreItemsPending()) {
-							mListView.removeFooterView(mLoadMoreFlipper);
-						}
-					} else {
-						if (app.isMoreItemsPending()){
-							mListView.addFooterView(mLoadMoreFlipper);
-						}
-					}
-				}
 	    	}
 	    	else {
 				Toast.makeText(
@@ -788,12 +408,55 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	
     	Log.i("ItemListActivity.onActivityResult", "requestCode:" + requestCode + " resultCode: " + resultCode);
-    	IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+    	final IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
     	if (scanResult != null) {
     		// handle scan result
-    		NoteItApplication app = (NoteItApplication) getApplication();
-    		app.searchItemByBarcode(scanResult.getFormatName(), scanResult.getContents(), null);
-    	} else if (requestCode == ADD_ITEM_REQUEST && resultCode == RESULT_OK) {
+        	final NoteItApplication app = (NoteItApplication) getApplication();
+    		mToolbar.showInderminateProgress(getString(R.string.progress_message));
+        	app.searchItemByBarcode(
+        		scanResult.getFormatName(), 
+        		scanResult.getContents()/*"602527246949"*/, 
+        		new NoteItApplication.OnSearchBarcodeListener() {
+    			
+	    			public void onSearchResults(long retVal, final Item item, String message) {
+	    				try {
+	    					if (retVal == 0 && item != null) {
+			    				mTempItemToPassToDialog = app.new Item(item);
+			    				mTempItemToPassToDialog.mBarcodeFormat = scanResult.getFormatName();
+			    				mTempItemToPassToDialog.mBarcode = scanResult.getContents(); //"602527246949";
+			    				showDialog(DIALOG_ADD_ITEM);
+	    					} else {
+		    					// Not Found, ask if user wants to add
+		    					final AlertDialog dialog = new AlertDialog.Builder(ItemListActivity.this).create();
+		    					
+		    					dialog.setTitle(getResources().getString(R.string.addedit_Title));
+		    					dialog.setMessage(getResources().getString(R.string.itemlist_itemnotfound));
+		    					dialog.setButton(DialogInterface.BUTTON1, "Yes", new DialogInterface.OnClickListener() {
+		    						
+		    						public void onClick(DialogInterface dialog, int which) {
+		    							dialog.dismiss();
+	    			    				mTempItemToPassToDialog = app.new Item();
+	    			    				mTempItemToPassToDialog.mBarcodeFormat = scanResult.getFormatName();
+	    			    				mTempItemToPassToDialog.mBarcode = scanResult.getContents(); //"602527246949";
+	    			    				showDialog(DIALOG_ADD_ITEM);
+		    						}
+		    					});
+		    			
+		    					dialog.setButton(DialogInterface.BUTTON2, "No", new DialogInterface.OnClickListener() {
+		    						
+		    						public void onClick(DialogInterface dialog, int which) {
+		    							dialog.dismiss();
+		    						}
+		    					});
+
+		    					dialog.show();
+		    				}
+	    				} finally {
+	    					mToolbar.hideIndeterminateProgress();
+	    				}
+	    			}
+    		});
+        } else if (requestCode == ADD_ITEM_REQUEST && resultCode == RESULT_OK) {
     		
     		// refresh our view
     		ArrayList<Item> addedItems = new ArrayList<Item>();
@@ -1158,6 +821,39 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		});
     }
     
+    private void addFooterToListView(boolean add) {
+    	
+    	if (add) {
+    		
+    		if (mLoadMoreFlipper == null) {
+	    		mLoadMoreFlipper = (ViewFlipper) mLayoutInflater.inflate(
+	    				R.layout.itemlist_moreswitcher, 
+	    				(ViewGroup) findViewById(R.id.itemlist_more_root), 
+	    				false);
+    		}
+    		
+			if (mLoadMoreFlipper != null) {
+				// Note: There seems to be a bug in android. If I don't call
+				// addFooterView before setting the adapter, the footer view
+				// is never added. Go Figure!
+				mListView.addFooterView(mLoadMoreFlipper);
+				Button moreButton = (Button) mLoadMoreFlipper.findViewById(R.id.itemlist_morebuttom);
+				if (moreButton != null) {
+					moreButton.setOnClickListener(new View.OnClickListener() {
+						
+						public void onClick(View v) {
+							fetchItems(ItemListActivity.this);
+						}
+					});
+				}
+			}
+    	} else {
+    		mListView.removeFooterView(mLoadMoreFlipper);
+    		mLoadMoreFlipper.removeAllViews();
+    		mLoadMoreFlipper = null;
+    	}
+    }
+    
     protected float doAskForPriceAndSave(final Item item) {
 
 		// inflate the view from resource layout
@@ -1293,7 +989,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 						// Note: There seems to be a bug in android. If I don't call
 						// addFooterView before setting the adapter, the footer view
 						// is never added. Go Figure!
-						mListView.addFooterView(mLoadMoreFlipper);
+						addFooterToListView(true);
 						mListView.setAdapter(adapter);
 					}
 					fetchItems(ItemListActivity.this);
@@ -1314,6 +1010,18 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	    		adapter.AddItem(thisItem, category);
     		}
     	}
+		NoteItApplication app = (NoteItApplication) getApplication();
+		if (app != null) { 
+			if (mListView.getFooterViewsCount() > 0) {
+				if  (!app.isMoreItemsPending()) {
+					addFooterToListView(false);
+				}
+			} else {
+				if (app.isMoreItemsPending()){
+					addFooterToListView(true);
+				}
+			}
+		}
     	adapter.notifyDataSetChanged();
     	Log.i("NoteItApplication.doDisplayItems", "Notified Adapter of change");
 		doExpandPending();
@@ -1435,22 +1143,358 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     
     protected void doScanBarcode() {
     	
-    	final NoteItApplication app = (NoteItApplication) getApplication();
-    	app.searchItemByBarcode("", "602527246949", new NoteItApplication.OnSearchBarcodeListener() {
-			
-			public void onSearchResults(long retVal, Item item, String message) {
-				if (retVal == 0) {
-					// Item found
-				} else {
-					// Not Found
-				}
-				mTempItemToPassToDialog = app.new Item(item);
-				mTempItemToPassToDialog.mBarcode = "602527246949";
-				mTempItemToPassToDialog.mBarcodeFormat = "";
-				showDialog(DIALOG_ADD_ITEM);
-			}
-		});
-//    	IntentIntegrator integrator = new IntentIntegrator(this);
-//    	mInstallScanAppDialog = integrator.initiateScan();
+    	IntentIntegrator integrator = new IntentIntegrator(this);
+    	mInstallScanAppDialog = integrator.initiateScan();
     }
+    
+	// Custom adapter for my shopping items
+	public class ItemsExpandableListAdapter extends BaseExpandableListAdapter {
+
+		private ArrayList<Category>				mCategories;
+
+		/* mItems
+		  -------------------------------------------
+	  	  | Category 0   		| ArrayList<Item>	|
+		  ------------------------------------------
+		  | Category n 			| ArrayList<Item>	|
+		  -------------------------------------------*/
+		private ArrayList<ArrayList<Item>>		mItems;
+		private Context							mContext = null;
+		private String							mUnitPriceFormat;
+		
+		ItemsExpandableListAdapter(Context context){
+			
+			mContext = context;
+			mCategories = new ArrayList<Category>();
+			mItems = new ArrayList<ArrayList<Item>>();
+			mUnitPriceFormat = getResources().getString(R.string.itemlist_unitpriceformat);
+			for (int i = 0; i < mCategories.size(); i++){
+				// Initialize the mItems ArrayList
+				mItems.add(new ArrayList<Item>());
+			}
+		}
+		
+		public void AddCategory(Category category){
+			
+			if (!mCategories.contains(category)) {
+				assert(category.mName != "");
+				mCategories.add(category);
+			}
+		}
+		
+		public void AddItem(Item item, Category category){
+			
+			if (category != null){
+				int index = mCategories.indexOf(category);
+				if (index < 0){
+					// Category has not been added, add it.
+					mCategories.add(category);
+					index = mCategories.indexOf(category);
+				}
+				if (index > mItems.size() - 1){
+					mItems.add(new ArrayList<Item>());
+				}
+				mItems.get(index).add(item);
+			}
+		}
+		
+		public void DeleteItem(final Item item) {
+			
+			if (item != null) {
+				Category category = ((NoteItApplication) getApplication()).getCategory(item.mCategoryID);
+				if (category != null) {
+					int categoryIndex = mCategories.indexOf(category);
+					if (categoryIndex >= 0 && categoryIndex < mItems.size()) {
+						mItems.get(categoryIndex).remove(item);
+						// if this is the last item remove the category as well
+						if (mItems.get(categoryIndex).size() == 0) { 
+							mItems.remove(categoryIndex);
+							mCategories.remove(category);
+						}
+					}
+				}
+			}
+		}
+		
+		public Object getChild(int groupPosition, int childPosition) {
+			
+			return mItems.get(groupPosition).get(childPosition);
+		}
+
+		public long getChildId(int groupPosition, int childPosition) {
+			
+			return childPosition;
+		}
+
+		public Object getNextChild(int groupPosition, int childPosition) {
+			
+			if (childPosition < getChildrenCount(groupPosition) - 1) {
+				// There are more next items in the same group
+				return getChild(groupPosition, childPosition + 1);
+			} else  if (groupPosition < getGroupCount() - 1)
+				return getChild(groupPosition + 1, 0);
+			
+			return null;
+		}
+		
+		public Object getPrevChild(int groupPosition, int childPosition) {
+			
+			if (childPosition > 0) {
+				// There are more next items in the same group
+				return getChild(groupPosition, childPosition -1);
+			} else if (groupPosition > 0) {
+				return getChild(
+					groupPosition - 1, 	// The previous group
+					getChildrenCount(groupPosition - 1) -1); // Last child
+			}
+			
+			return null;
+		}
+		
+		public boolean getNextChildPosition(
+				AtomicInteger groupPosition, //[IN/OUT] 
+				AtomicInteger childPosition) //[IN/OUT]
+		{
+			
+			if (childPosition.get() < getChildrenCount(groupPosition.get()) - 1) {
+
+				childPosition.set(childPosition.get() + 1);
+				return true;
+			} else if (groupPosition.get() < getGroupCount() - 1) {
+				
+				groupPosition.set(groupPosition.get() + 1);
+				childPosition.set(0);
+				return true;
+			}
+			
+			return false;
+		}
+
+		public boolean getPrevChildPosition(
+				AtomicInteger groupPosition, //[IN/OUT] 
+				AtomicInteger childPosition) //[IN/OUT]
+		{
+			
+			if (childPosition.get() > 0) {
+
+				childPosition.set(childPosition.get() - 1);
+				return true;
+			} else if (groupPosition.get() > 0) {
+				
+				groupPosition.set(groupPosition.get() - 1);
+				childPosition.set(getChildrenCount(groupPosition.get()) - 1);
+				return true;
+			}
+			
+			return false;
+		}
+
+		public int getTotalChildrenCount() {
+			int count = 0;
+			for (int index = 0; index < mCategories.size(); index++)
+				count += mItems.get(index).size();
+			return count;
+		}
+		
+		public int getChildrenCount(int groupPosition) {
+			
+			return mItems.get(groupPosition).size();
+		}
+
+		public Object getGroup(int groupPosition) {
+			
+			return mCategories.get(groupPosition);
+		}
+
+		public int getGroupCount() {
+			
+			return mCategories.size();
+		}
+
+		public long getGroupId(int groupPosition) {
+			
+			return groupPosition;
+		}
+
+		public boolean hasStableIds() {
+			
+			return true;
+		}
+
+		public boolean isChildSelectable(int groupPosition, int childPosition) {
+			
+			return true;
+		}
+
+	    public View getView(ViewGroup parent) {
+	    	
+	    	if (mLayoutInflater != null) {
+	    		return mLayoutInflater.inflate(R.layout.listitems_item, parent, false);
+	    	} else
+	    		return null;
+	    }
+	    
+		/* From Android Documentation: Makes life interesting
+		 * 
+		 * @param convertView the old view to reuse, if possible. You should check
+		 *            that this view is non-null and of an appropriate type before
+		 *            using. If it is not possible to convert this view to display
+		 *            the correct data, this method can create a new view. It is not
+		 *            guaranteed that the convertView will have been previously
+		 *            created by
+		 *            {@link #getChildView(int, int, boolean, View, ViewGroup)}.
+		 */
+	    public void setViewParams(View view, int height) {
+
+	    	 ViewGroup.LayoutParams params = new AbsListView.LayoutParams(
+		                ViewGroup.LayoutParams.FILL_PARENT, 
+		                height);
+	        
+	        view.setLayoutParams(params);
+	        view.setPadding(height + 10, 0, 0, 0);
+	    }
+	    
+	    public View getChildView(
+	    		int groupPosition, 
+	    		int childPosition,
+				boolean isLastChild, 
+				View convertView, 
+				ViewGroup parent) {
+
+	        Item thisItem = (Item) getChild(groupPosition, childPosition);;
+	        View view;
+	        
+	        if (convertView == null) {
+		        view = getView(parent);
+	        } else {
+	        	view = convertView;
+	        }
+	        
+	        if (view != null) {
+    	        TextView				textView = (TextView) view.findViewById(R.id.itemlist_name);
+    	        TextView 				quantity = (TextView) view.findViewById(R.id.itemlist_quantity);
+    	        TextView 				price = (TextView) view.findViewById(R.id.itemlist_price);
+    	        TextView				total = (TextView) view.findViewById(R.id.itemlist_Total);
+    	        ViewGroup.LayoutParams 	params = (ViewGroup.LayoutParams) parent.getLayoutParams();
+    	        
+    	        if (params != null) {  
+    	            params.width = ViewGroup.LayoutParams.FILL_PARENT;
+    	            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+    	        } else {
+    	        	params = new AbsListView.LayoutParams(
+    		                ViewGroup.LayoutParams.FILL_PARENT, 
+    		                ViewGroup.LayoutParams.WRAP_CONTENT);
+    	        }	
+    	        
+    	        if (textView != null) {
+
+			        if (thisItem.mIsPurchased > 0) {
+			        	textView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+			        	textView.setTextAppearance(
+			        			mContext, 
+			        			NoteItApplication.getPreferredTextAppearance(mContext, mFontSize, ItemType.DONE));
+			        }
+			        else { 
+			        	textView.setTextAppearance(
+			        			mContext, 
+			        			NoteItApplication.getPreferredTextAppearance(mContext, mFontSize, ItemType.PENDING));
+			        	textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+			        }
+			        
+			        textView.setText(thisItem.mName.toString());
+			        textView.setBackgroundColor(android.R.color.transparent);
+	        	}
+	        	
+	        	if (mDisplayExtras && quantity != null && thisItem.mQuantity > 0 ) {
+	        		NoteItApplication 	app = (NoteItApplication) getApplication();
+	        		String 				unit = app.getUnitFromID(thisItem.mUnitID).mAbbreviation; 
+	        		quantity.setText(String.valueOf(thisItem.mQuantity) + " " + unit); 
+	        		quantity.setVisibility(View.VISIBLE);
+	        		quantity.setPaintFlags(
+	        			thisItem.mIsPurchased > 0 ?
+	        					Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG :
+	        					textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);	
+		        	if (price != null && thisItem.mUnitPrice > 0){
+		        		String strPrice = String.format(
+		        				mUnitPriceFormat, 
+		        				String.format(mCurrencyFormat, thisItem.mUnitPrice),
+		        				unit);
+		        		String strTotal = String.format(mCurrencyFormat, thisItem.mUnitPrice * thisItem.mQuantity);
+			        	price.setPaintFlags(
+			        			thisItem.mIsPurchased > 0 ?
+	        					Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG :
+		        				textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);	
+			        	total.setPaintFlags(	        			
+			        			thisItem.mIsPurchased > 0 ?
+	        					Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG :
+		        				textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);	
+		        		price.setText(strPrice);
+		        		total.setText(strTotal);
+		        		price.setVisibility(View.VISIBLE);
+		        		total.setVisibility(View.VISIBLE);
+		        	} else {
+		        		price.setVisibility(View.GONE);
+		        		total.setVisibility(View.GONE);
+		        	}
+	        	} else {
+	        		quantity.setVisibility(View.GONE);
+	        		price.setVisibility(View.GONE);
+	        		total.setVisibility(View.GONE);
+	        	}
+	        }
+	        return view;
+		}
+
+	    public View getGroupView(
+	    		int groupPosition, 
+	    		boolean isExpanded,
+				View convertView, 
+				ViewGroup parent) {
+	    	
+	    	ViewGroup viewGroup = null;
+	    	if (convertView == null) {
+		    	if (mLayoutInflater != null) {
+		    		viewGroup = (ViewGroup) mLayoutInflater.inflate(R.layout.listitems_group, parent, false);
+		    	}
+	    	} else {
+	    		viewGroup = (ViewGroup) convertView;
+	    	}
+	    	
+    		if (viewGroup != null) {
+		    	TextView  	textView = (TextView) viewGroup.findViewById(R.id.itemslist_categoryName);
+		    	TextView  	totals = (TextView) viewGroup.findViewById(R.id.itemslist_categoryTotals);
+		    	
+		        textView.setText(getGroup(groupPosition).toString());
+		        textView.setTextAppearance(
+		        	mContext, 
+		        	NoteItApplication.getPreferredTextAppearance(
+		        			mContext, mFontSize, ItemType.GROUP));
+
+		        if (mDisplayCategoryExtras) {
+			    	String 		totalsText;
+			    	totalsText = "(" + getUnpurchasedChildrenCount(groupPosition) + ")";
+			        totals.setText(totalsText);
+			        totals.setTextAppearance(
+			        	mContext, 
+			        	NoteItApplication.getPreferredTextAppearance(
+			        		mContext, mFontSize, ItemType.GROUP));
+			        totals.setPadding(0, 0, mListView.getRightMargin(), 0);
+			        totals.setVisibility(View.VISIBLE);
+		        } else {
+			        totals.setVisibility(View.GONE);
+		        }
+    		}
+    		return viewGroup;
+		}
+	    
+	    public int getUnpurchasedChildrenCount(int groupPosition) {
+	    	int count = 0;
+	    	for (Item item : mItems.get(groupPosition)) {
+	    		count += (item.mIsPurchased <= 0 ? 1 : 0);
+	    	}
+	    	return count;
+	    }
+	}
+	
+    
 }

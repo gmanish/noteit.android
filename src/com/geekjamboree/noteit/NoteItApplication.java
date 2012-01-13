@@ -288,7 +288,7 @@ public class NoteItApplication extends Application {
 			mUnitPrice = (float) json.getDouble("unitCost");
 			mIsPurchased = json.getInt("isPurchased");
 			mIsAskLater = json.getInt("isAskLater");
-			//mBarcode = ;
+			mBarcode = json.getString("barcode");
 			//mBarcodeFormat
 		}
 		
@@ -572,16 +572,12 @@ public class NoteItApplication extends Application {
 	                	if (retval == 0){
 	        	        	JSONArray jsonArr = json.getJSONArray("arg1");
 	        	        	
-	        	        	// [TODO]: This doesn't feel right, calling the app object
-	        	        	// to read shopping list items and having to populate them
-	        	        	// in the object from here. Figure out an elegant way to 
-	        	        	// handle this.
 	        	        	for (int index = 0; index < jsonArr.length(); index++){
 	        	        		JSONObject thisObj = jsonArr.getJSONObject(index);
 	        	        		ShoppingList thisItem = new ShoppingList(
-	        	        				Long.parseLong(thisObj.getString("listID")),
-	        							thisObj.getString("listName"),
-	        							Long.parseLong(thisObj.getString("itemCount")));
+        	        				Long.parseLong(thisObj.getString("listID")),
+        							thisObj.getString("listName"),
+        							Long.parseLong(thisObj.getString("itemCount")));
 	        	        		
 	        	        		mShoppingLists.add(thisItem);
 	        	        	}
@@ -1301,20 +1297,7 @@ public class NoteItApplication extends Application {
 					message = json.getString("JSONRetMessage");
 					if (retVal == 0) {
 						JSONObject 	object = json.getJSONArray("arg1").getJSONObject(0);
-						Item 		newItem = new Item(
-										object.getLong("listID_FK"), 
-										object.getLong("categoryID_FK"), 
-										object.getString("itemName"));
-						
-						newItem.mID = object.getLong("instanceID");
-						newItem.mClassID = object.getLong("itemID_FK");
-						newItem.mListID = object.getLong("listID_FK");
-						newItem.mUnitPrice = (float)object.getDouble("unitCost");
-						newItem.mQuantity = (float)object.getDouble("quantity");
-						newItem.mUnitID = object.getInt("unitID_FK");
-						newItem.mCategoryID = object.getLong("categoryID_FK");
-						newItem.mIsPurchased = object.getInt("isPurchased");
-						newItem.mIsAskLater = object.getInt("isAskLater");
+						Item 		newItem = new Item(object);
 						
 						// Add to our internal list
 						mItems.add(newItem);
@@ -1347,6 +1330,7 @@ public class NoteItApplication extends Application {
 		nameValuePairs.add(new BasicNameValuePair("arg7", String.valueOf(getUserID())));
 		nameValuePairs.add(new BasicNameValuePair("arg8", String.valueOf(inItem.mIsPurchased)));
 		nameValuePairs.add(new BasicNameValuePair("arg9", String.valueOf(inItem.mIsAskLater)));
+		nameValuePairs.add(new BasicNameValuePair("arg10", inItem.mBarcode));
 		
 		AddItemTask myEditTask = new AddItemTask(inListener);
         AsyncInvokeURLTask task;
@@ -1757,8 +1741,13 @@ public class NoteItApplication extends Application {
 					try {
 						if (result.isNull("JSONRetVal")) {
 							if (searchMethod == ProductSearchMethod.GOOGLE_SEARCH) {
-								Item item = parseItemFromGoogleJSON(result);
-								listener.onSearchResults(0, item, "");
+								if (result.isNull("error")) {
+									Item item = parseItemFromGoogleJSON(result);
+									listener.onSearchResults(0, item, "");
+								} else if (listener != null){
+									JSONObject errors = result.getJSONObject("error");
+									listener.onSearchResults(errors.getLong("code"), null, errors.getString("message"));
+								}
 							}
 						} else if (listener != null){
 							listener.onSearchResults(

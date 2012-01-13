@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,10 +25,16 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,7 +73,7 @@ public class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 			throw new Exception("Param postExecuteListener cannot be null.");
 		if(("sdk".equals(Build.PRODUCT)) || ("google_sdk".equals(Build.PRODUCT)))
 			// We're running in the emulator connect with host loopback
-//			mNoteItWebUrl = "http://geekjamboree.com/noteit/controller/appcontroller.php";
+//			mNoteItWebUrl = "http://geekjamboree.com/controller/appcontroller.php";
 			mNoteItWebUrl = "http://10.0.2.2/~gmanish/noteit.web/controller/appcontroller.php";
 		else
 //			mNoteItWebUrl = "http://192.168.0.100/noteit.web/controller/appcontroller.php";
@@ -160,71 +165,72 @@ public class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 	protected String doPostInBackground(Void...params) {
         
 		String 				result = "";
-		HttpURLConnection 	http = null;
-		URL 				url;
-  
-		try {
-			url = new URL(mNoteItWebUrl);
-			if (url.getProtocol().toLowerCase().equals("https")) {
-				trustAllHosts();
-				HttpsURLConnection https = (HttpsURLConnection) url.openConnection();
-				https.setHostnameVerifier(DO_NOT_VERIFY);
-				http = https;
-			} else {
-			    http = (HttpURLConnection) url.openConnection();
-			}
-		
-			String data = URLEncodedUtils.format(mParams, HTTP.UTF_8);
-			http.setDoOutput(true);
-			http.setRequestMethod(HttpPost.METHOD_NAME);
-			http.setRequestProperty("User-Agent", "Mozilla/4.0");
-			http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-			http.setRequestProperty("Content-Length", String.valueOf(data.length()));
-		    OutputStreamWriter wr = new OutputStreamWriter(http.getOutputStream());
-		    wr.write(data);
-		    wr.flush();
-		
-		    int rc = http.getResponseCode();
-		    if (rc == HttpURLConnection.HTTP_OK) {
-		    	result = convertStreamToString(http.getInputStream());
-		    } else {
-		    	Log.e("AysncInvokeURLTask.doPostInBackground", "POST Failed with return code: " + rc);
-		    	result = getJSONFormattedErrorString(rc, http.getResponseMessage());
-		    }
-		} 
-		catch (MalformedURLException e1) {
-			e1.printStackTrace();
-	    	result = getJSONFormattedErrorString(-1, e1.getMessage());
-		} catch (IOException e2) {
-			e2.printStackTrace();
-	    	result = getJSONFormattedErrorString(-1, e2.getMessage());
-		}
+//		HttpURLConnection 	http = null;
+//		URL 				url;
+//		  
+//		try {
+//			url = new URL(mNoteItWebUrl);
+//			if (url.getProtocol().toLowerCase().equals("https")) {
+//				trustAllHosts();
+//				HttpsURLConnection https = (HttpsURLConnection) url.openConnection();
+//				https.setHostnameVerifier(DO_NOT_VERIFY);
+//				http = https;
+//			} else {
+//			    http = (HttpURLConnection) url.openConnection();
+//			}
+//		
+//			String data = URLEncodedUtils.format(mParams, HTTP.UTF_8);
+//			http.setDoOutput(true);
+//			http.setRequestMethod(HttpPost.METHOD_NAME);
+//			http.setRequestProperty("User-Agent", "Mozilla/4.0");
+//			http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+//			http.setRequestProperty("Content-Length", String.valueOf(data.length()));
+//		    OutputStreamWriter wr = new OutputStreamWriter(http.getOutputStream());
+//		    wr.write(data);
+//		    wr.flush();
+//		
+////		    int rc = http.getResponseCode();
+////		    if (rc == HttpURLConnection.HTTP_OK) {
+//		    	result = convertStreamToString(http.getInputStream());
+////		    } else {
+////		    	Log.e("AysncInvokeURLTask.doPostInBackground", "POST Failed with return code: " + rc);
+////		    	result = getJSONFormattedErrorString(rc, http.getResponseMessage());
+////		    }
+//		} 
+//		catch (MalformedURLException e1) {
+//			e1.printStackTrace();
+//	    	result = getJSONFormattedErrorString(-1, e1.getMessage());
+//		} catch (IOException e2) {
+//			e2.printStackTrace();
+//	    	result = getJSONFormattedErrorString(-1, e2.getMessage());
+//		}
 		
 //		AndroidHttpClient	httpclient = new DefaultHttpClient();
-//      HttpPost 			method = new HttpPost(mNoteItWebUrl);
-//        
-//	    try {
-//	        // Add parameters
-//	    	method.setEntity(new UrlEncodedFormEntity(mParams));
-//
-//	        // Execute HTTP Post Request
-//	        HttpResponse 	response = httpclient.execute(method);
-//	        HttpEntity 		entity = response.getEntity();
-//	        if (entity != null){
-//	        	InputStream inStream = entity.getContent();
-//	        	result = convertStreamToString(inStream);
-//	    		Log.i("AsyncInvokeUTRTask", "Got back response: " + result);
-//	        }
-//	    } catch (ClientProtocolException e) {
-//	    	Log.e("AsyncInvokeURLTask.doInBackground", e.getMessage());
-//			e.printStackTrace();
-//	    } catch (IOException e) {
-//	    	Log.e("AsyncInvokeURLTask.doInBackground", e.getMessage());
-//			e.printStackTrace();
-//	    } catch (Exception e) {
-//	    	Log.e("AsyncInvokeURLTask.doInBackground", "Unknown exception: " + e.getMessage());
-//	    	e.printStackTrace();
-//	    }
+		HttpClient			httpclient = new DefaultHttpClient();
+		HttpPost 			method = new HttpPost(mNoteItWebUrl);
+        
+	    try {
+	        // Add parameters
+	    	method.setEntity(new UrlEncodedFormEntity(mParams));
+
+	        // Execute HTTP Post Request
+	        HttpResponse 	response = httpclient.execute(method);
+	        HttpEntity 		entity = response.getEntity();
+	        if (entity != null){
+	        	InputStream inStream = entity.getContent();
+	        	result = convertStreamToString(inStream);
+	    		Log.i("AsyncInvokeUTRTask", "Got back response: " + result);
+	        }
+	    } catch (ClientProtocolException e) {
+	    	Log.e("AsyncInvokeURLTask.doInBackground", e.getMessage());
+			e.printStackTrace();
+	    } catch (IOException e) {
+	    	Log.e("AsyncInvokeURLTask.doInBackground", e.getMessage());
+			e.printStackTrace();
+	    } catch (Exception e) {
+	    	Log.e("AsyncInvokeURLTask.doInBackground", "Unknown exception: " + e.getMessage());
+	    	e.printStackTrace();
+	    }
 		
 		return result;
 	}
@@ -312,11 +318,11 @@ public class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 
         // Install the all-trusting trust manager
         try {
-                SSLContext sc = SSLContext.getInstance("TLS");
-                sc.init(null, trustAllCerts, new java.security.SecureRandom());
-                HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         } catch (Exception e) {
-                e.printStackTrace();
+            e.printStackTrace();
         }
 	}
 	
@@ -325,7 +331,7 @@ public class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 		JSONObject errorObj = new JSONObject();
     	try {
 			errorObj.put("JSONRetVal", result);
-	    	errorObj.put("JSONRetMessage", message);
+	    	errorObj.put("JSONRetMessage", message != null ? message : "Error description unavailable.");
 	    	return errorObj.toString();
 		} catch (JSONException e) {
 			e.printStackTrace();

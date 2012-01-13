@@ -325,7 +325,8 @@ public class AddEditItemDialog extends Dialog {
         
         ImageButton prevBtn = (ImageButton) findViewById(R.id.addedit_btnPrev);
         ImageButton nextBtn = (ImageButton) findViewById(R.id.addedit_btnNext);
-
+        ImageButton barcodeBtn = (ImageButton) findViewById(R.id.addedit_scanbarcode);
+        
         if (!mIsAddItem) {
         	
         	prevBtn.setOnClickListener(new View.OnClickListener() {
@@ -356,11 +357,11 @@ public class AddEditItemDialog extends Dialog {
         if (!mIsAddItem) {
         	// In the edit mode "Add More" button does not make sense
         	continueBtn.setVisibility(View.INVISIBLE);
-        	
+        	barcodeBtn.setVisibility(View.GONE);
         } else {
         	// In the Add mode, next and prev don't make sense
-        	nextBtn.setVisibility(View.INVISIBLE);
-        	prevBtn.setVisibility(View.INVISIBLE);
+        	nextBtn.setVisibility(View.GONE);
+        	prevBtn.setVisibility(View.GONE);
         }
         
     	if (mIsAddItem == false && mItemID != 0){

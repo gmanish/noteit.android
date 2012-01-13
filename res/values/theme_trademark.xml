@@ -162,6 +162,7 @@
 		<item name="Hand_Small">@drawable/hand_dark</item>
 		<item name="Prev_Small">@drawable/prev_dark</item>
 		<item name="Next_Small">@drawable/next_dark</item>
+		<item name="Scan_Barcode">@drawable/barcode_dark</item>		
 			
 	</style>
     			

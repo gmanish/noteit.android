@@ -66,7 +66,8 @@
 	<string name="itemlist_next">Next</string>
 	<string name="itemlist_loadmorebutton">Load More Items &#8230;</string>
 	<string name="itemlist_loadingmore">Loading More Items &#8230;</string>
-	<string name="itemlist_scanbarcode">Scan Barcode &#8230;</string>
+	<string name="itemlist_scanbarcode">Scan</string>
+	<string name="itemlist_itemnotfound">Details about the Item are not available. Would you like to enter details which will be remembered subsequently?</string>
 	    	    	
 	<string name="itemlistqe_edit">Edit</string>
 	<string name="itemlistqe_delete">Delete</string>

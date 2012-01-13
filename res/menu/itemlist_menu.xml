@@ -10,6 +10,7 @@
         android:title="@string/add_shoplist" />
 
    <item android:id="@+id/itemlist_scan"
+       android:icon="@drawable/barcode" 
        	android:title="@string/itemlist_scanbarcode" />
    
    <item android:id="@+id/itemlist_email"

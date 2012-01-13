@@ -46,6 +46,7 @@
 	<attr name="Category_Small" format="reference"></attr>
 	<attr name="Hand_Small" format="reference"></attr>
 	<attr name="Prev_Small" format="reference"></attr>
-	<attr name="Next_Small" format="reference"></attr>	
+	<attr name="Next_Small" format="reference"></attr>
+	<attr name="Scan_Barcode" format="reference"></attr>		
 					
 </resources>
