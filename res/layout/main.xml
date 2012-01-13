@@ -4,7 +4,8 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:padding="10dp"
-	android:orientation="vertical">
+	android:orientation="vertical"
+	android:baselineAligned="false">
 	
 	<LinearLayout
 		android:orientation="horizontal"
@@ -16,13 +17,13 @@
 			android:id="@+id/btn1"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Button 1" />
+			android:text="@+id/btn1" />
 
 		<Button
 			android:id="@+id/btn2"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:text="Button 2" />
+			android:text="@+id/btn2" />
 		
 	</LinearLayout>
 	

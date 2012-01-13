@@ -161,13 +161,10 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
             container = mInflater.inflate(R.layout.action_item_vertical, null);
         }
 		
-		ImageView img 	= (ImageView) container.findViewById(R.id.iv_icon);
 		TextView text 	= (TextView) container.findViewById(R.id.tv_title);
 		
 		if (icon != null) {
-			img.setImageDrawable(icon);
-		} else {
-			img.setVisibility(View.GONE);
+			text.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
 		}
 		
 		if (title != null) {
