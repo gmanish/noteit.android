@@ -158,7 +158,10 @@
 		<item name="Prev_Small">@drawable/prev</item>
 		<item name="Next_Small">@drawable/next</item>	
 		<item name="Scan_Barcode">@drawable/barcode</item>		
-		
+		<item name="Popup_Background">@drawable/popup</item>
+		<item name="Popup_Up">@drawable/arrow_up</item>
+		<item name="Popup_Down">@drawable/arrow_down</item>
+				
 	</style>
     
 </resources>

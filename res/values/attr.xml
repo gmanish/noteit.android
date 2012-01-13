@@ -47,6 +47,9 @@
 	<attr name="Hand_Small" format="reference"></attr>
 	<attr name="Prev_Small" format="reference"></attr>
 	<attr name="Next_Small" format="reference"></attr>
-	<attr name="Scan_Barcode" format="reference"></attr>		
+	<attr name="Scan_Barcode" format="reference"></attr>
+	<attr name="Popup_Background" format="reference"></attr>
+	<attr name="Popup_Up" format="reference"></attr>
+	<attr name="Popup_Down" format="reference"></attr>
 					
 </resources>

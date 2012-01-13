@@ -48,6 +48,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	
 	ExpandableLVRightIndicator		mListView;
 	QuickAction 					mQuickAction = null;
+	QuickAction						mExpandCollapseQA = null;
 	AtomicInteger					mSelectedGroup = new AtomicInteger();
 	AtomicInteger					mSelectedChild = new AtomicInteger();
 	long							mSelectedItemID = 0;
@@ -69,11 +70,13 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	
 	static final int ADD_ITEM_REQUEST = 0;	
 	
-	static final int QA_ID_EDIT 	= 0;
-	static final int QA_ID_DELETE	= 1;
-	static final int QA_ID_BOUGHT	= 2;
-	static final int QA_ID_COPY		= 3;
-	static final int QA_ID_MOVE 	= 4;
+	static final int QA_ID_EDIT 		= 0;
+	static final int QA_ID_DELETE		= 1;
+	static final int QA_ID_BOUGHT		= 2;
+	static final int QA_ID_COPY			= 3;
+	static final int QA_ID_MOVE 		= 4;
+	static final int QA_EXPAND			= 5;
+	static final int QA_COLLAPSE		= 6;
 	
 	static final int ITEM_FONT_LARGE 	= 0;
 	static final int ITEM_FONT_MEDIUM	= 1;
@@ -800,25 +803,71 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			}
 		});
     	
-    	ImageButton expandAll = new ImageButton(this);
-    	expandAll.setImageResource(R.drawable.down);
-    	mToolbar.addRightAlignedButton(expandAll, true, false);
-    	expandAll.setOnClickListener(new OnClickListener() {
+    	ImageButton scanBarcodeButton = new ImageButton(this);
+    	scanBarcodeButton.setImageResource(R.drawable.barcode);
+    	mToolbar.addRightAlignedButton(scanBarcodeButton, true, false);
+    	scanBarcodeButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
-				doExpandAll();
+				doScanBarcode();
 			}
 		});
     	
-    	ImageButton collapseAll = new ImageButton(this);
-    	collapseAll.setImageResource(R.drawable.up);
-    	mToolbar.addRightAlignedButton(collapseAll, true, false);
-    	collapseAll.setOnClickListener(new OnClickListener() {
+    	ImageButton expandCollapse = new ImageButton(this);
+    	expandCollapse.setImageResource(R.drawable.expand_collapse);
+    	mToolbar.addRightAlignedButton(expandCollapse, true, false);
+    	expandCollapse.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
-				doCollapseAll();
+				mExpandCollapseQA.show(v);
 			}
 		});
+    	
+    	mExpandCollapseQA = new QuickAction(this);
+    	ActionItem expandAll = new ActionItem(
+							    		QA_EXPAND, 
+							    		getString(R.string.itemlist_expandall), 
+							    		getResources().getDrawable(R.drawable.expand));
+    	ActionItem collapseAll = new ActionItem(
+    									QA_COLLAPSE,
+    									getString(R.string.itemlist_collapseall),
+    									getResources().getDrawable(R.drawable.collapse));
+    	mExpandCollapseQA.addActionItem(expandAll);
+    	mExpandCollapseQA.addActionItem(collapseAll);
+    	mExpandCollapseQA.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
+			
+			public void onItemClick(QuickAction source, int pos, int actionId) {
+				
+				switch(actionId){
+				case QA_EXPAND:
+					doExpandAll();
+					break;
+				case QA_COLLAPSE:
+					doCollapseAll();
+					break;
+				}
+			}
+		});
+		
+//    	ImageButton expandAll = new ImageButton(this);
+//    	expandAll.setImageResource(R.drawable.down);
+//    	mToolbar.addRightAlignedButton(expandAll, true, false);
+//    	expandAll.setOnClickListener(new OnClickListener() {
+//			
+//			public void onClick(View v) {
+//				doExpandAll();
+//			}
+//		});
+//    	
+//    	ImageButton collapseAll = new ImageButton(this);
+//    	collapseAll.setImageResource(R.drawable.up);
+//    	mToolbar.addRightAlignedButton(collapseAll, true, false);
+//    	collapseAll.setOnClickListener(new OnClickListener() {
+//			
+//			public void onClick(View v) {
+//				doCollapseAll();
+//			}
+//		});
     }
     
     private void addFooterToListView(boolean add) {
