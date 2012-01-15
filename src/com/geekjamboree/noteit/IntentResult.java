@@ -21,7 +21,7 @@ package com.geekjamboree.noteit;
  *
  * @author Sean Owen
  */
-public final class IntentResult {
+final class IntentResult {
 
   private final String contents;
   private final String formatName;

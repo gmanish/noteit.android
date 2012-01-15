@@ -30,7 +30,7 @@ import java.util.ArrayList;
  * Contributors:
  * - Kevin Peck <kevinwpeck@gmail.com>
  */
-public class QuickAction extends PopupWindows implements OnDismissListener {
+class QuickAction extends PopupWindows implements OnDismissListener {
 	private View mRootView;
 	private ImageView mArrowUp;
 	private ImageView mArrowDown;

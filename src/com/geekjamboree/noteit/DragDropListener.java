@@ -1,6 +1,6 @@
 package com.geekjamboree.noteit;
 
-public interface DragDropListener {
+interface DragDropListener {
 	/*
 	 *  @param dragSource: 	The item that is being dragged
 	 *  @param dropTarget:	THe item over which @dragSource is being dragged

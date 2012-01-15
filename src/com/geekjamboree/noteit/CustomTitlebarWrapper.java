@@ -20,7 +20,7 @@ import android.widget.ViewFlipper;
  *  construction is important. A instance should be created before setContentView
  *  is called in the parent activity and after super.OnCreate.
  */
-public class CustomTitlebarWrapper {
+class CustomTitlebarWrapper {
 
     boolean 		mCustomTitleSupported = false;
 	Activity		mParent;

@@ -4,7 +4,7 @@ import android.util.AttributeSet;
 import android.widget.ExpandableListView;
 
 
-public class ExpandableLVRightIndicator extends ExpandableListView {
+class ExpandableLVRightIndicator extends ExpandableListView {
 
 	protected int groupIndicatorWidth = 0;
 	protected int mRightMargin;

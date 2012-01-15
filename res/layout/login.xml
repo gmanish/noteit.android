@@ -39,7 +39,8 @@
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 		    android:selectAllOnFocus="true"
-	        android:inputType="textEmailAddress" >
+	        android:inputType="textEmailAddress"
+	        android:hint="@string/login_emailhint" >
 	        <requestFocus />
 	    </EditText>
 	
@@ -55,16 +56,29 @@
 		    android:id="@+id/editPassword"
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
-		    android:inputType="textPassword" />
+		    android:inputType="textPassword"
+		    android:hint="@string/password_hint" />
 	
-	    <Button
-	        android:id="@+id/buttonLogin"
-	        android:layout_width="148dp"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="right"
-	        android:layout_marginTop="10dip"
-	        android:text="@string/login_login" />
-
+		<LinearLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:padding="10dip"
+		    android:gravity="right"
+	    	android:orientation="horizontal">
+		    
+		    <Button
+		        android:id="@+id/buttonRegister"
+		        android:layout_width="90dip"
+		        android:layout_height="wrap_content"
+		        android:text="@string/register" />
+			
+		    <Button
+		        android:id="@+id/buttonLogin"
+		        android:layout_width="90dip"
+		        android:layout_height="wrap_content"
+		        android:text="@string/login_login" />
+		    
+		</LinearLayout>
     </LinearLayout>
 
     <LinearLayout 
@@ -74,8 +88,7 @@
 		android:padding="10dp"
 		android:layout_gravity="bottom"
 		android:gravity="bottom"
-		android:orientation="horizontal" 
-		android:visibility="visible">
+		android:orientation="horizontal" >
 
         <ProgressBar
             android:id="@+id/progressBar2"

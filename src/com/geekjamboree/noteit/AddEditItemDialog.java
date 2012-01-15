@@ -28,7 +28,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AddEditItemDialog extends Dialog {
+class AddEditItemDialog extends Dialog {
 	
 	public interface baseListener{
 		// Just a convenience, I need to have a single pointer

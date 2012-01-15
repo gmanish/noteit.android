@@ -17,8 +17,7 @@
 	    	android:title="Remember Me"
 	    	android:key="Remember_Me"
 	    	android:summaryOff="Note It! will not remember your login information. You will have to sign in everytime."
-	    	android:summaryOn="Note It! will remember your login infotmation and
-	    						 sign you in automatically."
+	    	android:summaryOn="Note It! will remember your login infotmation and sign you in automatically."
 	    	android:defaultValue="true" />
 
 	    <CheckBoxPreference

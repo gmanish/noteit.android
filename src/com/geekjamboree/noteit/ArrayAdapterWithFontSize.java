@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class ArrayAdapterWithFontSize<T> extends ArrayAdapter<T> {
+class ArrayAdapterWithFontSize<T> extends ArrayAdapter<T> {
 
 	protected int 		mFontSize 		= 3;
 	protected int 		mTextViewResId 	= 0;

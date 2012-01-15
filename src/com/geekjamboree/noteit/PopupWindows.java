@@ -18,7 +18,7 @@ import android.content.Context;
  * @author Lorensius W. L. T <lorenz@londatiga.net>
  *
  */
-public class PopupWindows {
+class PopupWindows {
 	protected Context mContext;
 	protected PopupWindow mWindow;
 	protected View mRootView;

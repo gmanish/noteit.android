@@ -449,7 +449,41 @@ public class NoteItApplication extends Application {
 	public void setUserPrefs(Preference prefs) {
 		mUserPrefs = prefs;
 	}
-	     
+	 
+	public void registerUser(
+		String firstName, 
+		String lastName, 
+		String email, 
+		String password,
+		final OnMethodExecuteListerner listener) {
+		
+		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(5);
+		args.add(new BasicNameValuePair("command", "do_register"));
+		args.add(new BasicNameValuePair("first_name", firstName));
+		args.add(new BasicNameValuePair("last_name", lastName));
+		args.add(new BasicNameValuePair("email_ID", email));
+		args.add(new BasicNameValuePair("password", password));
+		try {
+			AsyncInvokeURLTask task = new AsyncInvokeURLTask(args, new AsyncInvokeURLTask.OnPostExecuteListener() {
+				
+				public void onPostExecute(JSONObject result) {
+					long retVal;
+					try {
+						retVal = result.getLong("JSONRetVal");
+						if (listener != null) { 
+							listener.onPostExecute(retVal, result.getString("JSONRetMessage"));
+						}
+					} catch (JSONException e) {
+						if (listener != null) listener.onPostExecute(-1, e.getMessage());
+					}
+				}
+			});
+			task.execute();
+		} catch (Exception e) {
+			if (listener != null) listener.onPostExecute(-1, e.getMessage());
+		}
+	}
+	
 	public void loginUser(
 			String userEmail, 
 			String password, 
@@ -484,6 +518,33 @@ public class NoteItApplication extends Application {
 	
 	public void setUserID(long userID){
 		mUserID = userID;
+	}
+	
+	protected void doInitialize(final OnMethodExecuteListerner listener) {
+		
+		fetchUnits(Unit.METRIC, new NoteItApplication.OnMethodExecuteListerner() {
+
+			public void onPostExecute(long resultCode, String message) {
+				
+				if (resultCode == 0 && listener != null) {
+					
+					fetchCategories(new OnFetchCategoriesListener() {
+						
+						public void onPostExecute(
+								long resultCode, 
+								ArrayList<Category> categories,
+								String message) {
+							
+							if (listener != null) {
+								listener.onPostExecute(resultCode, message);
+							}
+						}
+					});
+				} else if (listener != null) {
+					listener.onPostExecute(resultCode, message);
+				}
+			}
+		});
 	}
 	
 	public String getCurrencyFormat(boolean formatString) {
@@ -770,12 +831,14 @@ public class NoteItApplication extends Application {
 	}
 	
 	public void setCurrentShoppingListIndex(int index){
-		ShoppingList thisList = getShoppingList(index);
-		if (thisList != null){
-			mItemsStartPos = 0;
-			mItemsMorePending = true;
-			mCurrentShoppingListID = thisList.mID;
-			mItems.clear();
+		if (index < getShoppingListCount()) {
+			ShoppingList thisList = getShoppingList(index);
+			if (thisList != null){
+				mItemsStartPos = 0;
+				mItemsMorePending = true;
+				mCurrentShoppingListID = thisList.mID;
+				mItems.clear();
+			}
 		}
 	}
 	
@@ -1757,13 +1820,13 @@ public class NoteItApplication extends Application {
 						}
 					} catch (JSONException e) {
 						e.printStackTrace();
-						listener.onSearchResults(-1, null, e.getMessage());
+						if (listener != null) listener.onSearchResults(-1, null, e.getMessage());
 					}
 				}
 			});
 	    	task.execute();
     	} catch (Exception e) {
-    		
+			if (listener != null) listener.onSearchResults(-1, null, e.getMessage());
     	}
     }
     

@@ -46,7 +46,7 @@ import org.json.JSONObject;
  * 	This code is not very secure when using https as we're ignoring all certificates, 
  *  suffices for the current purpose of using google api for search, but we should definitely revisit
  */
-public class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
+class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 
 	private String 						mNoteItWebUrl;
 	private ArrayList<NameValuePair> 	mParams;

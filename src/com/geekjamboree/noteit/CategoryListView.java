@@ -3,7 +3,7 @@ package com.geekjamboree.noteit;
 import android.content.Context;
 import android.util.AttributeSet;
 
-public class CategoryListView extends DragDropListView {
+class CategoryListView extends DragDropListView {
 	
 	int 	mDragDropIndicatorWidth = 0;
 	

@@ -12,7 +12,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-public class DragDropListView extends ListView {
+class DragDropListView extends ListView {
 
 	protected boolean			mIsDown = false;
 	protected boolean 			mIsDragging = false;

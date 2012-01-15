@@ -57,7 +57,9 @@
                 android:layout_alignParentLeft="true"
                 android:text="@+id/bottom_remaining"
                 android:textAppearance="?TextAppearance_Footer" />
+            
         </RelativeLayout>
+        
     </LinearLayout>
 
 </LinearLayout>

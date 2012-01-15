@@ -44,6 +44,7 @@ public class ShoppingListActivity
 	int						mFontSize = 3;
 	boolean					mIsShoppingListFetched = false;
 	boolean					mIsDisplayCount	= true;
+	SharedPreferences 		mPrefs;
 	static final String		IS_SHOPPINGLIST_FETCHED = "IS_SHOPPINGLIST_FETCHED";
 	
 
@@ -113,8 +114,8 @@ public class ShoppingListActivity
     			((NoteItApplication)getApplication()).getShoppingList());
 		mListView.setAdapter(mAdapter);
     	
-    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    	mIsDisplayCount = prefs.getBoolean("Display_Pending_Item_Count", true);
+		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	mIsDisplayCount = mPrefs.getBoolean("Display_Pending_Item_Count", true);
 		
 		class ItemClickAndPostExecuteListener 
     		implements AdapterView.OnItemClickListener {
@@ -236,7 +237,45 @@ public class ShoppingListActivity
     	}
     }
     
-    protected void editShoppingList(final int index) {
+//	protected void doFetchShoppingLists() {
+//		final NoteItApplication app = (NoteItApplication) getApplication();
+//		boolean					fetchCount = mPrefs.getBoolean("Display_Pending_Item_Count", true);
+//		
+//		app.fetchShoppingLists(fetchCount, new NoteItApplication.OnFetchShoppingListsListener() {
+//			
+//			public void onPostExecute(long resultCode,
+//					ArrayList<ShoppingList> categories, 
+//					String message) {
+//				
+//				if (resultCode == 0) {
+//						
+//					long lastUsedShoppingListID = mPrefs.getLong("LastUsedShoppingListID", 0);
+//					if (app.getShoppingListCount() > 0 && lastUsedShoppingListID != 0) {
+//						int index = app.getShoppingList().indexOf((app.new ShoppingList(lastUsedShoppingListID)));
+//						if (index >= 0)
+//							app.setCurrentShoppingListIndex(index);
+//						else
+//							app.setCurrentShoppingListIndex(0);
+//					} else if (app.getShoppingListCount() > 0) {
+//						app.setCurrentShoppingListIndex(0);
+//					}
+//	                Intent myIntent = new Intent(LoginActivity.this, ItemListActivity.class);
+//	                startActivity(myIntent);
+//	                finish();
+//	                hideIndeterminateProgress();
+//            		Toast.makeText(
+//            			LoginActivity.this, 
+//            			getString(R.string.login_success), 
+//            				Toast.LENGTH_SHORT).show();
+//				} else {
+//					Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+//					hideIndeterminateProgress();
+//				}
+//			}
+//		});
+//	}
+
+	protected void editShoppingList(final int index) {
 		
     	if (index >= 0 && index < mListView.getCount()) {
 			// inflate the view from resource layout

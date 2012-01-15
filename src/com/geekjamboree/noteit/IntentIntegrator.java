@@ -92,7 +92,7 @@ import android.util.Log;
  * @author Brad Drehmer
  * @author gcstang
  */
-public final class IntentIntegrator {
+final class IntentIntegrator {
 
   public static final int REQUEST_CODE = 0x0000c0de; // Only use bottom 16 bits
   private static final String TAG = IntentIntegrator.class.getSimpleName();
