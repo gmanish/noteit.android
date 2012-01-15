@@ -6,7 +6,6 @@
   android:layout_height="fill_parent">
 <TextView android:layout_height="fill_parent"
     android:gravity="center"
-    android:layout_width="2px"
-    android:text=" "
+    android:layout_width="2dip"
     android:background="#000000"/>    
 </RelativeLayout>
