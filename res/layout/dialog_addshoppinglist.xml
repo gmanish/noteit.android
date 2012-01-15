@@ -11,8 +11,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:inputType="text" 
-        android:paddingTop="5dp">
-
+        android:paddingTop="5dp"
+        android:selectAllOnFocus="true">
         <requestFocus />
     </EditText>
  

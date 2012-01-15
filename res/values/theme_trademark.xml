@@ -28,7 +28,7 @@
 	<color name="TextColor_Secondary_Trademark">#665839</color>
 	
 	<!-- Light Text Colors  -->
-	<color name="TextColor_Primary_Trademark_Light">#a2881b</color>
+	<color name="TextColor_Primary_Trademark_Light">#AAAAAA</color>
 				
 	<!-- ListView Selector Colors -->
 	<color name="ListViewSelectorPressed">#997e0c</color>

@@ -5,4 +5,8 @@
 		android:icon="@drawable/settings"
 		android:title="@string/noteit_prefs" />    		
 
+   <item android:id="@+id/dashboard_signout"
+		android:icon="@drawable/settings"
+		android:title="@string/noteit_prefs" />    		
+
 </menu>
