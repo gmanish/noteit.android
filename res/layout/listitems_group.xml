@@ -21,6 +21,7 @@
         android:paddingLeft="5dip"
         android:singleLine="true"
         android:drawableLeft="?Category_Small"
+        android:drawablePadding="5dip"
         style="?TextAppearance_Group_Small"
         android:text="@+id/itemslist_categoryName" />
 

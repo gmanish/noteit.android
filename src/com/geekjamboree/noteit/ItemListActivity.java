@@ -23,6 +23,7 @@ import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -964,6 +965,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		});
 	
 		if (editPrice != null) {
+			editPrice.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 			editPrice.setSelectAllOnFocus(true);
 			editPrice.setText(String.valueOf(item.mUnitPrice));
 			editPrice.requestFocus();

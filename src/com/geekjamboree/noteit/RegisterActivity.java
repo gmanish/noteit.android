@@ -65,10 +65,11 @@ public class RegisterActivity extends Activity implements OnEulaAgreedTo {
 					final String 	confirmPassword 	= editConfirmPassword.getEditableText().toString();
 
 					if (!mEulaAccepted) {
-						Toast.makeText(
+						AlertDialog dialog = MessageBox.createMessageBox(
 							RegisterActivity.this, 
-							getString(R.string.eula_agree), 
-							Toast.LENGTH_LONG).show();
+							getString(R.string.app_name), 
+							getString(R.string.eula_agree));
+						dialog.show();
 						return;
 					}
 					

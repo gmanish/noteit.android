@@ -104,7 +104,7 @@
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
 		        android:layout_gravity="right"
-		        android:text="@string/eula_terms_of_use" />
+		        android:text="@string/eula_terms_of_use"/>
 		    
 		    <Button
 		        android:id="@+id/buttonRegister"

@@ -21,7 +21,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginActivity 
@@ -230,16 +231,26 @@ public class LoginActivity
 	}
 	
 	protected void showIndeterminateProgress() {
-		LinearLayout progressLayout = (LinearLayout) findViewById(R.id.login_progress);
-		if (progressLayout != null) {
-			progressLayout.setVisibility(View.VISIBLE);
+		ProgressBar progressBar = (ProgressBar) findViewById(R.id.login_progress);
+		if (progressBar != null) {
+			progressBar.setVisibility(View.VISIBLE);
+		}
+
+		TextView	progressMessage = (TextView) findViewById(R.id.login_progress_message);
+		if (progressMessage != null) {
+			progressMessage.setVisibility(View.VISIBLE);
 		}
 	}
 	
 	protected void hideIndeterminateProgress() {
-		LinearLayout progressLayout = (LinearLayout) findViewById(R.id.login_progress);
-		if (progressLayout != null) {
-			progressLayout.setVisibility(View.GONE);
+		ProgressBar progressBar = (ProgressBar) findViewById(R.id.login_progress);
+		if (progressBar != null) {
+			progressBar.setVisibility(View.GONE);
+		}
+
+		TextView	progressMessage = (TextView) findViewById(R.id.login_progress_message);
+		if (progressMessage != null) {
+			progressMessage.setVisibility(View.GONE);
 		}
 	}
 	

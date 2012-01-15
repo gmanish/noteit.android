@@ -3,8 +3,8 @@
     <string name="eula_title">Note It!</string>
     <string name="eula_accept">I Accept</string>
     <string name="eula_refuse">Decline</string>
-    <string name="eula_terms_of_use">Terms of Use</string>
-    <string name="eula_agree">You need to Read and Accept the \"Terms of Use\" before you can continue.</string>
+    <string name="eula_terms_of_use">EULA</string>
+    <string name="eula_agree">You need to Read and Accept the \"EULA\" before you can continue.</string>
     
     <string name="app_critical_error">A critical error occurred. Try reinstalling the application.</string>
         
@@ -22,18 +22,18 @@
     <string name="category_uncategorized">Uncategorized</string>
     <string name="server_error">There was an error communicating with the server. Please try later.</string>
     
-    <string name="register">Register</string>
+    <string name="register">Sign Up</string>
     <string name="register_first_name">First Name</string>
     <string name="register_last_name">Last Name</string>
     <string name="register_confirm_password">Confirm Password</string>
     <string name="register_blank_password">Password cannot be empty.</string>
     <string name="register_blank_email">Please provide a valid email address.</string>
     <string name='register_password_not_match'>The passwords do not match.</string>
-    <string name="register_registering">Registering User &#8230;</string>
-    <string name="register_termsandconditions">By clicking on \"Register\", you are accepting the Terms of Use. Please click on \"Terms of Use\" to read and accept the EULA.</string>
+    <string name="register_registering">Signing Up &#8230;</string>
+    <string name="register_termsandconditions">By clicking on \"Sign Up\", you are accepting the End User License Agreement (EULA). Please click on \"EULA\" to read and accept the EULA.</string>
     <string name="register_first_name_hint">John</string>
     <string name="register_last_name_hint">Doe</string>
-    <string name="register_error_title">Registration Failed</string>
+    <string name="register_error_title">Sign Up Failed</string>
     <string name="password_hint">Required</string>
     
     

@@ -159,11 +159,7 @@ public class DashBoardActivity extends Activity {
     			startActivity(new Intent(this, MainPreferenceActivity.class));
     			return true;
     		case R.id.dashboard_signout:
-    			Intent intent = new Intent(DashBoardActivity.this, LoginActivity.class);
-    			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    			intent.putExtra(LoginActivity.DONT_LOGIN, true);
-    			startActivity(intent);
-    			finish();
+    			doSignOut();
     			return true;
     	}
     	
@@ -189,6 +185,16 @@ public class DashBoardActivity extends Activity {
 	}
 	
 	protected void doSetupToolbarButton() {
+		
+		ImageButton logOut = new ImageButton(this);
+		mToolbar.addRightAlignedButton(logOut, true, false);
+		logOut.setImageResource(R.drawable.sign_out);
+		logOut.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				doSignOut();
+			}
+		});
+		
         ImageButton settings = new ImageButton(this);
         mToolbar.addRightAlignedButton(settings, true, false);
         settings.setImageResource(R.drawable.settings);
@@ -206,5 +212,13 @@ public class DashBoardActivity extends Activity {
 		TypedValue 		resID = new TypedValue();
 		theme.resolveAttribute(attribId, resID, false);
 		return resID.data;
+	}
+	
+	private void doSignOut() {
+		Intent intent = new Intent(DashBoardActivity.this, LoginActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.putExtra(LoginActivity.DONT_LOGIN, true);
+		startActivity(intent);
+		finish();
 	}
 }

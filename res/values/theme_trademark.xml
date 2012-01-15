@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="App_Trademark_Button" parent="@android:style/Widget.Button.Inset">
+        <item name="android:background">@color/app_tm_textbutton_background</item>
+        <item name="android:padding">10dip</item>
+        <item name="android:textAppearance">@style/TextAppearance_Trademark.PendingItem_Small</item>
+    </style>
+    
 	<!--  Style Definitions for Trademark Theme -->
     <style name="NI_AppBackgroundNormal.Trademark">
         <item name="android:background">@drawable/application_background_trademark</item>

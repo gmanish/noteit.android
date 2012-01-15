@@ -10,6 +10,7 @@ class MessageBox {
 			
 		AlertDialog dialog = new AlertDialog.Builder(context)
 			.setTitle(title)
+			.setIcon(R.drawable.indicator_input_error)
 			.setMessage(message)
 			.create();
 		dialog.setButton(

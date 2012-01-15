@@ -1281,63 +1281,68 @@ public class NoteItApplication extends Application {
 	
 	public void getItem(long instanceID, OnGetItemListener inListener) {
 		
-		class GetItemTask implements OnPostExecuteListener {
-
-			OnGetItemListener mListener;
-			
-			GetItemTask(OnGetItemListener inListener){
-				mListener = inListener;
+		int index = mItems != null ? mItems.indexOf(new Item(instanceID)) : - 1;
+		if (index >= 0 && inListener != null) {
+			inListener.onPostExecute(0, mItems.get(index), "");
+		} else {
+			class GetItemTask implements OnPostExecuteListener {
+	
+				OnGetItemListener mListener;
+				
+				GetItemTask(OnGetItemListener inListener){
+					mListener = inListener;
+				}
+				
+		       	public void onPostExecute(JSONObject json) {
+		       		long retVal;
+					try {
+						retVal = json.getLong("JSONRetVal");
+						
+						if (retVal == 0){
+							
+							JSONArray itemArray = json.getJSONArray("arg1");
+							JSONObject itemObject = itemArray.getJSONObject(0);
+							
+							Item item = new Item(
+								itemObject.getLong("instanceID"),
+								itemObject.getString("itemName"),
+								itemObject.getLong("categoryID_FK"));
+							
+							item.mClassID = itemObject.getLong("itemID_FK");
+							item.mListID = itemObject.getLong("listID_FK");
+							item.mUnitID = itemObject.getInt("unitID_FK");
+							item.mCategoryID = itemObject.getLong("categoryID_FK");
+							item.mUnitPrice = (float)itemObject.getDouble("unitCost");
+							item.mQuantity = (float)itemObject.getDouble("quantity");
+	    	        		item.mIsPurchased = itemObject.getInt("isPurchased");
+	    	        		item.mIsAskLater = itemObject.getInt("isAskLater");
+							
+							mListener.onPostExecute(retVal, item, json.getString("JSONRetMessage"));
+						} else {
+							mListener.onPostExecute(retVal, null, json.getString("JSONRetMessage"));
+						}
+					} catch (JSONException e) {
+						Log.e("NoteItApplication.editShoppingList", e.getMessage());
+	                	mListener.onPostExecute(-1, null, e.getMessage());
+					}
+		       	}
 			}
 			
-	       	public void onPostExecute(JSONObject json) {
-	       		long retVal;
-				try {
-					retVal = json.getLong("JSONRetVal");
-					
-					if (retVal == 0){
-						
-						JSONArray itemArray = json.getJSONArray("arg1");
-						JSONObject itemObject = itemArray.getJSONObject(0);
-						
-						Item item = new Item(
-							itemObject.getLong("instanceID"),
-							itemObject.getString("itemName"),
-							itemObject.getLong("categoryID_FK"));
-						
-						item.mClassID = itemObject.getLong("itemID_FK");
-						item.mListID = itemObject.getLong("listID_FK");
-						item.mUnitID = itemObject.getInt("unitID_FK");
-						item.mCategoryID = itemObject.getLong("categoryID_FK");
-						item.mUnitPrice = (float)itemObject.getDouble("unitCost");
-						item.mQuantity = (float)itemObject.getDouble("quantity");
-    	        		item.mIsPurchased = itemObject.getInt("isPurchased");
-    	        		item.mIsAskLater = itemObject.getInt("isAskLater");
-						
-						mListener.onPostExecute(retVal, item, json.getString("JSONRetMessage"));
-					} else {
-						mListener.onPostExecute(retVal, null, json.getString("JSONRetMessage"));
-					}
-				} catch (JSONException e) {
-					Log.e("NoteItApplication.editShoppingList", e.getMessage());
-                	mListener.onPostExecute(-1, null, e.getMessage());
-				}
-	       	}
+			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
+			nameValuePairs.add(new BasicNameValuePair("command", "do_get_shop_item"));
+			nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(instanceID)));
+			nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(getUserID())));
+			
+			GetItemTask myEditTask = new GetItemTask(inListener);
+	        AsyncInvokeURLTask task;
+			try {
+				task = new AsyncInvokeURLTask(nameValuePairs, myEditTask);
+		        task.execute();
+			} catch (Exception e) {
+				Log.e("NoteItApplication.getItem", e.getMessage());
+				e.printStackTrace();
+			}
 		}
-		
-		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
-		nameValuePairs.add(new BasicNameValuePair("command", "do_get_shop_item"));
-		nameValuePairs.add(new BasicNameValuePair("arg1", String.valueOf(instanceID)));
-		nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(getUserID())));
-		
-		GetItemTask myEditTask = new GetItemTask(inListener);
-        AsyncInvokeURLTask task;
-		try {
-			task = new AsyncInvokeURLTask(nameValuePairs, myEditTask);
-	        task.execute();
-		} catch (Exception e) {
-			Log.e("NoteItApplication.getItem", e.getMessage());
-			e.printStackTrace();
-		}		
 	}
 	
 	public void addItem(Item inItem, OnAddItemListener inListener) {
