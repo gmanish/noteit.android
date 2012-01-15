@@ -17,6 +17,7 @@
 	<string name="app_home">Dashboard</string>
 		
     <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_signout">Log Out</string>
         
     <string name="category_uncategorized">Uncategorized</string>
     <string name="server_error">There was an error communicating with the server. Please try later.</string>
@@ -37,9 +38,9 @@
     
     
     <string name="login_activity_title">Please log in</string>
-    <string name="login_login">Login</string>
+    <string name="login_login">Log In</string>
 	<string name="login_email">Email</string>
-	<string name="login_emailhint">you@email.com (Required)</string>
+	<string name="login_emailhint">Required</string>
     <string name="login_password">Password</string>
     <string name="Login_Authenticating_message">Authenticating &#8230;</string>
     <string name="login_success">Login Successful</string>

@@ -158,6 +158,13 @@ public class DashBoardActivity extends Activity {
     		case R.id.dashboard_settings:
     			startActivity(new Intent(this, MainPreferenceActivity.class));
     			return true;
+    		case R.id.dashboard_signout:
+    			Intent intent = new Intent(DashBoardActivity.this, LoginActivity.class);
+    			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    			intent.putExtra(LoginActivity.DONT_LOGIN, true);
+    			startActivity(intent);
+    			finish();
+    			return true;
     	}
     	
     	return false;

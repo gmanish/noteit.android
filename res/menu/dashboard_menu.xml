@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-   <item android:id="@+id/dashboard_settings"
-		android:icon="@drawable/settings"
-		android:title="@string/noteit_prefs" />    		
-
    <item android:id="@+id/dashboard_signout"
+		android:icon="@drawable/sign_out"
+		android:title="@string/dashboard_signout" />    		
+
+   <item android:id="@+id/dashboard_settings"
 		android:icon="@drawable/settings"
 		android:title="@string/noteit_prefs" />    		
 

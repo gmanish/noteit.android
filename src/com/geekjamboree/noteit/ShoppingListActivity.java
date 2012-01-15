@@ -291,7 +291,7 @@ public class ShoppingListActivity
 			final EditText 	editListName = (EditText) dialogView.findViewById(R.id.dialog_addshoppinglist_editTextName);
 			editListName.setText(((ShoppingList)mListView.getItemAtPosition(index)).mName);
 
-			dialog.setButton(DialogInterface.BUTTON1, "OK", new DialogInterface.OnClickListener() {
+			dialog.setButton(DialogInterface.BUTTON2, "OK", new DialogInterface.OnClickListener() {
 				
 				public void onClick(DialogInterface dialog, int which) {
 					String 	listName = editListName.getText().toString();
@@ -328,7 +328,7 @@ public class ShoppingListActivity
 						Toast.makeText(getApplicationContext(), getResources().getString(R.string.shoppinglist_name_blank), Toast.LENGTH_SHORT).show();
 				}});
 				
-			dialog.setButton(DialogInterface.BUTTON2, "No", new DialogInterface.OnClickListener() {
+			dialog.setButton(DialogInterface.BUTTON1, "No", new DialogInterface.OnClickListener() {
 				
 				public void onClick(DialogInterface dialog, int which) {
 					Log.e("AddShoppingList", "Cancel");

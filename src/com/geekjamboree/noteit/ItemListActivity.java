@@ -940,6 +940,17 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		final EditText editPrice = (EditText) dialogView.findViewById(R.id.dialog_addshoppinglist_editTextName);
 		dialog.setButton(
 				DialogInterface.BUTTON1, 
+				getResources().getString(R.string.Skip), 
+				new DialogInterface.OnClickListener() {
+			
+			public void onClick(DialogInterface dialog, int which) {
+				
+				// Even if the user cancels the Price dialog, we still need to toggle the done state
+				doCommitToggleItemDone(item, false, 0);
+			}
+		});
+		dialog.setButton(
+				DialogInterface.BUTTON2, 
 				getResources().getString(R.string.OK), 
 				new DialogInterface.OnClickListener() {
 		
@@ -952,17 +963,6 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			}
 		});
 	
-		dialog.setButton(
-				DialogInterface.BUTTON2, 
-				getResources().getString(R.string.Skip), 
-				new DialogInterface.OnClickListener() {
-			
-			public void onClick(DialogInterface dialog, int which) {
-				
-				// Even if the user cancels the Price dialog, we still need to toggle the done state
-				doCommitToggleItemDone(item, false, 0);
-			}
-		});
 		if (editPrice != null) {
 			editPrice.setSelectAllOnFocus(true);
 			editPrice.setText(String.valueOf(item.mUnitPrice));

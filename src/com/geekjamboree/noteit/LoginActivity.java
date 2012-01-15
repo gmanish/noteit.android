@@ -28,6 +28,8 @@ public class LoginActivity
 	extends Activity 
 	implements AsyncInvokeURLTask.OnPostExecuteListener {
 	
+	static final String		DONT_LOGIN = "DONT_LOGIN";
+	
 	SharedPreferences		mPrefs;
 	boolean					mIsHashedPassword = false;
 	
@@ -90,7 +92,13 @@ public class LoginActivity
 			});
         }
         
-        if (isRememberMe && !password.equals("") && !emailID.equals("")) {
+        Intent 	intent = getIntent();
+        Bundle 	bundle = intent.getExtras();
+        boolean	dontLogin = false;
+        if (bundle != null) {
+        	dontLogin = bundle.getBoolean(DONT_LOGIN);
+        }
+        if (!dontLogin && isRememberMe && !password.equals("") && !emailID.equals("")) {
         	doLogin();
         }
 /*        
