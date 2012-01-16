@@ -1562,6 +1562,4 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	    	return count;
 	    }
 	}
-	
-    
 }

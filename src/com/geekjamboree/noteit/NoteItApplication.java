@@ -151,6 +151,14 @@ public class NoteItApplication extends Application {
 			else
 				return false;
 		}
+		
+		public void incrementCount() {
+			mItemCount++;
+		}
+		
+		public void decrementCount() {
+			mItemCount--;
+		}
 	}
 	
 	// Represents each category in the database
@@ -1373,7 +1381,7 @@ public class NoteItApplication extends Application {
 						// Increase itemCount on the parent list
 						int index = mShoppingLists.indexOf(new ShoppingList(newItem.mListID));
 						if (index >= 0) {
-							mShoppingLists.get(index).mItemCount++;
+							mShoppingLists.get(index).incrementCount();
 						}
 						
 						// Invoke the callback
@@ -1430,7 +1438,7 @@ public class NoteItApplication extends Application {
 						// Increase itemCount on the target list
 						int index = mShoppingLists.indexOf(new ShoppingList(targetListId));
 						if (index >= 0) {
-							mShoppingLists.get(index).mItemCount++;
+							mShoppingLists.get(index).incrementCount();
 						}
         			}
                 	mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
@@ -1473,9 +1481,9 @@ public class NoteItApplication extends Application {
 						int listIndex = mShoppingLists.indexOf(new ShoppingList(item.mListID));
 						if (listIndex >= 0) {
 							if (item.mIsPurchased > 0)
-								mShoppingLists.get(listIndex).mItemCount--;
+								mShoppingLists.get(listIndex).decrementCount();
 							else
-								mShoppingLists.get(listIndex).mItemCount++;
+								mShoppingLists.get(listIndex).incrementCount();
 						}
         			} 
         			
@@ -1484,11 +1492,11 @@ public class NoteItApplication extends Application {
         				// the item being moved is currently in the current shopping list.
         				int index = mShoppingLists.indexOf(new ShoppingList(getCurrentShoppingListID()));
         				if (index >= 0) {
-        					mShoppingLists.get(index).mItemCount--;
+        					mShoppingLists.get(index).decrementCount();
         				}
         				index = mShoppingLists.indexOf(new ShoppingList(item.mListID));
         				if (index >= 0) {
-        					mShoppingLists.get(index).mItemCount++;
+        					mShoppingLists.get(index).incrementCount();
         				}
         			}
         			
@@ -1561,7 +1569,7 @@ public class NoteItApplication extends Application {
     						// Decrease itemCount on the parent list
     						int listIndex = mShoppingLists.indexOf(new ShoppingList(item.mListID));
     						if (listIndex >= 0) {
-    							mShoppingLists.get(listIndex).mItemCount--;
+    							mShoppingLists.get(listIndex).decrementCount();
     						}
         				}
         			}
