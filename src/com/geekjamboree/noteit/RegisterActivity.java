@@ -100,7 +100,15 @@ public class RegisterActivity extends Activity implements OnEulaAgreedTo {
 						
 						dialog.show();
 						return;
-					}
+					} else if (password.length() < LoginActivity.MIN_PASSWORD_LENGTH) {
+			    		AlertDialog dialog = MessageBox.createMessageBox(
+			        			RegisterActivity.this, 
+			        			getString(R.string.register_error_title), 
+			        			getString(R.string.login_password_tooshort));
+			    		dialog.show();
+			    		return;
+		        	}
+
 					
 					NoteItApplication app = (NoteItApplication) getApplication();
 					if (app != null) {

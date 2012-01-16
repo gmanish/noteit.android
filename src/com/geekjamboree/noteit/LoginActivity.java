@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ public class LoginActivity
 	implements AsyncInvokeURLTask.OnPostExecuteListener {
 	
 	static final String		DONT_LOGIN = "DONT_LOGIN";
+	static final int		MIN_PASSWORD_LENGTH = 6;
 	
 	SharedPreferences		mPrefs;
 	boolean					mIsHashedPassword = false;
@@ -255,11 +257,34 @@ public class LoginActivity
 	}
 	
 	private void doLogin() {
-    	showIndeterminateProgress();
-    	// Try to authenticate the user with the supplied credentials.
-    	// If authentication succeeds, switch to the shopping list view
     	EditText emailID = (EditText) findViewById(R.id.editEmailID);
     	EditText password = (EditText) findViewById(R.id.editPassword);
+    	String strEmail = emailID.getEditableText().toString().trim();
+    	String strPassword = password.getEditableText().toString();
+    	
+    	if (strEmail.equals("")) {
+    		AlertDialog dialog = MessageBox.createMessageBox(
+    			this, 
+    			getString(R.string.login_failed), 
+    			getString(R.string.register_blank_email));
+    		dialog.show();
+    		return;
+    	} else if (strPassword.equals("")) {
+    		AlertDialog dialog = MessageBox.createMessageBox(
+    			this, 
+    			getString(R.string.login_failed), 
+    			getString(R.string.register_blank_password));
+    		dialog.show();
+    		return;
+    	} else if (strPassword.length() < MIN_PASSWORD_LENGTH) {
+    		AlertDialog dialog = MessageBox.createMessageBox(
+    			this, 
+    			getString(R.string.login_failed), 
+    			getString(R.string.login_password_tooshort));
+			dialog.show();
+    		return;
+    	}
+    	showIndeterminateProgress();
     	try {
         	((NoteItApplication) getApplication()).loginUser(
 				emailID.getText().toString(), 

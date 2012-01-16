@@ -1426,6 +1426,13 @@ public class NoteItApplication extends Application {
         	public void onPostExecute(JSONObject json) {
         		try {
         			long retVal = json.getLong("JSONRetVal");
+        			if (retVal == 0) {
+						// Increase itemCount on the target list
+						int index = mShoppingLists.indexOf(new ShoppingList(targetListId));
+						if (index >= 0) {
+							mShoppingLists.get(index).mItemCount++;
+						}
+        			}
                 	mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
         		} catch (JSONException e){
         			mListener.onPostExecute(-1, e.getMessage());
@@ -1471,6 +1478,20 @@ public class NoteItApplication extends Application {
 								mShoppingLists.get(listIndex).mItemCount++;
 						}
         			} 
+        			
+        			if (retVal == 0 && item.mListID != getCurrentShoppingListID()) {
+        				// Item is being moved, update the counts. The following assumes
+        				// the item being moved is currently in the current shopping list.
+        				int index = mShoppingLists.indexOf(new ShoppingList(getCurrentShoppingListID()));
+        				if (index >= 0) {
+        					mShoppingLists.get(index).mItemCount--;
+        				}
+        				index = mShoppingLists.indexOf(new ShoppingList(item.mListID));
+        				if (index >= 0) {
+        					mShoppingLists.get(index).mItemCount++;
+        				}
+        			}
+        			
                 	mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
         		} catch (JSONException e){
         			mListener.onPostExecute(-1, e.getMessage());

@@ -37,13 +37,15 @@
     <string name="password_hint">Required</string>
     
     
-    <string name="login_activity_title">Please log in</string>
+    <string name="login_activity_title">Please Log In</string>
     <string name="login_login">Log In</string>
 	<string name="login_email">Email</string>
 	<string name="login_emailhint">Required</string>
     <string name="login_password">Password</string>
     <string name="Login_Authenticating_message">Authenticating &#8230;</string>
-    <string name="login_success">Login Successful</string>
+    <string name="login_success">Log In Successful</string>
+    <string name="login_failed">Log In Failed</string>
+    <string name="login_password_tooshort">Password must be at least six characters in length.</string>
 
     <string name="categorylist_title">Categories</string>
     <string name="categorylists_add">Add Category</string>
