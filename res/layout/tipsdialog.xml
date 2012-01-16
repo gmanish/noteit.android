@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/tips_root"
-    android:layout_width="fill_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="5dip"
+    android:orientation="horizontal"
     style="?NI_TitleBackground" >
 
     <TextView
         android:id="@+id/textInfo"
-        android:layout_width="wrap_content"
+        android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/btnClose"
+        android:layout_weight="1"
         android:text="@string/register_termsandconditions"
         android:textAppearance="?TextAppearance_Footer" />
 
@@ -20,11 +19,10 @@
         android:id="@+id/btnClose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
         android:padding="0dip"
         android:layout_margin="0dip"
         android:background="@android:color/transparent"
-        android:src="@drawable/btn_dialog_normal" />
+        android:src="@drawable/btn_dialog_normal" 
+        style="@style/App_ButtonStyle" />
 
-</RelativeLayout>
+</LinearLayout>
