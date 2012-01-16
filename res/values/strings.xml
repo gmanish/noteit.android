@@ -113,7 +113,7 @@
 	<string name="addedit_itemupdated">The item details have been updated</string>
 	<string name="addedit_askLater">Ask Later</string>
 	<string name="addedit_askLaterPrompt">How much did %1$.2f %2$s of %3$s cost?</string>
-	<string name="addedit_asklaterhelp">"If you do not know the price of the item, please check 'Ask Later'. You will be prompted for price when you mark the item 'Done'."</string>
+	<string name="addedit_asklaterhelp">"If you do not know the price of the item, please select \"Ask Later\". You will be prompted for price when you mark the item \"Done\"."</string>
 	<string name="addedit_total">Total: %1$.2f</string>
 	<string name="addedit_asklater_price">Total Price</string>
 	<string name="addedit_increment">+</string>

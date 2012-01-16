@@ -186,7 +186,7 @@ public class DashBoardActivity extends Activity {
 	
 	protected void doSetupToolbarButton() {
 		
-		ImageButton logOut = new ImageButton(this);
+		final ImageButton logOut = new ImageButton(this);
 		mToolbar.addRightAlignedButton(logOut, true, false);
 		logOut.setImageResource(R.drawable.sign_out);
 		logOut.setOnClickListener(new View.OnClickListener() {

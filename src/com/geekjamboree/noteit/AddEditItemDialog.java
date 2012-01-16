@@ -216,15 +216,17 @@ class AddEditItemDialog extends Dialog {
         }
         
     	((TextView) findViewById(R.id.addedit_textview_caption)).setText(title);
-    	((ImageButton) findViewById(R.id.addedit_asklater_help)).setOnClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
-				Toast.makeText(
-						getContext(),
-						getContext().getResources().getString(R.string.addedit_asklaterhelp), 
-						Toast.LENGTH_LONG).show();
-			}
-		});
+    	final ImageButton askLater = (ImageButton) findViewById(R.id.addedit_asklater_help);
+    	if (askLater != null) {
+    		askLater.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					FloatingPopup.MakePopup(
+						getContext(), 
+						askLater, 
+						getContext().getResources().getString(R.string.addedit_asklaterhelp)).show();
+				}
+			});
+    	}
     	
         mSpinCategories = (Spinner) findViewById(R.id.addedit_spinCategories);
         if (mSpinCategories != null) {
