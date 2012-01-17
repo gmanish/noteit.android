@@ -57,6 +57,8 @@
         android:layout_below="@+id/addedit_titlebar"
         android:completionThreshold="3"
         android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:ellipsize="none"
         android:hint="@string/addedit_Name_Hint" />
    	
 	<LinearLayout

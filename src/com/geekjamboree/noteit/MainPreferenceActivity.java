@@ -38,7 +38,7 @@ public class MainPreferenceActivity extends PreferenceActivity {
 			}
 		}
 	};	
-	
+
 	public void onCreate(Bundle savedInstanceState){
         
 		CustomTitlebarWrapper toolbar = new CustomTitlebarWrapper(this);
@@ -67,8 +67,7 @@ public class MainPreferenceActivity extends PreferenceActivity {
 			
 			NoteItApplication 	app = (NoteItApplication) getApplication();
 			ListPreference 		currenciesPref = (ListPreference) findPreference("currency");
-			ArrayList<Country> 	countries = app.getCountries(); 
-			
+			ArrayList<Country> 	countries = app.getCountries();
 			if (currenciesPref != null &&  countries != null && countries.size() > 0){
 				CharSequence[] currencies = new String[countries.size()];
 				CharSequence[] currencyIds = new String[countries.size()];
@@ -76,7 +75,8 @@ public class MainPreferenceActivity extends PreferenceActivity {
 				int selIndex = -1;
 				Preference prefs = app.getUserPrefs();
 				for (int index = 0; index < countries.size(); index++) {
-					currencies[index] = countries.get(index).mCurrencyName + " (" + countries.get(index).mCurrencySymbol + ")";
+					currencies[index] = countries.get(index).mCurrencyName + 
+							" (" + countries.get(index).mCurrencySymbol + ")";
 					currencyIds[index] = countries.get(index).mCurrencyCode;
 					if (prefs != null && currencyIds[index].equals(prefs.mCurrencyCode))
 						selIndex = index;

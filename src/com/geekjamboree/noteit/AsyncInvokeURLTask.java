@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -211,7 +212,7 @@ class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
         
 	    try {
 	        // Add parameters
-	    	method.setEntity(new UrlEncodedFormEntity(mParams));
+	    	method.setEntity(new UrlEncodedFormEntity(mParams, HTTP.UTF_8));
 
 	        // Execute HTTP Post Request
 	        HttpResponse 	response = httpclient.execute(method);
@@ -267,7 +268,15 @@ class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 	}
 
 	private static String convertStreamToString(InputStream is){
-		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new InputStreamReader(is, HTTP.UTF_8));
+		} catch (UnsupportedEncodingException e1) {
+			Log.e("AsyncInvokeURLTask.convertStreamToString", "UnsupportedEncodingException");
+			return "";
+		}
+		
 		StringBuilder sb = new StringBuilder();
 
 		String line = null;
@@ -277,12 +286,14 @@ class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 				sb.append(line + "\n");
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.e("AsyncInvokeURLTask.convertStreamToString", "IOException");
+			return "";
 		} finally {
 			try {
 				is.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.e("AsyncInvokeURLTask.convertStreamToString", "IOException");
+				return "";
 			}
 		}
 		return sb.toString();

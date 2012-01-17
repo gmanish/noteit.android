@@ -424,7 +424,7 @@ public class NoteItApplication extends Application {
 	
 	@Override
 	public void onCreate() {
-		fetchCountries(new OnMethodExecuteListerner() {
+		fetchCurrencies(new OnMethodExecuteListerner() {
 			
 			public void onPostExecute(long resultCode, String message) {
 				if (resultCode != 0) {
@@ -1755,6 +1755,43 @@ public class NoteItApplication extends Application {
 		}
 	}
 	
+	public void fetchCurrencies(final OnMethodExecuteListerner listener) {
+		
+		ArrayList<NameValuePair>	nameValuePairs = new ArrayList<NameValuePair>(1);
+		nameValuePairs.add(new BasicNameValuePair("command", "do_get_currencies"));
+
+		AsyncInvokeURLTask myTask;
+		try {
+			myTask = new AsyncInvokeURLTask(
+					nameValuePairs, 
+					new OnPostExecuteListener() {
+				
+				public void onPostExecute(JSONObject result) {
+					try {
+						long retVal = result.getLong("JSONRetVal");
+						if (retVal == 0){
+							JSONArray jsonCountries = result.getJSONArray("arg3");
+							for (int i = 0; i < jsonCountries.length(); i++) {
+								mCountries.add(new Country(jsonCountries.getJSONObject(i)));
+							}
+							
+							if (result.has("arg2"))
+								mDefaultCountry = new Country(result.getJSONObject("arg2"));
+						}
+						if (listener != null)
+							listener.onPostExecute(retVal, result.getString("JSONRetMessage"));
+					} catch (JSONException e) {
+						if (listener != null)
+							listener.onPostExecute(-1, e.getMessage());
+					}
+				}
+			});
+			myTask.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void fetchUnits(int unitType, OnMethodExecuteListerner listener) {
 		
 		class getUnitsTask implements OnPostExecuteListener {
@@ -1879,11 +1916,13 @@ public class NoteItApplication extends Application {
     		if (inventories.length() > 0) {
 	    		item = new Item(0);
 	    		item.mName = product.getString("title");
-	    		item.mUnitPrice = (float) inventories.getJSONObject(0).getDouble("price");
+	    		String currency = inventories.getJSONObject(0).getString("currency");
+	    		if (currency.equals(mUserPrefs.mCurrencyCode)) {
+    	    		item.mUnitPrice = (float) inventories.getJSONObject(0).getDouble("price");
+	    		}
 	    		break;
     		}
     	} 
-    	
     	return item;
     }
     
