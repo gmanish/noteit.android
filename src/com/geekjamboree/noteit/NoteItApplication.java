@@ -68,8 +68,11 @@ public class NoteItApplication extends Application {
 
 		public boolean equals(Object obj){
 			if (obj instanceof Country)
-				return (mCountryCode.equals(((Country) obj).mCountryCode) &&
-						mCurrencyCode.equals(((Country) obj).mCurrencyCode));
+				// As of now, we're only needing the currency code, so don't
+				// compare against the country code
+				return mCurrencyCode.equals(((Country) obj).mCurrencyCode);
+//				return (mCountryCode.equals(((Country) obj).mCountryCode) &&
+//						mCurrencyCode.equals(((Country) obj).mCurrencyCode));
 			else
 				return false;
 		}
@@ -1915,6 +1918,8 @@ public class NoteItApplication extends Application {
     		
     		if (inventories.length() > 0) {
 	    		item = new Item(0);
+	    		item.mQuantity = 1;
+	    		item.mUnitID = 1; // unit
 	    		item.mName = product.getString("title");
 	    		String currency = inventories.getJSONObject(0).getString("currency");
 	    		if (currency.equals(mUserPrefs.mCurrencyCode)) {

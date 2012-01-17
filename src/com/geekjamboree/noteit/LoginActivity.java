@@ -221,13 +221,13 @@ public class LoginActivity
 				getString(R.string.server_error), 
 				Toast.LENGTH_SHORT).show();
 			Log.e("NoteItApplication.loginUser", e.getMessage());
-			hideIndeterminateProgress();
 		} catch (Exception e) {
     		Toast.makeText(
     			getApplicationContext(), 
     			e.getMessage(), 
     			Toast.LENGTH_SHORT).show();
 			Log.e("NoteItApplication.loginUser", e.getMessage());
+		} finally {
 			hideIndeterminateProgress();
 		}
 	}

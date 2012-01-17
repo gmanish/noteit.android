@@ -61,11 +61,18 @@
         android:ellipsize="none"
         android:hint="@string/addedit_Name_Hint" />
    	
+	<Spinner
+	    android:id="@+id/addedit_spinCategories"
+	    style="?AddEdit_Widget"
+	    android:layout_width="fill_parent"
+	    android:layout_below="@+id/addedit_editName"
+	    android:layout_marginBottom="5dp" />
+
 	<LinearLayout
        android:id="@+id/addedit_updowncontrol"
        android:layout_width="fill_parent"
        android:layout_height="wrap_content"
-       android:layout_below="@+id/addedit_editName"
+       android:layout_below="@+id/addedit_spinCategories"
        android:layout_marginBottom="5dp" 
        android:gravity="center_vertical"
   	   android:orientation="horizontal">
@@ -144,17 +151,10 @@
 
 	</LinearLayout>
 		
-	<Spinner
-	    android:id="@+id/addedit_spinCategories"
-	    style="?AddEdit_Widget"
-	    android:layout_width="fill_parent"
-	    android:layout_below="@+id/layout_price"
-	    android:layout_marginBottom="5dp" />
-
 	<LinearLayout 
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content" 
-	    android:layout_below="@+id/addedit_spinCategories"
+	    android:layout_below="@+id/layout_price"
 	    android:gravity="center_vertical"
 	    android:layout_marginTop="10dp"
 	    android:orientation="horizontal">

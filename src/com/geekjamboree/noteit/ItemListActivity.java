@@ -423,6 +423,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			    				mTempItemToPassToDialog = app.new Item(item);
 			    				mTempItemToPassToDialog.mBarcodeFormat = scanResult.getFormatName();
 			    				mTempItemToPassToDialog.mBarcode = scanResult.getContents(); //"602527246949";
+			    				mTempItemToPassToDialog.mListID = app.getCurrentShoppingListID();
+			    				mTempItemToPassToDialog.mCategoryID = 1; // Uncategorized
 			    				doAddItem(mTempItemToPassToDialog);
 	    					} else {
 		    					// Not Found, ask if user wants to add
