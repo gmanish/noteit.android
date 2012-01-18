@@ -101,7 +101,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     
     protected enum ProductSearchMethod {
     	GOOGLE_SEARCH,
-    	SEARCH_UPC
+    	SEARCH_UPC,
+    	NOTE_IT
     }
     
 	protected AbsListView.OnScrollListener mScrollListener = new AbsListView.OnScrollListener() {
@@ -424,7 +425,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			    				mTempItemToPassToDialog.mBarcodeFormat = scanResult.getFormatName();
 			    				mTempItemToPassToDialog.mBarcode = scanResult.getContents(); //"602527246949";
 			    				mTempItemToPassToDialog.mListID = app.getCurrentShoppingListID();
-			    				mTempItemToPassToDialog.mCategoryID = 1; // Uncategorized
+			    				if (mTempItemToPassToDialog.mCategoryID <= 0)
+			    					mTempItemToPassToDialog.mCategoryID = 1; // Uncategorized
 			    				doAddItem(mTempItemToPassToDialog);
 	    					} else {
 		    					// Not Found, ask if user wants to add

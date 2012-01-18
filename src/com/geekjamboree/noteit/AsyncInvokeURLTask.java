@@ -70,16 +70,10 @@ class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 		mParams = nameValuePairs;
 		mPostExecuteListener = postExecuteListener;
 		mRequestMethod = RequestMethod.POST;
+		mNoteItWebUrl = getNoteItURL(); 
 		if (mPostExecuteListener == null)
 			throw new Exception("Param postExecuteListener cannot be null.");
-		if(("sdk".equals(Build.PRODUCT)) || ("google_sdk".equals(Build.PRODUCT)))
-			// We're running in the emulator connect with host loopback
-//			mNoteItWebUrl = "http://geekjamboree.com/controller/appcontroller.php";
-			mNoteItWebUrl = "http://10.0.2.2/~gmanish/noteit.web/controller/appcontroller.php";
-		else
-//			mNoteItWebUrl = "http://192.168.0.100/noteit.web/controller/appcontroller.php";
-			mNoteItWebUrl = "http://geekjamboree.com/controller/appcontroller.php";
-		}
+	}
 	
 	AsyncInvokeURLTask(
 			RequestMethod method,
@@ -92,9 +86,21 @@ class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 		mPostExecuteListener = postExecuteListener;
 		if (mPostExecuteListener == null)
 			throw new Exception("Param postExecuteListener cannot be null.");
-		mNoteItWebUrl = url;
+		mNoteItWebUrl = url.equals("") ? getNoteItURL() : url;
 	}
 
+	private String getNoteItURL() {
+		String url = "";
+		if(("sdk".equals(Build.PRODUCT)) || ("google_sdk".equals(Build.PRODUCT)))
+			// We're running in the emulator connect with host loopback
+//			url = "http://geekjamboree.com/controller/appcontroller.php";
+			url = "http://10.0.2.2/~gmanish/noteit.web/controller/appcontroller.php";
+		else
+//			url = "http://192.168.0.102/~gmanish/noteit.web/controller/appcontroller.php";
+			url = "http://geekjamboree.com/controller/appcontroller.php";
+		
+		return url;
+	}
 	protected String doGetInBackground(Void...params) {
 	    
 		String 				result = "";

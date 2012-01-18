@@ -1845,11 +1845,15 @@ public class NoteItApplication extends Application {
 		}		
 	}
 
-    protected void searchItemByBarcode(String formatName, String contents, final OnSearchBarcodeListener listener) {
+    protected void searchItemByBarcode(
+    	String formatName, 
+    	String contents, 
+    	final OnSearchBarcodeListener listener) {
     	
     	ArrayList<NameValuePair> 	params = new ArrayList<NameValuePair>();
-    	final ProductSearchMethod	searchMethod = ProductSearchMethod.GOOGLE_SEARCH;
+    	final ProductSearchMethod	searchMethod = ProductSearchMethod.NOTE_IT;
     	String 						searchURL = "";
+    	RequestMethod				method = RequestMethod.GET;
     	
     	if (searchMethod == ProductSearchMethod.SEARCH_UPC) {
     		
@@ -1865,11 +1869,17 @@ public class NoteItApplication extends Application {
     		params.add(new BasicNameValuePair("key", googleAPIKey));
     		params.add(new BasicNameValuePair("country", "US"));
     		params.add(new BasicNameValuePair("q", contents));
+    	} else if (searchMethod == ProductSearchMethod.NOTE_IT) {
+    		
+    		method = RequestMethod.POST;
+    		params.add(new BasicNameValuePair("command", "do_search_barcode"));
+    		params.add(new BasicNameValuePair("arg1", contents));
+    		params.add(new BasicNameValuePair("arg2", String.valueOf(getUserID())));
     	}
     	
     	try {
 	    	AsyncInvokeURLTask task = new AsyncInvokeURLTask(
-	    			RequestMethod.GET,
+	    			method,
 	    			searchURL, 
 	    			params, 
 	    			new AsyncInvokeURLTask.OnPostExecuteListener() {
@@ -1877,19 +1887,28 @@ public class NoteItApplication extends Application {
 				public void onPostExecute(JSONObject result) {
 					try {
 						if (result.isNull("JSONRetVal")) {
+							// Seems like a valid JSON response
 							if (searchMethod == ProductSearchMethod.GOOGLE_SEARCH) {
 								if (result.isNull("error")) {
 									Item item = parseItemFromGoogleJSON(result);
 									listener.onSearchResults(0, item, "");
 								} else if (listener != null){
 									JSONObject errors = result.getJSONObject("error");
-									listener.onSearchResults(errors.getLong("code"), null, errors.getString("message"));
+									listener.onSearchResults(
+										errors.getLong("code"), 
+										null, 
+										errors.getString("message"));
 								}
 							}
-						} else if (listener != null){
+						} else {
+							long retVal = result.getLong("JSONRetVal");
+							Item item = null;
+							if (retVal == 0) {
+								item = new Item(result.getJSONObject("arg1"));
+							}
 							listener.onSearchResults(
-								result.getLong("JSONRetVal"), 
-								null, 
+								retVal, 
+								item, 
 								result.getString("JSONRetMessage"));
 						}
 					} catch (JSONException e) {
