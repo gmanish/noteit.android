@@ -106,6 +106,31 @@ public class NoteItApplication extends Application {
 		}
 	}
 	
+	// PRODUCT_CODE_TYPES = list("UPC_A", "UPC_E", "EAN_8", "EAN_13", "RSS_14"
+	static final int BARCODE_FORMAT_UNKNOWN 	= 1;
+	static final int BARCODE_FORMAT_UPC_A		= 2;
+	static final int BARCODE_FORMAT_UPC_E		= 3;
+	static final int BARCODE_FORMAT_EAN_8		= 4;
+	static final int BARCODE_FORMAT_EAN_13		= 5;
+	static final int BARCODE_FORMAT_RSS_14 	 	= 6;
+	
+	static int barcodeFormatFromString(String format) {
+		int barcodeFormat = BARCODE_FORMAT_UNKNOWN;
+		if (format.equals("UPC_A"))
+			barcodeFormat = BARCODE_FORMAT_UPC_A;
+		else if (format.equals("UPC_E"))
+			barcodeFormat = BARCODE_FORMAT_UPC_E;
+		else if (format.equals("EAN_8"))
+			barcodeFormat = BARCODE_FORMAT_EAN_8;
+		else if (format.equals("EAN_13"))
+			barcodeFormat = BARCODE_FORMAT_EAN_13;
+		else if (format.equals("RSS_14"))
+			barcodeFormat = BARCODE_FORMAT_RSS_14;
+		else
+			barcodeFormat = BARCODE_FORMAT_UNKNOWN;
+		return barcodeFormat;
+	}
+	
 	public class Preference {
 		public String 	mCountryCode = "";
 		public String 	mCurrencyCode = "";
@@ -236,7 +261,7 @@ public class NoteItApplication extends Application {
 		public int 		mIsAskLater 	= 0; // SMALLINT at the backend
 		public Date		mDateAdded;
 		public String 	mBarcode;
-		public String	mBarcodeFormat;
+		public int		mBarcodeFormat;
 
 		public Item() {
 			
@@ -300,6 +325,7 @@ public class NoteItApplication extends Application {
 			mIsPurchased = json.getInt("isPurchased");
 			mIsAskLater = json.getInt("isAskLater");
 			mBarcode = json.getString("itemBarcode");
+			mBarcodeFormat = json.getInt("itemBarcodeFormat");
 			//mBarcodeFormat
 		}
 		
@@ -1410,6 +1436,7 @@ public class NoteItApplication extends Application {
 		nameValuePairs.add(new BasicNameValuePair("arg8", String.valueOf(inItem.mIsPurchased)));
 		nameValuePairs.add(new BasicNameValuePair("arg9", String.valueOf(inItem.mIsAskLater)));
 		nameValuePairs.add(new BasicNameValuePair("arg10", inItem.mBarcode));
+		nameValuePairs.add(new BasicNameValuePair("arg11", String.valueOf(inItem.mBarcodeFormat)));
 		
 		AddItemTask myEditTask = new AddItemTask(inListener);
         AsyncInvokeURLTask task;
@@ -1846,7 +1873,7 @@ public class NoteItApplication extends Application {
 	}
 
     protected void searchItemByBarcode(
-    	String formatName, 
+    	int format,
     	String contents, 
     	final OnSearchBarcodeListener listener) {
     	
@@ -1874,7 +1901,8 @@ public class NoteItApplication extends Application {
     		method = RequestMethod.POST;
     		params.add(new BasicNameValuePair("command", "do_search_barcode"));
     		params.add(new BasicNameValuePair("arg1", contents));
-    		params.add(new BasicNameValuePair("arg2", String.valueOf(getUserID())));
+    		params.add(new BasicNameValuePair("arg2", String.valueOf(format)));
+    		params.add(new BasicNameValuePair("arg3", String.valueOf(getUserID())));
     	}
     	
     	try {
@@ -1887,7 +1915,6 @@ public class NoteItApplication extends Application {
 				public void onPostExecute(JSONObject result) {
 					try {
 						if (result.isNull("JSONRetVal")) {
-							// Seems like a valid JSON response
 							if (searchMethod == ProductSearchMethod.GOOGLE_SEARCH) {
 								if (result.isNull("error")) {
 									Item item = parseItemFromGoogleJSON(result);
@@ -1902,8 +1929,9 @@ public class NoteItApplication extends Application {
 							}
 						} else {
 							long retVal = result.getLong("JSONRetVal");
+							long count = result.getLong("arg2");
 							Item item = null;
-							if (retVal == 0) {
+							if (retVal == 0 && count > 0) {
 								item = new Item(result.getJSONObject("arg1"));
 							}
 							listener.onSearchResults(

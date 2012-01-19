@@ -414,7 +414,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
         	final NoteItApplication app = (NoteItApplication) getApplication();
     		mToolbar.showInderminateProgress(getString(R.string.progress_message));
         	app.searchItemByBarcode(
-        		scanResult.getFormatName(), 
+        		NoteItApplication.barcodeFormatFromString(scanResult.getFormatName()), 
         		scanResult.getContents()/*"602527246949"*/, 
         		new NoteItApplication.OnSearchBarcodeListener() {
     			
@@ -422,13 +422,13 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	    				try {
 	    					if (retVal == 0 && item != null) {
 			    				mTempItemToPassToDialog = app.new Item(item);
-			    				mTempItemToPassToDialog.mBarcodeFormat = scanResult.getFormatName();
+			    				mTempItemToPassToDialog.mBarcodeFormat = NoteItApplication.barcodeFormatFromString(scanResult.getFormatName());
 			    				mTempItemToPassToDialog.mBarcode = scanResult.getContents(); //"602527246949";
 			    				mTempItemToPassToDialog.mListID = app.getCurrentShoppingListID();
 			    				if (mTempItemToPassToDialog.mCategoryID <= 0)
 			    					mTempItemToPassToDialog.mCategoryID = 1; // Uncategorized
 			    				doAddItem(mTempItemToPassToDialog);
-	    					} else {
+	    					} else if (retVal == 0){
 		    					// Not Found, ask if user wants to add
 		    					final AlertDialog dialog = new AlertDialog.Builder(ItemListActivity.this).create();
 		    					
@@ -439,7 +439,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		    						public void onClick(DialogInterface dialog, int which) {
 		    							dialog.dismiss();
 	    			    				mTempItemToPassToDialog = app.new Item();
-	    			    				mTempItemToPassToDialog.mBarcodeFormat = scanResult.getFormatName();
+	    			    				mTempItemToPassToDialog.mBarcodeFormat = NoteItApplication.barcodeFormatFromString(scanResult.getFormatName());
 	    			    				mTempItemToPassToDialog.mBarcode = scanResult.getContents(); //"602527246949";
 	    			    				showDialog(DIALOG_ADD_ITEM);
 		    						}
@@ -453,6 +453,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		    					});
 
 		    					dialog.show();
+		    				} else {
+		    					Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG);
 		    				}
 	    				} finally {
 	    					mToolbar.hideIndeterminateProgress();
