@@ -96,8 +96,8 @@ class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 //			url = "http://geekjamboree.com/controller/appcontroller.php";
 			url = "http://10.0.2.2/~gmanish/noteit.web/controller/appcontroller.php";
 		else
-			url = "http://192.168.0.102/~gmanish/noteit.web/controller/appcontroller.php";
-//			url = "http://geekjamboree.com/controller/appcontroller.php";
+//			url = "http://192.168.0.102/~gmanish/noteit.web/controller/appcontroller.php";
+			url = "http://geekjamboree.com/controller/appcontroller.php";
 		
 		return url;
 	}

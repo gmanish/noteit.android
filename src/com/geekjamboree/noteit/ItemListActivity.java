@@ -44,7 +44,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
 
 public class ItemListActivity extends ExpandableListActivity implements NoteItApplication.OnFetchItemsListener {
 	
@@ -65,7 +64,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	String							mCurrencyFormat = new String();
 	boolean							mLoadingMore = false;
 	float							mPendingTotal = 0f;
-	ViewFlipper						mLoadMoreFlipper;
+	ViewFlipperHack					mLoadMoreFlipper;
 	LayoutInflater					mLayoutInflater;
 	AlertDialog 					mInstallScanAppDialog = null;
 	Item							mTempItemToPassToDialog = null;
@@ -898,9 +897,9 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	if (add) {
     		
     		if (mLoadMoreFlipper == null) {
-	    		mLoadMoreFlipper = (ViewFlipper) mLayoutInflater.inflate(
+	    		mLoadMoreFlipper = (ViewFlipperHack) mLayoutInflater.inflate(
 	    				R.layout.itemlist_moreswitcher, 
-	    				(ViewGroup) findViewById(R.id.itemlist_more_root), 
+	    				null, 
 	    				false);
     		}
     		
@@ -908,7 +907,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 				// Note: There seems to be a bug in android. If I don't call
 				// addFooterView before setting the adapter, the footer view
 				// is never added. Go Figure!
-				mListView.addFooterView(mLoadMoreFlipper);
+				getExpandableListView().addFooterView(mLoadMoreFlipper);
 				Button moreButton = (Button) mLoadMoreFlipper.findViewById(R.id.itemlist_morebuttom);
 				if (moreButton != null) {
 					moreButton.setOnClickListener(new View.OnClickListener() {
@@ -920,8 +919,13 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 				}
 			}
     	} else {
-    		mListView.removeFooterView(mLoadMoreFlipper);
+//    		WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+//    		if (wm != null) {
+//    			wm.removeView(mLoadMoreFlipper);
+//    		}
+    		mLoadMoreFlipper.stopFlipping();
     		mLoadMoreFlipper.removeAllViews();
+    		getExpandableListView().removeFooterView(mLoadMoreFlipper);
     		mLoadMoreFlipper = null;
     	}
     }
