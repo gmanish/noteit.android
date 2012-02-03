@@ -47,7 +47,6 @@ import android.widget.Toast;
 
 public class ItemListActivity extends ExpandableListActivity implements NoteItApplication.OnFetchItemsListener {
 	
-	ExpandableLVRightIndicator		mListView;
 	QuickAction 					mQuickAction = null;
 	QuickAction						mExpandCollapseQA = null;
 	AtomicInteger					mSelectedGroup = new AtomicInteger();
@@ -127,9 +126,11 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 						" VisibleItemCount: " + visibleItemCount + 
 						" TotalItemsCount:" + totalItemCount);
 
-				ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
+				ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) getExpandableListView().getExpandableListAdapter();
 				Log.i("ItemsListView.onScrollListener", "App Items: " + app.getItems().size());
-				if (totalItemCount - mListView.getGroupCount() >= adapter.getTotalChildrenCount()) {
+				if (totalItemCount - 
+					((ExpandableLVRightIndicator)getExpandableListView()).getGroupCount() >= 
+					adapter.getTotalChildrenCount()) {
 					if (app.isMoreItemsPending()) {
 						fetchItems(ItemListActivity.this);
 					}
@@ -156,7 +157,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 					mDisplayCategoryExtras = sharedPreferences.getBoolean("Display_Category_Totals", true);
 			        mFontSize = Integer.valueOf(sharedPreferences.getString("Item_Font_Size", "3"));
 			        mHideDoneItems = sharedPreferences.getBoolean("Delete_Bought_Items", false);
-					mListView.invalidateViews();
+					getExpandableListView().invalidateViews();
 				}
 				
 			}
@@ -253,12 +254,11 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		
 		
         ItemsExpandableListAdapter adapter = new ItemsExpandableListAdapter(this);
-		mListView = (ExpandableLVRightIndicator) getExpandableListView();
 		mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE); 
-		mListView.setTextFilterEnabled(true);
+		getExpandableListView().setTextFilterEnabled(true);
 		addFooterToListView(true);
-		mListView.setAdapter(adapter);
-    	mListView.setOnChildClickListener(new OnChildClickListener() {
+		getExpandableListView().setAdapter(adapter);
+    	getExpandableListView().setOnChildClickListener(new OnChildClickListener() {
 			
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
@@ -270,7 +270,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 				}
 				mSelectedGroup.set(groupPosition);
 				mSelectedChild.set(childPosition);
-				mSelectedItemID = ((Item) mListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).mID;
+				mSelectedItemID = ((Item) getExpandableListView().getExpandableListAdapter().getChild(groupPosition, childPosition)).mID;
 				return false;
 			}
 		});
@@ -344,10 +344,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		outState.putInt(SELECTED_CHILD, mSelectedChild.get());
 		outState.putBoolean(IS_ITEMLIST_FETCHED, mIsItemListFetched);
 		Item selItem = null;
-		ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
+		ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) getExpandableListView().getExpandableListAdapter();
 		if (mSelectedGroup.get() < adapter.getGroupCount() && 
 			mSelectedChild.get() < adapter.getChildrenCount(mSelectedGroup.get())) {
-			selItem = (Item) mListView.getExpandableListAdapter().getChild(
+			selItem = (Item) getExpandableListView().getExpandableListAdapter().getChild(
 									mSelectedGroup.get(), mSelectedChild.get());
 		}
 		if (selItem != null) {
@@ -376,7 +376,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		mDisplayCategoryExtras = mPrefs.getBoolean("Display_Category_Totals", true);
 		mHideDoneItems = mPrefs.getBoolean("Delete_Bought_Items", false);
         mFontSize = Integer.valueOf(mPrefs.getString("Item_Font_Size", "3"));
-		mListView.invalidateViews();
+		getExpandableListView().invalidateViews();
 		mCurrencyFormat = ((NoteItApplication) getApplication()).getCurrencyFormat(false);
 		doDisplayPendingTotal();
 		super.onResume();
@@ -467,7 +467,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     		if (addedItems.size() > 0) {
     	
     			// New items were added by the called activity, we need to add them to our view
-    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
+    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
     			for (Item item : addedItems) {
     				Category category = ((NoteItApplication) getApplication()).getCategory(item.mCategoryID);
     				adapter.AddItem(item, category);
@@ -520,7 +520,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     				
     				public long onPreviousItem() {
     					
-    					ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
+    					ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) getExpandableListView().getExpandableListAdapter();
     					if (adapter.getPrevChildPosition(mSelectedGroup, mSelectedChild)) {
     						
     						Item prevItem = (Item) adapter.getChild(mSelectedGroup.get(), mSelectedChild.get());
@@ -533,7 +533,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     				
     				public long onNextItem() {
     					
-    					ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
+    					ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) getExpandableListView().getExpandableListAdapter();
     					if (adapter.getNextChildPosition(mSelectedGroup, mSelectedChild)) {
     						
     						Item nextItem = (Item) adapter.getChild(mSelectedGroup.get(), mSelectedChild.get());
@@ -574,7 +574,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 
 	protected void doDeleteItem() {
     	
-    	final Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup.get(), mSelectedChild.get());
+    	final Item selItem = (Item) getExpandableListView().getExpandableListAdapter().getChild(mSelectedGroup.get(), mSelectedChild.get());
     	if (selItem != null) {
     		mToolbar.showInderminateProgress(getString(R.string.progress_message));
     		((NoteItApplication) getApplication()).deleteItem(selItem.mID, new OnMethodExecuteListerner() {
@@ -583,7 +583,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 					try {
 						if (resultCode == 0) {
 							// Remove the item from our adapter
-							ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
+							ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
 							adapter.DeleteItem(selItem);
 							adapter.notifyDataSetChanged();
 							doDeductFromPendingTotal(selItem.mUnitPrice * selItem.mQuantity);
@@ -607,9 +607,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			public void onPostExecute(long resultCode, Item item, String message) {
 				try {
 					if (resultCode == 0){
-				    	ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
+				    	ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
 	    				Category category = ((NoteItApplication) getApplication()).getCategory(item.mCategoryID);
 	    				adapter.AddItem(item, category);
+	    				Log.d("ItemListActivity.doAddItem()", "Item added: " + item.mName);
 						adapter.notifyDataSetChanged();
 						doAddToPendingTotal(item.mUnitID * item.mUnitPrice);
 						doDisplayPendingTotal();
@@ -636,7 +637,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			public void onPostExecute(long resultCode, String message) {
 				try {
 					if (resultCode == 0) {
-		    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
+		    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
 	    				Category category = ((NoteItApplication) getApplication()).getCategory(newItem.mCategoryID);
 	    				if ((bitMask & Item.ITEM_CATEGORYID) > 0 || (bitMask & Item.ITEM_NAME) > 0) {
 		    				adapter.DeleteItem(oldItem);
@@ -644,7 +645,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		    				doAddToPendingTotal(newItem.mUnitPrice * newItem.mQuantity - oldItem.mUnitPrice * oldItem.mQuantity);
 		    				doDisplayPendingTotal();
 	    				} else {
-	    					Item selItem = (Item) mListView.getExpandableListAdapter().getChild(
+	    					Item selItem = (Item) getExpandableListView().getExpandableListAdapter().getChild(
 	    							mSelectedGroup.get(), 
 	    							mSelectedChild.get());
 	    					selItem.copyFrom(newItem);
@@ -662,7 +663,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	
 	protected void doCopyItem() {
 		
-		final ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
+		final ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) getExpandableListView().getExpandableListAdapter();
 		if (mSelectedGroup.get() < adapter.getGroupCount() &&
 		    mSelectedGroup.get() >= 0 &&
 		    mSelectedChild.get() < adapter.getChildrenCount(mSelectedGroup.get()) &&
@@ -718,7 +719,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	
 	protected void doMoveItem() {
 		
-		final ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter )mListView.getExpandableListAdapter();
+		final ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter )getExpandableListView().getExpandableListAdapter();
 		if (mSelectedGroup.get() < adapter.getGroupCount() &&
 		    mSelectedGroup.get() >= 0 &&
 		    mSelectedChild.get() < adapter.getChildrenCount(mSelectedGroup.get()) &&
@@ -775,7 +776,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	
     void doToggleMarkDone() {
     	
-    	final Item selItem = (Item) mListView.getExpandableListAdapter().getChild(mSelectedGroup.get(), mSelectedChild.get());
+    	final Item selItem = (Item) getExpandableListView().getExpandableListAdapter().getChild(mSelectedGroup.get(), mSelectedChild.get());
     	if (selItem != null){
     		
     		if (selItem.mIsPurchased <= 0 && selItem.mIsAskLater > 0) {
@@ -788,24 +789,24 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     }
     
     protected void doExpandPending() {
-    	ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
+    	ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) getExpandableListView().getExpandableListAdapter();
     	for (int i = 0; i < adapter.getGroupCount(); i++){
     		if (adapter.getUnpurchasedChildrenCount(i) > 0)
-    			mListView.expandGroup(i);
+    			getExpandableListView().expandGroup(i);
     	}        	
     }
     
     protected void doExpandAll() {
-    	ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
+    	ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) getExpandableListView().getExpandableListAdapter();
     	for (int i = 0; i < adapter.getGroupCount(); i++){
-    		mListView.expandGroup(i);
+    		getExpandableListView().expandGroup(i);
     	}        	
     }
     
     protected void doCollapseAll() {
-    	ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
+    	ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) getExpandableListView().getExpandableListAdapter();
     	for (int i = 0; i < adapter.getGroupCount(); i++){
-    		mListView.collapseGroup(i);
+    		getExpandableListView().collapseGroup(i);
     	}        	
     	
     }
@@ -1019,7 +1020,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 								item.mIsPurchased = newItem.mIsPurchased;
 								item.mIsAskLater = newItem.mIsAskLater;
 								item.mUnitPrice = newItem.mUnitPrice; 
-								ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)mListView.getExpandableListAdapter();
+								ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
 								if (item.mIsPurchased > 0 && mPrefs.getBoolean("Shuffle_Done_Items", true)) {
 									adapter.DeleteItem(item);
 									adapter.AddItem(item, app.getCategory(item.mCategoryID));
@@ -1067,7 +1068,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 						// addFooterView before setting the adapter, the footer view
 						// is never added. Go Figure!
 						addFooterToListView(true);
-						mListView.setAdapter(adapter);
+						getExpandableListView().setAdapter(adapter);
 					}
 					fetchItems(ItemListActivity.this);
 					doFetchAndDisplayPendingTotal();
@@ -1079,7 +1080,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     
     protected void doDisplayItems(ArrayList<Item> items) {
 		
-    	ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
+    	ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) getExpandableListView().getExpandableListAdapter();
     	for (int index = 0; index < items.size(); index++){
     		Item 	thisItem = items.get(index);
     		if (thisItem.mIsPurchased <= 0 || ((thisItem.mIsPurchased > 0) && !mHideDoneItems)) {
@@ -1089,7 +1090,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	}
 		NoteItApplication app = (NoteItApplication) getApplication();
 		if (app != null) { 
-			if (mListView.getFooterViewsCount() > 0) {
+			if (getExpandableListView().getFooterViewsCount() > 0) {
 				if  (!app.isMoreItemsPending()) {
 					addFooterToListView(false);
 				}
@@ -1179,7 +1180,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 				public void onPostExecute(long resultCode, String message) {
 					try {
 						if (resultCode == 0) {
-							ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) mListView.getExpandableListAdapter();
+							ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter) getExpandableListView().getExpandableListAdapter();
 							for (int group = 0; group < adapter.getGroupCount(); group++)
 								for (int child = 0; child < adapter.getChildrenCount(group); child++)
 								{
@@ -1295,7 +1296,11 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		
 		public Object getChild(int groupPosition, int childPosition) {
 			
-			return mItems.get(groupPosition).get(childPosition);
+			if (groupPosition >= 0 && groupPosition < mItems.size() &&
+				childPosition >= 0 && childPosition < mItems.get(groupPosition).size())
+				return mItems.get(groupPosition).get(childPosition);
+			else
+				throw new IndexOutOfBoundsException();
 		}
 
 		public long getChildId(int groupPosition, int childPosition) {
@@ -1555,7 +1560,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			        	mContext, 
 			        	NoteItApplication.getPreferredTextAppearance(
 			        		mContext, mFontSize, ItemType.GROUP));
-			        totals.setPadding(0, 0, mListView.getRightMargin(), 0);
+			        totals.setPadding(0, 0, ((ExpandableLVRightIndicator) getExpandableListView()).getRightMargin(), 0);
 			        totals.setVisibility(View.VISIBLE);
 		        } else {
 			        totals.setVisibility(View.GONE);

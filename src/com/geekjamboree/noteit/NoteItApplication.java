@@ -1413,6 +1413,8 @@ public class NoteItApplication extends Application {
 							mShoppingLists.get(index).incrementCount();
 						}
 						
+						Log.d("NoteItApplication.addItem()", "Item added: " + newItem.mName);
+						
 						// Invoke the callback
 						mListener.onPostExecute(retVal, newItem, message);
 					} else 

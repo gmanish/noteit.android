@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- <bitmap xmlns:android="http://schemas.android.com/apk/res/android"
-   	android:src="@drawable/brushed_metal" 
+<!-- <bitmap
+    xmlns:android="http://schemas.android.com/apk/res/android"
+   	android:src="@drawable/notebook" 
    	android:tileMode="repeat" />
- -->
+ -->	
 <shape xmlns:android="http://schemas.android.com/apk/res/android" 
-	android:shape="rectangle">
-    
+		android:shape="rectangle">
     <gradient 
     	android:type="radial"
         android:startColor="#fcd42a"
         android:endColor="#a2881b"
         android:gradientRadius="180" />
-    
 </shape>
+	    

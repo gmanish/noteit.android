@@ -13,7 +13,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 /*
  *  A wrapper over customizing the toolbar in an activity. Note that the order of 
@@ -22,12 +21,12 @@ import android.widget.ViewFlipper;
  */
 class CustomTitlebarWrapper {
 
-    boolean 		mCustomTitleSupported = false;
-	Activity		mParent;
-	ViewFlipper		mFlipper;
-	TextView 		mTitleText;
-	int				index = 0;
-	boolean			mProgressShowing = false;
+    boolean 			mCustomTitleSupported = false;
+	Activity			mParent;
+	ViewFlipperHack		mFlipper;
+	TextView 			mTitleText;
+	int					index = 0;
+	boolean				mProgressShowing = false;
 	
     public CustomTitlebarWrapper(Activity parent) {
     	mParent = parent;
@@ -41,7 +40,7 @@ class CustomTitlebarWrapper {
         	mParent.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.titlebar);
         }
 
-    	mFlipper = (ViewFlipper) mParent.findViewById(R.id.titlebar_flipper);
+    	mFlipper = (ViewFlipperHack) mParent.findViewById(R.id.titlebar_flipper);
     	mTitleText = (TextView) mFlipper.findViewById(R.id.titlebar_title);
         if (mTitleText != null) {
         	mTitleText.setText(charSequence);

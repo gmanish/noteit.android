@@ -17,7 +17,7 @@
         android:ellipsize="end"
         android:gravity="left|center_vertical"
         style="?TextAppearance_Item_Small"
-        android:text="@+id/itemlist_name" />
+        android:text="@string/app_name" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/itemList_details"
@@ -31,7 +31,7 @@
 	        android:layout_width="0dip"
 	        android:layout_weight="1"
 	        android:gravity="left|center_vertical"
-	        android:text="@+id/itemlist_quantity"
+	        android:text="@string/itemlist_total"
 	        android:singleLine="true"
 	        android:ellipsize="end"
 			style="?TextAppearance_Item_SubItem_Small" />
@@ -42,7 +42,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_weight="2"
 	        android:gravity="center"
-	        android:text="@+id/itemlist_price" 
+	        android:text="@string/app_name" 
 	        android:singleLine="true"
 	        android:ellipsize="end"
 	        style="?TextAppearance_Item_SubItem_Small" />
@@ -53,7 +53,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
 	        android:gravity="right|center_vertical"
-	        android:text="@+id/itemlist_Total" 
+	        android:text="@string/app_name" 
 	        android:singleLine="true"
 	        android:ellipsize="end"
 	        style="?TextAppearance_Item_SubItem_Small" />

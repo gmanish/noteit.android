@@ -23,7 +23,7 @@
         android:drawableLeft="?Category_Small"
         android:drawablePadding="5dip"
         style="?TextAppearance_Group_Small"
-        android:text="@+id/itemslist_categoryName" />
+        android:text="@string/app_name" />
 
     <TextView
         android:id="@+id/itemslist_categoryTotals"
@@ -36,6 +36,6 @@
         android:paddingLeft="5dip"
         android:singleLine="true"
         style="?TextAppearance_Group_Small"
-        android:text="@+id/itemslist_categoryTotals" />
+        android:text="@string/app_name" />
 
 </LinearLayout>
