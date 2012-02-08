@@ -216,19 +216,19 @@ public class LoginActivity
 				}
 			});
 		} catch (JSONException e) {
+			hideIndeterminateProgress();
 			Toast.makeText(
 				getApplicationContext(), 
 				getString(R.string.server_error), 
 				Toast.LENGTH_SHORT).show();
 			Log.e("NoteItApplication.loginUser", e.getMessage());
 		} catch (Exception e) {
+			hideIndeterminateProgress();
     		Toast.makeText(
     			getApplicationContext(), 
     			e.getMessage(), 
     			Toast.LENGTH_SHORT).show();
 			Log.e("NoteItApplication.loginUser", e.getMessage());
-		} finally {
-			hideIndeterminateProgress();
 		}
 	}
 	
@@ -284,15 +284,17 @@ public class LoginActivity
 			dialog.show();
     		return;
     	}
-    	showIndeterminateProgress();
     	try {
+        	showIndeterminateProgress();
         	((NoteItApplication) getApplication()).loginUser(
 				emailID.getText().toString(), 
 				password.getText().toString(),
 				mIsHashedPassword,
 				LoginActivity.this);
     	} catch (Exception e) {
-    		hideIndeterminateProgress();
+    		hideIndeterminateProgress();    		
+    		Log.e("doLogin", e.getMessage());
+    	} finally {
     	}
 	}
 }
