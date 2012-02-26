@@ -408,7 +408,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	
     	Log.i("ItemListActivity.onActivityResult", "requestCode:" + requestCode + " resultCode: " + resultCode);
     	final IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-    	if (scanResult != null) {
+    	if (scanResult != null && scanResult.getFormatName() != null && scanResult.getContents() != null) {
     		// handle scan result
         	final NoteItApplication app = (NoteItApplication) getApplication();
     		mToolbar.showInderminateProgress(getString(R.string.progress_message));
@@ -1384,8 +1384,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		}
 
 		public Object getGroup(int groupPosition) {
-			
-			return mCategories.get(groupPosition);
+			if (groupPosition >=0 && groupPosition < getGroupCount())
+				return mCategories.get(groupPosition);
+			else 
+				return null;
 		}
 
 		public int getGroupCount() {
