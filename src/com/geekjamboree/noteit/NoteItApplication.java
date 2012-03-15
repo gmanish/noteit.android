@@ -1626,6 +1626,35 @@ public class NoteItApplication extends Application {
         }
     }
 	
+	public void setItemMetadata(final long itemId, boolean like, final OnMethodExecuteListerner inListener) {
+		
+		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(2);
+		args.add(new BasicNameValuePair("command", like == true ? "do_like_item" : "do_dislike_item"));
+		args.add(new BasicNameValuePair("arg1", String.valueOf(itemId)));
+		args.add(new BasicNameValuePair("arg2", String.valueOf(getUserID())));
+		try {
+			AsyncInvokeURLTask task = new AsyncInvokeURLTask(args, new OnPostExecuteListener() {
+				
+				public void onPostExecute(JSONObject result) {
+					try {
+						if (inListener != null)
+							inListener.onPostExecute(
+								result.getLong("JSONRetVal"), 
+								result.getString("JSONRetMessage"));
+					} catch (JSONException e) {
+						if (inListener != null)
+							inListener.onPostExecute(-1, e.getMessage());
+					}
+				}
+			});
+			task.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (inListener != null)
+				inListener.onPostExecute(-1, e.getMessage());
+		}
+	}
+	
 	public void markAllItemsDone(final long list_ID, boolean done, final OnMethodExecuteListerner listener) {
 		try {
 			ArrayList<NameValuePair> 	args = new ArrayList<NameValuePair>(4);

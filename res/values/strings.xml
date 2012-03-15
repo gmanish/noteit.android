@@ -96,6 +96,8 @@
 	<string name="itemlistqe_bought">Done</string>
 	<string name="itemlistqe_copy">Copy</string>
 	<string name="itemlistqe_move">Move</string>
+	<string name="itemlistqe_like">Like</string>
+	<string name="itemlistqe_dislike">Dislike</string>
 	    	    	
 	<string name="addedit_Title">Add Item</string> 
 	<string name="addedit_EditTitle">Edit Item</string>   
