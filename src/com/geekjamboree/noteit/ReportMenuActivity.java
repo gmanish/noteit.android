@@ -27,6 +27,10 @@ public class ReportMenuActivity extends ExpandableListActivity {
 	final String REPORT_NAME 				= "REPORT_NAME";
 	final String REPORT_ID					= "REPORT_ID";
 	final String REPORT_DESCRIPTION			= "REPORT_DESCRIPTION";
+	final String REPORT_TYPE				= "REPORT_TYPE";
+	
+	final int REPORT_TYPE_ITEM				= 0;
+	final int REPORT_TYPE_CATEGORY			= 1;
 	
 	// Report IDs
 	protected ExpandableLVRightIndicator 	mListView;
@@ -127,7 +131,12 @@ public class ReportMenuActivity extends ExpandableListActivity {
 					Map<String, String> child = (Map<String, String>) 
 						mListView.getExpandableListAdapter().getChild(groupPosition, childPosition);
 					if (child != null) {
-						doDisplayReport(Integer.valueOf(child.get(REPORT_ID)));
+						int reportId = Integer.valueOf(child.get(REPORT_ID));
+						int reportType = Integer.valueOf(child.get(REPORT_TYPE));
+						if (reportType == REPORT_TYPE_ITEM)
+							doDisplayReport(reportId);
+						else if (reportType == REPORT_TYPE_CATEGORY)
+							doDisplayChart(reportId);
 					}
 					return false;
 				}
@@ -166,36 +175,42 @@ public class ReportMenuActivity extends ExpandableListActivity {
 		purchasedToday.put(REPORT_NAME, getString(R.string.reporting_putchased_today));
 		purchasedToday.put(REPORT_ID, String.valueOf(ReportActivity.REPORT_ITEM_PURCHASED_TODAY));
 		purchasedToday.put(REPORT_DESCRIPTION, getString(R.string.reporting_purchased_today_desc));
+		purchasedToday.put(REPORT_TYPE, String.valueOf(REPORT_TYPE_ITEM));
 		purchasedReports.add(purchasedToday);
 		
 		Map<String, String> 			purchasedYesterday = new HashMap<String, String>();
 		purchasedYesterday.put(REPORT_NAME, getString(R.string.reporting_putchased_yesterday));
 		purchasedYesterday.put(REPORT_ID, String.valueOf(ReportActivity.REPORT_ITEM_PURCHASED_YESTERDAY));
 		purchasedYesterday.put(REPORT_DESCRIPTION, getString(R.string.reporting_purchased_yesterday_desc));
+		purchasedYesterday.put(REPORT_TYPE, String.valueOf(REPORT_TYPE_ITEM));
 		purchasedReports.add(purchasedYesterday);
 
 		Map<String, String> 			purchasedThisWeek = new HashMap<String, String>();
 		purchasedThisWeek.put(REPORT_NAME, getString(R.string.reporting_purchased_thisweek));
 		purchasedThisWeek.put(REPORT_ID, String.valueOf(ReportActivity.REPORT_ITEM_PURCHASED_THISWEEK));
 		purchasedThisWeek.put(REPORT_DESCRIPTION, getString(R.string.reporting_purchased_thisweek_desc));
+		purchasedThisWeek.put(REPORT_TYPE, String.valueOf(REPORT_TYPE_ITEM));
 		purchasedReports.add(purchasedThisWeek);
 		
 		Map<String, String> 			purchasedLastWeek = new HashMap<String, String>();
 		purchasedLastWeek.put(REPORT_NAME, getString(R.string.reporting_purchased_lastweek));
 		purchasedLastWeek.put(REPORT_ID, String.valueOf(ReportActivity.REPORT_ITEM_PURCHASED_LASTWEEK));
 		purchasedLastWeek.put(REPORT_DESCRIPTION, getString(R.string.reporting_purchased_lastweek_desc));
+		purchasedLastWeek.put(REPORT_TYPE, String.valueOf(REPORT_TYPE_ITEM));
 		purchasedReports.add(purchasedLastWeek);
 
 		Map<String, String> 			purchasedThisMonth = new HashMap<String, String>();
 		purchasedThisMonth.put(REPORT_NAME, getString(R.string.reporting_purchased_thisMonth));
 		purchasedThisMonth.put(REPORT_ID, String.valueOf(ReportActivity.REPORT_CATEGORY_PURCHASED_THISMONTH));
 		purchasedThisMonth.put(REPORT_DESCRIPTION, getString(R.string.reporting_purchased_thisMonth_desc));
+		purchasedThisMonth.put(REPORT_TYPE, String.valueOf(REPORT_TYPE_CATEGORY));
 		purchasedReports.add(purchasedThisMonth);
 		
 		Map<String, String> 			purchasedLastMonth = new HashMap<String, String>();
 		purchasedLastMonth.put(REPORT_NAME, getString(R.string.reporting_purchased_lastMonth));
 		purchasedLastMonth.put(REPORT_ID, String.valueOf(ReportActivity.REPORT_CATEGORY_PURCHASED_LASTMONTH));
 		purchasedLastMonth.put(REPORT_DESCRIPTION, getString(R.string.reporting_purchased_lastMonth_desc));
+		purchasedLastMonth.put(REPORT_TYPE, String.valueOf(REPORT_TYPE_CATEGORY));
 		purchasedReports.add(purchasedLastMonth);
 		
 //		Map<String, String> 			purchasedAll = new HashMap<String, String>();
@@ -207,6 +222,7 @@ public class ReportMenuActivity extends ExpandableListActivity {
 		pendingAll.put(REPORT_NAME, getString(R.string.reporting_pending_all_menu));
 		pendingAll.put(REPORT_ID, String.valueOf(ReportActivity.REPORT_ITEM_PENDING_ALL));
 		pendingAll.put(REPORT_DESCRIPTION, getString(R.string.reporting_pending_all_desc));
+		pendingAll.put(REPORT_TYPE, String.valueOf(REPORT_TYPE_ITEM));
 		pendingReports.add(pendingAll);
 
 		children.add(purchasedReports);
@@ -230,6 +246,12 @@ public class ReportMenuActivity extends ExpandableListActivity {
 	void doDisplayReport(int reportId) {
 		Intent intent = new Intent(this, ReportActivity.class);
 		intent.putExtra(ReportActivity.REPORT_TYPE, reportId);
+		startActivity(intent);
+	}
+	
+	void doDisplayChart(int reportId) {
+		Intent intent = new Intent(this, ReportCategoryChart.class);
+		intent.putExtra(ReportCategoryChart.REPORT_TYPE, reportId);
 		startActivity(intent);
 	}
 
