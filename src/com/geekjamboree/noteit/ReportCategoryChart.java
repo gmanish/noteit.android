@@ -17,7 +17,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -77,8 +80,10 @@ public class ReportCategoryChart extends Activity {
 					mChartView.repaint();
 			}
 		}
+		doSetupToolbarButtons();
 	}
 
+	
 	@Override
 	protected void onResume() {
 	    
@@ -170,4 +175,43 @@ public class ReportCategoryChart extends Activity {
 			break;
 		}
 	}
+	
+	protected void doSetupToolbarButtons() {
+
+    	ImageButton settingsButton = new ImageButton(this);
+    	settingsButton.setImageResource(R.drawable.settings);
+    	settingsButton.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+    			startActivity(new Intent(ReportCategoryChart.this, MainPreferenceActivity.class));
+			}
+		});
+
+    	ImageButton homeButton = new ImageButton(this);
+    	homeButton.setImageResource(R.drawable.home);
+    	homeButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				Intent intent = new Intent(ReportCategoryChart.this, DashBoardActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				finish();
+			}
+		});
+    	
+//    	ImageButton shareButton = new ImageButton(this);
+//    	shareButton.setImageResource(R.drawable.email);
+//    	shareButton.setOnClickListener(new OnClickListener() {
+//			
+//			public void onClick(View v) {
+//				doEmail();
+//			}
+//		});
+    	
+    	mToolbar.addLeftAlignedButton(homeButton, false, true);
+//    	mToolbar.addRightAlignedButton(shareButton, true, false);
+    	mToolbar.addRightAlignedButton(settingsButton, true, false);
+    }
+	
 }
+
