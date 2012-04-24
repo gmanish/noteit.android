@@ -43,16 +43,7 @@ public class ReportCategoryChart extends Activity {
 		super.onSaveInstanceState(outState);
 		outState.putSerializable("current_series", mSeries);
 		outState.putSerializable("current_renderer", mRenderer);
-	}
-
-	@Override
-	protected void onRestoreInstanceState(Bundle savedState) {
-		
-		super.onRestoreInstanceState(savedState);
-		if (savedState != null) {
-		    mSeries = (CategorySeries) savedState.getSerializable("current_series");
-		    mRenderer = (DefaultRenderer) savedState.getSerializable("current_renderer");
-		}
+		outState.putString("chart_title", mToolbar.GetTitle());
 	}
 	
 	@Override
@@ -70,16 +61,22 @@ public class ReportCategoryChart extends Activity {
 	    mRenderer.setMargins(new int[] { 15, 15, 15, 30 });
 	    mRenderer.setStartAngle(90);
 	    
-		Intent intent = getIntent();
-		if (intent != null) {
-			Bundle bundle = intent.getExtras();
-			if (bundle != null) {
-				int reportId = bundle.getInt(REPORT_TYPE);
-				doReport(reportId);
-				if (mChartView != null)
-					mChartView.repaint();
+	    if (savedInstanceState == null) {
+			Intent intent = getIntent();
+			if (intent != null) {
+				Bundle bundle = intent.getExtras();
+				if (bundle != null) {
+					int reportId = bundle.getInt(REPORT_TYPE);
+					doReport(reportId);
+				}
 			}
-		}
+	    } else {
+		    mSeries = (CategorySeries) savedInstanceState.getSerializable("current_series");
+		    mRenderer = (DefaultRenderer) savedInstanceState.getSerializable("current_renderer");
+		    mToolbar.SetTitle(savedInstanceState.getString("chart_title"));
+	    }
+		if (mChartView != null)
+			mChartView.repaint();
 		doSetupToolbarButtons();
 	}
 
@@ -94,8 +91,8 @@ public class ReportCategoryChart extends Activity {
 				mChartView = ChartFactory.getPieChartView(this, mSeries, mRenderer);
 			    mRenderer.setClickEnabled(false);
 			    layout.addView(mChartView, new LayoutParams(
-				LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT));
+					LayoutParams.FILL_PARENT,
+					LayoutParams.FILL_PARENT));
 			    mChartView.repaint();
 			}
 	    } else {

@@ -77,6 +77,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	static final int QA_ID_MOVE 		= 4;
 	static final int QA_EXPAND			= 5;
 	static final int QA_COLLAPSE		= 6;
+	static final int QA_ID_LIKE			= 7;
 	
 	static final int ITEM_FONT_LARGE 	= 0;
 	static final int ITEM_FONT_MEDIUM	= 1;
@@ -213,6 +214,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 									QA_ID_MOVE,
 									getResources().getString(R.string.itemlistqe_move),
 									getResources().getDrawable(R.drawable.move));
+//        ActionItem likeItem 	= new ActionItem(
+//        							QA_ID_LIKE,
+//        							getResources().getString(R.string.itemlistqe_like),
+//        							getResources().getDrawable(R.drawable.thumbs_up));
 
         mQuickAction = new QuickAction(this);
 		mQuickAction.addActionItem(boughtItem);
@@ -220,6 +225,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		mQuickAction.addActionItem(deleteItem);
 		mQuickAction.addActionItem(copyItem);
 		mQuickAction.addActionItem(moveItem);
+//		mQuickAction.addActionItem(likeItem);
 		
 		//setup the action item click listener
 		mQuickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {

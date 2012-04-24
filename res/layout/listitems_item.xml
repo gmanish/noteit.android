@@ -9,15 +9,35 @@
     android:paddingBottom="10dip"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/itemlist_name"
+<!--     
+    <LinearLayout 
+        android:id="@+id/itemlist_itemgroup"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:ellipsize="end"
-        android:gravity="left|center_vertical"
-        style="?TextAppearance_Item_Small"
-        android:text="@string/app_name" />
+        android:orientation="horizontal" >
+ -->       	
+       	<TextView
+	        android:id="@+id/itemlist_name"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:singleLine="true"
+	        android:ellipsize="end"
+	        android:layout_gravity="left|center_vertical"
+	        android:gravity="left|center_vertical"
+	        style="?TextAppearance_Item_Small"
+	        android:text="@string/app_name" />
+       	
+<!-- 
+       	<Button 
+       	    android:id="@+id/itemlist_like"
+       	    android:layout_width="wrap_content"
+       	    android:layout_height="wrap_content"
+       	    android:layout_gravity="right|center_vertical"
+       	    android:gravity="right|center_vertical"
+       	    style="?NI_ButtonStyle"/>
+       	
+     </LinearLayout> 
+-->
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/itemList_details"

@@ -113,7 +113,7 @@ public class ReportActivity extends Activity {
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putString(HTML_REPORT,mCurrentReportHtml);
+		outState.putString(HTML_REPORT, mCurrentReportHtml);
 		outState.putString(TEXT_REPORT, mCurrentReportText);
 		outState.putString(TEXT_TITLE, mToolbar.GetTitle());
 		super.onSaveInstanceState(outState);
