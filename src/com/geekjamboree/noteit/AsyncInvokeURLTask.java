@@ -98,7 +98,7 @@ class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 			// We're running in the emulator connect with host loopback
 			url = URL_HOST_LOOPBACK;
 		else
-			url = URL_LOCALHOST;
+			url = URL_GEEKJAM;
 		return url;
 	}
 	protected String doGetInBackground(Void...params) {
