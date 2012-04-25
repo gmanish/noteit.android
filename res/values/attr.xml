@@ -51,5 +51,6 @@
 	<attr name="Popup_Background" format="reference"></attr>
 	<attr name="Popup_Up" format="reference"></attr>
 	<attr name="Popup_Down" format="reference"></attr>
+	<attr name="Like_Small" format="reference"></attr>
 					
 </resources>

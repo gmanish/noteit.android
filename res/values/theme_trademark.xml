@@ -172,6 +172,7 @@
 		<item name="Popup_Background">@drawable/popup_trademark</item>
 		<item name="Popup_Up">@drawable/arrow_up_trademark</item>
 		<item name="Popup_Down">@drawable/arrow_down_trademark</item>
+		<item name="Like_Small">@drawable/thumbs_up_dark_small</item>
 					
 	</style>
     			

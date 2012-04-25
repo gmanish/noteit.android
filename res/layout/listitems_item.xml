@@ -33,7 +33,7 @@
        	    android:layout_height="wrap_content"
        	    android:layout_gravity="right|center_vertical"
        	    android:gravity="right|center_vertical"
-       	    android:drawableLeft="@drawable/thumbs_up_dark_small"
+       	    android:drawableLeft="?Like_Small"
        	    android:drawablePadding="5dip"
        	    android:paddingLeft="5dip"
        	    style="?TextAppearance_Item_Small" />
