@@ -800,18 +800,25 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     void doLikeItem(){
     	final Item selItem = (Item) getExpandableListView().getExpandableListAdapter().getChild(mSelectedGroup.get(), mSelectedChild.get());
     	if (selItem != null){
-	    	final NoteItApplication app = (NoteItApplication) getApplication();
+	    	
+    		final NoteItApplication app = (NoteItApplication) getApplication();
+    		mToolbar.showInderminateProgress(getString(R.string.progress_message));
 	    	app.setItemMetadata(selItem.mClassID, true, new OnItemVoteListener() {
 				
 				public void onPostExecute(long retVal, int voteCount, String message) {
-					if (retVal != 0) {
-						Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
-					} else {
-						selItem.mLikeCount = voteCount;
-						ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
-						if (adapter != null) {
-							adapter.notifyDataSetChanged();
+					
+					try {
+						if (retVal != 0) {
+							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+						} else {
+							selItem.mLikeCount = voteCount;
+							ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
+							if (adapter != null) {
+								adapter.notifyDataSetChanged();
+							}
 						}
+					} finally {
+						mToolbar.hideIndeterminateProgress();
 					}
 				}
 			});
@@ -822,18 +829,24 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	final Item selItem = (Item) getExpandableListView().getExpandableListAdapter().getChild(mSelectedGroup.get(), mSelectedChild.get());
     	if (selItem != null){
 	    	final NoteItApplication app = (NoteItApplication) getApplication();
+    		mToolbar.showInderminateProgress(getString(R.string.progress_message));
 	    	app.setItemMetadata(selItem.mClassID, false, new OnItemVoteListener() {
 				
 	    		public void onPostExecute(long retVal, int voteCount, String message) {
-					if (retVal != 0) {
-						Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
-					} else {
-						selItem.mLikeCount = voteCount;
-						ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
-						if (adapter != null) {
-							adapter.notifyDataSetChanged();
+	    			
+	    			try {
+						if (retVal != 0) {
+							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+						} else {
+							selItem.mLikeCount = voteCount;
+							ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
+							if (adapter != null) {
+								adapter.notifyDataSetChanged();
+							}
 						}
-					}
+	    			} finally {
+	    	    		mToolbar.hideIndeterminateProgress();
+	    			}
 				}
 			});
     	}
@@ -1580,7 +1593,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	        	
 	        	if (thisItem.mLikeCount > 0) {
 	        		likeCount.setVisibility(View.VISIBLE);
-	        		likeCount.setText(String.valueOf(thisItem.mLikeCount));
+	        		likeCount.setText(String.format("%,d", thisItem.mLikeCount));
 	        	} else {
 	        		likeCount.setVisibility(View.GONE);
 	        	}
