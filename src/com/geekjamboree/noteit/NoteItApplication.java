@@ -262,6 +262,7 @@ public class NoteItApplication extends Application {
 		public Date		mDateAdded;
 		public String 	mBarcode;
 		public int		mBarcodeFormat;
+		public int 		mLikeCount 		= 0;
 
 		public Item() {
 			
@@ -280,6 +281,7 @@ public class NoteItApplication extends Application {
 			this.mIsAskLater = item.mIsAskLater;
 			this.mBarcode = item.mBarcode;
 			this.mBarcodeFormat = item.mBarcodeFormat;
+			this.mLikeCount = item.mLikeCount;
 		}
 		
 		public void copyFrom(Item item) {
@@ -295,6 +297,7 @@ public class NoteItApplication extends Application {
 			this.mIsAskLater = item.mIsAskLater;
 			this.mBarcode = item.mBarcode;
 			this.mBarcodeFormat = item.mBarcodeFormat;
+			this.mLikeCount = item.mLikeCount;
 		}
 
 		public Item(long itemID) {
@@ -326,6 +329,7 @@ public class NoteItApplication extends Application {
 			mIsAskLater = json.getInt("isAskLater");
 			mBarcode = json.getString("itemBarcode");
 			mBarcodeFormat = json.getInt("itemBarcodeFormat");
+			mLikeCount = json.getInt("voteCount");
 			//mBarcodeFormat
 		}
 		
@@ -437,7 +441,11 @@ public class NoteItApplication extends Application {
     	public void onSearchResults(long retVal, Item item, String message); 
     }
     
-	private long						mUserID = 0;
+    public static interface OnItemVoteListener {
+    	public void onPostExecute(long retVal, int voteCount, String message); 
+    }
+
+    private long						mUserID = 0;
 	private long						mCurrentShoppingListID = 0;
 	private ArrayList<ShoppingList>		mShoppingLists = new ArrayList<ShoppingList>();
 	private ArrayList<Category>			mCategories = new ArrayList<Category>();
@@ -1226,20 +1234,7 @@ public class NoteItApplication extends Application {
 	        	        		JSONObject thisObj = jsonArr.getJSONObject(index);
 	        	        		
 	        	        		// construct the Item from JSON
-	        	        		Item thisItem = new Item(
-	        	        				Long.parseLong(thisObj.getString("instanceID")),
-	        							thisObj.getString("itemName"),
-	        							Long.parseLong(thisObj.getString("categoryID_FK")));
-	        	        		
-	        	        		thisItem.mClassID = thisObj.getLong("itemID_FK");
-	        	        		thisItem.mListID = thisObj.getLong("listID_FK");
-	        	        		thisItem.mUnitID = thisObj.getInt("unitID_FK");
-	        	        		thisItem.mCategoryID = thisObj.getLong("categoryID_FK");
-	        	        		thisItem.mUnitPrice = (float)thisObj.getDouble("unitCost");
-	        	        		thisItem.mQuantity = (float)thisObj.getDouble("quantity");
-	        	        		thisItem.mIsPurchased = thisObj.getInt("isPurchased");
-	        	        		thisItem.mIsAskLater = thisObj.getInt("isAskLater");
-	        	        		
+	        	        		Item thisItem = new Item(thisObj);
 	        	        		items.add(thisItem);
 	        	        		mItems.add(thisItem);
 	        	        	}
@@ -1340,20 +1335,7 @@ public class NoteItApplication extends Application {
 							JSONArray itemArray = json.getJSONArray("arg1");
 							JSONObject itemObject = itemArray.getJSONObject(0);
 							
-							Item item = new Item(
-								itemObject.getLong("instanceID"),
-								itemObject.getString("itemName"),
-								itemObject.getLong("categoryID_FK"));
-							
-							item.mClassID = itemObject.getLong("itemID_FK");
-							item.mListID = itemObject.getLong("listID_FK");
-							item.mUnitID = itemObject.getInt("unitID_FK");
-							item.mCategoryID = itemObject.getLong("categoryID_FK");
-							item.mUnitPrice = (float)itemObject.getDouble("unitCost");
-							item.mQuantity = (float)itemObject.getDouble("quantity");
-	    	        		item.mIsPurchased = itemObject.getInt("isPurchased");
-	    	        		item.mIsAskLater = itemObject.getInt("isAskLater");
-							
+							Item item = new Item(itemObject);
 							mListener.onPostExecute(retVal, item, json.getString("JSONRetMessage"));
 						} else {
 							mListener.onPostExecute(retVal, null, json.getString("JSONRetMessage"));
@@ -1626,7 +1608,7 @@ public class NoteItApplication extends Application {
         }
     }
 	
-	public void setItemMetadata(final long itemId, boolean like, final OnMethodExecuteListerner inListener) {
+	public void setItemMetadata(final long itemId, boolean like, final OnItemVoteListener inListener) {
 		
 		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(2);
 		args.add(new BasicNameValuePair("command", like == true ? "do_like_item" : "do_dislike_item"));
@@ -1637,13 +1619,22 @@ public class NoteItApplication extends Application {
 				
 				public void onPostExecute(JSONObject result) {
 					try {
-						if (inListener != null)
-							inListener.onPostExecute(
-								result.getLong("JSONRetVal"), 
-								result.getString("JSONRetMessage"));
+						long retVal = result.getLong("JSONRetVal"); 
+						if (inListener != null) {
+							if (retVal == 0)
+								inListener.onPostExecute(
+									retVal, 
+									result.getInt("voteCount"),
+									result.getString("JSONRetMessage"));
+							else
+								inListener.onPostExecute(
+									retVal, 
+									0,
+									result.getString("JSONRetMessage"));
+						}
 					} catch (JSONException e) {
 						if (inListener != null)
-							inListener.onPostExecute(-1, e.getMessage());
+							inListener.onPostExecute(-1, 0, e.getMessage());
 					}
 				}
 			});
@@ -1651,7 +1642,7 @@ public class NoteItApplication extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (inListener != null)
-				inListener.onPostExecute(-1, e.getMessage());
+				inListener.onPostExecute(-1, 0, e.getMessage());
 		}
 	}
 	

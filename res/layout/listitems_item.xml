@@ -9,35 +9,36 @@
     android:paddingBottom="10dip"
     android:orientation="vertical" >
 
-<!--     
     <LinearLayout 
         android:id="@+id/itemlist_itemgroup"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
- -->       	
-       	<TextView
+
+        <TextView
 	        android:id="@+id/itemlist_name"
-	        android:layout_width="fill_parent"
+	        android:layout_width="0dip"
 	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
 	        android:singleLine="true"
 	        android:ellipsize="end"
 	        android:layout_gravity="left|center_vertical"
 	        android:gravity="left|center_vertical"
 	        style="?TextAppearance_Item_Small"
 	        android:text="@string/app_name" />
-       	
-<!-- 
-       	<Button 
-       	    android:id="@+id/itemlist_like"
+
+       	<TextView 
+       	    android:id="@+id/itemlist_likeCount"
        	    android:layout_width="wrap_content"
        	    android:layout_height="wrap_content"
        	    android:layout_gravity="right|center_vertical"
        	    android:gravity="right|center_vertical"
-       	    style="?NI_ButtonStyle"/>
+       	    android:drawableLeft="@drawable/thumbs_up_dark_small"
+       	    android:drawablePadding="5dip"
+       	    android:paddingLeft="5dip"
+       	    style="?TextAppearance_Item_Small" />
        	
-     </LinearLayout> 
--->
+    </LinearLayout> 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/itemList_details"

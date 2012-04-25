@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.geekjamboree.noteit.ActionItem;
 import com.geekjamboree.noteit.NoteItApplication.OnAddItemListener;
 import com.geekjamboree.noteit.NoteItApplication.OnFetchItemsListener;
+import com.geekjamboree.noteit.NoteItApplication.OnItemVoteListener;
 import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
 import com.geekjamboree.noteit.NoteItApplication.ShoppingList;
 import com.geekjamboree.noteit.QuickAction;
@@ -214,10 +215,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 									QA_ID_MOVE,
 									getResources().getString(R.string.itemlistqe_move),
 									getResources().getDrawable(R.drawable.move));
-//        ActionItem likeItem 	= new ActionItem(
-//        							QA_ID_LIKE,
-//        							getResources().getString(R.string.itemlistqe_like),
-//        							getResources().getDrawable(R.drawable.thumbs_up));
+        ActionItem likeItem 	= new ActionItem(
+        							QA_ID_LIKE,
+        							getResources().getString(R.string.itemlistqe_like),
+        							getResources().getDrawable(R.drawable.thumbs_up));
 
         mQuickAction = new QuickAction(this);
 		mQuickAction.addActionItem(boughtItem);
@@ -225,7 +226,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		mQuickAction.addActionItem(deleteItem);
 		mQuickAction.addActionItem(copyItem);
 		mQuickAction.addActionItem(moveItem);
-//		mQuickAction.addActionItem(likeItem);
+		mQuickAction.addActionItem(likeItem);
 		
 		//setup the action item click listener
 		mQuickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
@@ -247,6 +248,9 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 						break;
 					case QA_ID_MOVE:
 						doMoveItem();
+						break;
+					case QA_ID_LIKE:
+						doLikeItem();
 						break;
 				}
 			}
@@ -797,11 +801,17 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	final Item selItem = (Item) getExpandableListView().getExpandableListAdapter().getChild(mSelectedGroup.get(), mSelectedChild.get());
     	if (selItem != null){
 	    	final NoteItApplication app = (NoteItApplication) getApplication();
-	    	app.setItemMetadata(selItem.mClassID, true, new OnMethodExecuteListerner() {
+	    	app.setItemMetadata(selItem.mClassID, true, new OnItemVoteListener() {
 				
-	    		public void onPostExecute(long resultCode, String message) {
-					if (resultCode != 0) {
+				public void onPostExecute(long retVal, int voteCount, String message) {
+					if (retVal != 0) {
 						Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+					} else {
+						selItem.mLikeCount = voteCount;
+						ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
+						if (adapter != null) {
+							adapter.notifyDataSetChanged();
+						}
 					}
 				}
 			});
@@ -812,11 +822,17 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	final Item selItem = (Item) getExpandableListView().getExpandableListAdapter().getChild(mSelectedGroup.get(), mSelectedChild.get());
     	if (selItem != null){
 	    	final NoteItApplication app = (NoteItApplication) getApplication();
-	    	app.setItemMetadata(selItem.mClassID, false, new OnMethodExecuteListerner() {
+	    	app.setItemMetadata(selItem.mClassID, false, new OnItemVoteListener() {
 				
-				public void onPostExecute(long resultCode, String message) {
-					if (resultCode != 0) {
+	    		public void onPostExecute(long retVal, int voteCount, String message) {
+					if (retVal != 0) {
 						Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+					} else {
+						selItem.mLikeCount = voteCount;
+						ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
+						if (adapter != null) {
+							adapter.notifyDataSetChanged();
+						}
 					}
 				}
 			});
@@ -1491,6 +1507,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	        
 	        if (view != null) {
     	        TextView				textView = (TextView) view.findViewById(R.id.itemlist_name);
+    	        TextView				likeCount = (TextView) view.findViewById(R.id.itemlist_likeCount);
     	        TextView 				quantity = (TextView) view.findViewById(R.id.itemlist_quantity);
     	        TextView 				price = (TextView) view.findViewById(R.id.itemlist_price);
     	        TextView				total = (TextView) view.findViewById(R.id.itemlist_Total);
@@ -1559,6 +1576,13 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	        		quantity.setVisibility(View.GONE);
 	        		price.setVisibility(View.GONE);
 	        		total.setVisibility(View.GONE);
+	        	}
+	        	
+	        	if (thisItem.mLikeCount > 0) {
+	        		likeCount.setVisibility(View.VISIBLE);
+	        		likeCount.setText(String.valueOf(thisItem.mLikeCount));
+	        	} else {
+	        		likeCount.setVisibility(View.GONE);
 	        	}
 	        }
 	        return view;
