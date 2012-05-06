@@ -30,49 +30,59 @@ import com.geekjamboree.noteit.ItemListActivity.ProductSearchMethod;
 public class NoteItApplication extends Application {
 
 	public class Country {
-		public String 	mCountryCode = "";
-		public String 	mCurrencyCode = "";
-		public String 	mCurrencySymbol = "";
-		public String 	mCurrencyName = "";
-		public int 		mCurrencyIsRight = 0;
+		
+		public int 		mCountryId 			= 0;
+		public String 	mCountryCode 		= "";
 		
 		public Country(
-			String countryCode,
-			String currencyCode) {
+			int countryId) {
 			
-			mCountryCode = countryCode;
-			mCurrencyCode = currencyCode;
+			mCountryId = countryId;
 		}
 		
 		public Country(
-			String countryCode, 
-			String currencyCode, 
-			String currencySymbol, 
-			int currencyIsRight, 
-			String currencyName) {
+			int 	countryId,
+			String 	countryCode) {
 			
-			mCountryCode = countryCode;
-			mCurrencyCode = currencyCode;
-			mCurrencySymbol = currencySymbol;
-			mCurrencyName = currencyName;
-			mCurrencyIsRight = currencyIsRight;
+			mCountryId		= countryId;
+			mCountryCode 	= countryCode;
 		}
 		
 		public Country(JSONObject json) throws JSONException {
+			mCountryId = json.getInt("countryId");
 			mCountryCode = json.getString("countryCode");
-			mCurrencyCode = json.getString("currencyCode"); 
+		}
+
+	}
+	
+	public class Currency {
+	
+		public int 		mCurrencyId 		= 0;
+		public String 	mCurrencyCode 		= "";
+		public String 	mCurrencySymbol 	= "";
+		public String 	mCurrencyName 		= "";
+		public int 		mCurrencyIsRight 	= 0;
+		
+		public static final int kDefaultCurrencyId = 135; // USD
+		
+		public Currency(int currencyId) {
+			mCurrencyId = currencyId;
+		}
+		
+		public Currency(JSONObject json) throws JSONException {
+			
+			mCurrencyId = json.getInt("currencyId");
+			mCurrencyCode = json.getString("currencyCode");
 			mCurrencySymbol = json.getString("currencySymbol");
 			mCurrencyIsRight = json.getInt("currencyIsRight");
 			mCurrencyName = json.getString("currencyName");
 		}
 
 		public boolean equals(Object obj){
-			if (obj instanceof Country)
+			if (obj instanceof Currency)
 				// As of now, we're only needing the currency code, so don't
 				// compare against the country code
-				return mCurrencyCode.equals(((Country) obj).mCurrencyCode);
-//				return (mCountryCode.equals(((Country) obj).mCountryCode) &&
-//						mCurrencyCode.equals(((Country) obj).mCurrencyCode));
+				return mCurrencyId == ((Currency)obj).mCurrencyId;
 			else
 				return false;
 		}
@@ -132,23 +142,20 @@ public class NoteItApplication extends Application {
 	}
 	
 	public class Preference {
-		public String 	mCountryCode = "";
-		public String 	mCurrencyCode = "";
 		
-		public Preference(String countryCode, String currencyCode) {
-			mCountryCode = countryCode;
-			mCurrencyCode = currencyCode;
+		public int mCurrencyId = 0;
+		
+		public Preference(int currencyId) {
+			mCurrencyId = currencyId;
 		}
 		
 		public Preference(JSONObject json) throws JSONException {
-			mCountryCode = json.getString("countryCode");
-			mCurrencyCode = json.getString("currencyCode");
+			mCurrencyId = json.getInt("currencyId");
 		}
 		
 		public JSONObject getJSON() throws JSONException {
 			JSONObject json = new JSONObject();
-			json.put("countryCode", mCountryCode);
-			json.put("currencyCode", mCurrencyCode);
+			json.put("currencyId", mCurrencyId);
 			return json;
 		}
 	}
@@ -451,9 +458,11 @@ public class NoteItApplication extends Application {
 	private ArrayList<Category>			mCategories = new ArrayList<Category>();
 	private ArrayList<Item>				mItems = new ArrayList<Item>();
 	private ArrayList<Unit>				mUnits = new ArrayList<Unit>();
-	private ArrayList<Country>			mCountries = new ArrayList<Country>();
-	private Country						mDefaultCountry = new Country("US", "USD","$", 0, "US Dollar");
-	private Preference					mUserPrefs = new Preference("US", "USD");
+//	private ArrayList<Country>			mCountries = new ArrayList<Country>();
+	private ArrayList<Currency>			mCurrencies = new ArrayList<Currency>();
+//	private Country						mDefaultCountry;
+	private Currency					mDefaultCurrency;
+	private Preference					mUserPrefs = new Preference(Currency.kDefaultCurrencyId);
 	private int 						mItemsStartPos = 0;
 	private int 						mItemsBatchSize = 10;
 	private boolean						mItemsMorePending = true;
@@ -479,13 +488,17 @@ public class NoteItApplication extends Application {
 		return mSanityPrevails;
 	}
 
-	public ArrayList<Country> getCountries() {
-		return mCountries;
+//	public ArrayList<Country> getCountries() {
+//		return mCountries;
+//	}
+	
+	public ArrayList<Currency> getCurrencies() {
+		return mCurrencies;
 	}
 	
-	public Country getDefaultCountry () {
-		return mDefaultCountry;
-	}
+//	public Country getDefaultCountry () {
+//		return mDefaultCountry;
+//	}
 	
 	public Preference getUserPrefs() {
 		return mUserPrefs;
@@ -592,21 +605,34 @@ public class NoteItApplication extends Application {
 		});
 	}
 	
+	public String getCurrencyForId(int currencyId) {
+		
+		String currencyCode = null;
+		if (mCurrencies != null && mUserPrefs != null) {
+			int index = mCurrencies.indexOf(new Currency(currencyId));
+			if (index >= 0) {
+				currencyCode = new String(mCurrencies.get(index).mCurrencyCode);
+			}
+		}
+		
+		return currencyCode != null ? currencyCode : "";
+	}
+	
 	public String getCurrencyFormat(boolean formatString) {
 		
 		String currencyFormat = null;
-        if (mCountries != null && mUserPrefs != null) {
-        	int index = mCountries.indexOf(
-        			new Country(mUserPrefs.mCountryCode, mUserPrefs.mCurrencyCode));
+        if (mCurrencies != null && mUserPrefs != null) {
+        	int index = mCurrencies.indexOf(
+        			new Currency(mUserPrefs.mCurrencyId));
         	if (index >= 0) {
-        		if (mCountries.get(index).mCurrencyIsRight > 0) {
+        		if (mCurrencies.get(index).mCurrencyIsRight > 0) {
         			currencyFormat = new String(
         					(formatString ? "%1$s " : "%1$.2f ") + 
-        					mCountries.get(index).mCurrencySymbol);
+        					mCurrencies.get(index).mCurrencySymbol);
         		}
         		else { 
         			currencyFormat = new String(
-        					mCountries.get(index).mCurrencySymbol + 
+        					mCurrencies.get(index).mCurrencySymbol + 
         					(formatString ? " %1$s " : " %1$.2f"));
         		}
         	}
@@ -622,8 +648,7 @@ public class NoteItApplication extends Application {
 			
 			try {
 				args.add(new BasicNameValuePair("command", "do_save_prefs"));
-				args.add(new BasicNameValuePair("arg1", mUserPrefs.mCountryCode));
-				args.add(new BasicNameValuePair("arg2", mUserPrefs.mCurrencyCode));
+				args.add(new BasicNameValuePair("arg2", String.valueOf(mUserPrefs.mCurrencyId)));
 				args.add(new BasicNameValuePair("arg3", String.valueOf(mUserID)));
 				
 				AsyncInvokeURLTask task = new AsyncInvokeURLTask(args, 
@@ -1770,42 +1795,42 @@ public class NoteItApplication extends Application {
 		}		
 	}
 	
-	public void fetchCountries(final OnMethodExecuteListerner listener) {
-		
-		ArrayList<NameValuePair>	nameValuePairs = new ArrayList<NameValuePair>(1);
-		nameValuePairs.add(new BasicNameValuePair("command", "do_get_countries"));
-
-		AsyncInvokeURLTask myTask;
-		try {
-			myTask = new AsyncInvokeURLTask(
-					nameValuePairs, 
-					new OnPostExecuteListener() {
-				
-				public void onPostExecute(JSONObject result) {
-					try {
-						long retVal = result.getLong("JSONRetVal");
-						if (retVal == 0){
-							JSONArray jsonCountries = result.getJSONArray("arg3");
-							for (int i = 0; i < jsonCountries.length(); i++) {
-								mCountries.add(new Country(jsonCountries.getJSONObject(i)));
-							}
-							
-							if (result.has("arg2"))
-								mDefaultCountry = new Country(result.getJSONObject("arg2"));
-						}
-						if (listener != null)
-							listener.onPostExecute(retVal, result.getString("JSONRetMessage"));
-					} catch (JSONException e) {
-						if (listener != null)
-							listener.onPostExecute(-1, e.getMessage());
-					}
-				}
-			});
-			myTask.execute();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	public void fetchCountries(final OnMethodExecuteListerner listener) {
+//		
+//		ArrayList<NameValuePair>	nameValuePairs = new ArrayList<NameValuePair>(1);
+//		nameValuePairs.add(new BasicNameValuePair("command", "do_get_countries"));
+//
+//		AsyncInvokeURLTask myTask;
+//		try {
+//			myTask = new AsyncInvokeURLTask(
+//					nameValuePairs, 
+//					new OnPostExecuteListener() {
+//				
+//				public void onPostExecute(JSONObject result) {
+//					try {
+//						long retVal = result.getLong("JSONRetVal");
+//						if (retVal == 0){
+//							JSONArray jsonCountries = result.getJSONArray("arg3");
+//							for (int i = 0; i < jsonCountries.length(); i++) {
+//								mCountries.add(new Country(jsonCountries.getJSONObject(i)));
+//							}
+//							
+//							if (result.has("arg2"))
+//								mDefaultCountry = new Country(result.getJSONObject("arg2"));
+//						}
+//						if (listener != null)
+//							listener.onPostExecute(retVal, result.getString("JSONRetMessage"));
+//					} catch (JSONException e) {
+//						if (listener != null)
+//							listener.onPostExecute(-1, e.getMessage());
+//					}
+//				}
+//			});
+//			myTask.execute();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 	
 	public void fetchCurrencies(final OnMethodExecuteListerner listener) {
 		
@@ -1822,13 +1847,13 @@ public class NoteItApplication extends Application {
 					try {
 						long retVal = result.getLong("JSONRetVal");
 						if (retVal == 0){
-							JSONArray jsonCountries = result.getJSONArray("arg3");
-							for (int i = 0; i < jsonCountries.length(); i++) {
-								mCountries.add(new Country(jsonCountries.getJSONObject(i)));
+							JSONArray jsonCurrencies = result.getJSONArray("arg3");
+							for (int i = 0; i < jsonCurrencies.length(); i++) {
+								mCurrencies.add(new Currency(jsonCurrencies.getJSONObject(i)));
 							}
 							
 							if (result.has("arg2"))
-								mDefaultCountry = new Country(result.getJSONObject("arg2"));
+								mDefaultCurrency = new Currency(result.getJSONObject("arg2"));
 						}
 						if (listener != null)
 							listener.onPostExecute(retVal, result.getString("JSONRetMessage"));
@@ -1991,7 +2016,7 @@ public class NoteItApplication extends Application {
 	    		item.mUnitID = 1; // unit
 	    		item.mName = product.getString("title");
 	    		String currency = inventories.getJSONObject(0).getString("currency");
-	    		if (currency.equals(mUserPrefs.mCurrencyCode)) {
+	    		if (currency.equals(mUserPrefs.mCurrencyId)) {
     	    		item.mUnitPrice = (float) inventories.getJSONObject(0).getDouble("price");
 	    		}
 	    		break;

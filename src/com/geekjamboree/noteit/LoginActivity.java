@@ -144,7 +144,7 @@ public class LoginActivity
     	
 		NoteItApplication app = (NoteItApplication) getApplication();
     	if (app.getUserPrefs() != null) {
-			editor.putString("currency", app.getUserPrefs().mCurrencyCode);
+			editor.putString("currency", String.valueOf(app.getUserPrefs().mCurrencyId));
 		}
 
     	editor.commit();

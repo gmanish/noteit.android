@@ -2,7 +2,7 @@ package com.geekjamboree.noteit;
 
 import java.util.ArrayList;
 
-import com.geekjamboree.noteit.NoteItApplication.Country;
+import com.geekjamboree.noteit.NoteItApplication.Currency;
 import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
 import com.geekjamboree.noteit.NoteItApplication.Preference;
 import com.geekjamboree.noteit.R;
@@ -26,7 +26,7 @@ public class MainPreferenceActivity extends PreferenceActivity {
 				NoteItApplication app = (NoteItApplication) getApplication();
 				if (app != null) {
 					Preference appPrefs = app.getUserPrefs();
-					appPrefs.mCurrencyCode = sharedPreferences.getString(key, "USD");
+					appPrefs.mCurrencyId = Integer.valueOf(sharedPreferences.getString(key, String.valueOf(Currency.kDefaultCurrencyId)));
 					app.saveUserPreferences(new OnMethodExecuteListerner() {
 						
 						public void onPostExecute(long resultCode, String message) {
@@ -67,22 +67,22 @@ public class MainPreferenceActivity extends PreferenceActivity {
 			
 			NoteItApplication 	app = (NoteItApplication) getApplication();
 			ListPreference 		currenciesPref = (ListPreference) findPreference("currency");
-			ArrayList<Country> 	countries = app.getCountries();
-			if (currenciesPref != null &&  countries != null && countries.size() > 0){
-				CharSequence[] currencies = new String[countries.size()];
-				CharSequence[] currencyIds = new String[countries.size()];
+			ArrayList<Currency> currencies = app.getCurrencies();
+			if (currenciesPref != null &&  currencies != null && currencies.size() > 0){
+				CharSequence[] currencyNames = new String[currencies.size()];
+				CharSequence[] currencyIds = new String[currencies.size()];
 				
 				int selIndex = -1;
 				Preference prefs = app.getUserPrefs();
-				for (int index = 0; index < countries.size(); index++) {
-					currencies[index] = countries.get(index).mCurrencyName + 
-							" (" + countries.get(index).mCurrencySymbol + ")";
-					currencyIds[index] = countries.get(index).mCurrencyCode;
-					if (prefs != null && currencyIds[index].equals(prefs.mCurrencyCode))
+				for (int index = 0; index < currencies.size(); index++) {
+					currencyNames[index] = currencies.get(index).mCurrencyName + 
+							" (" + currencies.get(index).mCurrencySymbol + ")";
+					currencyIds[index] = String.valueOf(currencies.get(index).mCurrencyId);
+					if (prefs != null && currencyIds[index].equals(String.valueOf(prefs.mCurrencyId)))
 						selIndex = index;
 				}
 				
-				currenciesPref.setEntries(currencies);
+				currenciesPref.setEntries(currencyNames);
 				currenciesPref.setEntryValues(currencyIds);
 				if (selIndex >= 0)
 					currenciesPref.setValueIndex(selIndex);
