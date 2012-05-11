@@ -276,7 +276,7 @@ public class CategoryListActivity
     
     protected void doEditCategory(final int position) {
     	
-    	doShowCategoryNameDialog(false, new CategoryNameDialogListener() {
+    	doShowCategoryNameDialog(false, position, new CategoryNameDialogListener() {
 			
 			public void onDialogOK(final String categoryName) {
 		    	
@@ -338,6 +338,7 @@ public class CategoryListActivity
     
     protected void doShowCategoryNameDialog(
     		boolean isAdd, 
+    		int selPosition,
     		final CategoryNameDialogListener listener) {
 		
     	// inflate the view from resource layout
@@ -352,8 +353,17 @@ public class CategoryListActivity
 
 		if (isAdd)
 			dialog.setTitle(getResources().getString(R.string.categorylists_add));
-		else
+		else {
 			dialog.setTitle(getResources().getString(R.string.categorylists_edit));
+			EditText  editName = (EditText) dialogView.findViewById(R.id.dialog_addshoppinglist_editTextName);
+			if (editName != null) {
+				Category category = ((NoteItApplication) getApplication()).getCategory(selPosition);
+				if (category != null) {
+					editName.setText(category.mName);
+					editName.selectAll();
+				}
+			}
+		}
 			
 		dialog.setButton(DialogInterface.BUTTON1, "OK", new DialogInterface.OnClickListener() {
 			
@@ -379,7 +389,7 @@ public class CategoryListActivity
 	}
     
     void doAddCategory() {
-		doShowCategoryNameDialog(true, 
+		doShowCategoryNameDialog(true, 0, // Position not relevant in add case 
 			new CategoryNameDialogListener() {
 				public void onDialogOK(String categoryName) {
 					

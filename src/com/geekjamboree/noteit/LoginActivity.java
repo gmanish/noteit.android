@@ -60,6 +60,7 @@ public class LoginActivity
         if (!emailID.equals("") && isRememberMe) {
 	        EditText editTextEmail = (EditText) findViewById(R.id.editEmailID);
 	        editTextEmail.setText(emailID);
+	        editTextEmail.selectAll();
         }
         
         String 		password = mPrefs.getString("password", "");
