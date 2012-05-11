@@ -461,7 +461,7 @@ public class NoteItApplication extends Application {
 //	private ArrayList<Country>			mCountries = new ArrayList<Country>();
 	private ArrayList<Currency>			mCurrencies = new ArrayList<Currency>();
 //	private Country						mDefaultCountry;
-	private Currency					mDefaultCurrency;
+//	private Currency					mDefaultCurrency = null;
 	private Preference					mUserPrefs = new Preference(Currency.kDefaultCurrencyId);
 	private int 						mItemsStartPos = 0;
 	private int 						mItemsBatchSize = 10;
@@ -1852,8 +1852,8 @@ public class NoteItApplication extends Application {
 								mCurrencies.add(new Currency(jsonCurrencies.getJSONObject(i)));
 							}
 							
-							if (result.has("arg2"))
-								mDefaultCurrency = new Currency(result.getJSONObject("arg2"));
+//							if (result.has("arg2"))
+//								mDefaultCurrency = new Currency(result.getJSONObject("arg2"));
 						}
 						if (listener != null)
 							listener.onPostExecute(retVal, result.getString("JSONRetMessage"));
