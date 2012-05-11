@@ -31,7 +31,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
-import android.widget.Toast;
 
 /**
  * @author mgupta
@@ -67,7 +66,10 @@ public class CategoryListActivity
 					if (resultCode == 0) {
 						notifyDataSetChanged();
 					} else
-						Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+						CustomToast.makeText(
+								CategoryListActivity.this, 
+								CategoryListActivity.this.getListView(), 
+								message).show(true);
 				}
 			});
 		}
@@ -226,7 +228,10 @@ public class CategoryListActivity
 						if (resultCode == 0) {
 							mAdapter.notifyDataSetChanged();
 						} else
-							Toast.makeText(CategoryListActivity.this, message, Toast.LENGTH_LONG).show();
+							CustomToast.makeText(
+									CategoryListActivity.this, 
+									CategoryListActivity.this.getListView(), 
+									message).show(true);
 					} finally {
 						mToolbar.hideIndeterminateProgress();
 					}
@@ -291,7 +296,10 @@ public class CategoryListActivity
 						public void onPostExecute(long resultCode, String message) {
 							try {
 								if (resultCode != 0)
-									Toast.makeText(CategoryListActivity.this, message, Toast.LENGTH_LONG).show();
+									CustomToast.makeText(
+											CategoryListActivity.this, 
+											CategoryListActivity.this.getListView(), 
+											message).show(true);
 								else {
 									mAdapter.getItem(position).mName = categoryName;
 									mAdapter.notifyDataSetChanged();
@@ -319,7 +327,10 @@ public class CategoryListActivity
 				public void onPostExecute(long resultCode, String message) {
 					try {
 						if (resultCode != 0)
-							Toast.makeText(CategoryListActivity.this, message, Toast.LENGTH_LONG).show();
+							CustomToast.makeText(
+									CategoryListActivity.this, 
+									CategoryListActivity.this.getListView(), 
+									message).show(true);
 						else
 							mAdapter.notifyDataSetChanged();
 					} finally {
@@ -405,7 +416,10 @@ public class CategoryListActivity
 								public void onPostExecute(long result, Category category, String message) {
 									try {
 										if (result != 0) {
-											Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+											CustomToast.makeText(
+													CategoryListActivity.this, 
+													CategoryListActivity.this.getListView(), 
+													message).show(true);
 										} else {
 								    		mAdapter.notifyDataSetChanged();
 										}

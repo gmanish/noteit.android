@@ -223,7 +223,7 @@ class AddEditItemDialog extends Dialog {
 					FloatingPopup.MakePopup(
 						getContext(), 
 						askLater, 
-						getContext().getResources().getString(R.string.addedit_asklaterhelp)).show();
+						getContext().getResources().getString(R.string.addedit_asklaterhelp)).show(false);
 				}
 			});
     	}

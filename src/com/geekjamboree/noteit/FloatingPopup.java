@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Gravity;
 import android.view.WindowManager;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
@@ -73,7 +74,12 @@ class FloatingPopup extends PopupWindow {
 		return new FloatingPopup(context, anchor, text);
 	}
 	
-	public void show() {
-		showAsDropDown(mAnchor);
+	public void show(boolean bCenterOnAnchorView) {
+		if (!bCenterOnAnchorView) {
+			showAsDropDown(mAnchor);
+		} else {
+			// center in the parent
+			showAtLocation(mContentView, Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
+		}
 	}
 }
