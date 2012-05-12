@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 public class RegisterActivity extends Activity implements OnEulaAgreedTo {
 
@@ -23,7 +22,8 @@ public class RegisterActivity extends Activity implements OnEulaAgreedTo {
 
     CustomTitlebarWrapper 		mToolbar;
     boolean						mEulaAccepted = false;
-
+    View						mRoot = null;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
@@ -38,6 +38,7 @@ public class RegisterActivity extends Activity implements OnEulaAgreedTo {
         editor.putBoolean(PREFERENCE_EULA_ACCEPTED, false);
         editor.commit();
         
+        mRoot = findViewById(R.id.register_root);  
 		mEulaAccepted = prefs.getBoolean(PREFERENCE_EULA_ACCEPTED, false);
 		Button eula = (Button) findViewById(R.id.buttonEula);
 		if (eula != null) {
@@ -128,10 +129,10 @@ public class RegisterActivity extends Activity implements OnEulaAgreedTo {
 												new Intent(RegisterActivity.this, LoginActivity.class));
 											finish();
 										} else {
-											Toast.makeText(
-												RegisterActivity.this, 
-												message, 
-												Toast.LENGTH_LONG).show();
+								    		CustomToast.makeText(
+								    				RegisterActivity.this,
+								    				mRoot,
+								    				message).show(true);
 										}
 									} finally {
 										hideIndeterminateProgress();

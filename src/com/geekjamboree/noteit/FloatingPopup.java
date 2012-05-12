@@ -79,7 +79,7 @@ class FloatingPopup extends PopupWindow {
 			showAsDropDown(mAnchor);
 		} else {
 			// center in the parent
-			showAtLocation(mContentView, Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
+			showAtLocation(mAnchor, Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
 		}
 	}
 }

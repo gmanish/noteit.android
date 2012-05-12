@@ -26,7 +26,6 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 class AddEditItemDialog extends Dialog {
 	
@@ -105,6 +104,7 @@ class AddEditItemDialog extends Dialog {
 	Spinner					mSpinCategories;
 	Spinner					mSpinUnits;
 	CheckBox				mAskLater;
+	View					mContentView = null;
 
 	final AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -215,6 +215,7 @@ class AddEditItemDialog extends Dialog {
         	title = getContext().getResources().getString(R.string.addedit_EditTitle);
         }
         
+        mContentView = findViewById(R.id.addedit_view);
     	((TextView) findViewById(R.id.addedit_textview_caption)).setText(title);
     	final ImageButton askLater = (ImageButton) findViewById(R.id.addedit_asklater_help);
     	if (askLater != null) {
@@ -267,14 +268,16 @@ class AddEditItemDialog extends Dialog {
 					dismiss();
 		    	}catch (DialogFieldException dialogException){
 		    		
-		    		Toast.makeText(getContext(), 
-		    				dialogException.getMessage(), 
-		    				Toast.LENGTH_LONG).show();
+		    		CustomToast.makeText(
+		    				getContext(),
+		    				mContentView,
+		    				dialogException.getMessage()).show(true);
 		    	}
 		    	catch (Exception e) {
-		    		Toast.makeText(getContext(), 
-		    				getContext().getResources().getString(R.string.server_error), 
-		    				Toast.LENGTH_LONG).show();
+		    		CustomToast.makeText(
+		    				getContext(),
+		    				mContentView,
+		    				getContext().getResources().getString(R.string.server_error)).show(true);
 		    	}
 			}
 		});
@@ -304,16 +307,17 @@ class AddEditItemDialog extends Dialog {
 					clearDialogFields();
 		    	}catch (DialogFieldException dialogException){
 		    		
-		    		Toast.makeText(getContext(), 
-		    				dialogException.getMessage(), 
-		    				Toast.LENGTH_LONG).show();
-		    		
+		    		CustomToast.makeText(
+		    				getContext(),
+		    				mContentView,
+		    				dialogException.getMessage()).show(true);
 		    	}
 		    	catch (Exception e) {
-		    		Toast.makeText(getContext(), 
-		    				getContext().getResources().getString(R.string.server_error), 
-		    				Toast.LENGTH_LONG).show();
-	    	}
+		    		CustomToast.makeText(
+		    				getContext(),
+		    				mContentView,
+		    				getContext().getResources().getString(R.string.server_error)).show(true);
+		    	}
 			}
 		});
         
@@ -492,7 +496,10 @@ class AddEditItemDialog extends Dialog {
 					mOriginalItem = mApplication.new Item(item);
 					populateView(item, Item.ITEM_ALL);
 				} else {
-					Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+		    		CustomToast.makeText(
+		    				getContext(),
+		    				mContentView,
+		    				message).show(true);
 					mOriginalItem = null;
 				}
 			}

@@ -44,7 +44,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ItemListActivity extends ExpandableListActivity implements NoteItApplication.OnFetchItemsListener {
 	
@@ -68,6 +67,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	LayoutInflater					mLayoutInflater;
 	AlertDialog 					mInstallScanAppDialog = null;
 	Item							mTempItemToPassToDialog = null;
+	View							mContentView = null;
 	
 	static final int ADD_ITEM_REQUEST = 0;	
 	
@@ -188,7 +188,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
         
         mToolbar = new CustomTitlebarWrapper(this);
         setContentView(R.layout.itemlists);
-
+        mContentView = findViewById(R.id.layout_itemslist);
         mToolbar.SetTitle(app.getShoppingList().get(app.getCurrentShoppingListIndex()).mName);
         doSetupToolbarButtons(app.getShoppingList().get(app.getCurrentShoppingListIndex()).mName);
                 
@@ -401,13 +401,16 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	        	doDisplayItems(items);
 	    	}
 	    	else {
-				Toast.makeText(
-					getApplicationContext(), 
-					"The server seems to be out of its mind. Please try later.", 
-					Toast.LENGTH_SHORT).show();
+	    		CustomToast.makeText(
+	    				getApplicationContext(),
+	    				mContentView,
+	    				"The server seems to be out of its mind. Please try later.").show(true);
 	    	}
     	} catch (Exception e) {
-    		Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+    		CustomToast.makeText(
+    				this,
+    				mContentView,
+    				e.getMessage()).show(true);
     	}
 		if (mLoadingMore) 
 			mLoadingMore = false;
@@ -462,7 +465,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 
 		    					dialog.show();
 		    				} else {
-		    					Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG);
+		    		    		CustomToast.makeText(
+		    		    				ItemListActivity.this,
+		    		    				mContentView,
+		    		    				message).show(true);
 		    				}
 	    				} finally {
 	    					mToolbar.hideIndeterminateProgress();
@@ -598,7 +604,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 							doDeductFromPendingTotal(selItem.mUnitPrice * selItem.mQuantity);
 							doDisplayPendingTotal();
 						} else
-							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+	    		    		CustomToast.makeText(
+	    		    				ItemListActivity.this,
+	    		    				mContentView,
+	    		    				message).show(true);
 					} finally {
 						mToolbar.hideIndeterminateProgress();
 					}
@@ -625,7 +634,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 						doDisplayPendingTotal();
 					}
 					else {
-						Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+    		    		CustomToast.makeText(
+    		    				ItemListActivity.this,
+    		    				mContentView,
+    		    				message).show(true);
 					}
 				} finally {
 		    		mToolbar.hideIndeterminateProgress();
@@ -662,7 +674,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 						adapter.notifyDataSetChanged();
 					}
 					else
-						Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+    		    		CustomToast.makeText(
+    		    				ItemListActivity.this,
+    		    				mContentView,
+    		    				message).show(true);
 				} finally {
 		    		mToolbar.hideIndeterminateProgress();
 				}
@@ -706,13 +721,16 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			    					public void onPostExecute(long resultCode, String message) {
 			    						try {
 				    						if (resultCode == 0) {
-				    							Toast.makeText(
-				    								ItemListActivity.this, 
-				    								getResources().getString(R.string.itemlist_copytolistsuccess), 
-				    								Toast.LENGTH_SHORT).show();	
+				    	    		    		CustomToast.makeText(
+				    	    		    				ItemListActivity.this,
+				    	    		    				mContentView,
+				    	    		    				getResources().getString(R.string.itemlist_copytolistsuccess)).show(true);
 				    						}
 				    						else
-				    							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_SHORT).show();
+				    	    		    		CustomToast.makeText(
+				    	    		    				ItemListActivity.this,
+				    	    		    				mContentView,
+				    	    		    				message).show(true);
 			    						} finally {
 			    							mToolbar.hideIndeterminateProgress();
 			    						}
@@ -769,7 +787,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 					    							adapter.notifyDataSetChanged();
 					    						}
 					    						else
-					    							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+					    	    		    		CustomToast.makeText(
+					    	    		    				ItemListActivity.this,
+					    	    		    				mContentView,
+					    	    		    				message).show(true);
 				    						} finally {
 				    				    		mToolbar.hideIndeterminateProgress();
 				    						}
@@ -809,7 +830,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 					
 					try {
 						if (retVal != 0) {
-							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+	    		    		CustomToast.makeText(
+	    		    				ItemListActivity.this,
+	    		    				mContentView,
+	    		    				message).show(true);
 						} else {
 							selItem.mLikeCount = voteCount;
 							ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
@@ -836,7 +860,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	    			
 	    			try {
 						if (retVal != 0) {
-							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+	    		    		CustomToast.makeText(
+	    		    				ItemListActivity.this,
+	    		    				mContentView,
+	    		    				message).show(true);
 						} else {
 							selItem.mLikeCount = voteCount;
 							ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
@@ -1097,7 +1124,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 								adapter.notifyDataSetChanged();
 							}
 							else
-								Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+    	    		    		CustomToast.makeText(
+    	    		    				ItemListActivity.this,
+    	    		    				mContentView,
+    	    		    				message).show(true);
 						} finally {
 							mToolbar.hideIndeterminateProgress();
 						}
@@ -1255,7 +1285,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 								}
 							adapter.notifyDataSetChanged();
 						} else
-							Toast.makeText(ItemListActivity.this, message, Toast.LENGTH_LONG).show();
+	    		    		CustomToast.makeText(
+	    		    				ItemListActivity.this,
+	    		    				mContentView,
+	    		    				message).show(true);
 					} finally {
 						mToolbar.hideIndeterminateProgress();
 					}

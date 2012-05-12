@@ -24,7 +24,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 public class ReportActivity extends Activity {
 
@@ -71,6 +70,7 @@ public class ReportActivity extends Activity {
 	int						mReportItemId = 0;
 	int						mReportFooterId = 0;
 	boolean					mAttachHTML = true;
+	View 					mRoot;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +107,10 @@ public class ReportActivity extends Activity {
 		mReportFooterId = resID.data;
 		
 		if (mReportHeaderId <= 0 || mReportItemId <= 0 || mReportFooterId <= 0) {
-			Toast.makeText(this, getString(R.string.reporting_resource_missing), Toast.LENGTH_LONG).show();
+			CustomToast.makeText(
+					this, 
+					mTextView, 
+					getString(R.string.reporting_resource_missing)).show(true);
 		}
 	}
 
@@ -175,7 +178,10 @@ public class ReportActivity extends Activity {
 					mCurrentReportHtml = text;
 					mTextView.loadDataWithBaseURL(null, text, "text/html", "UTF-8", null);
 				} else 
-					Toast.makeText(ReportActivity.this, message, Toast.LENGTH_LONG).show();		
+					CustomToast.makeText(
+							ReportActivity.this, 
+							mTextView, 
+							message).show(true);
 			} finally {
 				mToolbar.hideIndeterminateProgress();
 			}
@@ -235,7 +241,10 @@ public class ReportActivity extends Activity {
 					mCurrentReportHtml = text;
 					mTextView.loadDataWithBaseURL(null, text, "text/html", "UTF-8", null);
 				} else 
-					Toast.makeText(ReportActivity.this, message, Toast.LENGTH_LONG).show();
+					CustomToast.makeText(
+							ReportActivity.this, 
+							mTextView, 
+							message).show(true);
 			} finally {
 				mToolbar.hideIndeterminateProgress();
 			}
@@ -407,7 +416,10 @@ public class ReportActivity extends Activity {
 	                }
             	}
             } catch (IOException e) {
-	    		Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+				CustomToast.makeText(
+						this, 
+						mTextView, 
+						e.getMessage()).show(true);
             }
             return Uri.fromFile(file);
         } finally {
@@ -416,7 +428,10 @@ public class ReportActivity extends Activity {
 					fOut.flush();
 		            fOut.close();
 				} catch (IOException e) {
-		    		Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+					CustomToast.makeText(
+							this, 
+							mTextView, 
+							e.getMessage()).show(true);
 				}
         	}
         }

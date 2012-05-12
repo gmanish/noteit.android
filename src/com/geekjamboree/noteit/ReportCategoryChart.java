@@ -22,7 +22,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 public class ReportCategoryChart extends Activity {
 
@@ -36,7 +35,8 @@ public class ReportCategoryChart extends Activity {
 	private DefaultRenderer mRenderer = new DefaultRenderer();
 	private GraphicalView 	mChartView;
 	CustomTitlebarWrapper	mToolbar;
-
+	View					mRoot;
+	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		
@@ -52,7 +52,8 @@ public class ReportCategoryChart extends Activity {
 		super.onCreate(savedInstanceState);
         mToolbar = new CustomTitlebarWrapper(this);
 	    setContentView(R.layout.report_categorychart);
-
+	    mRoot = findViewById(R.id.report_category_chart_root);
+	    
 	    mRenderer.setApplyBackgroundColor(true);
 	    mRenderer.setBackgroundColor(Color.argb(100, 50, 50, 50));
 	    mRenderer.setChartTitleTextSize(20);
@@ -136,7 +137,7 @@ public class ReportCategoryChart extends Activity {
 					if (mChartView != null)
 						mChartView.repaint();
 				} else 
-					Toast.makeText(ReportCategoryChart.this, message, Toast.LENGTH_LONG).show();
+					CustomToast.makeText(ReportCategoryChart.this, mRoot, message).show(true);
 			} finally {
 			}
 		}

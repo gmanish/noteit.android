@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.widget.Toast;
 
 public class MainPreferenceActivity extends PreferenceActivity {
 
@@ -31,7 +30,10 @@ public class MainPreferenceActivity extends PreferenceActivity {
 						
 						public void onPostExecute(long resultCode, String message) {
 							if (resultCode != 0)
-								Toast.makeText(MainPreferenceActivity.this, message, Toast.LENGTH_LONG).show();
+					    		CustomToast.makeText(
+					    				MainPreferenceActivity.this,
+					    				findViewById(android.R.id.content),
+					    				message).show(true);
 						}
 					});
 				}

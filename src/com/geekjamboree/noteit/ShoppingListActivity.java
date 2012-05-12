@@ -31,7 +31,6 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ListView;
 
 public class ShoppingListActivity 
@@ -233,48 +232,13 @@ public class ShoppingListActivity
     		mIsShoppingListFetched = true;
     		mAdapter.notifyDataSetChanged();
     	} else {
-    		Toast.makeText(getApplicationContext(), "Error Occurred:" + errMsg, Toast.LENGTH_LONG).show();
+    		CustomToast.makeText(
+    				getApplicationContext(),
+    				getListView(),
+    				"Error Occurred:" + errMsg).show(true);
     	}
     }
     
-//	protected void doFetchShoppingLists() {
-//		final NoteItApplication app = (NoteItApplication) getApplication();
-//		boolean					fetchCount = mPrefs.getBoolean("Display_Pending_Item_Count", true);
-//		
-//		app.fetchShoppingLists(fetchCount, new NoteItApplication.OnFetchShoppingListsListener() {
-//			
-//			public void onPostExecute(long resultCode,
-//					ArrayList<ShoppingList> categories, 
-//					String message) {
-//				
-//				if (resultCode == 0) {
-//						
-//					long lastUsedShoppingListID = mPrefs.getLong("LastUsedShoppingListID", 0);
-//					if (app.getShoppingListCount() > 0 && lastUsedShoppingListID != 0) {
-//						int index = app.getShoppingList().indexOf((app.new ShoppingList(lastUsedShoppingListID)));
-//						if (index >= 0)
-//							app.setCurrentShoppingListIndex(index);
-//						else
-//							app.setCurrentShoppingListIndex(0);
-//					} else if (app.getShoppingListCount() > 0) {
-//						app.setCurrentShoppingListIndex(0);
-//					}
-//	                Intent myIntent = new Intent(LoginActivity.this, ItemListActivity.class);
-//	                startActivity(myIntent);
-//	                finish();
-//	                hideIndeterminateProgress();
-//            		Toast.makeText(
-//            			LoginActivity.this, 
-//            			getString(R.string.login_success), 
-//            				Toast.LENGTH_SHORT).show();
-//				} else {
-//					Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
-//					hideIndeterminateProgress();
-//				}
-//			}
-//		});
-//	}
-
 	protected void editShoppingList(final int index) {
 		
     	if (index >= 0 && index < mListView.getCount()) {
@@ -313,7 +277,10 @@ public class ShoppingListActivity
 								public void onPostExecute(long resultCode, String message) {
 									try {
 										if (resultCode != 0) {
-											Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+								    		CustomToast.makeText(
+								    				getApplicationContext(),
+								    				getListView(),
+								    				message).show(true);
 										} else {
 											// refresh the listView
 											mAdapter.notifyDataSetChanged();
@@ -325,7 +292,10 @@ public class ShoppingListActivity
 							}
 						);
 					} else 
-						Toast.makeText(getApplicationContext(), getResources().getString(R.string.shoppinglist_name_blank), Toast.LENGTH_SHORT).show();
+			    		CustomToast.makeText(
+			    				getApplicationContext(),
+			    				getListView(),
+			    				getResources().getString(R.string.shoppinglist_name_blank)).show(true);
 				}});
 				
 			dialog.setButton(DialogInterface.BUTTON1, "No", new DialogInterface.OnClickListener() {
@@ -361,7 +331,10 @@ public class ShoppingListActivity
 							public void onPostExecute(long resultCode, String message) {
 								try {
 									if (resultCode != 0) {
-										Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+										CustomToast.makeText(
+												getApplicationContext(),
+												getListView(),
+												message).show(true);
 									} else {
 										// Delete this item from the view
 										mAdapter.notifyDataSetChanged();
@@ -449,7 +422,10 @@ public class ShoppingListActivity
 								
 							public void onPostExecute(long resultCode, String message) {
 								if (resultCode != 0) {
-									Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+									CustomToast.makeText(
+											getApplicationContext(),
+											getListView(),
+											message).show(true);
 								} else {
 									// refresh the listView
 									mAdapter.notifyDataSetChanged();
@@ -457,7 +433,10 @@ public class ShoppingListActivity
 							}
 						});
 					} else 
-						Toast.makeText(getApplicationContext(), getResources().getString(R.string.shoppinglist_name_blank), Toast.LENGTH_SHORT).show();
+						CustomToast.makeText(
+								getApplicationContext(),
+								getListView(),
+								getResources().getString(R.string.shoppinglist_name_blank)).show(true);
 				}
 			}
 		);

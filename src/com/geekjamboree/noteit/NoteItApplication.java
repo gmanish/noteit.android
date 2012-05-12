@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 import android.util.TypedValue;
-import android.widget.Toast;
 
 import com.geekjamboree.noteit.AsyncInvokeURLTask.OnPostExecuteListener;
 import com.geekjamboree.noteit.AsyncInvokeURLTask.RequestMethod;
@@ -806,8 +805,6 @@ public class NoteItApplication extends Application {
         			}
                 	mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
         		} catch (JSONException e){
-        			Toast.makeText(getApplicationContext(), "The server seems to be out of " +
-        							"its mind. Please try later.", Toast.LENGTH_SHORT).show();
         			mListener.onPostExecute(-1, e.getMessage());
         		}
         	}
@@ -1269,7 +1266,7 @@ public class NoteItApplication extends Application {
 	                	} else 
 	                		mListener.onPostExecute(retval, null, json.getString("JSONRetMessage"));
 	        		} catch (JSONException e){
-	        			Toast.makeText(getApplicationContext(), "The server seems to be out of its mind. Please try later.", Toast.LENGTH_SHORT).show();
+                		mListener.onPostExecute(-1, null, e.getMessage()	);
 	        			Log.e("NoteItApplication.fetchItems", e.getMessage());
 	        		}
 	        		

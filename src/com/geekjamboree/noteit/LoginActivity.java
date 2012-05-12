@@ -24,7 +24,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class LoginActivity 
 	extends Activity 
@@ -35,6 +34,7 @@ public class LoginActivity
 	
 	SharedPreferences		mPrefs;
 	boolean					mIsHashedPassword = false;
+	View					mContentView = null;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -42,17 +42,21 @@ public class LoginActivity
         
     	super.onCreate(savedInstanceState);
     	
-    	if (((NoteItApplication) getApplication()).doesSanityPrevail() == false) {
-    		Toast.makeText(this, getString(R.string.app_critical_error), Toast.LENGTH_LONG).show();
-    		finish();
-    		return;
-    	}
-    	
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.login);
         hideIndeterminateProgress();
    
-        // Read the email id from the preference
+        mContentView = findViewById(R.id.Login_Root); 
+    	if (((NoteItApplication) getApplication()).doesSanityPrevail() == false) {
+    		CustomToast.makeText(
+    				this,
+    				mContentView,
+    				getString(R.string.app_critical_error)).show(true);
+    		finish();
+    		return;
+    	}
+
+    	// Read the email id from the preference
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRememberMe = mPrefs.getBoolean("Remember_Me", true);
 
@@ -200,35 +204,35 @@ public class LoginActivity
 						                startActivity(myIntent);
 						                finish();
 									} else {
-										Toast.makeText(
-											getApplicationContext(), 
-											message, 
-											Toast.LENGTH_SHORT).show();
+							    		CustomToast.makeText(
+							    				getApplicationContext(),
+							    				mContentView,
+							    				message).show(true);
 									}
 								}
 							});
 						}
 					} else {
-						Toast.makeText(
-								getApplicationContext(), 
-								message, 
-								Toast.LENGTH_SHORT).show();
+			    		CustomToast.makeText(
+			    				getApplicationContext(),
+			    				mContentView,
+			    				message).show(true);
 					}
 				}
 			});
 		} catch (JSONException e) {
 			hideIndeterminateProgress();
-			Toast.makeText(
-				getApplicationContext(), 
-				getString(R.string.server_error), 
-				Toast.LENGTH_SHORT).show();
+    		CustomToast.makeText(
+    				getApplicationContext(),
+    				mContentView,
+    				getString(R.string.server_error)).show(true);
 			Log.e("NoteItApplication.loginUser", e.getMessage());
 		} catch (Exception e) {
 			hideIndeterminateProgress();
-    		Toast.makeText(
-    			getApplicationContext(), 
-    			e.getMessage(), 
-    			Toast.LENGTH_SHORT).show();
+    		CustomToast.makeText(
+    				getApplicationContext(),
+    				mContentView,
+    				e.getMessage()).show(true);
 			Log.e("NoteItApplication.loginUser", e.getMessage());
 		}
 	}
