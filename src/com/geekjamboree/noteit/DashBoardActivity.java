@@ -3,6 +3,7 @@ package com.geekjamboree.noteit;
 import java.util.ArrayList;
 
 import com.geekjamboree.noteit.ItemListActivity.ItemType;
+import com.geekjamboree.noteit.NoteItApplication.Message;
 
 import android.app.Activity;
 import android.content.Context;
@@ -141,6 +142,19 @@ public class DashBoardActivity extends Activity {
         		}
         	}
 		});
+        
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null && bundle.getInt(LoginActivity.DISPLAY_UNREAD_MESSAGES, 0) > 0) {
+	        // Read the messages in inbox
+	        final NoteItApplication app = (NoteItApplication) getApplication();
+	        if (app != null) {
+				InboxMessages inboxMessages = new InboxMessages(app, DashBoardActivity.this, mGridView);
+				if (inboxMessages != null) {
+					inboxMessages.doDisplayUnreadMessages();
+				}
+	        }
+        }
 	}
 
 

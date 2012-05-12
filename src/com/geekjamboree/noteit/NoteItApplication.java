@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.CancellationException;
@@ -398,6 +399,28 @@ public class NoteItApplication extends Application {
 			mPrice = price;
 		}
 	}
+	
+	class Message {
+		
+		long 		mMessageId		= 0;
+		long 		mUserId 		= 0;
+		long 		mFromUserId 	= 0;
+		Timestamp	mDateReceived	= new Timestamp(Calendar.getInstance().getTimeInMillis());
+		String		mSubject		= "";
+		String		mText		 	= "";
+		boolean 	mIsRead			= false;
+		
+		public Message(JSONObject json) throws JSONException {
+			
+			mMessageId 		= json.getLong("message_id");
+			mUserID 		= json.getLong("user_id");
+			mFromUserId 	= json.getLong("from_user_id");
+			mDateReceived 	= java.sql.Timestamp.valueOf(json.getString("date_received"));
+			mSubject 		= json.getString("subject");
+			mText 			= json.getString("text");
+			mIsRead	 		= json.getInt("is_read") > 0 ? true : false;
+		}
+	}
 
 	public static interface OnMethodExecuteListerner {
 		void onPostExecute(long resultCode, String message);
@@ -449,6 +472,10 @@ public class NoteItApplication extends Application {
     
     public static interface OnItemVoteListener {
     	public void onPostExecute(long retVal, int voteCount, String message); 
+    }
+    
+    public static interface OnFetchMessagesListener {
+    	public void onPostExecute(long retVal, ArrayList<Message> messages, String errMessage);
     }
 
     private long						mUserID = 0;
@@ -1916,6 +1943,85 @@ public class NoteItApplication extends Application {
 		}		
 	}
 
+	public void fetchInboxMessageHeaders(boolean ignoreRead, final OnFetchMessagesListener listener) {
+	
+		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(3);
+		args.add(new BasicNameValuePair("command", "do_get_msg_headers"));
+		args.add(new BasicNameValuePair("arg1", String.valueOf(ignoreRead ? 1 : 0)));
+		args.add(new BasicNameValuePair("arg2", String.valueOf(getUserID())));
+		
+		try {
+			AsyncInvokeURLTask 	myTask = new AsyncInvokeURLTask(args, new OnPostExecuteListener() {
+				
+				public void onPostExecute(JSONObject result) {
+					
+					long retVal = -1;
+					try {
+						ArrayList<Message> messages = null;
+						retVal = result.getLong("JSONRetVal");
+						if (retVal == 0) {
+							messages = new ArrayList<Message>();
+							JSONArray jsonMessages = result.getJSONArray("arg1");
+							for (int index = 0; index < jsonMessages.length(); index++) {
+								JSONObject obj = jsonMessages.getJSONObject(index);
+								messages.add(new Message(obj));
+							}
+						} 
+						if (listener != null) {
+							listener.onPostExecute(retVal, messages, result.getString("JSONRetMessage"));
+						}
+					} catch (JSONException e) {
+						if (listener != null)
+							listener.onPostExecute(retVal, null, e.getMessage());
+						e.printStackTrace();
+					}
+				}
+			});
+			myTask.execute();
+		} catch (Exception e) {
+			if (listener != null)
+				listener.onPostExecute(-1, null, e.getMessage());
+		}
+	}
+	
+	public void getMessage(long messageID, final OnFetchMessagesListener listener) {
+		
+		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(3);
+		args.add(new BasicNameValuePair("command", "do_get_msg"));
+		args.add(new BasicNameValuePair("arg1", String.valueOf(messageID)));
+		args.add(new BasicNameValuePair("arg2", String.valueOf(getUserID())));
+		
+		try {
+			AsyncInvokeURLTask 	myTask = new AsyncInvokeURLTask(args, new OnPostExecuteListener() {
+				
+				public void onPostExecute(JSONObject result) {
+					
+					long retVal = -1;
+					try {
+						ArrayList<Message> messages = null;
+						retVal = result.getLong("JSONRetVal");
+						if (retVal == 0) {
+							messages = new ArrayList<Message>();
+							JSONObject jsonMessage = result.getJSONObject("arg1");
+							messages.add(new Message(jsonMessage));
+						} 
+						if (listener != null) {
+							listener.onPostExecute(retVal, messages, result.getString("JSONRetMessage"));
+						}
+					} catch (JSONException e) {
+						if (listener != null)
+							listener.onPostExecute(retVal, null, e.getMessage());
+						e.printStackTrace();
+					}
+				}
+			});
+			myTask.execute();
+		} catch (Exception e) {
+			if (listener != null)
+				listener.onPostExecute(-1, null, e.getMessage());
+		}
+	}
+	
     protected void searchItemByBarcode(
     	int format,
     	String contents, 

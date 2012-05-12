@@ -18,20 +18,26 @@ class FloatingPopup extends PopupWindow {
 	
 	View 				mAnchor = null;
 	View 				mContentView = null;
+	OnDismissListener	mDismissListener = null;
 	OnTouchListener		mTouchListener = new OnTouchListener() {
 		
 		public boolean onTouch(View v, MotionEvent event) {
 			if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
-				dismiss();
+				dismissWithNotification();
 				return true;
 			}
 			return false;
 		}
 	};
 	
-	private FloatingPopup(Context context, View anchor, String text) {
+	public static interface OnDismissListener {
+		public void onDismiss();
+	}
+	
+	private FloatingPopup(Context context, View anchor, String text, OnDismissListener listener) {
 		super(context);
 		mAnchor = anchor;
+		mDismissListener = listener;
 		LayoutInflater 	li = (LayoutInflater) context.getSystemService(Service.LAYOUT_INFLATER_SERVICE);
 		if (li != null) {
 			mContentView = li.inflate(R.layout.tipsdialog, null);
@@ -62,7 +68,7 @@ class FloatingPopup extends PopupWindow {
 				if (close != null) {
 					close.setOnClickListener(new View.OnClickListener() {
 						public void onClick(View v) {
-							dismiss();
+							dismissWithNotification();
 						}
 					});
 				}
@@ -70,8 +76,19 @@ class FloatingPopup extends PopupWindow {
 		}
 	}
 	
+	protected void dismissWithNotification() {
+		
+		dismiss();
+		if (mDismissListener != null)
+			mDismissListener.onDismiss();
+	}
+	
 	public static FloatingPopup MakePopup(Context context, View anchor, String text) {
-		return new FloatingPopup(context, anchor, text);
+		return new FloatingPopup(context, anchor, text, null);
+	}
+	
+	public static FloatingPopup MakePopup(Context context, View anchor, String text, OnDismissListener listener) {
+		return new FloatingPopup(context, anchor, text, listener);
 	}
 	
 	public void show(boolean bCenterOnAnchorView) {

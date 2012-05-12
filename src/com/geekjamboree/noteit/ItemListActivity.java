@@ -292,6 +292,16 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			doDisplayItems(app.getItems());
 		}
 		
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null && bundle.getInt(LoginActivity.DISPLAY_UNREAD_MESSAGES, 0) > 0) {
+	        // Read the messages in inbox
+			InboxMessages inboxMessages = new InboxMessages(app, ItemListActivity.this, getExpandableListView());
+			if (inboxMessages != null) {
+				inboxMessages.doDisplayUnreadMessages();
+			}
+        }
+        
     	doFetchAndDisplayPendingTotal();
     }
 

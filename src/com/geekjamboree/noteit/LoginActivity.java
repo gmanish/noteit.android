@@ -31,6 +31,7 @@ public class LoginActivity
 	
 	static final String		DONT_LOGIN = "DONT_LOGIN";
 	static final int		MIN_PASSWORD_LENGTH = 6;
+	static final String		DISPLAY_UNREAD_MESSAGES = "DISPLAY_UNREAD_MESSAGES";
 	
 	SharedPreferences		mPrefs;
 	boolean					mIsHashedPassword = false;
@@ -180,6 +181,7 @@ public class LoginActivity
 						boolean startDashboard = mPrefs.getBoolean("Start_Dashboard", true);
 						if (startDashboard) {
 		            		Intent myIntent = new Intent(LoginActivity.this, DashBoardActivity.class);
+		            		myIntent.putExtra(DISPLAY_UNREAD_MESSAGES, 1);
 		                    startActivity(myIntent);
 		                    finish();
 						} else {
@@ -201,6 +203,7 @@ public class LoginActivity
 										}
 										app.setCurrentShoppingListIndex(index);
 						                Intent myIntent = new Intent(LoginActivity.this, ItemListActivity.class);
+						                myIntent.putExtra(DISPLAY_UNREAD_MESSAGES, 1);
 						                startActivity(myIntent);
 						                finish();
 									} else {
