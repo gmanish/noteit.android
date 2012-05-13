@@ -89,16 +89,17 @@ class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 		mNoteItWebUrl = url.equals("") ? getNoteItURL() : url;
 	}
 
+	@SuppressWarnings("unused")
 	private String getNoteItURL() {
 		final String URL_HOST_LOOPBACK 	= "http://10.0.2.2/noteit.web/controller/appcontroller.php";
 		final String URL_GEEKJAM 		= "http://geekjamboree.com/controller/appcontroller.php"; 
-		final String URL_LOCALHOST 		= "http://192.168.1.3/noteit.web/controller/appcontroller.php";
+		final String URL_LOCALHOST 		= "http://192.168.1.2/noteit.web/controller/appcontroller.php";
 		String url 						= URL_LOCALHOST;
 		if(("sdk".equals(Build.PRODUCT)) || ("google_sdk".equals(Build.PRODUCT)))
 			// We're running in the emulator connect with host loopback
 			url = URL_HOST_LOOPBACK;
 		else
-			url = URL_GEEKJAM;
+			url = URL_LOCALHOST; //URL_GEEKJAM;
 		return url;
 	}
 	protected String doGetInBackground(Void...params) {

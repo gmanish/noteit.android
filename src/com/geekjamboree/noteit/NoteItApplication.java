@@ -2022,6 +2022,35 @@ public class NoteItApplication extends Application {
 		}
 	}
 	
+	public void setMessageRead(long messageID, final OnMethodExecuteListerner listener) {
+		
+		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(3);
+		args.add(new BasicNameValuePair("command", "do_mark_msg_read"));
+		args.add(new BasicNameValuePair("arg1", String.valueOf(messageID)));
+		args.add(new BasicNameValuePair("arg2", String.valueOf(getUserID())));
+		
+		try {
+			AsyncInvokeURLTask 	myTask = new AsyncInvokeURLTask(args, new OnPostExecuteListener() {
+				
+				public void onPostExecute(JSONObject result) {
+					
+					if (listener != null) {
+						try {
+							listener.onPostExecute(result.getLong("JSONRetVal"), result.getString("JSONRetMessage"));
+						} catch (JSONException e) {
+							e.printStackTrace();
+							listener.onPostExecute(-1, e.getMessage());
+						}
+					}
+				}
+			});
+			myTask.execute();
+		} catch (Exception e) {
+			if (listener != null)
+				listener.onPostExecute(-1, e.getMessage());
+		}
+	}
+	
     protected void searchItemByBarcode(
     	int format,
     	String contents, 

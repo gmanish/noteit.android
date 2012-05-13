@@ -44,13 +44,14 @@ public class InboxMessages {
 				
 				public void onPostExecute(
 						long retVal, 
-						ArrayList<Message> message,
+						final ArrayList<Message> message,
 						String errMessage) {
 					
 					if (retVal == 0 && message.size() == 1) {
 						CustomToast.makeText(mContext, mAnchor, message.get(0).mText, new FloatingPopup.OnDismissListener() {
 							
 							public void onDismiss() {
+								mApp.setMessageRead(message.get(0).mMessageId, null);
 								doDisplayMessage(messages, index + 1);
 							}
 						}).show(true);

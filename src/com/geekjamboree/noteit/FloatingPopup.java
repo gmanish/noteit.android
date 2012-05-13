@@ -46,7 +46,7 @@ class FloatingPopup extends PopupWindow {
 				setWidth(LayoutParams.WRAP_CONTENT);
 				setHeight(LayoutParams.WRAP_CONTENT);
 				setTouchable(true);
-				setFocusable(true);
+				setFocusable(false);
 				setOutsideTouchable(true);
 				setTouchInterceptor(mTouchListener);
 				setAnimationStyle(R.style.Animations_PopDownMenu_Reflect);
@@ -79,8 +79,9 @@ class FloatingPopup extends PopupWindow {
 	protected void dismissWithNotification() {
 		
 		dismiss();
-		if (mDismissListener != null)
+		if (mDismissListener != null) {
 			mDismissListener.onDismiss();
+		}
 	}
 	
 	public static FloatingPopup MakePopup(Context context, View anchor, String text) {

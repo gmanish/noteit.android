@@ -3,7 +3,6 @@ package com.geekjamboree.noteit;
 import java.util.ArrayList;
 
 import com.geekjamboree.noteit.ItemListActivity.ItemType;
-import com.geekjamboree.noteit.NoteItApplication.Message;
 
 import android.app.Activity;
 import android.content.Context;
