@@ -90,10 +90,16 @@ public class CategoryListActivity
 				
 				if (category != null && category.mUserID != app.getUserID()) {
 					textView.setCompoundDrawablesWithIntrinsicBounds(
-							getResourceIdFromAttribute(R.attr.Category_Shared_Small), 0, 0, 0);
+							getResourceIdFromAttribute(R.attr.Category_Shared_Small), 
+							0,
+							getResourceIdFromAttribute(R.attr.Hand_Small), 
+							0);
 				} else { 
 					textView.setCompoundDrawablesWithIntrinsicBounds(
-							getResourceIdFromAttribute(R.attr.Category_Small), 0, 0, 0);
+							getResourceIdFromAttribute(R.attr.Category_Small),
+							0,
+							getResourceIdFromAttribute(R.attr.Hand_Small), 
+							0);
 				}
 			}
 			return view;
