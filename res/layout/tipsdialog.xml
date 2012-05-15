@@ -14,7 +14,7 @@
         android:layout_weight="1"
 	    android:padding="5dip"
         android:text="@string/register_termsandconditions"
-        android:textAppearance="?TextAppearance_Footer" />
+        style="?TextAppearance_Footer" />
 
     <ImageButton
         android:id="@+id/btnClose"
