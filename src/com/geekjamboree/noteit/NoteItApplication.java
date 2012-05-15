@@ -1023,7 +1023,7 @@ public class NoteItApplication extends Application {
 				        		Category thisCategory = new Category(
 				        				Long.parseLong(thisObj.getString("listID")),
 										thisObj.getString("listName"),
-										thisObj.getLong("listID"),
+										thisObj.getLong("userID_FK"),
 										thisObj.getLong("categoryRank"));
 				        		
 				        		mCategories.add(thisCategory);

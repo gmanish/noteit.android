@@ -17,9 +17,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,6 +33,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 /**
  * @author mgupta
@@ -74,6 +77,27 @@ public class CategoryListActivity
 			});
 		}
 		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			
+			View view = super.getView(position, convertView, parent);
+			
+			if (view != null) {
+				
+				NoteItApplication 	app = (NoteItApplication) getApplication();
+				Category 			category = app.getCategory(position);
+				TextView 			textView = (TextView) view.findViewById(mTextViewResId);
+				
+				if (category != null && category.mUserID != app.getUserID()) {
+					textView.setCompoundDrawablesWithIntrinsicBounds(
+							getResourceIdFromAttribute(R.attr.Category_Shared_Small), 0, 0, 0);
+				} else { 
+					textView.setCompoundDrawablesWithIntrinsicBounds(
+							getResourceIdFromAttribute(R.attr.Category_Small), 0, 0, 0);
+				}
+			}
+			return view;
+		}
 	}
 	
 	
@@ -434,4 +458,11 @@ public class CategoryListActivity
 				}
 		});
     }
+    
+	protected int getResourceIdFromAttribute(int attribId) {
+		Resources.Theme theme = getTheme();
+		TypedValue 		resID = new TypedValue();
+		theme.resolveAttribute(attribId, resID, false);
+		return resID.data;
+	}
 }

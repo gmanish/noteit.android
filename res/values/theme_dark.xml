@@ -156,6 +156,7 @@
 		
 		<item name="Disclosure">@drawable/disclosure</item>
 		<item name="Category_Small">@drawable/category</item>
+		<item name="Category_Shared_Small">@drawable/category_shared</item>
 		<item name="Hand_Small">@drawable/hand</item>	
 		<item name="Prev_Small">@drawable/prev</item>
 		<item name="Next_Small">@drawable/next</item>	

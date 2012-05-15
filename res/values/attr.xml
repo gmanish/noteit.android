@@ -45,6 +45,7 @@
 	<attr name="SharedShoppingList" format="reference"></attr>
 	<attr name="Disclosure" format="reference"></attr>
 	<attr name="Category_Small" format="reference"></attr>
+	<attr name="Category_Shared_Small" format="reference"></attr>
 	<attr name="Hand_Small" format="reference"></attr>
 	<attr name="Prev_Small" format="reference"></attr>
 	<attr name="Next_Small" format="reference"></attr>
