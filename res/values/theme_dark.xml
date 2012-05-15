@@ -152,6 +152,8 @@
 		<item name="Dashboard_Reports">@drawable/reports_large</item>
 
 		<item name="ShoppingList_Cart">@drawable/cart</item>
+		<item name="SharedShoppingList">@drawable/cart_shared</item>
+		
 		<item name="Disclosure">@drawable/disclosure</item>
 		<item name="Category_Small">@drawable/category</item>
 		<item name="Hand_Small">@drawable/hand</item>	

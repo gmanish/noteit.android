@@ -165,15 +165,17 @@ public class NoteItApplication extends Application {
 		public String 	mName = "";
 		public long		mID = 0;
 		public long 	mItemCount = 0;
+		public long 	mUserID = 0;
 		
 		public ShoppingList(long listID) {
 			mID = listID;
 		}
 		
-		public ShoppingList(long itemID, String itemName, long itemCount){
+		public ShoppingList(long itemID, String itemName, long itemCount, long userID){
 			mName = itemName;
 			mID = itemID;
 			mItemCount = itemCount;
+			mUserID = userID;
 		}
 		
 		public String toString(){
@@ -734,7 +736,8 @@ public class NoteItApplication extends Application {
 	        	        		ShoppingList thisItem = new ShoppingList(
         	        				Long.parseLong(thisObj.getString("listID")),
         							thisObj.getString("listName"),
-        							Long.parseLong(thisObj.getString("itemCount")));
+        							Long.parseLong(thisObj.getString("itemCount")),
+        							thisObj.getLong("userID_FK"));
 	        	        		
 	        	        		mShoppingLists.add(thisItem);
 	        	        	}
@@ -787,7 +790,8 @@ public class NoteItApplication extends Application {
         						new ShoppingList(
         								json.getLong("arg1"), 
         								json.getString("arg2"),
-        								0));
+        								0,
+        								getUserID()));
         			
         			}
         			
@@ -871,7 +875,8 @@ public class NoteItApplication extends Application {
 		       			ShoppingList newList = new ShoppingList(
 		       					json.getLong("arg1"), 
 		       					json.getString("arg2"),
-		       					listDetail.mItemCount); // Number of items wouldn't change
+		       					listDetail.mItemCount,
+		       					getUserID()); // Number of items wouldn't change
 		       			mShoppingLists.set(mShoppingLists.indexOf(newList), newList);
 		       		}
 
@@ -898,6 +903,44 @@ public class NoteItApplication extends Application {
 			Log.e("NoteItApplication.editShoppingList", e.getMessage());
 			e.printStackTrace();
 		}
+	}
+	
+	public void shareShoppingList(long listID, String emailID, final OnMethodExecuteListerner listener) {
+	
+		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(4);
+		
+		args.add(new BasicNameValuePair("command", "do_share_shop_list"));
+		args.add(new BasicNameValuePair("arg1", String.valueOf(listID)));
+		args.add(new BasicNameValuePair("arg2", emailID));
+		args.add(new BasicNameValuePair("arg3", String.valueOf(getUserID())));
+		
+		try {
+			AsyncInvokeURLTask	task = new AsyncInvokeURLTask(args, new OnPostExecuteListener() {
+				
+				public void onPostExecute(JSONObject result) {
+					if (listener != null) {
+						try {
+							listener.onPostExecute(
+									result.getLong("JSONRetVal"), 
+									result.getString("JSONRetMessage"));
+						} catch (JSONException e) {
+							e.printStackTrace();
+							if (listener != null) {
+								listener.onPostExecute(-1, e.getMessage());
+							}
+						}
+					}
+				}
+			});
+			task.execute();
+			
+		} catch (Exception e) {
+			if (listener != null) {
+				listener.onPostExecute(-1, e.getMessage());
+			}
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public int getUnitsCount() {

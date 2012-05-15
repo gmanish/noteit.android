@@ -341,7 +341,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			finish();
 			break;
 		case R.id.itemlist_email:
-			doEmail();
+			doShare();
 			break;
 		case R.id.itemlist_alldone:
 			doAllDone();
@@ -1263,8 +1263,88 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			statusBar.setVisibility(View.GONE);
 		}
     }
-        
-    protected void doEmail() {
+    
+    protected void doShare() {
+    	
+    	String[] 				optionsArray = getResources().getStringArray(R.array.shoplist_share_options);
+    	ArrayAdapter<String> 	adapter = new ArrayAdapter<String>(
+								    			this, 
+								    			android.R.layout.simple_dropdown_item_1line,
+								    			optionsArray);
+    	AlertDialog shareOptions = new AlertDialog.Builder(this)
+    		.setTitle(R.string.sharewith_title)
+    		.setAdapter(adapter, new DialogInterface.OnClickListener() {
+				
+				public void onClick(DialogInterface dialog, int which) {
+					
+					switch (which) {
+					case 0:
+						doShareWithUser();
+						break;
+					default:
+						doPickApp();
+					}
+				}
+			})
+			.create();
+    	shareOptions.show();
+    }
+    
+    void doShareWithUser() {
+		// inflate the view from resource layout
+		LayoutInflater	inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final View 		dialogView = inflater.inflate(R.layout.dialog_addshoppinglist, null, false);
+		final EditText 	editListName = (EditText) dialogView.findViewById(R.id.dialog_addshoppinglist_editTextName);
+		
+		AlertDialog dialog = new AlertDialog.Builder(this)
+			.setView(dialogView)
+			.setTitle(getResources().getString(R.string.sharewithuser_title))
+			.create();
+
+		editListName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+		dialog.setButton(DialogInterface.BUTTON1, "OK", new DialogInterface.OnClickListener() {
+			
+			public void onClick(DialogInterface dialog, int which) {
+				
+				final String emailID = editListName.getText().toString();
+
+				if (!emailID.trim().matches("")) {
+					dialog.dismiss();
+				
+					NoteItApplication app = (NoteItApplication) getApplication();
+					app.shareShoppingList(app.getCurrentShoppingListID(), emailID, new OnMethodExecuteListerner() {
+						
+						public void onPostExecute(long resultCode, String message) {
+							
+							if (resultCode != 0) {
+								CustomToast.makeText(
+										ItemListActivity.this,
+										getExpandableListView(),
+										message).show(true);
+							} else {
+								CustomToast.makeText(
+										ItemListActivity.this, 
+										getExpandableListView(), 
+										String.format(getResources().getString(R.string.sharewith_succeded), emailID)).show(true);
+							}
+						}
+					});
+				}
+			}
+		});
+	
+		dialog.setButton(DialogInterface.BUTTON2, "Cancel", new DialogInterface.OnClickListener() {
+			
+			public void onClick(DialogInterface dialog, int which) {
+				Log.e("AddShoppingList", "Cancel");
+				dialog.dismiss();
+			}
+		});
+
+		dialog.show();    
+	}
+    
+    protected void doPickApp() {
     	NoteItApplication	app = (NoteItApplication) getApplication();
     	final Intent 		emailIntent = new Intent(Intent.ACTION_SEND);
     	emailIntent.setType("text/plain");

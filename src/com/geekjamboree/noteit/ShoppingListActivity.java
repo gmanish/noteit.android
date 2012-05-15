@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem; 
 import android.content.DialogInterface;
+import android.content.res.Resources;
 
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,6 +32,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ListView;
 
@@ -59,10 +62,10 @@ public class ShoppingListActivity
 		public View getView(int position, View convertView, ViewGroup parent){
 			View view = super.getView(position, convertView, parent);
 			
-			TextView itemCount = (TextView) view.findViewById(R.id.shoppinglist_itemCount);
+			ShoppingList 	item = getItem(position);
+			TextView 		itemCount = (TextView) view.findViewById(R.id.shoppinglist_itemCount);
 			if (itemCount != null) {
 				if (mIsDisplayCount) {
-					ShoppingList item = getItem(position);
 					if (item != null) {
 						itemCount.setText(" (" + String.valueOf(item.mItemCount) + ")");
 						itemCount.setTextAppearance(parent.getContext(), super.getPreferredTextAppearance());
@@ -73,6 +76,13 @@ public class ShoppingListActivity
 				} else {
 					itemCount.setVisibility(View.GONE);
 				}
+			}
+			ImageView icon = (ImageView) view.findViewById(R.id.shoppinglist_icon);
+			if (icon != null) {
+				if (item.mUserID != ((NoteItApplication) getApplication()).getUserID())
+					icon.setBackgroundResource(getResourceIdFromAttribute(R.attr.SharedShoppingList));
+				else 
+					icon.setBackgroundResource(getResourceIdFromAttribute(R.attr.ShoppingList_Cart));
 			}
 			return view;
 		}
@@ -271,7 +281,8 @@ public class ShoppingListActivity
 								app.new ShoppingList(
 									list.mID, 
 									listName,
-									list.mItemCount),
+									list.mItemCount,
+									list.mUserID),
 							new NoteItApplication.OnMethodExecuteListerner() {
 								
 								public void onPostExecute(long resultCode, String message) {
@@ -449,5 +460,13 @@ public class ShoppingListActivity
 			}
 		});
 
-		dialog.show();    }
+		dialog.show();    
+	}
+    
+	protected int getResourceIdFromAttribute(int attribId) {
+		Resources.Theme theme = getTheme();
+		TypedValue 		resID = new TypedValue();
+		theme.resolveAttribute(attribId, resID, false);
+		return resID.data;
+	}
 }

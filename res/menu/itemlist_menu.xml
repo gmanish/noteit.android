@@ -14,7 +14,7 @@
        	android:title="@string/itemlist_scanbarcode" />
    
    <item android:id="@+id/itemlist_email"
-		android:icon="@drawable/email" 		
+		android:icon="@drawable/share" 		
         android:title="@string/itemlist_email" />
 
    <item android:id="@+id/itemlist_alldone"

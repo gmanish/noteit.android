@@ -42,6 +42,7 @@
 	<attr name="Dashboard_ShoppingList" format="reference"></attr>
 	<attr name="Dashboard_Reports" format="reference"></attr>
 	<attr name="ShoppingList_Cart" format="reference"></attr>
+	<attr name="SharedShoppingList" format="reference"></attr>
 	<attr name="Disclosure" format="reference"></attr>
 	<attr name="Category_Small" format="reference"></attr>
 	<attr name="Hand_Small" format="reference"></attr>
@@ -52,5 +53,7 @@
 	<attr name="Popup_Up" format="reference"></attr>
 	<attr name="Popup_Down" format="reference"></attr>
 	<attr name="Like_Small" format="reference"></attr>
+	
+	<attr name="Tips_Background" format="reference"></attr>
 					
 </resources>
