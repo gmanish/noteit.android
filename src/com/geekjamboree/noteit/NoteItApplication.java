@@ -116,6 +116,8 @@ public class NoteItApplication extends Application {
 		}
 	}
 	
+	static final int MIN_PASSWORD_LENGTH 		= 6;
+
 	// PRODUCT_CODE_TYPES = list("UPC_A", "UPC_E", "EAN_8", "EAN_13", "RSS_14"
 	static final int BARCODE_FORMAT_UNKNOWN 	= 1;
 	static final int BARCODE_FORMAT_UPC_A		= 2;
@@ -494,28 +496,7 @@ public class NoteItApplication extends Application {
 	private int 						mItemsStartPos = 0;
 	private int 						mItemsBatchSize = 10;
 	private boolean						mItemsMorePending = true;
-	private boolean						mSanityPrevails = true;
 	
-	@Override
-	public void onCreate() {
-		fetchCurrencies(new OnMethodExecuteListerner() {
-			
-			public void onPostExecute(long resultCode, String message) {
-				if (resultCode != 0) {
-					mSanityPrevails = false;
-					// Oopsie dasies! how do I report this error
-					// See http://stackoverflow.com/questions/8793865/how-to-bail-out-from-critical-error-in-application-oncreate-with-message
-					Log.e("NoteItApplication.onCreate", "Critical Error Occurred: " + message);
-				} 
-			}
-		});
-		super.onCreate();
-	}
-	
-	public boolean doesSanityPrevail() {
-		return mSanityPrevails;
-	}
-
 //	public ArrayList<Country> getCountries() {
 //		return mCountries;
 //	}
@@ -541,15 +522,28 @@ public class NoteItApplication extends Application {
 		String lastName, 
 		String email, 
 		String password,
+		String confirmPassword,
 		final OnMethodExecuteListerner listener) {
 		
-		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(5);
-		args.add(new BasicNameValuePair("command", "do_register"));
-		args.add(new BasicNameValuePair("first_name", firstName));
-		args.add(new BasicNameValuePair("last_name", lastName));
-		args.add(new BasicNameValuePair("email_ID", email));
-		args.add(new BasicNameValuePair("password", password));
 		try {
+
+			if (email.trim().equals("")) {
+				throw new Exception(getString(R.string.register_blank_email));
+			} else if (password.trim().equals("") || confirmPassword.trim().equals("")) {
+				throw new Exception(getString(R.string.register_blank_password));
+			} else if (!password.trim().equals(confirmPassword.trim())) {
+				throw new Exception(getString(R.string.register_password_not_match));
+			} else if (password.length() < MIN_PASSWORD_LENGTH) {
+       			throw new Exception(getString(R.string.login_password_tooshort));
+        	}
+			
+			ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(5);
+			args.add(new BasicNameValuePair("command", "do_register"));
+			args.add(new BasicNameValuePair("first_name", firstName));
+			args.add(new BasicNameValuePair("last_name", lastName));
+			args.add(new BasicNameValuePair("email_ID", email));
+			args.add(new BasicNameValuePair("password", password));
+			
 			AsyncInvokeURLTask task = new AsyncInvokeURLTask(args, new AsyncInvokeURLTask.OnPostExecuteListener() {
 				
 				public void onPostExecute(JSONObject result) {
@@ -566,7 +560,9 @@ public class NoteItApplication extends Application {
 			});
 			task.execute();
 		} catch (Exception e) {
-			if (listener != null) listener.onPostExecute(-1, e.getMessage());
+			if (listener != null) {
+				listener.onPostExecute(-1, e.getMessage());
+			}
 		}
 	}
 	
@@ -574,8 +570,17 @@ public class NoteItApplication extends Application {
 			String userEmail, 
 			String password, 
 			boolean isHashedPassword,
-			AsyncInvokeURLTask.OnPostExecuteListener inPostExecute){
+			final OnMethodExecuteListerner inPostExecute){
 		try {
+			
+        	if (userEmail.equals("")) {
+        		throw new Exception(getString(R.string.register_blank_email));
+        	} else if (password.equals("")) {
+        		throw new Exception(getString(R.string.register_blank_password));
+        	} else if (password.length() < MIN_PASSWORD_LENGTH) {
+    			throw new Exception(getString(R.string.login_password_tooshort));
+        	}
+   	
 	        ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 	        nameValuePairs.add(new BasicNameValuePair("command", "do_login_json"));
 	        nameValuePairs.add(new BasicNameValuePair("email_ID", userEmail));
@@ -584,17 +589,38 @@ public class NoteItApplication extends Application {
 	        
 	        Log.i("NoteItApplication.loginUser", "Email: " + userEmail);
 	        Log.i("NoteItApplication.loginUser", "Password: " + password);
-			AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs, inPostExecute);
+			AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs, new OnPostExecuteListener() {
+				
+				public void onPostExecute(JSONObject result) {
+					try {
+						long retVal = result.getLong("JSONRetVal");
+						if (retVal == 0) {
+							long userID = result.getLong("arg1");
+							
+							setUserID(userID);
+				    		if (!result.isNull("arg2")) {
+				    			Preference prefs = new Preference(result.getJSONObject("arg2"));
+				    			setUserPrefs(prefs);
+				    		}
+						}
+						if (inPostExecute != null) {
+							inPostExecute.onPostExecute(retVal, result.getString("JSONRetMessage"));
+						}
+					} catch (JSONException e) {
+						if (inPostExecute != null) {
+							inPostExecute.onPostExecute(-1, e.getMessage());
+						}
+						e.printStackTrace();
+					}
+				}
+			});
 			task.execute();
 			
-		} catch (CancellationException e) {
-			Log.e("NoteItApplication.loginUser", e.getMessage());
-		} catch (ExecutionException e) {
-			Log.e("NoteItApplication.loginUser", e.getMessage());
-		} catch (InterruptedException e) {
-			Log.e("NoteItApplication.loginUser", e.getMessage());
 		} catch (Exception e) {
 			Log.e("NoteItApplication.loginUser", e.getMessage());		
+			if (inPostExecute != null) {
+				inPostExecute.onPostExecute(-1, e.getMessage());
+			}
 		}
 	}
 	
@@ -606,29 +632,49 @@ public class NoteItApplication extends Application {
 		mUserID = userID;
 	}
 	
-	protected void doInitialize(final OnMethodExecuteListerner listener) {
+	protected void doInitialize(
+			final String email, 
+			final String password, 
+			final boolean isHashedPassword, 
+			final OnMethodExecuteListerner listener) {
 		
-		fetchUnits(Unit.METRIC, new NoteItApplication.OnMethodExecuteListerner() {
-
+		fetchCurrencies(new OnMethodExecuteListerner() {
 			public void onPostExecute(long resultCode, String message) {
 				
-				if (resultCode == 0 && listener != null) {
-					
-					fetchCategories(new OnFetchCategoriesListener() {
-						
-						public void onPostExecute(
-								long resultCode, 
-								ArrayList<Category> categories,
-								String message) {
-							
-							if (listener != null) {
+				if (resultCode == 0) {
+					loginUser(email, password, isHashedPassword, new OnMethodExecuteListerner() {
+						public void onPostExecute(long resultCode, String message) {
+
+							if (resultCode == 0) {
+								fetchUnits(Unit.METRIC, new NoteItApplication.OnMethodExecuteListerner() {
+									public void onPostExecute(long resultCode, String message) {
+										
+										if (resultCode == 0) {
+											fetchCategories(new OnFetchCategoriesListener() {
+												public void onPostExecute(
+														long resultCode, 
+														ArrayList<Category> categories,
+														String message) {
+													
+													if (listener != null) {
+														listener.onPostExecute(resultCode, message);
+													}
+												}
+											});
+										} else if (listener != null) {
+											listener.onPostExecute(resultCode, message);
+										}
+									}
+								});
+							} else if (listener != null) {
 								listener.onPostExecute(resultCode, message);
 							}
 						}
 					});
-				} else if (listener != null) {
-					listener.onPostExecute(resultCode, message);
 				}
+				else if (listener != null) {
+						listener.onPostExecute(resultCode, message);
+				} 
 			}
 		});
 	}

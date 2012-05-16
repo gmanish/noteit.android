@@ -3,12 +3,9 @@ package com.geekjamboree.noteit;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
-import com.geekjamboree.noteit.NoteItApplication.Preference;
+import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
 import com.geekjamboree.noteit.NoteItApplication.ShoppingList;
 import com.geekjamboree.noteit.R;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -27,10 +24,9 @@ import android.widget.TextView;
 
 public class LoginActivity 
 	extends Activity 
-	implements AsyncInvokeURLTask.OnPostExecuteListener {
+	implements OnMethodExecuteListerner {
 	
 	static final String		DONT_LOGIN = "DONT_LOGIN";
-	static final int		MIN_PASSWORD_LENGTH = 6;
 	static final String		DISPLAY_UNREAD_MESSAGES = "DISPLAY_UNREAD_MESSAGES";
 	
 	SharedPreferences		mPrefs;
@@ -47,15 +43,7 @@ public class LoginActivity
         setContentView(R.layout.login);
         hideIndeterminateProgress();
    
-        mContentView = findViewById(R.id.Login_Root); 
-    	if (((NoteItApplication) getApplication()).doesSanityPrevail() == false) {
-    		CustomToast.makeText(
-    				this,
-    				mContentView,
-    				getString(R.string.app_critical_error)).show(true);
-    		finish();
-    		return;
-    	}
+        mContentView = findViewById(R.id.Login_Root);
 
     	// Read the email id from the preference
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -157,79 +145,51 @@ public class LoginActivity
 		super.onPause();
 	}
 
-	public void onPostExecute(JSONObject json) {
+	public void onPostExecute(long resultCode, String message) {
 
 		try {
-			long retVal = json.getLong("JSONRetVal");
-			if (retVal != 0)
-				throw new Exception(json.getString("JSONRetMessage"));
-			
-			long 					userID = json.getLong("arg1");
-			final NoteItApplication app = (NoteItApplication) getApplication();
-			
-			app.setUserID(userID);
-    		if (!json.isNull("arg2")) {
-    			Preference prefs = app.new Preference(json.getJSONObject("arg2"));
-    			app.setUserPrefs(prefs);
-    		}
-    		
-    		app.doInitialize(new NoteItApplication.OnMethodExecuteListerner() {
-				
-				public void onPostExecute(long resultCode, String message) {
+			if (resultCode != 0) {
+				throw new Exception(message);
+			} else {
+				boolean startDashboard = mPrefs.getBoolean("Start_Dashboard", true);
+				if (startDashboard) {
+            		Intent myIntent = new Intent(LoginActivity.this, DashBoardActivity.class);
+            		myIntent.putExtra(DISPLAY_UNREAD_MESSAGES, 1);
+                    startActivity(myIntent);
+                    finish();
+				} else {
+					boolean					fetchCount = mPrefs.getBoolean("Display_Pending_Item_Count", true);
+					final NoteItApplication	app = (NoteItApplication) getApplication();
 					
-					if (resultCode == 0) {
-						boolean startDashboard = mPrefs.getBoolean("Start_Dashboard", true);
-						if (startDashboard) {
-		            		Intent myIntent = new Intent(LoginActivity.this, DashBoardActivity.class);
-		            		myIntent.putExtra(DISPLAY_UNREAD_MESSAGES, 1);
-		                    startActivity(myIntent);
-		                    finish();
-						} else {
-							boolean	fetchCount = mPrefs.getBoolean("Display_Pending_Item_Count", true);
-							app.fetchShoppingLists(fetchCount, new NoteItApplication.OnFetchShoppingListsListener() {
+					app.fetchShoppingLists(fetchCount, new NoteItApplication.OnFetchShoppingListsListener() {
+						public void onPostExecute(
+								long resultCode,
+								ArrayList<ShoppingList> categories, 
+								String message) {
+							
+							if (resultCode == 0) {
+								int 	index = 0;
+								long 	lastUsedShoppingListID = mPrefs.getLong("LastUsedShoppingListID", 0);
 								
-								public void onPostExecute(
-										long resultCode,
-										ArrayList<ShoppingList> categories, 
-										String message) {
-									
-									if (resultCode == 0) {
-										int 	index = 0;
-										long 	lastUsedShoppingListID = mPrefs.getLong("LastUsedShoppingListID", 0);
-										
-										if (app.getShoppingListCount() > 0 && lastUsedShoppingListID != 0) {
-											index = app.getShoppingList().indexOf(
-													app.new ShoppingList(lastUsedShoppingListID));
-										}
-										app.setCurrentShoppingListIndex(index);
-						                Intent myIntent = new Intent(LoginActivity.this, ItemListActivity.class);
-						                myIntent.putExtra(DISPLAY_UNREAD_MESSAGES, 1);
-						                startActivity(myIntent);
-						                finish();
-									} else {
-							    		CustomToast.makeText(
-							    				getApplicationContext(),
-							    				mContentView,
-							    				message).show(true);
-									}
+								if (app.getShoppingListCount() > 0 && lastUsedShoppingListID != 0) {
+									index = app.getShoppingList().indexOf(
+											app.new ShoppingList(lastUsedShoppingListID));
 								}
-							});
+								app.setCurrentShoppingListIndex(index);
+				                Intent myIntent = new Intent(LoginActivity.this, ItemListActivity.class);
+				                myIntent.putExtra(DISPLAY_UNREAD_MESSAGES, 1);
+				                startActivity(myIntent);
+				                finish();
+							} else {
+					    		CustomToast.makeText(
+					    				getApplicationContext(),
+					    				mContentView,
+					    				message).show(true);
+							}
 						}
-					} else {
-			    		CustomToast.makeText(
-			    				getApplicationContext(),
-			    				mContentView,
-			    				message).show(true);
-					}
+					});
 				}
-			});
-		} catch (JSONException e) {
-			hideIndeterminateProgress();
-    		CustomToast.makeText(
-    				getApplicationContext(),
-    				mContentView,
-    				getString(R.string.server_error)).show(true);
-			Log.e("NoteItApplication.loginUser", e.getMessage());
+			}
 		} catch (Exception e) {
 			hideIndeterminateProgress();
     		CustomToast.makeText(
@@ -270,39 +230,22 @@ public class LoginActivity
     	String strEmail = emailID.getEditableText().toString().trim();
     	String strPassword = password.getEditableText().toString();
     	
-    	if (strEmail.equals("")) {
-    		AlertDialog dialog = MessageBox.createMessageBox(
-    			this, 
-    			getString(R.string.login_failed), 
-    			getString(R.string.register_blank_email));
-    		dialog.show();
-    		return;
-    	} else if (strPassword.equals("")) {
-    		AlertDialog dialog = MessageBox.createMessageBox(
-    			this, 
-    			getString(R.string.login_failed), 
-    			getString(R.string.register_blank_password));
-    		dialog.show();
-    		return;
-    	} else if (strPassword.length() < MIN_PASSWORD_LENGTH) {
-    		AlertDialog dialog = MessageBox.createMessageBox(
-    			this, 
-    			getString(R.string.login_failed), 
-    			getString(R.string.login_password_tooshort));
-			dialog.show();
-    		return;
-    	}
     	try {
         	showIndeterminateProgress();
-        	((NoteItApplication) getApplication()).loginUser(
-				emailID.getText().toString(), 
-				password.getText().toString(),
+
+        	((NoteItApplication) getApplication()).doInitialize(
+				strEmail, 
+				strPassword,
 				mIsHashedPassword,
-				LoginActivity.this);
+				this);
     	} catch (Exception e) {
     		hideIndeterminateProgress();    		
     		Log.e("doLogin", e.getMessage());
-    	} finally {
+    		AlertDialog dialog = MessageBox.createMessageBox(
+        			this, 
+        			getString(R.string.login_failed),
+        			e.getMessage());
+			dialog.show();
     	}
 	}
 }

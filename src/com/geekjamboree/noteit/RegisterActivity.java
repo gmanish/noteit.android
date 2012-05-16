@@ -74,51 +74,15 @@ public class RegisterActivity extends Activity implements OnEulaAgreedTo {
 						return;
 					}
 					
-					if (email.trim().equals("")) {
-						
-						AlertDialog dialog = MessageBox.createMessageBox(
-							RegisterActivity.this, 
-							getString(R.string.register_error_title), 
-							getString(R.string.register_blank_email));
-
-						dialog.show();
-						return;
-					} else if (password.trim().equals("") || confirmPassword.trim().equals("")) {
-						
-						AlertDialog dialog = MessageBox.createMessageBox(
-							RegisterActivity.this, 
-							getString(R.string.register_error_title), 
-							getString(R.string.register_blank_password));
-
-						dialog.show();
-						return;
-					} else if (!password.trim().equals(confirmPassword.trim())) {
-						
-						AlertDialog dialog = MessageBox.createMessageBox(
-								RegisterActivity.this, 
-								getString(R.string.register_error_title), 
-								getString(R.string.register_password_not_match));
-						
-						dialog.show();
-						return;
-					} else if (password.length() < LoginActivity.MIN_PASSWORD_LENGTH) {
-			    		AlertDialog dialog = MessageBox.createMessageBox(
-			        			RegisterActivity.this, 
-			        			getString(R.string.register_error_title), 
-			        			getString(R.string.login_password_tooshort));
-			    		dialog.show();
-			    		return;
-		        	}
-
-					
 					NoteItApplication app = (NoteItApplication) getApplication();
 					if (app != null) {
 						showIndeterminateProgress();
 						app.registerUser(
 							editFirstName.getEditableText().toString(), 
 							editLastName.getEditableText().toString(), 
-							editEmail.getEditableText().toString(), 
-							editPassword.getEditableText().toString(), 
+							email, 
+							password, 
+							confirmPassword,
 							new NoteItApplication.OnMethodExecuteListerner() {
 								
 								public void onPostExecute(long resultCode, String message) {
@@ -130,9 +94,9 @@ public class RegisterActivity extends Activity implements OnEulaAgreedTo {
 											finish();
 										} else {
 								    		CustomToast.makeText(
-								    				RegisterActivity.this,
-								    				mRoot,
-								    				message).show(true);
+							    				RegisterActivity.this,
+							    				mRoot,
+							    				message).show(true);
 										}
 									} finally {
 										hideIndeterminateProgress();
