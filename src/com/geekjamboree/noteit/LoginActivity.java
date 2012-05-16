@@ -89,6 +89,16 @@ public class LoginActivity
 			});
         }
         
+        Button forgotPassword = (Button) findViewById(R.id.buttonForgotPassword);
+        if (forgotPassword != null) {
+        	forgotPassword.setOnClickListener(new View.OnClickListener() {
+				
+				public void onClick(View v) {
+					
+				}
+			});
+        }
+        
         Intent 	intent = getIntent();
         Bundle 	bundle = intent.getExtras();
         boolean	dontLogin = false;

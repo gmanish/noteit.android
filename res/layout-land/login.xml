@@ -89,13 +89,31 @@
 			    android:layout_height="wrap_content"
 			    android:inputType="textPassword" />
 		
-		    <Button
-		        android:id="@+id/buttonLogin"
-		        android:layout_width="148dp"
-		        android:layout_height="wrap_content"
-		        android:layout_gravity="right"
-		        android:layout_marginTop="10dip"
-		        android:text="@string/login_login" />
+			<RelativeLayout
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:paddingBottom="10dip"
+			    android:paddingTop="10dip" >
+
+				<Button
+			        android:id="@+id/buttonForgotPassword"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_alignParentLeft="true"
+			        android:layout_centerVertical="true"
+			        android:padding="5dip"
+			        style="@style/HyperLink_ButtonStyle"
+			        android:text="@string/login_forgot_password" />
+	
+			    <Button
+			        android:id="@+id/buttonLogin"
+			        android:layout_width="100dip"
+			        android:layout_height="wrap_content"
+			        android:layout_gravity="right"
+		        	android:layout_alignParentRight="true"
+			        android:text="@string/login_login" />
+			    
+			</RelativeLayout>
 
 		</LinearLayout>
 			
