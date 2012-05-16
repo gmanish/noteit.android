@@ -1235,6 +1235,7 @@ public class NoteItApplication extends Application {
 	        nameValuePairs.add(new BasicNameValuePair("arg2", String.valueOf(sourceCategory.mRank)));
 	        nameValuePairs.add(new BasicNameValuePair("arg3", String.valueOf(targetCategory.mRank)));
 	        nameValuePairs.add(new BasicNameValuePair("arg4", String.valueOf(getUserID())));
+	        nameValuePairs.add(new BasicNameValuePair("arg5", String.valueOf(targetCategory.mID)));
 	        
 	        ReorderCategoryListener reorderListener = new ReorderCategoryListener();
 	        AsyncInvokeURLTask task;
