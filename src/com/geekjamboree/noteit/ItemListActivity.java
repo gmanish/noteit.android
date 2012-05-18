@@ -29,23 +29,27 @@ import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -72,7 +76,6 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	AlertDialog 					mInstallScanAppDialog = null;
 	Item							mTempItemToPassToDialog = null;
 	View							mContentView = null;
-	
 	static final int ADD_ITEM_REQUEST = 0;	
 	
 	static final int QA_ID_EDIT 		= 0;
@@ -96,6 +99,12 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	static final String SELECTED_ITEM_ID		= "selItemID";
 	static final String IS_ITEMLIST_FETCHED 	= "IS_ITEM_LIST_FETCHED";
 	
+	ViewConfiguration 	mVC 						= null;
+	int 				mSwipeMinDistance 			= 0;
+	int 				mSwipeThresholdVelocity 	= 0;
+	int 				mSwipeMaxVDistance 			= 0;
+	final int			MAX_SWIPE_DISTANCE			= 50;
+	
     protected enum ItemType {
     	PENDING, 
     	DONE, 
@@ -109,6 +118,30 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	NOTE_IT
     }
     
+	public static interface OnChildGestureListener {
+		
+		public boolean onChildClick(
+				ExpandableListView parent, 
+				View v, 
+				int groupPosition, 
+				int childPosition, 
+				long id);
+		
+		public boolean onChildLeftSwipe(
+				ExpandableListView parent, 
+				View v, 
+				int groupPosition, 
+				int childPosition, 
+				long id);
+		
+		public boolean onChildRightSwipe(
+				ExpandableListView parent, 
+				View v, 
+				int groupPosition, 
+				int childPosition, 
+				long id);
+	}
+	
 	protected AbsListView.OnScrollListener mScrollListener = new AbsListView.OnScrollListener() {
 		
 		public void onScrollStateChanged(
@@ -168,7 +201,154 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 				
 			}
 		};
+
+	/* 
+	 * The following was added for detecting fling across an item. There's a problem with the onChildClick
+	 * listener in that it is always called whether we detect a fling on not leading to both a fling and
+	 * item click being fired. This obviously is not desirable. Hence we do not use the onClickClick 
+	 * listener on the listview. Instead we've simulated onChildClick thorough the SimpleGestureListener 
+	 * and it seems to work fine. Yippie!
+	 */
+	protected SimpleOnGestureListener mGestureListener = 
+			new SimpleOnGestureListener() {
+
+				@Override
+				public boolean onFling(
+						MotionEvent e1, 
+						MotionEvent e2,
+						float velocityX, 
+						float velocityY) {
+
+		            try {
+		            	Log.i("onFling", "Y Offset: " + Math.abs(e1.getY() - e2.getY()));
+		                if (Math.abs(e1.getY() - e2.getY()) > mSwipeMaxVDistance) {
+		                	Log.i("onFling", "Too much vertical movement.");
+		                    return false;
+		                }
+		                
+		                // right to left swipe
+		                if(Math.abs(e1.getX() - e2.getX()) > mSwipeMinDistance 
+		                		&& Math.abs(velocityX) > mSwipeThresholdVelocity) {
+
+							ExpandableListView lv = getExpandableListView();
+				            int pos = lv.pointToPosition((int)e1.getX(), (int)e1.getY());
+				            if (pos != ListView.INVALID_POSITION) {
+					            int 	viewPos = pos - lv.getFirstVisiblePosition(); 
+					            View 	view = lv.getChildAt(viewPos);
+					            if (view != null) {
+					            	long packedPosition = lv.getExpandableListPosition(pos);
+					            	if (ExpandableListView.getPackedPositionType(packedPosition) == 
+					            			ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+					            		
+					            		// Don't send onFling for groups
+							            if (e1.getX() > e2.getX()) {
+							            	mChildClickListener.onChildLeftSwipe(
+							            			lv, 
+							            			view, 
+							            			ExpandableListView.getPackedPositionGroup(packedPosition), 
+						            				ExpandableListView.getPackedPositionChild(packedPosition), 
+						            				view.getId());
+							            	
+						                }  else {
+							            	mChildClickListener.onChildRightSwipe(
+							            			lv, 
+							            			view, 
+							            			ExpandableListView.getPackedPositionGroup(packedPosition), 
+						            				ExpandableListView.getPackedPositionChild(packedPosition), 
+						            				view.getId());
+						                }
+					            	}
+					            }
+				            }
+		                }
+		            } catch (Exception e) {
+		                // nothing
+		            }
+		            Log.i("ItemListActivity.SimpleOnGestureListener", "onFling Detected");
+					return false;
+				}
+
+				@Override
+		        public boolean onSingleTapUp(MotionEvent e) {
+		            
+					ExpandableListView lv = getExpandableListView();
+		            int pos = lv.pointToPosition((int)e.getX(), (int)e.getY());
+		            if (pos != ListView.INVALID_POSITION) {
+			            int 	viewPos = pos - lv.getFirstVisiblePosition(); 
+			            View 	view = lv.getChildAt(viewPos);
+			            
+			            if (view != null) {
+			            	long packedPosition = lv.getExpandableListPosition(pos);
+			            	if (ExpandableListView.getPackedPositionType(packedPosition) == 
+			            			ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+			            		
+			            		// Don't send itemClick for groups
+			            		mChildClickListener.onChildClick(
+			            				lv, 
+			            				view, 
+			            				ExpandableListView.getPackedPositionGroup(packedPosition), 
+			            				ExpandableListView.getPackedPositionChild(packedPosition), 
+			            				view.getId());
+			            	}
+			            }
+		            }
+		            return false;
+		        }
+			};
+	
+	protected GestureDetector mGestureDetector = new GestureDetector(mGestureListener);
+	
+	protected View.OnTouchListener mTouchListener = 
+			new View.OnTouchListener() {
+				
+				public boolean onTouch(View v, MotionEvent event) {
+					if (mGestureDetector != null)
+						return mGestureDetector.onTouchEvent(event);
+					else
+						return false;
+				}
+			};
+			
+	protected OnChildGestureListener mChildClickListener = new OnChildGestureListener() {
 		
+		public boolean onChildClick(
+				ExpandableListView parent, 
+				View v,
+				int groupPosition, 
+				int childPosition, long id) {
+
+			mQuickAction.show(v);
+			mSelectedGroup.set(groupPosition);
+			mSelectedChild.set(childPosition);
+			mSelectedItemID = ((Item) getExpandableListView().getExpandableListAdapter().getChild(groupPosition, childPosition)).mID;
+			return false;
+		}
+		
+		public boolean onChildLeftSwipe(
+				ExpandableListView parent, 
+				View v, 
+				int groupPosition, 
+				int childPosition, 
+				long id) {
+
+			return false;
+		}
+		
+		public boolean onChildRightSwipe(
+				ExpandableListView parent, 
+				View v, 
+				int groupPosition, 
+				int childPosition, 
+				long id) {
+			
+			mSelectedGroup.set(groupPosition);
+			mSelectedChild.set(childPosition);
+			mSelectedItemID = ((Item) parent.getExpandableListAdapter().getChild(groupPosition, childPosition)).mID;
+			doToggleMarkDone();
+			return false;
+		}
+	};
+	
 	class ShoppingListAdapterWithIcons extends ArrayAdapter<ShoppingList> {
 
 		public ShoppingListAdapterWithIcons(
@@ -209,6 +389,13 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	
     	super.onCreate(savedInstanceState);
 
+    	final float scale 			= getResources().getDisplayMetrics().density;
+    	mVC 						= ViewConfiguration.get(this);
+    	mSwipeMinDistance 			= mVC.getScaledTouchSlop();
+    	mSwipeThresholdVelocity 	= mVC.getScaledMinimumFlingVelocity();
+    	mSwipeMaxVDistance 			= (int)(MAX_SWIPE_DISTANCE * scale + 0.5f);
+
+    	
     	if (savedInstanceState != null) {
     		Log.i("ItemListActivity.onCreate", "Got a valid savedInstanceState");
     		mSelectedGroup.set(savedInstanceState.getInt(SELECTED_GROUP));
@@ -305,24 +492,9 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
         ItemsExpandableListAdapter adapter = new ItemsExpandableListAdapter(this);
 		mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE); 
 		getExpandableListView().setTextFilterEnabled(true);
+		getExpandableListView().setOnTouchListener(mTouchListener);
 		addFooterToListView(true);
 		getExpandableListView().setAdapter(adapter);
-    	getExpandableListView().setOnChildClickListener(new OnChildClickListener() {
-			
-			public boolean onChildClick(ExpandableListView parent, View v,
-					int groupPosition, int childPosition, long id) {
-				
-				if (v.getId() == R.id.itemlist_name) {
-					doToggleMarkDone();
-				} else {
-    				mQuickAction.show(v);
-				}
-				mSelectedGroup.set(groupPosition);
-				mSelectedChild.set(childPosition);
-				mSelectedItemID = ((Item) getExpandableListView().getExpandableListAdapter().getChild(groupPosition, childPosition)).mID;
-				return false;
-			}
-		});
         
     	// Populating of the list with items is handled in OnScrollListener for the list view
 		if (app.getShoppingListCount() > 0 && !mIsItemListFetched) {
@@ -1698,8 +1870,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     		                ViewGroup.LayoutParams.FILL_PARENT, 
     		                ViewGroup.LayoutParams.WRAP_CONTENT);
     	        }	
-    	        
-    	        if (textView != null) {
+
+        		if (textView != null) {
 
 			        if (thisItem.mIsPurchased > 0) {
 			        	textView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
@@ -1719,21 +1891,26 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	        	}
 	        	
 	        	if (mDisplayExtras && quantity != null && thisItem.mQuantity > 0 ) {
+	        		
 	        		NoteItApplication 	app = (NoteItApplication) getApplication();
 	        		String 				unit = app.getUnitFromID(thisItem.mUnitID).mAbbreviation; 
+	        		
 	        		quantity.setText(String.valueOf(thisItem.mQuantity) + " " + unit); 
 	        		quantity.setVisibility(View.VISIBLE);
 	        		quantity.setPaintFlags(
 	        			thisItem.mIsPurchased > 0 ?
 	        					Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG :
 	        					textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);	
-		        	if (price != null && thisItem.mUnitPrice > 0){
-		        		String strPrice = String.format(
+	        		
+	        		if (price != null && thisItem.mUnitPrice > 0){
+		        		
+	        			String strPrice = String.format(
 		        				mUnitPriceFormat, 
 		        				String.format(mCurrencyFormat, thisItem.mUnitPrice),
 		        				unit);
 		        		String strTotal = String.format(mCurrencyFormat, thisItem.mUnitPrice * thisItem.mQuantity);
-			        	price.setPaintFlags(
+			        	
+		        		price.setPaintFlags(
 			        			thisItem.mIsPurchased > 0 ?
 	        					Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG :
 		        				textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);	
