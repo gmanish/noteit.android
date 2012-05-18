@@ -1,6 +1,7 @@
 
 package com.geekjamboree.noteit;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.geekjamboree.noteit.ActionItem;
@@ -21,11 +22,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,6 +44,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -164,6 +168,42 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 				
 			}
 		};
+		
+	class ShoppingListAdapterWithIcons extends ArrayAdapter<ShoppingList> {
+
+		public ShoppingListAdapterWithIcons(
+				Context context, 
+				int resource,
+				int textViewResourceId, 
+				List<ShoppingList> objects) {
+			super(context, resource, textViewResourceId, objects);
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View 			view = super.getView(position, convertView, parent);
+			ShoppingList	item = getItem(position);
+			
+			TextView 		itemCount = (TextView) view.findViewById(R.id.shoppinglist_itemCount);
+			if (itemCount != null && item != null) {
+				itemCount.setText(" (" + String.valueOf(item.mItemCount) + ")");
+				itemCount.setVisibility(View.VISIBLE);
+			}
+			
+			ImageView icon = (ImageView) view.findViewById(R.id.shoppinglist_icon);
+			if (icon != null) {
+				if (item.mUserID != ((NoteItApplication) getApplication()).getUserID())
+					icon.setBackgroundResource(getResourceIdFromAttribute(R.attr.SharedShoppingList));
+				else 
+					icon.setBackgroundResource(getResourceIdFromAttribute(R.attr.ShoppingList_Cart));
+			}
+
+			ImageView expandIcon = (ImageView) view.findViewById(R.id.shopppinglist_expand);
+			if (expandIcon != null) {
+				expandIcon.setVisibility(View.GONE);
+			}
+			return view;
+		}
+	}
 		
 	public void onCreate(Bundle savedInstanceState) { 
     	
@@ -1150,9 +1190,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	final NoteItApplication app = (NoteItApplication) getApplication();
     	
     	ArrayList<ShoppingList> shoppingList = app.getShoppingList();
-    	ArrayAdapter<ShoppingList> adapter = new ArrayAdapter<ShoppingList>(
+    	ShoppingListAdapterWithIcons adapter = new ShoppingListAdapterWithIcons(
     			this, 
-    			android.R.layout.simple_dropdown_item_1line,
+    			R.layout.shoppinglists_item,
+    			R.id.shoppinglist_name,
     			shoppingList);
     	AlertDialog shoppingLists = new AlertDialog.Builder(this)
     		.setTitle(R.string.itemlist_select_shoppinglist)
@@ -1774,4 +1815,12 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	    	return count;
 	    }
 	}
+	
+	protected int getResourceIdFromAttribute(int attribId) {
+		Resources.Theme theme = getTheme();
+		TypedValue 		resID = new TypedValue();
+		theme.resolveAttribute(attribId, resID, false);
+		return resID.data;
+	}
+	
 }
