@@ -15,6 +15,9 @@ import android.preference.PreferenceManager;
 
 public class MainPreferenceActivity extends PreferenceActivity {
 
+	public static final String 				kPref_HideDoneItems 		= "Delete_Bought_Items";
+	public static final boolean				kPref_HideDoneDefault		= true;
+	
 	SharedPreferences 									mPrefs;
 	SharedPreferences.OnSharedPreferenceChangeListener	mPrefChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
 		
