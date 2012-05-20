@@ -624,6 +624,32 @@ public class NoteItApplication extends Application {
 		}
 	}
 	
+	public void do_forgot_password(String emailID, final OnMethodExecuteListerner listener) {
+		
+		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(2);
+		args.add(new BasicNameValuePair("command", "do_forgot_password"));
+		args.add(new BasicNameValuePair("arg1", emailID));
+		try {
+			AsyncInvokeURLTask task = new AsyncInvokeURLTask(args, new OnPostExecuteListener() {
+				
+				public void onPostExecute(JSONObject result) {
+					try {
+						long retVal = result.getLong("JSONRetVal");
+						if (listener != null)
+							listener.onPostExecute(retVal, result.getString("JSONRetMessage"));
+					} catch (JSONException e) {
+						if (listener != null)
+							listener.onPostExecute(-1, e.getMessage());
+					}
+				}
+			});
+			task.execute();
+		} catch (Exception e) {
+			if (listener != null)
+				listener.onPostExecute(-1, e.getMessage());
+		}
+	}
+	
 	public long getUserID(){
 		return mUserID;
 	}

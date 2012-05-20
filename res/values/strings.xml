@@ -47,6 +47,8 @@
     <string name="login_failed">Log In Failed</string>
     <string name="login_password_tooshort">Password must be at least six characters in length.</string>
     <string name="login_forgot_password">Forgot Password?</string>
+    <string name="login_forgot_password_title">Enter email:</string>
+    <string name="login_forgot_password_success">A password reset link has been sent to \'%1$s\'. Please use the link within the next 24 hours to reset your password.</string>
 
     <string name="categorylist_title">Categories</string>
     <string name="categorylists_add">Add Category</string>
