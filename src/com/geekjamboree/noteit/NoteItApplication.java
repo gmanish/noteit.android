@@ -394,6 +394,15 @@ public class NoteItApplication extends Application {
 			mSampleDeviation = json.getDouble("sampleDeviation");
 		}
 		
+		public void copyFrom(Item item) {
+			
+			super.copyFrom(item);
+			if (item instanceof ItemAndStats) {
+				mMean = ((ItemAndStats) item).mMean;
+				mSampleDeviation = ((ItemAndStats) item).mSampleDeviation;
+			}
+		}
+
 		public int getDeviationRange() {
 			
 			double diff = mUnitPrice - mMean;
@@ -1693,13 +1702,13 @@ public class NoteItApplication extends Application {
         }
 	}
 	
-	public void editItem(final int bitMask, final Item item, OnMethodExecuteListerner inListener) {
+	public void editItem(final int bitMask, final Item item, OnAddItemListener inListener) {
         
 		class EditItemTask  implements AsyncInvokeURLTask.OnPostExecuteListener {
 
-        	OnMethodExecuteListerner mListener;
+        	OnAddItemListener mListener;
         	
-        	EditItemTask(OnMethodExecuteListerner inListener) {
+        	EditItemTask(OnAddItemListener inListener) {
         		mListener = inListener;
         	}
         	
@@ -1741,10 +1750,13 @@ public class NoteItApplication extends Application {
 	        			if (itemIndex >= 0) {
 	        				mItems.set(itemIndex, editedItem);
 	        			}
+	                	
+	        			mListener.onPostExecute(retVal, editedItem, json.getString("JSONRetMessage"));
+        			} else { 
+        				mListener.onPostExecute(retVal, null, json.getString("JSONRetMessage"));
         			}
-                	mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
         		} catch (JSONException e){
-        			mListener.onPostExecute(-1, e.getMessage());
+        			mListener.onPostExecute(-1, null, e.getMessage());
         		}
         	}
         }

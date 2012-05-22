@@ -340,6 +340,10 @@ public class ItemListActivity
 				int childPosition, 
 				long id) {
 
+			mSelectedGroup.set(groupPosition);
+			mSelectedChild.set(childPosition);
+			mSelectedItemID = ((Item) parent.getExpandableListAdapter().getChild(groupPosition, childPosition)).mID;
+			doDeleteItem();
 			return false;
 		}
 		
@@ -1058,15 +1062,15 @@ public class ItemListActivity
 		mToolbar.showInderminateProgress(getString(R.string.progress_message));
 		app.addItem(item, new OnAddItemListener() {
 			
-			public void onPostExecute(long resultCode, Item item, String message) {
+			public void onPostExecute(long resultCode, Item newItem, String message) {
 				try {
 					if (resultCode == 0){
 				    	ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
-	    				Category category = ((NoteItApplication) getApplication()).getCategory(item.mCategoryID);
-	    				adapter.AddItem(item, category);
-	    				Log.d("ItemListActivity.doAddItem()", "Item added: " + item.mName);
+	    				Category category = ((NoteItApplication) getApplication()).getCategory(newItem.mCategoryID);
+	    				adapter.AddItem(newItem, category);
+	    				Log.d("ItemListActivity.doAddItem()", "Item added: " + newItem.mName);
 						adapter.notifyDataSetChanged();
-						doAddToPendingTotal(item.mUnitID * item.mUnitPrice);
+						doAddToPendingTotal(newItem.mUnitID * newItem.mUnitPrice);
 						doDisplayPendingTotal();
 					}
 					else {
@@ -1082,43 +1086,43 @@ public class ItemListActivity
 		});
 	}
 	
-	protected void doEditItem(final Item oldItem, final Item newItem, final int bitMask) {
+	protected void doEditItem(final Item oldItem, Item newItem, final int bitMask) {
 
 		NoteItApplication app = (NoteItApplication) getApplication();
 		mToolbar.showInderminateProgress(getString(R.string.progress_message));
 		app.editItem(
 				bitMask, 
     			newItem,  
-    			new OnMethodExecuteListerner() {
-			
-			public void onPostExecute(long resultCode, String message) {
-				try {
-					if (resultCode == 0) {
-		    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
-	    				Category category = ((NoteItApplication) getApplication()).getCategory(newItem.mCategoryID);
-	    				if ((bitMask & Item.ITEM_CATEGORYID) > 0 || (bitMask & Item.ITEM_NAME) > 0) {
-		    				adapter.DeleteItem(oldItem);
-		    				adapter.AddItem(newItem, category);
-		    				doAddToPendingTotal(newItem.mUnitPrice * newItem.mQuantity - oldItem.mUnitPrice * oldItem.mQuantity);
-		    				doDisplayPendingTotal();
-	    				} else {
-	    					Item selItem = (Item) getExpandableListView().getExpandableListAdapter().getChild(
-	    							mSelectedGroup.get(), 
-	    							mSelectedChild.get());
-	    					selItem.copyFrom(newItem);
-	    				}
-						adapter.notifyDataSetChanged();
+    			new OnAddItemListener() {
+					
+					public void onPostExecute(long resultCode, Item item, String message) {
+						try {
+							if (resultCode == 0) {
+				    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
+			    				Category category = ((NoteItApplication) getApplication()).getCategory(item.mCategoryID);
+			    				if ((bitMask & Item.ITEM_CATEGORYID) > 0 || (bitMask & Item.ITEM_NAME) > 0) {
+				    				adapter.DeleteItem(oldItem);
+				    				adapter.AddItem(item, category);
+				    				doAddToPendingTotal(item.mUnitPrice * item.mQuantity - oldItem.mUnitPrice * oldItem.mQuantity);
+				    				doDisplayPendingTotal();
+			    				} else {
+			    					Item selItem = (Item) getExpandableListView().getExpandableListAdapter().getChild(
+			    							mSelectedGroup.get(), 
+			    							mSelectedChild.get());
+			    					selItem.copyFrom(item);
+			    				}
+								adapter.notifyDataSetChanged();
+							}
+							else
+		    		    		CustomToast.makeText(
+		    		    				ItemListActivity.this,
+		    		    				mContentView,
+		    		    				message).show(true);
+						} finally {
+				    		mToolbar.hideIndeterminateProgress();
+						}
 					}
-					else
-    		    		CustomToast.makeText(
-    		    				ItemListActivity.this,
-    		    				mContentView,
-    		    				message).show(true);
-				} finally {
-		    		mToolbar.hideIndeterminateProgress();
-				}
-			}
-		});
+				});
 	}
 	
 	protected void doCopyItem() {
@@ -1215,8 +1219,9 @@ public class ItemListActivity
 				    		app.editItem(
 				    				editBitmask, 
 				    				newItem, 
-				        			new OnMethodExecuteListerner() {
-				    					public void onPostExecute(long resultCode, String message) {
+				        			new OnAddItemListener() {
+										
+										public void onPostExecute(long resultCode, Item item, String message) {
 				    						try {
 					    						if (resultCode == 0) {
 					    							adapter.DeleteItem(selItem);
@@ -1230,8 +1235,8 @@ public class ItemListActivity
 				    						} finally {
 				    				    		mToolbar.hideIndeterminateProgress();
 				    						}
-				    					}
-				    			});
+										}
+				    				});
 				    	}
 					}
 				})
@@ -1538,15 +1543,12 @@ public class ItemListActivity
 		app.editItem(
 				editBitmask, 
     			newItem, 
-    			new OnMethodExecuteListerner() {
-				
-					public void onPostExecute(long resultCode, String message) {
-						
+    			new OnAddItemListener() {
+					
+					public void onPostExecute(long resultCode, Item editedItem, String message) {
 						try {
 							if (resultCode == 0) {
-								item.mIsPurchased = newItem.mIsPurchased;
-								item.mIsAskLater = newItem.mIsAskLater;
-								item.mUnitPrice = newItem.mUnitPrice; 
+								item.copyFrom(editedItem);
 								ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
 								if (item.mIsPurchased > 0) {
 									// Shuffle purchased item to the bottom
