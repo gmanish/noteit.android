@@ -409,9 +409,9 @@ public class NoteItApplication extends Application {
 			
 			if (mMean <= 0)
 				return kNormalDeviation;
-			else if (diff <= -2 * mSampleDeviation) 
+			else if (diff < -2 * mSampleDeviation) 
 				return kDown_AlarmingDev;
-			else if (diff <= -1 * mSampleDeviation)
+			else if (diff < -1 * mSampleDeviation)
 				return kDown_TwoStandardDev;
 			else if (diff < 0)
 				return kDown_OneStandardDev;
