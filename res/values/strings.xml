@@ -93,6 +93,8 @@
 	<string name="itemlist_loadingmore">Loading More Items &#8230;</string>
 	<string name="itemlist_scanbarcode">Scan</string>
 	<string name="itemlist_itemnotfound">Details about the Item are not available. Would you like to enter details which will be remembered subsequently?</string>
+	<string name="itemlist_Price_Up">&#x2191;</string>
+	<string name="itemlist_Price_Down">&#x2193;</string>
 	    	    	
 	<string name="itemlistqe_edit">Edit</string>
 	<string name="itemlistqe_delete">Delete</string>

@@ -3,8 +3,8 @@
     android:id="@+id/itemlist_root"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="20dip"
-    android:paddingRight="20dip"
+    android:paddingLeft="10dip"
+    android:paddingRight="10dip"
     android:paddingTop="10dip"
     android:paddingBottom="10dip"
     android:orientation="vertical" >
@@ -24,6 +24,7 @@
 	        android:ellipsize="end"
 	        android:layout_gravity="left|center_vertical"
 	        android:gravity="left|center_vertical"
+	        android:drawablePadding="5dip"
 	        style="?TextAppearance_Item_Small"
 	        android:text="@string/app_name" />
 

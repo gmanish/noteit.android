@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.geekjamboree.noteit.ActionItem;
+import com.geekjamboree.noteit.NoteItApplication.ItemAndStats;
 import com.geekjamboree.noteit.NoteItApplication.OnAddItemListener;
 import com.geekjamboree.noteit.NoteItApplication.OnFetchItemsListener;
 import com.geekjamboree.noteit.NoteItApplication.OnItemVoteListener;
@@ -2132,8 +2133,16 @@ public class ItemListActivity
 			        			thisItem.mIsPurchased > 0 ?
 	        					Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG :
 		        				textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);	
-		        		price.setText(strPrice);
 		        		total.setText(strTotal);
+		        		
+				        if (thisItem instanceof ItemAndStats) {
+				        	ItemAndStats itemStats = (ItemAndStats) thisItem;
+			        		int deviationRange = itemStats.getDeviationRange();
+			        		price.setText(strPrice + getStatsText(deviationRange));
+				        } else {
+			        		price.setText(strPrice);
+				        }
+				        
 		        		price.setVisibility(View.VISIBLE);
 		        		total.setVisibility(View.VISIBLE);
 		        	} else {
@@ -2204,6 +2213,26 @@ public class ItemListActivity
 	    		count += (item.mIsPurchased <= 0 ? 1 : 0);
 	    	}
 	    	return count;
+	    }
+	    
+	    protected String getStatsText(int deviationType) {
+	    	
+	    	final String up = mContext.getString(R.string.itemlist_Price_Up);
+	    	final String down = mContext.getString(R.string.itemlist_Price_Down); 
+	    	if (deviationType == ItemAndStats.kUP_AlarmingDev) {
+	    		return " " + up + up + up;	
+	    	} else if (deviationType == ItemAndStats.kUp_TwoStandardDev) {
+				return " " + up + up;
+	    	} else if (deviationType == ItemAndStats.kUp_OneStandardDev) {
+	    		return " " + up;
+	    	} else if (deviationType == ItemAndStats.kDown_AlarmingDev) {
+    			return " " + down + down + down;
+    		} else if (deviationType == ItemAndStats.kDown_TwoStandardDev) {
+    			return " " + down + down;
+    		} else if (deviationType == ItemAndStats.kDown_OneStandardDev) {
+    			return " " + down;
+    		}
+	    	return "";
 	    }
 	}
 	
