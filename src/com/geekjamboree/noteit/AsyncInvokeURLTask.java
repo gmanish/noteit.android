@@ -89,7 +89,7 @@ class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 		mNoteItWebUrl = url.equals("") ? getNoteItURL() : url;
 	}
 
-	@SuppressWarnings("unused")
+//	@SuppressWarnings("unused")
 	private String getNoteItURL() {
 		final String URL_HOST_LOOPBACK 	= "http://10.0.2.2/noteit.web/controller/appcontroller.php";
 		final String URL_GEEKJAM 		= "http://geekjamboree.com/controller/appcontroller.php"; 
