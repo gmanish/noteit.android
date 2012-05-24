@@ -200,7 +200,7 @@ public class DashBoardActivity extends Activity {
 	protected void doSetupToolbarButton() {
 		
 		final ImageButton logOut = new ImageButton(this);
-		mToolbar.addRightAlignedButton(logOut, true, false);
+		mToolbar.addRightAlignedButton(logOut, false, true);
 		logOut.setImageResource(R.drawable.sign_out);
 		logOut.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -209,7 +209,7 @@ public class DashBoardActivity extends Activity {
 		});
 		
         ImageButton settings = new ImageButton(this);
-        mToolbar.addRightAlignedButton(settings, true, false);
+        mToolbar.addRightAlignedButton(settings, false, true);
         settings.setImageResource(R.drawable.settings);
         settings.setOnClickListener(new View.OnClickListener() {
 			

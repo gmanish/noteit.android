@@ -15,16 +15,14 @@
 	    <LinearLayout 
 	        android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
-		    android:paddingTop="10dip"
-		    android:paddingBottom="10dip"
-		    android:paddingLeft="20dip"
-		    android:paddingRight="20dip"
+		    android:padding="8dip"
 		    android:orientation="vertical">
 		    
 			<TextView
 		        android:id="@+id/textView1"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
+		    	android:paddingBottom="8dip"
 		        android:text="@string/register_first_name"
 		        style="@style/TextAppearance.TradeMarkDark" />
 		
@@ -32,6 +30,7 @@
 		        android:id="@+id/editFirstName"
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
+		    	android:paddingBottom="8dip"
 		        android:selectAllOnFocus="true"
 		        android:inputType="text"
 		        android:hint="@string/register_first_name_hint" >
@@ -42,6 +41,7 @@
 		        android:id="@+id/textView2"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
+		    	android:paddingBottom="8dip"
 		        android:text="@string/register_last_name"
 		        style="@style/TextAppearance.TradeMarkDark" />
 		
@@ -49,6 +49,7 @@
 		        android:id="@+id/editLastName"
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
+		    	android:paddingBottom="8dip"
 		        android:selectAllOnFocus="true"
 		        android:inputType="text"
 		        android:hint="@string/register_last_name_hint" />
@@ -57,6 +58,7 @@
 		        android:id="@+id/textView3"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
+		    	android:paddingBottom="8dip"
 		        android:text="@string/login_email"
 		        style="@style/TextAppearance.TradeMarkDark" />
 		
@@ -64,6 +66,7 @@
 		        android:id="@+id/editEmail"
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
+		    	android:paddingBottom="8dip"
 		        android:selectAllOnFocus="true"
 		        android:inputType="textEmailAddress"
 		        android:hint="@string/login_emailhint" />
@@ -72,6 +75,7 @@
 		        android:id="@+id/textView4"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
+		    	android:paddingBottom="8dip"
 		        android:text="@string/login_password"
 		        style="@style/TextAppearance.TradeMarkDark" />
 		
@@ -79,6 +83,7 @@
 		        android:id="@+id/editPassword"
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
+		    	android:paddingBottom="8dip"
 		        android:selectAllOnFocus="true"
 		        android:inputType="textPassword"
 		        android:hint="@string/password_hint" />
@@ -87,6 +92,7 @@
 		        android:id="@+id/textView5"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
+		    	android:paddingBottom="8dip"
 		        android:text="@string/register_confirm_password"
 		        style="@style/TextAppearance.TradeMarkDark" />
 		
@@ -94,6 +100,7 @@
 		        android:id="@+id/editConfirmPassword"
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
+		    	android:paddingBottom="8dip"
 		        android:selectAllOnFocus="true"
 		        android:inputType="textPassword"
 		        android:hint="@string/password_hint" />
@@ -101,7 +108,7 @@
 		    <TextView 
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
-		        android:padding="5dip"
+		    	android:paddingBottom="8dip"
 		        android:text="@string/register_termsandconditions"
 		        style="@style/TextAppearance.TradeMarkDark.Small" />
 		    
@@ -110,6 +117,7 @@
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
 		        android:layout_gravity="right"
+		    	android:paddingBottom="8dip"
 		        android:text="@string/eula_terms_of_use"/>
 		    
 		    <Button
@@ -117,6 +125,7 @@
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
 		        android:layout_gravity="right"
+		    	android:paddingBottom="8dip"
 		        android:text="@string/register" />
 
 		</LinearLayout>	    
@@ -127,7 +136,8 @@
         android:id="@+id/login_progress"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:padding="10dp"
+    	android:paddingTop="8dip"
+    	android:paddingBottom="8dip"
 		android:layout_gravity="bottom"
 		android:gravity="bottom"
 		android:orientation="horizontal" >
@@ -142,7 +152,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
+            android:paddingLeft="8dp"
             android:text="@string/register_registering"
             android:textAppearance="@style/TextAppearance.TradeMarkDark.Small" />
 

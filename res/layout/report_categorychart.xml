@@ -3,8 +3,10 @@
     android:id="@+id/report_category_chart_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:padding="8dip"
     android:orientation="vertical"
-    android:baselineAligned="false" >
+    android:baselineAligned="false"
+    style="?NI_AppBackgroundNormal" >
     
 	<LinearLayout android:id="@+id/chart" 
 	    android:orientation="horizontal"

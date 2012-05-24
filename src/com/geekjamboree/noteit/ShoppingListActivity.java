@@ -77,12 +77,15 @@ public class ShoppingListActivity
 					itemCount.setVisibility(View.GONE);
 				}
 			}
-			ImageView icon = (ImageView) view.findViewById(R.id.shoppinglist_icon);
-			if (icon != null) {
+
+			TextView listName = (TextView) view.findViewById(R.id.shoppinglist_name);
+			if (listName != null) {
 				if (item.mUserID != ((NoteItApplication) getApplication()).getUserID())
-					icon.setBackgroundResource(getResourceIdFromAttribute(R.attr.SharedShoppingList));
+					listName.setCompoundDrawablesWithIntrinsicBounds(
+							getResourceIdFromAttribute(R.attr.SharedShoppingList), 0, 0, 0);
 				else 
-					icon.setBackgroundResource(getResourceIdFromAttribute(R.attr.ShoppingList_Cart));
+					listName.setCompoundDrawablesWithIntrinsicBounds(
+							getResourceIdFromAttribute(R.attr.ShoppingList_Cart), 0, 0, 0);
 			}
 			return view;
 		}
@@ -402,9 +405,9 @@ public class ShoppingListActivity
 			}
 		});
 
-    	mToolbar.addLeftAlignedButton(homeButton, false, true);
-    	mToolbar.addRightAlignedButton(addButton, true, false);
-    	mToolbar.addRightAlignedButton(settingsButton, true, false);
+    	mToolbar.addLeftAlignedButton(homeButton, true, true);
+    	mToolbar.addRightAlignedButton(addButton, true, true);
+    	mToolbar.addRightAlignedButton(settingsButton, false, true);
     }
     
     void doAddShoppingList() {

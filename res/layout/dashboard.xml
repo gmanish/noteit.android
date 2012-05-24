@@ -4,7 +4,8 @@
     android:id="@+id/dash_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    style="?NI_AppBackgroundNormal">
 
     <GridView
         android:id="@+id/category_gridview"
@@ -14,10 +15,9 @@
         android:layout_weight="1"
         android:cacheColorHint="#00000000"
         android:gravity="center"
-        android:horizontalSpacing="10dip"
         android:numColumns="auto_fit"
-        android:padding="10dip"
-        android:verticalSpacing="10dip" />
+        android:horizontalSpacing="8dip"
+        android:verticalSpacing="8dip" />
 
   	<com.google.ads.AdView android:id="@+id/adView"
 		android:layout_width="wrap_content"

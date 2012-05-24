@@ -21,7 +21,7 @@
 		android:layout_gravity="center_vertical"
 		android:gravity="center"
 		android:layout_weight="1"
-		android:padding="10dp"
+		android:padding="8dip"
 		android:drawableRight="@drawable/add"
 		android:text="@string/empty_shoppinglists"
 		style="?TextAppearance_Item_Small" />
@@ -33,5 +33,5 @@
 		ads:adSize="BANNER"
 		ads:testDevices="TEST_EMULATOR, 544ED9EA497C0DCEFC6FBD8935FBC34A"
 		ads:loadAdOnCreate="true"/>
-    
+  	
 </LinearLayout>

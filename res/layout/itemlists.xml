@@ -18,13 +18,13 @@
     <TextView
         android:id="@android:id/empty"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dip"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:background="@android:color/transparent"
         android:drawableRight="@drawable/add"
         android:gravity="center"
-        android:padding="10dp"
+        android:padding="8dp"
         android:text="@string/empty_shoppingitems"
         style="?TextAppearance_Item_Small" />
 
@@ -46,10 +46,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingBottom="5dip"
-            android:paddingLeft="10dip"
-            android:paddingRight="10dip"
-            android:paddingTop="5dip" >
+        	android:padding="8dp">
 
             <TextView
                 android:id="@+id/bottom_remaining"

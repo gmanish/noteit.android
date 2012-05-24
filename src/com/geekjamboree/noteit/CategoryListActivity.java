@@ -304,9 +304,9 @@ public class CategoryListActivity
 			}
 		});
 
-    	mToolbar.addLeftAlignedButton(homeButton, false, true);
-    	mToolbar.addRightAlignedButton(addButton, true, false);
-    	mToolbar.addRightAlignedButton(settingsButton, true, false);
+    	mToolbar.addLeftAlignedButton(homeButton, true, true);
+    	mToolbar.addRightAlignedButton(addButton, false, true);
+    	mToolbar.addRightAlignedButton(settingsButton, false, true);
     }
     
     protected void doEditCategory(final int position) {

@@ -567,17 +567,19 @@ public class ItemListActivity
 				itemCount.setVisibility(View.VISIBLE);
 			}
 			
-			ImageView icon = (ImageView) view.findViewById(R.id.shoppinglist_icon);
-			if (icon != null) {
+			TextView listName = (TextView) view.findViewById(R.id.shoppinglist_name);
+			if (listName != null) {
 				if (item.mUserID != ((NoteItApplication) getApplication()).getUserID())
-					icon.setBackgroundResource(getResourceIdFromAttribute(R.attr.SharedShoppingList));
+					listName.setCompoundDrawablesWithIntrinsicBounds(
+							getResourceIdFromAttribute(R.attr.SharedShoppingList), 0, 0, 0);
 				else 
-					icon.setBackgroundResource(getResourceIdFromAttribute(R.attr.ShoppingList_Cart));
+					listName.setCompoundDrawablesWithIntrinsicBounds(
+							getResourceIdFromAttribute(R.attr.ShoppingList_Cart), 0, 0, 0);
 			}
 
-			ImageView expandIcon = (ImageView) view.findViewById(R.id.shopppinglist_expand);
-			if (expandIcon != null) {
-				expandIcon.setVisibility(View.GONE);
+			TextView listCount = (TextView) view.findViewById(R.id.shoppinglist_itemCount);
+			if (listCount != null) {
+				listCount.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 			}
 			return view;
 		}
@@ -1347,7 +1349,7 @@ public class ItemListActivity
 
     	ImageButton homeButton = new ImageButton(this);
     	homeButton.setImageResource(R.drawable.home);
-    	mToolbar.addLeftAlignedButton(homeButton, false, true);
+    	mToolbar.addLeftAlignedButton(homeButton, true, true);
     	homeButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -1390,7 +1392,7 @@ public class ItemListActivity
     	
     	ImageButton expandCollapse = new ImageButton(this);
     	expandCollapse.setImageResource(R.drawable.expand_collapse);
-    	mToolbar.addRightAlignedButton(expandCollapse, true, false);
+    	mToolbar.addRightAlignedButton(expandCollapse, true, true);
     	expandCollapse.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -2072,6 +2074,7 @@ public class ItemListActivity
 	        }
 	        
 	        if (view != null) {
+	        	LinearLayout			details = (LinearLayout) view.findViewById(R.id.itemList_details);
     	        TextView				textView = (TextView) view.findViewById(R.id.itemlist_name);
     	        TextView				likeCount = (TextView) view.findViewById(R.id.itemlist_likeCount);
     	        TextView 				quantity = (TextView) view.findViewById(R.id.itemlist_quantity);
@@ -2112,6 +2115,7 @@ public class ItemListActivity
 	        		NoteItApplication 	app = (NoteItApplication) getApplication();
 	        		String 				unit = app.getUnitFromID(thisItem.mUnitID).mAbbreviation; 
 	        		
+	        		details.setVisibility(View.VISIBLE);
 	        		quantity.setText(String.valueOf(thisItem.mQuantity) + " " + unit); 
 	        		quantity.setVisibility(View.VISIBLE);
 	        		quantity.setPaintFlags(
@@ -2152,6 +2156,7 @@ public class ItemListActivity
 		        		total.setVisibility(View.GONE);
 		        	}
 	        	} else {
+	        		details.setVisibility(View.GONE);
 	        		quantity.setVisibility(View.GONE);
 	        		price.setVisibility(View.GONE);
 	        		total.setVisibility(View.GONE);

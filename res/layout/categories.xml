@@ -17,10 +17,11 @@
     <TextView
         android:id="@android:id/empty"
 	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
 	    android:layout_gravity="center_vertical"
+	    android:padding="8dip"
 	    android:gravity="center"
-	    android:padding="10dp"
 	    android:drawableRight="@drawable/add"
 	    android:text="@string/categoriesactivity_empty_list"
 	    style="?TextAppearance_Item_Small" />

@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	The goal is to keep the padding on all external boundaries at 8 dip 
+	and internal one between item name and it's details at 4 dip. Be 
+	very careful about adjusting these top and bottom padding values. 
+-->
+	
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/itemlist_root"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="20dip"
-    android:paddingRight="20dip"
-    android:paddingTop="10dip"
-    android:paddingBottom="10dip"
+    android:paddingLeft="16dip"
+    android:paddingRight="16dip"
+    android:paddingTop="0dip"
+    android:paddingBottom="4dip"
     android:orientation="vertical" >
 
     <LinearLayout 
         android:id="@+id/itemlist_itemgroup"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+	    android:paddingTop="8dip"
+	    android:paddingBottom="4dip"
         android:orientation="horizontal" >
 
         <TextView
@@ -34,8 +42,8 @@
        	    android:layout_gravity="right|center_vertical"
        	    android:gravity="right|center_vertical"
        	    android:drawableLeft="?Like_Small"
-       	    android:drawablePadding="5dip"
-       	    android:paddingLeft="5dip"
+       	    android:drawablePadding="8dip"
+       	    android:paddingLeft="8dip"
        	    style="?TextAppearance_Item_Small" />
        	
     </LinearLayout> 
@@ -44,6 +52,8 @@
         android:id="@+id/itemList_details"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="0dip"
+	    android:paddingBottom="4dip"
         android:orientation="horizontal" >
 	    
 	    <TextView
@@ -55,7 +65,7 @@
 	        android:text="@string/itemlist_total"
 	        android:singleLine="true"
 	        android:ellipsize="end"
-			style="?TextAppearance_Item_SubItem_Small" />
+			style="?TextAppearance_Item_SubItem_Small" android:layout_gravity="center_vertical"/>
 	
 		<TextView
 	        android:id="@+id/itemlist_price"
@@ -66,7 +76,7 @@
 	        android:text="@string/app_name" 
 	        android:singleLine="true"
 	        android:ellipsize="end"
-	        style="?TextAppearance_Item_SubItem_Small" />
+	        style="?TextAppearance_Item_SubItem_Small" android:layout_gravity="center_vertical"/>
 		
 	    <TextView
 	        android:id="@+id/itemlist_Total"
@@ -77,7 +87,7 @@
 	        android:text="@string/app_name" 
 	        android:singleLine="true"
 	        android:ellipsize="end"
-	        style="?TextAppearance_Item_SubItem_Small" />
+	        style="?TextAppearance_Item_SubItem_Small" android:layout_gravity="center_vertical"/>
     
     </LinearLayout>
 
