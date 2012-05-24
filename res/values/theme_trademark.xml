@@ -120,6 +120,7 @@
         <item name="android:dividerHeight">2dip</item>
 		<item name="android:cacheColorHint">#00000000</item>
         <item name="android:fadingEdge">vertical</item>
+        <item name="android:fadingEdgeLength">8dip</item>
         <item name="android:listSelector">@color/listview_selector_trademark</item> 
         
   	</style>

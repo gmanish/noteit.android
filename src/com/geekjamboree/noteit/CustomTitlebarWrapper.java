@@ -98,7 +98,7 @@ class CustomTitlebarWrapper {
     	button.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_flyout, 0);
     	button.setTextAppearance(mParent, android.R.style.TextAppearance_WindowTitle);
     	button.setTextColor(mParent.getResources().getColor(R.color.noteit_header_textcolor));
-    	button.setGravity(Gravity.LEFT);
+    	button.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
     	button.setSingleLine(true);
     	button.setEllipsize(TruncateAt.END);
     	button.setBackgroundResource(R.color.app_button_background);
