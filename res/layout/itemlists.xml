@@ -7,14 +7,6 @@
     android:orientation="vertical"
     style="?NI_AppBackgroundNormal" >
 
-  	<com.google.ads.AdView android:id="@+id/adView"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		ads:adUnitId="a14fbd2f2e807ca"
-		ads:adSize="BANNER"
-		ads:testDevices="TEST_EMULATOR, 544ED9EA497C0DCEFC6FBD8935FBC34A"
-		ads:loadAdOnCreate="true"/>
-    
     <com.geekjamboree.noteit.ExpandableLVRightIndicator
         android:id="@+android:id/list"
         style="?NI_ListViewAttr"
@@ -71,4 +63,12 @@
         
     </LinearLayout>
 
+  	<com.google.ads.AdView android:id="@+id/adView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		ads:adUnitId="a14fbd2f2e807ca"
+		ads:adSize="BANNER"
+		ads:testDevices="TEST_EMULATOR, 544ED9EA497C0DCEFC6FBD8935FBC34A"
+		ads:loadAdOnCreate="true"/>
+    
 </LinearLayout>
