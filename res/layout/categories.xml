@@ -10,7 +10,8 @@
     <com.geekjamboree.noteit.CategoryListView
         android:id="@+android:id/list"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
         style="?NI_ListViewAttr" />
     
     <TextView
