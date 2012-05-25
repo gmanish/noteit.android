@@ -1060,20 +1060,40 @@ public class ItemListActivity
 
 	protected void doAddItem(Item item) {
 		
-		NoteItApplication app = (NoteItApplication) getApplication();
+		final NoteItApplication 			app = (NoteItApplication) getApplication();
+		final ExpandableListView 			listView = (ExpandableListView)getExpandableListView();
+		final ItemsExpandableListAdapter	adapter = (ItemsExpandableListAdapter)listView.getExpandableListAdapter();				
+				
 		mToolbar.showInderminateProgress(getString(R.string.progress_message));
 		app.addItem(item, new OnAddItemListener() {
 			
 			public void onPostExecute(long resultCode, Item newItem, String message) {
 				try {
 					if (resultCode == 0){
-				    	ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
-	    				Category category = ((NoteItApplication) getApplication()).getCategory(newItem.mCategoryID);
-	    				adapter.AddItem(newItem, category);
-	    				Log.d("ItemListActivity.doAddItem()", "Item added: " + newItem.mName);
-						adapter.notifyDataSetChanged();
-						doAddToPendingTotal(newItem.mUnitID * newItem.mUnitPrice);
-						doDisplayPendingTotal();
+				    	
+	    				Category 	category = app.getCategory(newItem.mCategoryID);
+	    				long 		packedPosition = adapter.AddItem(newItem, category);
+	    				
+	    				if (packedPosition != ExpandableListView.PACKED_POSITION_TYPE_NULL) {
+		    				Log.d("ItemListActivity.doAddItem()", "Item added: " + newItem.mName);
+							adapter.notifyDataSetChanged();
+							doAddToPendingTotal(newItem.mUnitID * newItem.mUnitPrice);
+							doDisplayPendingTotal();
+							
+							// Select the just added child
+							int groupPos = ExpandableListView.getPackedPositionGroup(packedPosition);
+							int childPos = ExpandableListView.getPackedPositionGroup(packedPosition);
+							
+							if (groupPos != ExpandableListView.PACKED_POSITION_VALUE_NULL &&
+								childPos != ExpandableListView.PACKED_POSITION_VALUE_NULL) {
+								getExpandableListView().setSelectedChild(
+										groupPos, 
+										childPos, 
+										true);
+							}
+	    				} else {
+	    					Log.e("doAddItem", "Could not add item to adapter. PACKED_POSITION_TYPE_NULL returned.");
+	    				}
 					}
 					else {
     		    		CustomToast.makeText(
@@ -1879,7 +1899,8 @@ public class ItemListActivity
 			}
 		}
 		
-		public void AddItem(Item item, Category category){
+		// Returns the packed position for the newly added item
+		public long AddItem(Item item, Category category){
 			
 			if (category != null){
 				int index = mCategories.indexOf(category);
@@ -1892,7 +1913,11 @@ public class ItemListActivity
 					mItems.add(new ArrayList<Item>());
 				}
 				mItems.get(index).add(item);
-			}
+				return ExpandableListView.getPackedPositionForChild(
+						index, 
+						mItems.get(index).size() - 1);
+			} else 
+				return ExpandableListView.PACKED_POSITION_TYPE_NULL;
 		}
 		
 		public void DeleteItem(final Item item) {

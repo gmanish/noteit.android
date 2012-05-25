@@ -127,8 +127,8 @@
 	<string name="addedit_decrement">-</string>
 	
 	<string name="reporting_title">Reports</string>
-	<string name="reporting_purchased_group">Purchase Reports</string>
-	<string name="reporting_pending_group">Pending Reports</string>
+	<string name="reporting_purchased_group">Expense Reports</string>
+	<string name="reporting_pending_group">Pending Item Reports</string>
 	<string name="reporting_putchased_today">Today</string>
 	<string name="reporting_purchased_today_desc">Display a Report of all Items Purchased Today</string>
 	<string name="reporting_putchased_yesterday">Yesterday</string>

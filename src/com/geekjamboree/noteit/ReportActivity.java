@@ -367,7 +367,7 @@ public class ReportActivity extends Activity {
 		});
     	
     	ImageButton shareButton = new ImageButton(this);
-    	shareButton.setImageResource(R.drawable.email);
+    	shareButton.setImageResource(R.drawable.share);
     	shareButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -375,9 +375,9 @@ public class ReportActivity extends Activity {
 			}
 		});
     	
-    	mToolbar.addLeftAlignedButton(homeButton, false, true);
-    	mToolbar.addRightAlignedButton(shareButton, true, false);
-    	mToolbar.addRightAlignedButton(settingsButton, true, false);
+    	mToolbar.addLeftAlignedButton(homeButton, true, true);
+    	mToolbar.addRightAlignedButton(shareButton, true, true);
+    	mToolbar.addRightAlignedButton(settingsButton, false, true);
     }
 
     protected void doEmail() {
