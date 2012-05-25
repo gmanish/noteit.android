@@ -554,7 +554,7 @@ public class NoteItApplication extends Application {
 //	private Currency					mDefaultCurrency = null;
 	private Preference					mUserPrefs = new Preference(Currency.kDefaultCurrencyId);
 	private int 						mItemsStartPos = 0;
-	private int 						mItemsBatchSize = 10;
+	static final private int 			mItemsBatchSize = 25;
 	private boolean						mItemsMorePending = true;
 	
 //	public ArrayList<Country> getCountries() {

@@ -258,7 +258,7 @@ public class ReportMenuActivity extends ExpandableListActivity {
 	protected void doSetupToolbarButtons() {
 
     	ImageButton expandAll = new ImageButton(this);
-    	expandAll.setImageResource(R.drawable.down);
+    	expandAll.setImageResource(R.drawable.expand);
     	mToolbar.addRightAlignedButton(expandAll, true, true);
     	expandAll.setOnClickListener(new OnClickListener() {
 			
@@ -268,7 +268,7 @@ public class ReportMenuActivity extends ExpandableListActivity {
 		});
     	
     	ImageButton collapseAll = new ImageButton(this);
-    	collapseAll.setImageResource(R.drawable.up);
+    	collapseAll.setImageResource(R.drawable.collapse);
     	mToolbar.addRightAlignedButton(collapseAll, false, true);
     	collapseAll.setOnClickListener(new OnClickListener() {
 			

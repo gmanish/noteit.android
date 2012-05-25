@@ -42,7 +42,7 @@
        	    android:layout_gravity="right|center_vertical"
        	    android:gravity="right|center_vertical"
        	    android:drawableLeft="?Like_Small"
-       	    android:drawablePadding="8dip"
+       	    android:drawablePadding="4dip"
        	    android:paddingLeft="8dip"
        	    style="?TextAppearance_Item_Small" />
        	
