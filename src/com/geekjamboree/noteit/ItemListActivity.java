@@ -52,7 +52,6 @@ import android.widget.ExpandableListView;
 import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -242,14 +241,17 @@ public class ItemListActivity
 							ExpandableListView lv = getExpandableListView();
 				            int pos = lv.pointToPosition((int)e1.getX(), (int)e1.getY());
 				            if (pos != ListView.INVALID_POSITION) {
-					            int 	viewPos = pos - lv.getFirstVisiblePosition(); 
+					            
+				            	int 	viewPos = pos - lv.getFirstVisiblePosition(); 
 					            View 	view = lv.getChildAt(viewPos);
+					            
 					            if (view != null) {
+
 					            	long packedPosition = lv.getExpandableListPosition(pos);
+				            		// Don't send onFling for groups
 					            	if (ExpandableListView.getPackedPositionType(packedPosition) == 
 					            			ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
 					            		
-					            		// Don't send onFling for groups
 							            if (e1.getX() > e2.getX()) {
 							            	mChildClickListener.onChildLeftSwipe(
 							            			lv, 
