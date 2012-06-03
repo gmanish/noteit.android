@@ -120,6 +120,7 @@
         <item name="android:dividerHeight">2dip</item>
 		<item name="android:cacheColorHint">#00000000</item>
         <item name="android:fadingEdge">vertical</item>
+        <item name="android:fadingEdgeLength">8dip</item>
         <item name="android:listSelector">@color/listview_selector_trademark</item> 
         
   	</style>
@@ -179,6 +180,7 @@
 		<item name="Popup_Up">@drawable/arrow_up_trademark</item>
 		<item name="Popup_Down">@drawable/arrow_down_trademark</item>
 		<item name="Like_Small">@drawable/thumbs_up_dark_small</item>
+		<item name="Reports_Small">@drawable/reports_small_dark</item>
 		
 		<item name="Tips_Background">@style/App_TipsBackground_Trademark</item>
 					

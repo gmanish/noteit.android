@@ -27,11 +27,22 @@ class CustomTitlebarWrapper {
 	TextView 			mTitleText;
 	int					index = 0;
 	boolean				mProgressShowing = false;
+	static float 		mScale = 0.0f;
+	static int 			mButtonSize = 0;
+	static int 			mButtonPadding = 0;
+	static int 			mButtonMargin = 0;
 	
+    static final int BUTTON_DIMENSION 	= 32; //dip
+    static final int BUTTON_PADDING 	= 8; //dip
+    static final int BUTTON_MARGIN		= 8; //dip
+
     public CustomTitlebarWrapper(Activity parent) {
     	mParent = parent;
 		mCustomTitleSupported = parent.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-		
+		mScale = mParent.getResources().getDisplayMetrics().density;
+		mButtonSize = (int) (BUTTON_DIMENSION * mScale + 0.5f);
+		mButtonPadding = (int) (BUTTON_PADDING * mScale + 0.5f);
+		mButtonMargin = (int) (BUTTON_MARGIN * mScale + 0.5f);
 	}
     
     public void SetTitle(CharSequence charSequence){
@@ -71,23 +82,23 @@ class CustomTitlebarWrapper {
     	}
     }
 
-    static final int BUTTON_DIMENSION = 50; //dip
     public void addCenterFillButton(Button button) {
     	
-    	final float 				scale = mParent.getResources().getDisplayMetrics().density;
-    	final int 					buttonSize = (int) (BUTTON_DIMENSION * scale + 0.5f);
     	LinearLayout 				root = (LinearLayout) mParent.findViewById(R.id.titlebar_root);
-    	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, buttonSize);
+    	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(
+    			LinearLayout.LayoutParams.FILL_PARENT, 
+    			mButtonSize); // Fill Parent because this button needs to expand to fill available horizontal space 
     	
     	// When we display the center fill button, we don't have the title
     	mTitleText.setVisibility(View.GONE);
     	lp.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
     	lp.weight = 1;
     	button.setLayoutParams(lp);
-    	button.setPadding(10, 0, 5, 0);
+    	button.setPadding(mButtonPadding, mButtonPadding, mButtonPadding, mButtonPadding);
     	button.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_flyout, 0);
     	button.setTextAppearance(mParent, android.R.style.TextAppearance_WindowTitle);
     	button.setTextColor(mParent.getResources().getColor(R.color.noteit_header_textcolor));
+    	button.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
     	button.setSingleLine(true);
     	button.setEllipsize(TruncateAt.END);
     	button.setBackgroundResource(R.color.app_button_background);
@@ -96,42 +107,42 @@ class CustomTitlebarWrapper {
         
     public void addLeftAlignedButton(ImageButton button, boolean separatorBefore, boolean separatorAfter) {
 
-    	final float 				scale = mParent.getResources().getDisplayMetrics().density;
-    	final int 					buttonSize = (int) (BUTTON_DIMENSION * scale + 0.5f);
     	LinearLayout 				root = (LinearLayout) mParent.findViewById(R.id.titlebar_root);
-    	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(buttonSize, buttonSize);
+    	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(mButtonSize, mButtonSize);
     	
-    	if (separatorBefore)
-    		root.addView(getSeparator(Gravity.LEFT | Gravity.CENTER_VERTICAL), index++);
+//    	if (separatorBefore)
+//    		root.addView(getSeparator(Gravity.LEFT | Gravity.CENTER_VERTICAL), index++);
     	
     	lp.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
+    	lp.leftMargin = separatorBefore == true ? mButtonMargin : 0;
+    	lp.rightMargin = separatorAfter == true ? mButtonMargin : 0;
     	button.setLayoutParams(lp);
-    	button.setPadding(0, 2, 0, 2);
+    	button.setPadding(mButtonPadding, mButtonPadding, mButtonPadding, mButtonPadding);
     	button.setBackgroundResource(R.color.app_button_background);
     	root.addView(button, index++);
     	
-    	if (separatorAfter)
-    		root.addView(getSeparator(Gravity.LEFT | Gravity.CENTER_VERTICAL), index++);
+//    	if (separatorAfter)
+//    		root.addView(getSeparator(Gravity.LEFT | Gravity.CENTER_VERTICAL), index++);
     }
     
     public void addRightAlignedButton(ImageButton button, boolean separatorBefore, boolean separatorAfter) {
     	
-    	final float 				scale = mParent.getResources().getDisplayMetrics().density;
-    	final int 					buttonSize = (int) (BUTTON_DIMENSION * scale + 0.5f);
     	LinearLayout 				root = (LinearLayout) mParent.findViewById(R.id.titlebar_root);
-    	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(buttonSize, buttonSize);
+    	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(mButtonSize, mButtonSize);
 
-    	if (separatorBefore)
-    		root.addView(getSeparator(Gravity.RIGHT | Gravity.CENTER_VERTICAL));
+//    	if (separatorBefore)
+//    		root.addView(getSeparator(Gravity.RIGHT | Gravity.CENTER_VERTICAL));
 
     	lp.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+    	lp.leftMargin = separatorBefore == true ? mButtonMargin : 0;
+    	lp.rightMargin = separatorAfter == true ? mButtonMargin : 0;
     	button.setLayoutParams(lp);
-    	button.setPadding(0, 2, 0, 2);
+    	button.setPadding(mButtonPadding, mButtonPadding, mButtonPadding, mButtonPadding);
     	button.setBackgroundResource(R.color.app_button_background);
     	root.addView(button);
     	
-    	if (separatorAfter) 
-    		root.addView(getSeparator(Gravity.RIGHT | Gravity.CENTER_VERTICAL));
+//    	if (separatorAfter) 
+//    		root.addView(getSeparator(Gravity.RIGHT | Gravity.CENTER_VERTICAL));
     }
     
     protected ImageView getSeparator(int gravity) {

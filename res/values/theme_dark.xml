@@ -165,7 +165,8 @@
 		<item name="Popup_Up">@drawable/arrow_up</item>
 		<item name="Popup_Down">@drawable/arrow_down</item>
 		<item name="Like_Small">@drawable/thumbs_up_dark_small</item>
-
+		<item name="Reports_Small">@drawable/reports_small_light</item>
+		
 	</style>
     
 </resources>

@@ -3,11 +3,8 @@
     android:id="@+id/listitems_group_root"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:padding="8dip"
     android:orientation="vertical"
-    android:paddingLeft="5dip"
-    android:paddingRight="10dip"
-    android:paddingTop="5dip"
-    android:paddingBottom="5dip" 
     android:background="@android:color/transparent" >
 
     <TextView
@@ -17,8 +14,9 @@
         android:background="@android:color/transparent"
         android:ellipsize="end"
         android:gravity="left|center_vertical"
-        android:paddingLeft="5dip"
         android:singleLine="true"
+        android:drawableLeft="?Reports_Small"
+        android:drawablePadding="8dip"
         style="?TextAppearance_Group_Small"
         android:text="@+id/itemslist_categoryName" />
 

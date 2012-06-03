@@ -10,7 +10,7 @@
         
     <string name="OK">OK</string>
     <string name="Cancel">Cancel</string>
-    <string name="Skip">Skip</string>
+    <string name="Skip">Skip Price</string>
     
     <string name="hello"> </string>
     <string name="app_name">Note It!</string>
@@ -47,6 +47,8 @@
     <string name="login_failed">Log In Failed</string>
     <string name="login_password_tooshort">Password must be at least six characters in length.</string>
     <string name="login_forgot_password">Forgot Password?</string>
+    <string name="login_forgot_password_title">Enter email:</string>
+    <string name="login_forgot_password_success">A password reset link has been sent to \'%1$s\'. Please use the link within the next 24 hours to reset your password.</string>
 
     <string name="categorylist_title">Categories</string>
     <string name="categorylists_add">Add Category</string>
@@ -91,6 +93,8 @@
 	<string name="itemlist_loadingmore">Loading More Items &#8230;</string>
 	<string name="itemlist_scanbarcode">Scan</string>
 	<string name="itemlist_itemnotfound">Details about the Item are not available. Would you like to enter details which will be remembered subsequently?</string>
+	<string name="itemlist_Price_Up">&#x2191;</string>
+	<string name="itemlist_Price_Down">&#x2193;</string>
 	    	    	
 	<string name="itemlistqe_edit">Edit</string>
 	<string name="itemlistqe_delete">Delete</string>
@@ -123,8 +127,8 @@
 	<string name="addedit_decrement">-</string>
 	
 	<string name="reporting_title">Reports</string>
-	<string name="reporting_purchased_group">Purchase Reports</string>
-	<string name="reporting_pending_group">Pending Reports</string>
+	<string name="reporting_purchased_group">Expense Reports</string>
+	<string name="reporting_pending_group">Pending Item Reports</string>
 	<string name="reporting_putchased_today">Today</string>
 	<string name="reporting_purchased_today_desc">Display a Report of all Items Purchased Today</string>
 	<string name="reporting_putchased_yesterday">Yesterday</string>

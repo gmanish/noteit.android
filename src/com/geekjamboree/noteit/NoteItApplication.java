@@ -366,6 +366,66 @@ public class NoteItApplication extends Application {
 		}
 	}
 	
+	class ItemAndStats extends Item {
+		
+		public double mMean 					= 0.0f;
+		public double mSampleDeviation 			= 0.0f;
+		
+		
+		static public final int kNormalDeviation		= 0;
+		static public final int kUp_OneStandardDev 		= 1;
+		static public final int kUp_TwoStandardDev 		= 2;
+		static public final int kUP_AlarmingDev			= 3;
+		static public final int kDown_OneStandardDev	= -1;
+		static public final int kDown_TwoStandardDev	= -2;
+		static public final int kDown_AlarmingDev		= -3;
+		
+		public ItemAndStats(Item item, float mean, float deviation) {
+			
+			super(item);
+			mMean = mean;
+			mSampleDeviation = deviation;
+		}
+		
+		public ItemAndStats(JSONObject json) throws JSONException {
+		
+			super(json);
+			mMean = json.getDouble("mean");
+			mSampleDeviation = json.getDouble("sampleDeviation");
+		}
+		
+		public void copyFrom(Item item) {
+			
+			super.copyFrom(item);
+			if (item instanceof ItemAndStats) {
+				mMean = ((ItemAndStats) item).mMean;
+				mSampleDeviation = ((ItemAndStats) item).mSampleDeviation;
+			}
+		}
+
+		public int getDeviationRange() {
+			
+			double diff = mUnitPrice - mMean;
+			
+			if (mMean <= 0)
+				return kNormalDeviation;
+			else if (diff < -2 * mSampleDeviation) 
+				return kDown_AlarmingDev;
+			else if (diff < -1 * mSampleDeviation)
+				return kDown_TwoStandardDev;
+			else if (diff < 0)
+				return kDown_OneStandardDev;
+			else if (diff > 2 * mSampleDeviation)
+				return kUP_AlarmingDev;
+			else if (diff > 1 * mSampleDeviation)
+				return kUp_TwoStandardDev;
+			else if (diff > 0)
+				return kUp_OneStandardDev;
+			else
+				return kNormalDeviation;
+		}
+	}
+	
 	class SuggestedItem {
 		long 	mItemId = 0;
 		String	mItemName = "";
@@ -494,7 +554,7 @@ public class NoteItApplication extends Application {
 //	private Currency					mDefaultCurrency = null;
 	private Preference					mUserPrefs = new Preference(Currency.kDefaultCurrencyId);
 	private int 						mItemsStartPos = 0;
-	private int 						mItemsBatchSize = 10;
+	static final private int 			mItemsBatchSize = 25;
 	private boolean						mItemsMorePending = true;
 	
 //	public ArrayList<Country> getCountries() {
@@ -621,6 +681,32 @@ public class NoteItApplication extends Application {
 			if (inPostExecute != null) {
 				inPostExecute.onPostExecute(-1, e.getMessage());
 			}
+		}
+	}
+	
+	public void do_forgot_password(String emailID, final OnMethodExecuteListerner listener) {
+		
+		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(2);
+		args.add(new BasicNameValuePair("command", "do_forgot_password"));
+		args.add(new BasicNameValuePair("arg1", emailID));
+		try {
+			AsyncInvokeURLTask task = new AsyncInvokeURLTask(args, new OnPostExecuteListener() {
+				
+				public void onPostExecute(JSONObject result) {
+					try {
+						long retVal = result.getLong("JSONRetVal");
+						if (listener != null)
+							listener.onPostExecute(retVal, result.getString("JSONRetMessage"));
+					} catch (JSONException e) {
+						if (listener != null)
+							listener.onPostExecute(-1, e.getMessage());
+					}
+				}
+			});
+			task.execute();
+		} catch (Exception e) {
+			if (listener != null)
+				listener.onPostExecute(-1, e.getMessage());
 		}
 	}
 	
@@ -1522,8 +1608,8 @@ public class NoteItApplication extends Application {
 					retVal = json.getLong("JSONRetVal");
 					message = json.getString("JSONRetMessage");
 					if (retVal == 0) {
-						JSONObject 	object = json.getJSONArray("arg1").getJSONObject(0);
-						Item 		newItem = new Item(object);
+						JSONObject 		object = json.getJSONArray("arg1").getJSONObject(0);
+						ItemAndStats	newItem = new ItemAndStats(object);
 						
 						// Add to our internal list
 						mItems.add(newItem);
@@ -1616,46 +1702,61 @@ public class NoteItApplication extends Application {
         }
 	}
 	
-	public void editItem(final int bitMask, final Item item, OnMethodExecuteListerner inListener) {
+	public void editItem(final int bitMask, final Item item, OnAddItemListener inListener) {
         
 		class EditItemTask  implements AsyncInvokeURLTask.OnPostExecuteListener {
 
-        	OnMethodExecuteListerner mListener;
+        	OnAddItemListener mListener;
         	
-        	EditItemTask(OnMethodExecuteListerner inListener) {
+        	EditItemTask(OnAddItemListener inListener) {
         		mListener = inListener;
         	}
         	
         	public void onPostExecute(JSONObject json) {
         		try {
         			long retVal = json.getLong("JSONRetVal");
-        			if (retVal == 0 && (bitMask & Item.ITEM_ISPURCHASED) > 0) {
-        				// Item is being marked purchased, decrease count
+        			
+        			if (retVal == 0) {
+        				
+						JSONObject 		object = json.getJSONArray("arg1").getJSONObject(0);
+						ItemAndStats	editedItem = new ItemAndStats(object);
+						
 						int listIndex = mShoppingLists.indexOf(new ShoppingList(item.mListID));
-						if (listIndex >= 0) {
+        				if (listIndex >= 0 && (bitMask & Item.ITEM_ISPURCHASED) > 0) {
+
+        					// Item is being marked purchased, decrease count
 							if (item.mIsPurchased > 0)
 								mShoppingLists.get(listIndex).decrementCount();
 							else
 								mShoppingLists.get(listIndex).incrementCount();
-						}
-        			} 
+	        			} 
         			
-        			if (retVal == 0 && item.mListID != getCurrentShoppingListID()) {
-        				// Item is being moved, update the counts. The following assumes
-        				// the item being moved is currently in the current shopping list.
-        				int index = mShoppingLists.indexOf(new ShoppingList(getCurrentShoppingListID()));
-        				if (index >= 0) {
-        					mShoppingLists.get(index).decrementCount();
-        				}
-        				index = mShoppingLists.indexOf(new ShoppingList(item.mListID));
-        				if (index >= 0) {
-        					mShoppingLists.get(index).incrementCount();
-        				}
+	        			if (item.mListID != getCurrentShoppingListID()) {
+	        				
+	        				// Item is being moved, update the counts. The following assumes
+	        				// the item being moved is currently in the current shopping list.
+	        				int index = mShoppingLists.indexOf(new ShoppingList(getCurrentShoppingListID()));
+	        				if (index >= 0) {
+	        					mShoppingLists.get(index).decrementCount();
+	        				}
+	        				index = mShoppingLists.indexOf(new ShoppingList(item.mListID));
+	        				if (index >= 0) {
+	        					mShoppingLists.get(index).incrementCount();
+	        				}
+	        			}
+
+	        			// Update item details in our internal list
+	        			int itemIndex = mItems.indexOf(new Item(item.mID));
+	        			if (itemIndex >= 0) {
+	        				mItems.set(itemIndex, editedItem);
+	        			}
+	                	
+	        			mListener.onPostExecute(retVal, editedItem, json.getString("JSONRetMessage"));
+        			} else { 
+        				mListener.onPostExecute(retVal, null, json.getString("JSONRetMessage"));
         			}
-        			
-                	mListener.onPostExecute(retVal, json.getString("JSONRetMessage"));
         		} catch (JSONException e){
-        			mListener.onPostExecute(-1, e.getMessage());
+        			mListener.onPostExecute(-1, null, e.getMessage());
         		}
         	}
         }

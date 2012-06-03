@@ -3,7 +3,7 @@
     android:id="@+id/tips_root"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="5dip"
+    android:padding="8dip"
     android:orientation="horizontal"
     style="?NI_TitleBackground" >
 
@@ -12,7 +12,6 @@
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-	    android:padding="5dip"
         android:text="@string/register_termsandconditions"
         style="?TextAppearance_Footer" />
 
@@ -20,8 +19,8 @@
         android:id="@+id/btnClose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="3dip"
-        android:layout_margin="0dip"
+        android:layout_gravity="top|right"
+        android:paddingLeft="8dip"
         android:background="@android:color/transparent"
         android:src="@drawable/btn_dialog_normal" 
         style="@style/App_ButtonStyle" />

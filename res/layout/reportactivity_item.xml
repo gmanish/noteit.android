@@ -5,7 +5,10 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="vertical"
-    android:padding="10dp" >
+    android:paddingTop="8dp"
+    android:paddingBottom="8dip"
+    android:paddingLeft="16dip"
+    android:paddingRight="16dip" >
 
     <TextView
         android:id="@+id/reportactvity_item_name"
@@ -13,7 +16,6 @@
         android:layout_height="wrap_content"
        	android:layout_gravity="center_vertical"
        	android:gravity="center_vertical"
-       	android:paddingLeft="10dip"
 		android:singleLine="true"
 		android:ellipsize="end"
         android:text="@+id/categorylists_item_name" />
@@ -24,7 +26,6 @@
         android:layout_height="wrap_content"
        	android:layout_gravity="center_vertical"
        	android:gravity="center_vertical"
-       	android:paddingLeft="10dip"
 		android:singleLine="false"
         android:text="@+id/reportactvity_item_description"
         style="?TextAppearance_Item_SubItem_Small" />

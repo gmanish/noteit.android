@@ -13,7 +13,7 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal"
-        android:paddingRight="20dip"
+	    android:padding="8dip"
 	    android:background="@color/noteit_trademark_dark">
     
 	    <ImageView
@@ -22,8 +22,6 @@
 	        android:contentDescription="@string/app_name"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
-	        android:gravity="center"
-	        android:padding="5dip"
 	        android:src="@drawable/noteit_logo"/>
 	        
 	    <Button
@@ -41,7 +39,7 @@
         android:layout_width="fill_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
-	    android:padding="10dp"
+	    android:padding="8dp"
         android:orientation="vertical" >
 	    
 	    <TextView
@@ -79,9 +77,7 @@
 	
 		<RelativeLayout
 		    android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-		    android:paddingBottom="10dip"
-		    android:paddingTop="10dip" >
+		    android:layout_height="wrap_content" >
 		    
 
 		    <Button
@@ -90,7 +86,6 @@
 		        android:layout_height="wrap_content"
 		        android:layout_alignParentLeft="true"
 		        android:layout_centerVertical="true"
-		        android:padding="5dip"
 		        style="@style/HyperLink_ButtonStyle"
 		        android:text="@string/login_forgot_password" />
 		    
@@ -108,7 +103,7 @@
         android:id="@+id/login_bottom_root"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:padding="10dp"
+		android:padding="8dp"
 		android:layout_gravity="bottom"
 		android:gravity="bottom"
 		android:background="@color/noteit_trademark_dark">
@@ -125,7 +120,7 @@
             android:id="@+id/login_progress_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
+            android:paddingLeft="8dp"
             android:layout_below="@id/buttonRegister"
             android:layout_toRightOf="@+id/login_progress"
             android:text="@string/Login_Authenticating_message"

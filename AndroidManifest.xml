@@ -6,13 +6,11 @@
 
     <uses-sdk 
         android:minSdkVersion="7" 
-        android:targetSdkVersion="11"/>
+        android:targetSdkVersion="15"/>
     
-    <uses-permission 
-        android:name="android.permission.INTERNET"/>
-    
-    <uses-permission 
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
  
     <application
         android:icon="@drawable/ic_launcher_noteit1"
@@ -35,7 +33,9 @@
         <activity android:name="ReportMenuActivity"></activity>
         <activity android:name="ReportActivity"></activity>
         <activity android:name="ReportCategoryChart"></activity>
-        
+   	 	<activity 
+			android:name="com.google.ads.AdActivity"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
     </application>
 
 </manifest>

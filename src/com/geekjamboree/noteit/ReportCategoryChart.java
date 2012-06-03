@@ -206,9 +206,9 @@ public class ReportCategoryChart extends Activity {
 //			}
 //		});
     	
-    	mToolbar.addLeftAlignedButton(homeButton, false, true);
+    	mToolbar.addLeftAlignedButton(homeButton, true, true);
 //    	mToolbar.addRightAlignedButton(shareButton, true, false);
-    	mToolbar.addRightAlignedButton(settingsButton, true, false);
+    	mToolbar.addRightAlignedButton(settingsButton, true, true);
     }
 	
 }

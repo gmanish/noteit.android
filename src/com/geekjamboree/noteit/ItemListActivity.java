@@ -1,9 +1,11 @@
 
 package com.geekjamboree.noteit;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.geekjamboree.noteit.ActionItem;
+import com.geekjamboree.noteit.NoteItApplication.ItemAndStats;
 import com.geekjamboree.noteit.NoteItApplication.OnAddItemListener;
 import com.geekjamboree.noteit.NoteItApplication.OnFetchItemsListener;
 import com.geekjamboree.noteit.NoteItApplication.OnItemVoteListener;
@@ -21,31 +23,43 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Paint;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-public class ItemListActivity extends ExpandableListActivity implements NoteItApplication.OnFetchItemsListener {
+public class ItemListActivity 
+		extends ExpandableListActivity 
+		implements NoteItApplication.OnFetchItemsListener {
 	
 	QuickAction 					mQuickAction = null;
 	QuickAction						mExpandCollapseQA = null;
@@ -68,7 +82,6 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	AlertDialog 					mInstallScanAppDialog = null;
 	Item							mTempItemToPassToDialog = null;
 	View							mContentView = null;
-	
 	static final int ADD_ITEM_REQUEST = 0;	
 	
 	static final int QA_ID_EDIT 		= 0;
@@ -92,6 +105,12 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	static final String SELECTED_ITEM_ID		= "selItemID";
 	static final String IS_ITEMLIST_FETCHED 	= "IS_ITEM_LIST_FETCHED";
 	
+	ViewConfiguration 	mVC 						= null;
+	int 				mSwipeMinDistance 			= 0;
+	int 				mSwipeThresholdVelocity 	= 0;
+	int 				mSwipeMaxVDistance 			= 0;
+	final int			MAX_SWIPE_DISTANCE			= 50;
+	
     protected enum ItemType {
     	PENDING, 
     	DONE, 
@@ -105,6 +124,30 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	NOTE_IT
     }
     
+	public static interface OnChildGestureListener {
+		
+		public boolean onChildClick(
+				ExpandableListView parent, 
+				View v, 
+				int groupPosition, 
+				int childPosition, 
+				long id);
+		
+		public boolean onChildLeftSwipe(
+				ExpandableListView parent, 
+				View v, 
+				int groupPosition, 
+				int childPosition, 
+				long id);
+		
+		public boolean onChildRightSwipe(
+				ExpandableListView parent, 
+				View v, 
+				int groupPosition, 
+				int childPosition, 
+				long id);
+	}
+	
 	protected AbsListView.OnScrollListener mScrollListener = new AbsListView.OnScrollListener() {
 		
 		public void onScrollStateChanged(
@@ -157,18 +200,404 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 					Log.i("ItemListActivity.onSharedPreferenceChanged", "Display_Price_Quantity preference changed");
 					mDisplayExtras = sharedPreferences.getBoolean("Display_Price_Quantity", true);
 					mDisplayCategoryExtras = sharedPreferences.getBoolean("Display_Category_Totals", true);
-			        mFontSize = Integer.valueOf(sharedPreferences.getString("Item_Font_Size", "3"));
-			        mHideDoneItems = sharedPreferences.getBoolean("Delete_Bought_Items", false);
+					mFontSize = Integer.valueOf(sharedPreferences.getString("Item_Font_Size", "3"));
+			        mHideDoneItems = sharedPreferences.getBoolean(
+			        		MainPreferenceActivity.kPref_HideDoneItems, 
+			        		MainPreferenceActivity.kPref_HideDoneDefault);
 					getExpandableListView().invalidateViews();
 				}
 				
 			}
 		};
+
+	/* 
+	 * The following was added for detecting fling across an item. There's a problem with the onChildClick
+	 * listener in that it is always called whether we detect a fling on not leading to both a fling and
+	 * item click being fired. This obviously is not desirable. Hence we do not use the onClickClick 
+	 * listener on the listview. Instead we've simulated onChildClick thorough the SimpleGestureListener 
+	 * and it seems to work fine. Yippie!
+	 */
+	protected SimpleOnGestureListener mGestureListener = 
+			new SimpleOnGestureListener() {
+
+				@Override
+				public boolean onFling(
+						MotionEvent e1, 
+						MotionEvent e2,
+						float velocityX, 
+						float velocityY) {
+
+		            try {
+		            	Log.i("onFling", "Y Offset: " + Math.abs(e1.getY() - e2.getY()));
+		                if (Math.abs(e1.getY() - e2.getY()) > mSwipeMaxVDistance) {
+		                	Log.i("onFling", "Too much vertical movement.");
+		                    return false;
+		                }
+		                
+		                // right to left swipe
+		                if(Math.abs(e1.getX() - e2.getX()) > mSwipeMinDistance 
+		                		&& Math.abs(velocityX) > mSwipeThresholdVelocity) {
+
+							ExpandableListView lv = getExpandableListView();
+				            int pos = lv.pointToPosition((int)e1.getX(), (int)e1.getY());
+				            if (pos != ListView.INVALID_POSITION) {
+					            
+				            	int 	viewPos = pos - lv.getFirstVisiblePosition(); 
+					            View 	view = lv.getChildAt(viewPos);
+					            
+					            if (view != null) {
+
+					            	long packedPosition = lv.getExpandableListPosition(pos);
+				            		// Don't send onFling for groups
+					            	if (ExpandableListView.getPackedPositionType(packedPosition) == 
+					            			ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+					            		
+							            if (e1.getX() > e2.getX()) {
+							            	mChildClickListener.onChildLeftSwipe(
+							            			lv, 
+							            			view, 
+							            			ExpandableListView.getPackedPositionGroup(packedPosition), 
+						            				ExpandableListView.getPackedPositionChild(packedPosition), 
+						            				view.getId());
+							            	
+						                }  else {
+							            	mChildClickListener.onChildRightSwipe(
+							            			lv, 
+							            			view, 
+							            			ExpandableListView.getPackedPositionGroup(packedPosition), 
+						            				ExpandableListView.getPackedPositionChild(packedPosition), 
+						            				view.getId());
+						                }
+					            	}
+					            }
+				            }
+		                }
+		            } catch (Exception e) {
+		                // nothing
+		            }
+		            Log.i("ItemListActivity.SimpleOnGestureListener", "onFling Detected");
+					return false;
+				}
+
+				@Override
+		        public boolean onSingleTapUp(MotionEvent e) {
+		            
+					ExpandableListView lv = getExpandableListView();
+		            int pos = lv.pointToPosition((int)e.getX(), (int)e.getY());
+		            if (pos != ListView.INVALID_POSITION) {
+			            int 	viewPos = pos - lv.getFirstVisiblePosition(); 
+			            View 	view = lv.getChildAt(viewPos);
+			            
+			            if (view != null) {
+			            	long packedPosition = lv.getExpandableListPosition(pos);
+			            	if (ExpandableListView.getPackedPositionType(packedPosition) == 
+			            			ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+			            		
+			            		// Don't send itemClick for groups
+			            		mChildClickListener.onChildClick(
+			            				lv, 
+			            				view, 
+			            				ExpandableListView.getPackedPositionGroup(packedPosition), 
+			            				ExpandableListView.getPackedPositionChild(packedPosition), 
+			            				view.getId());
+			            	}
+			            }
+		            }
+		            return false;
+		        }
+			};
+	
+	protected GestureDetector mGestureDetector = new GestureDetector(mGestureListener);
+	
+	protected View.OnTouchListener mTouchListener = 
+			new View.OnTouchListener() {
+				
+				public boolean onTouch(View v, MotionEvent event) {
+					if (mGestureDetector != null)
+						return mGestureDetector.onTouchEvent(event);
+					else
+						return false;
+				}
+			};
+			
+	protected OnChildGestureListener mChildClickListener = new OnChildGestureListener() {
+		
+		public boolean onChildClick(
+				ExpandableListView parent, 
+				View v,
+				int groupPosition, 
+				int childPosition, long id) {
+
+			mQuickAction.show(v);
+			mSelectedGroup.set(groupPosition);
+			mSelectedChild.set(childPosition);
+			mSelectedItemID = ((Item) getExpandableListView().getExpandableListAdapter().getChild(groupPosition, childPosition)).mID;
+			return false;
+		}
+		
+		public boolean onChildLeftSwipe(
+				ExpandableListView parent, 
+				View v, 
+				int groupPosition, 
+				int childPosition, 
+				long id) {
+
+			mSelectedGroup.set(groupPosition);
+			mSelectedChild.set(childPosition);
+			mSelectedItemID = ((Item) parent.getExpandableListAdapter().getChild(groupPosition, childPosition)).mID;
+			doDeleteItem();
+			return false;
+		}
+		
+		public boolean onChildRightSwipe(
+				ExpandableListView parent, 
+				View v, 
+				int groupPosition, 
+				int childPosition, 
+				long id) {
+			
+			mSelectedGroup.set(groupPosition);
+			mSelectedChild.set(childPosition);
+			mSelectedItemID = ((Item) parent.getExpandableListAdapter().getChild(groupPosition, childPosition)).mID;
+			doToggleMarkDone();
+			return false;
+		}
+	};
+	
+	/**
+	* Interface for shake gesture.
+	* 
+	*/
+	public interface OnShakeListener {
+		
+		/**
+		* Called when shake gesture is detected.
+		*/
+		void onShake();
+	}
+	
+	/**
+	 * Listener that detects shake gesture.
+	 */
+	public class ShakeEventListener implements SensorEventListener {
+
+//		/** Minimum movement force to consider. */
+//		private static final int MIN_FORCE = 10;
+//			
+//		/**
+//		* Minimum times in a shake gesture that the direction of movement needs to
+//		* change.
+//		*/
+//		private static final int MIN_DIRECTION_CHANGE = 3;
+//			
+//		/** Maximum pause between movements. */
+//		private static final int MAX_PAUSE_BETHWEEN_DIRECTION_CHANGE = 200;
+//		
+//		/** Maximum allowed time for shake gesture. */
+//		private static final int MAX_TOTAL_DURATION_OF_SHAKE = 400;
+//			
+//		/** Time when the gesture started. */
+//		private long mFirstDirectionChangeTime = 0;
+//			
+//		/** Time when the last movement started. */
+//		private long mLastDirectionChangeTime;
+//			
+//		/** How many movements are considered so far. */
+//		private int mDirectionChangeCount = 0;
+//			
+//		/** The last x position. */
+//		private float lastX = 0;
+//			
+//		/** The last y position. */
+//		private float lastY = 0;
+//			
+//		/** The last z position. */
+//		private float lastZ = 0;
+		
+		private long lastUpdate = -1;
+//		private float x, y, z;
+//		private float last_x, last_y, last_z;
+//		private static final int SHAKE_THRESHOLD = 800;
+		
+		/** OnShakeListener that is called when shake is detected. */
+		private OnShakeListener mShakeListener = null;
+
+		public void setOnShakeListener(OnShakeListener listener) {
+			mShakeListener = listener;
+		}
+
+		private void getAccelerometer(SensorEvent event) {
+			float[] values = event.values;
+			// Movement
+			float x = values[0];
+			float y = values[1];
+			float z = values[2];
+
+			float accelationSquareRoot = (x * x + y * y + z * z)
+					/ (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
+			long actualTime = System.currentTimeMillis();
+			Log.i("onSensorChanged", "accelationSquareRoot: " + accelationSquareRoot);
+			
+			if (accelationSquareRoot >= 2) //
+			{
+				if (actualTime - lastUpdate < 200) {
+					return;
+				}
+				lastUpdate = actualTime;
+				mShakeListener.onShake();
+			}
+		}
+
+		public void onSensorChanged(SensorEvent se) {
+	  		
+	  		Log.d("onSensorChanged", "X: " + se.values[SensorManager.DATA_X] + " Y: " + se.values[SensorManager.DATA_Y] + " Z: " + se.values[SensorManager.DATA_Z]);
+	  		if (se.sensor.getType() == Sensor.TYPE_ACCELEROMETER) 
+	  		{
+	  			getAccelerometer(se);
+	  			/*
+	  		    long curTime = System.currentTimeMillis();
+	  		    // only allow one update every 100ms.
+	  		    if ((curTime - lastUpdate) > 100) {
+		  			long diffTime = (curTime - lastUpdate);
+		  			lastUpdate = curTime;
+		  	 
+		  			x = se.values[SensorManager.DATA_X];
+		  			y = se.values[SensorManager.DATA_Y];
+		  			z = se.values[SensorManager.DATA_Z];
+		  	 
+		  			float speed = Math.abs(x+y+z - last_x - last_y - last_z)
+		  	                              / diffTime * 10000;
+		  			Log.d("onSensorChanged: ", "Speed: " + speed);
+		  			if (speed > SHAKE_THRESHOLD) {
+		  			    // yes, this is a shake action! Do something about it!
+		  				mShakeListener.onShake();
+		  			}
+		  			last_x = x;
+		  			last_y = y;
+		  			last_z = z;
+	  		    }*/
+	  		}
+	  		/*
+			// get sensor data
+			float x = se.values[SensorManager.DATA_X];
+			float y = se.values[SensorManager.DATA_Y];
+			float z = se.values[SensorManager.DATA_Z];
+
+		  // calculate movement
+			float totalMovement = Math.abs(x + y + z - lastX - lastY - lastZ);
+			Log.i("onSensorChanged", "totalMovement:" + totalMovement);
+			if (totalMovement > MIN_FORCE) {
+
+				// get time
+				long now = System.currentTimeMillis();
+
+				// store first movement time
+				if (mFirstDirectionChangeTime == 0) {
+					mFirstDirectionChangeTime = now;
+					mLastDirectionChangeTime = now;
+				}
+	
+				// check if the last movement was not long ago
+				long lastChangeWasAgo = now - mLastDirectionChangeTime;
+				Log.i("onSensorChange", "lastChangeWasAgo: " + lastChangeWasAgo);
+				if (lastChangeWasAgo < MAX_PAUSE_BETHWEEN_DIRECTION_CHANGE) {
+	
+					// store movement data
+					mLastDirectionChangeTime = now;
+					mDirectionChangeCount++;
+					
+					// store last sensor data 
+					lastX = x;
+					lastY = y;
+					lastZ = z;
+					
+					Log.i("OnSensorChange", "mDirectionChangeCount: " + mDirectionChangeCount);
+	
+			        // check how many movements are so far
+			        if (mDirectionChangeCount >= MIN_DIRECTION_CHANGE) {
+			
+			          // check total duration
+			          long totalDuration = now - mFirstDirectionChangeTime;
+			          if (totalDuration < MAX_TOTAL_DURATION_OF_SHAKE) {
+			            mShakeListener.onShake();
+			            resetShakeParameters();
+			          }
+			        }
+	
+				} else {
+					resetShakeParameters();
+				}
+			}*/
+		}
+
+		/**
+		 * Resets the shake parameters to their default values.
+		 */
+//		private void resetShakeParameters() {
+//		    mFirstDirectionChangeTime = 0;
+//		    mDirectionChangeCount = 0;
+//		    mLastDirectionChangeTime = 0;
+//		    lastX = 0;
+//		    lastY = 0;
+//		    lastZ = 0;
+//		}
+//
+		public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		}
+	}
+	
+//	private SensorManager 				mSensorManager = null;
+//	private final ShakeEventListener 	mSensorListener = new ShakeEventListener();
+	
+	class ShoppingListAdapterWithIcons extends ArrayAdapter<ShoppingList> {
+
+		public ShoppingListAdapterWithIcons(
+				Context context, 
+				int resource,
+				int textViewResourceId, 
+				List<ShoppingList> objects) {
+			super(context, resource, textViewResourceId, objects);
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View 			view = super.getView(position, convertView, parent);
+			ShoppingList	item = getItem(position);
+			
+			TextView 		itemCount = (TextView) view.findViewById(R.id.shoppinglist_itemCount);
+			if (itemCount != null && item != null) {
+				itemCount.setText(" (" + String.valueOf(item.mItemCount) + ")");
+				itemCount.setVisibility(View.VISIBLE);
+			}
+			
+			TextView listName = (TextView) view.findViewById(R.id.shoppinglist_name);
+			if (listName != null) {
+				if (item.mUserID != ((NoteItApplication) getApplication()).getUserID())
+					listName.setCompoundDrawablesWithIntrinsicBounds(
+							getResourceIdFromAttribute(R.attr.SharedShoppingList), 0, 0, 0);
+				else 
+					listName.setCompoundDrawablesWithIntrinsicBounds(
+							getResourceIdFromAttribute(R.attr.ShoppingList_Cart), 0, 0, 0);
+			}
+
+			TextView listCount = (TextView) view.findViewById(R.id.shoppinglist_itemCount);
+			if (listCount != null) {
+				listCount.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+			}
+			return view;
+		}
+	}
 		
 	public void onCreate(Bundle savedInstanceState) { 
     	
     	super.onCreate(savedInstanceState);
 
+    	final float scale 			= getResources().getDisplayMetrics().density;
+    	mVC 						= ViewConfiguration.get(this);
+    	mSwipeMinDistance 			= mVC.getScaledTouchSlop();
+    	mSwipeThresholdVelocity 	= mVC.getScaledMinimumFlingVelocity();
+    	mSwipeMaxVDistance 			= (int)(MAX_SWIPE_DISTANCE * scale + 0.5f);
+
+    	
     	if (savedInstanceState != null) {
     		Log.i("ItemListActivity.onCreate", "Got a valid savedInstanceState");
     		mSelectedGroup.set(savedInstanceState.getInt(SELECTED_GROUP));
@@ -261,28 +690,28 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			}
 		});    
 		
+		// Sensor
+//		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+//		if (mSensorManager != null) {
+//			mSensorManager.registerListener(
+//					mSensorListener, 
+//					mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 
+//					SensorManager.SENSOR_DELAY_NORMAL);
+//			
+//			mSensorListener.setOnShakeListener(new OnShakeListener() {
+//				
+//				public void onShake() {
+//					Toast.makeText(ItemListActivity.this, "Shake", Toast.LENGTH_SHORT);
+//				}
+//			});
+//		}
 		
         ItemsExpandableListAdapter adapter = new ItemsExpandableListAdapter(this);
 		mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE); 
 		getExpandableListView().setTextFilterEnabled(true);
+		getExpandableListView().setOnTouchListener(mTouchListener);
 		addFooterToListView(true);
 		getExpandableListView().setAdapter(adapter);
-    	getExpandableListView().setOnChildClickListener(new OnChildClickListener() {
-			
-			public boolean onChildClick(ExpandableListView parent, View v,
-					int groupPosition, int childPosition, long id) {
-				
-				if (v.getId() == R.id.itemlist_name) {
-					doToggleMarkDone();
-				} else {
-    				mQuickAction.show(v);
-				}
-				mSelectedGroup.set(groupPosition);
-				mSelectedChild.set(childPosition);
-				mSelectedItemID = ((Item) getExpandableListView().getExpandableListAdapter().getChild(groupPosition, childPosition)).mID;
-				return false;
-			}
-		});
         
     	// Populating of the list with items is handled in OnScrollListener for the list view
 		if (app.getShoppingListCount() > 0 && !mIsItemListFetched) {
@@ -324,7 +753,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		mLoadingMore = true;
 		app.fetchItems(
 			!mPrefs.getBoolean("Delete_Bought_Items", true),
-				mPrefs.getBoolean("Shuffle_Done_Items", true),
+				true,
 				listener);
     }
 
@@ -384,21 +813,26 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		mPrefs.unregisterOnSharedPreferenceChangeListener(mPrefChangeListener);
 		if (mInstallScanAppDialog != null && mInstallScanAppDialog.isShowing())
 			mInstallScanAppDialog.dismiss();
+//	    mSensorManager.unregisterListener(mSensorListener);
 		super.onPause();
 	}
 
 	@Override
 	protected void onResume() {
 
+		super.onResume();
 		mPrefs.registerOnSharedPreferenceChangeListener(mPrefChangeListener);
 		mDisplayExtras = mPrefs.getBoolean("Display_Price_Quantity", true);
 		mDisplayCategoryExtras = mPrefs.getBoolean("Display_Category_Totals", true);
-		mHideDoneItems = mPrefs.getBoolean("Delete_Bought_Items", false);
+		mHideDoneItems = mPrefs.getBoolean("Delete_Bought_Items", true);
         mFontSize = Integer.valueOf(mPrefs.getString("Item_Font_Size", "3"));
 		getExpandableListView().invalidateViews();
 		mCurrencyFormat = ((NoteItApplication) getApplication()).getCurrencyFormat(false);
 		doDisplayPendingTotal();
-		super.onResume();
+//		mSensorManager.registerListener(
+//				mSensorListener, 
+//				mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 
+//				SensorManager.SENSOR_DELAY_NORMAL);
 	}
 
 	public void onPostExecute(long retval, ArrayList<Item> items, String message) {
@@ -628,20 +1062,40 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 
 	protected void doAddItem(Item item) {
 		
-		NoteItApplication app = (NoteItApplication) getApplication();
+		final NoteItApplication 			app = (NoteItApplication) getApplication();
+		final ExpandableListView 			listView = (ExpandableListView)getExpandableListView();
+		final ItemsExpandableListAdapter	adapter = (ItemsExpandableListAdapter)listView.getExpandableListAdapter();				
+				
 		mToolbar.showInderminateProgress(getString(R.string.progress_message));
 		app.addItem(item, new OnAddItemListener() {
 			
-			public void onPostExecute(long resultCode, Item item, String message) {
+			public void onPostExecute(long resultCode, Item newItem, String message) {
 				try {
 					if (resultCode == 0){
-				    	ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
-	    				Category category = ((NoteItApplication) getApplication()).getCategory(item.mCategoryID);
-	    				adapter.AddItem(item, category);
-	    				Log.d("ItemListActivity.doAddItem()", "Item added: " + item.mName);
-						adapter.notifyDataSetChanged();
-						doAddToPendingTotal(item.mUnitID * item.mUnitPrice);
-						doDisplayPendingTotal();
+				    	
+	    				Category 	category = app.getCategory(newItem.mCategoryID);
+	    				long 		packedPosition = adapter.AddItem(newItem, category);
+	    				
+	    				if (packedPosition != ExpandableListView.PACKED_POSITION_TYPE_NULL) {
+		    				Log.d("ItemListActivity.doAddItem()", "Item added: " + newItem.mName);
+							adapter.notifyDataSetChanged();
+							doAddToPendingTotal(newItem.mUnitID * newItem.mUnitPrice);
+							doDisplayPendingTotal();
+							
+							// Select the just added child
+							int groupPos = ExpandableListView.getPackedPositionGroup(packedPosition);
+							int childPos = ExpandableListView.getPackedPositionGroup(packedPosition);
+							
+							if (groupPos != ExpandableListView.PACKED_POSITION_VALUE_NULL &&
+								childPos != ExpandableListView.PACKED_POSITION_VALUE_NULL) {
+								getExpandableListView().setSelectedChild(
+										groupPos, 
+										childPos, 
+										true);
+							}
+	    				} else {
+	    					Log.e("doAddItem", "Could not add item to adapter. PACKED_POSITION_TYPE_NULL returned.");
+	    				}
 					}
 					else {
     		    		CustomToast.makeText(
@@ -656,43 +1110,43 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		});
 	}
 	
-	protected void doEditItem(final Item oldItem, final Item newItem, final int bitMask) {
+	protected void doEditItem(final Item oldItem, Item newItem, final int bitMask) {
 
 		NoteItApplication app = (NoteItApplication) getApplication();
 		mToolbar.showInderminateProgress(getString(R.string.progress_message));
 		app.editItem(
 				bitMask, 
     			newItem,  
-    			new OnMethodExecuteListerner() {
-			
-			public void onPostExecute(long resultCode, String message) {
-				try {
-					if (resultCode == 0) {
-		    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
-	    				Category category = ((NoteItApplication) getApplication()).getCategory(newItem.mCategoryID);
-	    				if ((bitMask & Item.ITEM_CATEGORYID) > 0 || (bitMask & Item.ITEM_NAME) > 0) {
-		    				adapter.DeleteItem(oldItem);
-		    				adapter.AddItem(newItem, category);
-		    				doAddToPendingTotal(newItem.mUnitPrice * newItem.mQuantity - oldItem.mUnitPrice * oldItem.mQuantity);
-		    				doDisplayPendingTotal();
-	    				} else {
-	    					Item selItem = (Item) getExpandableListView().getExpandableListAdapter().getChild(
-	    							mSelectedGroup.get(), 
-	    							mSelectedChild.get());
-	    					selItem.copyFrom(newItem);
-	    				}
-						adapter.notifyDataSetChanged();
+    			new OnAddItemListener() {
+					
+					public void onPostExecute(long resultCode, Item item, String message) {
+						try {
+							if (resultCode == 0) {
+				    			ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
+			    				Category category = ((NoteItApplication) getApplication()).getCategory(item.mCategoryID);
+			    				if ((bitMask & Item.ITEM_CATEGORYID) > 0 || (bitMask & Item.ITEM_NAME) > 0) {
+				    				adapter.DeleteItem(oldItem);
+				    				adapter.AddItem(item, category);
+				    				doAddToPendingTotal(item.mUnitPrice * item.mQuantity - oldItem.mUnitPrice * oldItem.mQuantity);
+				    				doDisplayPendingTotal();
+			    				} else {
+			    					Item selItem = (Item) getExpandableListView().getExpandableListAdapter().getChild(
+			    							mSelectedGroup.get(), 
+			    							mSelectedChild.get());
+			    					selItem.copyFrom(item);
+			    				}
+								adapter.notifyDataSetChanged();
+							}
+							else
+		    		    		CustomToast.makeText(
+		    		    				ItemListActivity.this,
+		    		    				mContentView,
+		    		    				message).show(true);
+						} finally {
+				    		mToolbar.hideIndeterminateProgress();
+						}
 					}
-					else
-    		    		CustomToast.makeText(
-    		    				ItemListActivity.this,
-    		    				mContentView,
-    		    				message).show(true);
-				} finally {
-		    		mToolbar.hideIndeterminateProgress();
-				}
-			}
-		});
+				});
 	}
 	
 	protected void doCopyItem() {
@@ -789,8 +1243,9 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 				    		app.editItem(
 				    				editBitmask, 
 				    				newItem, 
-				        			new OnMethodExecuteListerner() {
-				    					public void onPostExecute(long resultCode, String message) {
+				        			new OnAddItemListener() {
+										
+										public void onPostExecute(long resultCode, Item item, String message) {
 				    						try {
 					    						if (resultCode == 0) {
 					    							adapter.DeleteItem(selItem);
@@ -804,8 +1259,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 				    						} finally {
 				    				    		mToolbar.hideIndeterminateProgress();
 				    						}
-				    					}
-				    			});
+										}
+				    				});
 				    	}
 					}
 				})
@@ -916,7 +1371,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 
     	ImageButton homeButton = new ImageButton(this);
     	homeButton.setImageResource(R.drawable.home);
-    	mToolbar.addLeftAlignedButton(homeButton, false, true);
+    	mToolbar.addLeftAlignedButton(homeButton, true, true);
     	homeButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -959,7 +1414,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	
     	ImageButton expandCollapse = new ImageButton(this);
     	expandCollapse.setImageResource(R.drawable.expand_collapse);
-    	mToolbar.addRightAlignedButton(expandCollapse, true, false);
+    	mToolbar.addRightAlignedButton(expandCollapse, true, true);
     	expandCollapse.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -1112,17 +1567,15 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		app.editItem(
 				editBitmask, 
     			newItem, 
-    			new OnMethodExecuteListerner() {
-				
-					public void onPostExecute(long resultCode, String message) {
-						
+    			new OnAddItemListener() {
+					
+					public void onPostExecute(long resultCode, Item editedItem, String message) {
 						try {
 							if (resultCode == 0) {
-								item.mIsPurchased = newItem.mIsPurchased;
-								item.mIsAskLater = newItem.mIsAskLater;
-								item.mUnitPrice = newItem.mUnitPrice; 
+								item.copyFrom(editedItem);
 								ItemsExpandableListAdapter adapter = (ItemsExpandableListAdapter)getExpandableListView().getExpandableListAdapter();
-								if (item.mIsPurchased > 0 && mPrefs.getBoolean("Shuffle_Done_Items", true)) {
+								if (item.mIsPurchased > 0) {
+									// Shuffle purchased item to the bottom
 									adapter.DeleteItem(item);
 									adapter.AddItem(item, app.getCategory(item.mCategoryID));
 								}
@@ -1150,9 +1603,10 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     	final NoteItApplication app = (NoteItApplication) getApplication();
     	
     	ArrayList<ShoppingList> shoppingList = app.getShoppingList();
-    	ArrayAdapter<ShoppingList> adapter = new ArrayAdapter<ShoppingList>(
+    	ShoppingListAdapterWithIcons adapter = new ShoppingListAdapterWithIcons(
     			this, 
-    			android.R.layout.simple_dropdown_item_1line,
+    			R.layout.shoppinglists_item,
+    			R.id.shoppinglist_name,
     			shoppingList);
     	AlertDialog shoppingLists = new AlertDialog.Builder(this)
     		.setTitle(R.string.itemlist_select_shoppinglist)
@@ -1447,7 +1901,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			}
 		}
 		
-		public void AddItem(Item item, Category category){
+		// Returns the packed position for the newly added item
+		public long AddItem(Item item, Category category){
 			
 			if (category != null){
 				int index = mCategories.indexOf(category);
@@ -1460,7 +1915,11 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 					mItems.add(new ArrayList<Item>());
 				}
 				mItems.get(index).add(item);
-			}
+				return ExpandableListView.getPackedPositionForChild(
+						index, 
+						mItems.get(index).size() - 1);
+			} else 
+				return ExpandableListView.PACKED_POSITION_TYPE_NULL;
 		}
 		
 		public void DeleteItem(final Item item) {
@@ -1642,6 +2101,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	        }
 	        
 	        if (view != null) {
+	        	LinearLayout			details = (LinearLayout) view.findViewById(R.id.itemList_details);
     	        TextView				textView = (TextView) view.findViewById(R.id.itemlist_name);
     	        TextView				likeCount = (TextView) view.findViewById(R.id.itemlist_likeCount);
     	        TextView 				quantity = (TextView) view.findViewById(R.id.itemlist_quantity);
@@ -1657,8 +2117,8 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
     		                ViewGroup.LayoutParams.FILL_PARENT, 
     		                ViewGroup.LayoutParams.WRAP_CONTENT);
     	        }	
-    	        
-    	        if (textView != null) {
+
+        		if (textView != null) {
 
 			        if (thisItem.mIsPurchased > 0) {
 			        	textView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
@@ -1678,21 +2138,27 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	        	}
 	        	
 	        	if (mDisplayExtras && quantity != null && thisItem.mQuantity > 0 ) {
+	        		
 	        		NoteItApplication 	app = (NoteItApplication) getApplication();
 	        		String 				unit = app.getUnitFromID(thisItem.mUnitID).mAbbreviation; 
+	        		
+	        		details.setVisibility(View.VISIBLE);
 	        		quantity.setText(String.valueOf(thisItem.mQuantity) + " " + unit); 
 	        		quantity.setVisibility(View.VISIBLE);
 	        		quantity.setPaintFlags(
 	        			thisItem.mIsPurchased > 0 ?
 	        					Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG :
 	        					textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);	
-		        	if (price != null && thisItem.mUnitPrice > 0){
-		        		String strPrice = String.format(
+	        		
+	        		if (price != null && thisItem.mUnitPrice > 0){
+		        		
+	        			String strPrice = String.format(
 		        				mUnitPriceFormat, 
 		        				String.format(mCurrencyFormat, thisItem.mUnitPrice),
 		        				unit);
 		        		String strTotal = String.format(mCurrencyFormat, thisItem.mUnitPrice * thisItem.mQuantity);
-			        	price.setPaintFlags(
+			        	
+		        		price.setPaintFlags(
 			        			thisItem.mIsPurchased > 0 ?
 	        					Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG :
 		        				textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);	
@@ -1700,8 +2166,16 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 			        			thisItem.mIsPurchased > 0 ?
 	        					Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG :
 		        				textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);	
-		        		price.setText(strPrice);
 		        		total.setText(strTotal);
+		        		
+				        if (thisItem instanceof ItemAndStats) {
+				        	ItemAndStats itemStats = (ItemAndStats) thisItem;
+			        		int deviationRange = itemStats.getDeviationRange();
+			        		price.setText(strPrice + getStatsText(deviationRange));
+				        } else {
+			        		price.setText(strPrice);
+				        }
+				        
 		        		price.setVisibility(View.VISIBLE);
 		        		total.setVisibility(View.VISIBLE);
 		        	} else {
@@ -1709,6 +2183,7 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 		        		total.setVisibility(View.GONE);
 		        	}
 	        	} else {
+	        		details.setVisibility(View.GONE);
 	        		quantity.setVisibility(View.GONE);
 	        		price.setVisibility(View.GONE);
 	        		total.setVisibility(View.GONE);
@@ -1773,5 +2248,43 @@ public class ItemListActivity extends ExpandableListActivity implements NoteItAp
 	    	}
 	    	return count;
 	    }
+	    
+	    protected String getStatsText(int deviationType) {
+	    	
+	    	final String up = mContext.getString(R.string.itemlist_Price_Up);
+	    	final String down = mContext.getString(R.string.itemlist_Price_Down); 
+	    	if (deviationType == ItemAndStats.kUP_AlarmingDev) {
+	    		return " " + up + up + up;	
+	    	} else if (deviationType == ItemAndStats.kUp_TwoStandardDev) {
+				return " " + up + up;
+	    	} else if (deviationType == ItemAndStats.kUp_OneStandardDev) {
+	    		return " " + up;
+	    	} else if (deviationType == ItemAndStats.kDown_AlarmingDev) {
+    			return " " + down + down + down;
+    		} else if (deviationType == ItemAndStats.kDown_TwoStandardDev) {
+    			return " " + down + down;
+    		} else if (deviationType == ItemAndStats.kDown_OneStandardDev) {
+    			return " " + down;
+    		}
+	    	return "";
+	    }
 	}
+	
+	protected int getResourceIdFromAttribute(int attribId) {
+		Resources.Theme theme = getTheme();
+		TypedValue 		resID = new TypedValue();
+		theme.resolveAttribute(attribId, resID, false);
+		return resID.data;
+	}
+
+	public void onSensorChanged(int sensor, float[] values) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onAccuracyChanged(int sensor, int accuracy) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

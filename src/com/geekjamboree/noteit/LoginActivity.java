@@ -9,12 +9,16 @@ import com.geekjamboree.noteit.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -94,7 +98,7 @@ public class LoginActivity
         	forgotPassword.setOnClickListener(new View.OnClickListener() {
 				
 				public void onClick(View v) {
-					
+					doForgotPassword();
 				}
 			});
         }
@@ -210,7 +214,63 @@ public class LoginActivity
 		}
 	}
 	
-	protected void showIndeterminateProgress() {
+    void doForgotPassword() {
+		// inflate the view from resource layout
+		LayoutInflater	inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final View 		dialogView = inflater.inflate(R.layout.dialog_addshoppinglist, null, false);
+		final EditText 	editListName = (EditText) dialogView.findViewById(R.id.dialog_addshoppinglist_editTextName);
+		
+		AlertDialog dialog = new AlertDialog.Builder(this)
+			.setView(dialogView)
+			.setTitle(getResources().getString(R.string.login_forgot_password_title))
+			.create();
+
+		editListName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+		dialog.setButton(DialogInterface.BUTTON1, "OK", new DialogInterface.OnClickListener() {
+			
+			public void onClick(DialogInterface dialog, int which) {
+				
+				final String emailID = editListName.getText().toString();
+
+				if (!emailID.trim().matches("")) {
+					dialog.dismiss();
+				
+					NoteItApplication app = (NoteItApplication) getApplication();
+					app.do_forgot_password(emailID, new OnMethodExecuteListerner() {
+						
+						public void onPostExecute(long resultCode, String message) {
+							
+							if (resultCode != 0) {
+								CustomToast.makeText(
+										LoginActivity.this,
+										mContentView,
+										message).show(true);
+							} else {
+								CustomToast.makeText(
+										LoginActivity.this, 
+										mContentView, 
+										String.format(
+												getResources().getString(R.string.login_forgot_password_success), 
+												emailID)).show(true);
+							}
+						}
+					});
+				}
+			}
+		});
+	
+		dialog.setButton(DialogInterface.BUTTON2, "Cancel", new DialogInterface.OnClickListener() {
+			
+			public void onClick(DialogInterface dialog, int which) {
+				Log.e("AddShoppingList", "Cancel");
+				dialog.dismiss();
+			}
+		});
+
+		dialog.show();    
+	}
+    
+    protected void showIndeterminateProgress() {
 		ProgressBar progressBar = (ProgressBar) findViewById(R.id.login_progress);
 		if (progressBar != null) {
 			progressBar.setVisibility(View.VISIBLE);

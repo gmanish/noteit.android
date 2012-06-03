@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="10dp" >
+    android:padding="8dp" >
 
     <TextView
         android:id="@+id/categorylists_item_name"
@@ -17,7 +17,7 @@
 		android:ellipsize="end"
         android:drawableLeft="?Category_Small"
         android:drawableRight="?Hand_Small"
-        android:drawablePadding="5dip"
+        android:drawablePadding="8dip"
         android:text="@+id/categorylists_item_name" />
     
 </LinearLayout>
