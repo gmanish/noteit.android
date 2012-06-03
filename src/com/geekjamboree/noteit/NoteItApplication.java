@@ -561,6 +561,10 @@ public class NoteItApplication extends Application {
 //		return mCountries;
 //	}
 	
+	public static int getItemBatchSize() {
+		return mItemsBatchSize;
+	}
+	
 	public ArrayList<Currency> getCurrencies() {
 		return mCurrencies;
 	}

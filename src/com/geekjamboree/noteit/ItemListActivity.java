@@ -1457,10 +1457,16 @@ public class ItemListActivity
 	    		mLoadMoreFlipper = (ViewFlipperHack) mLayoutInflater.inflate(
 	    				R.layout.itemlist_moreswitcher, 
 	    				null, 
-	    				false);
-    		}
+	    				false);	    		
+	    	}
     		
 			if (mLoadMoreFlipper != null) {
+	    		String text = String.format(
+	    				getString(R.string.itemlist_loadmorebutton), 
+	    				NoteItApplication.getItemBatchSize());
+	    		Button moreBtn = (Button) mLoadMoreFlipper.findViewById(R.id.itemlist_morebuttom);
+	    		moreBtn.setText(text);
+	    		
 				// Note: There seems to be a bug in android. If I don't call
 				// addFooterView before setting the adapter, the footer view
 				// is never added. Go Figure!
