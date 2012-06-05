@@ -50,19 +50,7 @@ public class ReportActivity extends Activity {
 	public static final String HTML_REPORT 	= "HTML_REPORT";
 	public static final String TEXT_TITLE	= "TEXT_TITLE";
 	
-	class ToolbarWrapper extends CustomTitlebarWrapper {
-
-		public ToolbarWrapper(Activity parent) {
-			super(parent);
-		}
-
-		public void SetTitle(CharSequence title) {
-			super.SetTitle(title);
-			doSetupToolbarButtons();
-		}
-	}
-
-	ToolbarWrapper			mToolbar;
+	TitleBar				mToolbar;
 	WebView					mTextView;
 	String					mCurrentReportText = "";
 	String 					mCurrentReportHtml = "";
@@ -76,10 +64,12 @@ public class ReportActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-        mToolbar = new ToolbarWrapper(this);
-		setContentView(R.layout.reportactvity);
+    	TitleBar.RequestNoTitle(this);
+        setContentView(R.layout.reportactvity);
+        mToolbar = (TitleBar) findViewById(R.id.reportactivity_title);
 		mTextView = (WebView) findViewById(R.id.webview);
 		mTextView.setBackgroundColor(0);
+		doSetupToolbarButtons();
 		
 		if (savedInstanceState != null) {
 			mCurrentReportHtml = savedInstanceState.getString(HTML_REPORT);
@@ -345,17 +335,7 @@ public class ReportActivity extends Activity {
 
 	protected void doSetupToolbarButtons() {
 
-    	ImageButton settingsButton = new ImageButton(this);
-    	settingsButton.setImageResource(R.drawable.settings);
-    	settingsButton.setOnClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
-    			startActivity(new Intent(ReportActivity.this, MainPreferenceActivity.class));
-			}
-		});
-
-    	ImageButton homeButton = new ImageButton(this);
-    	homeButton.setImageResource(R.drawable.home);
+    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home, true, true);
     	homeButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -366,8 +346,7 @@ public class ReportActivity extends Activity {
 			}
 		});
     	
-    	ImageButton shareButton = new ImageButton(this);
-    	shareButton.setImageResource(R.drawable.share);
+    	ImageButton shareButton = mToolbar.addRightAlignedButton(R.drawable.share, true, true);
     	shareButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -375,9 +354,13 @@ public class ReportActivity extends Activity {
 			}
 		});
     	
-    	mToolbar.addLeftAlignedButton(homeButton, true, true);
-    	mToolbar.addRightAlignedButton(shareButton, true, true);
-    	mToolbar.addRightAlignedButton(settingsButton, false, true);
+    	ImageButton settingsButton = mToolbar.addRightAlignedButton(R.drawable.settings, false, true);
+    	settingsButton.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+    			startActivity(new Intent(ReportActivity.this, MainPreferenceActivity.class));
+			}
+		});
     }
 
     protected void doEmail() {

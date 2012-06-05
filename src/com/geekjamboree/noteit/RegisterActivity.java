@@ -20,7 +20,7 @@ public class RegisterActivity extends Activity implements OnEulaAgreedTo {
     private static final String PREFERENCE_EULA_ACCEPTED = "eula.accepted";
     private static final String PREFERENCES_EULA = "eula";
 
-    CustomTitlebarWrapper 		mToolbar;
+    TitleBar 					mToolbar;
     boolean						mEulaAccepted = false;
     View						mRoot = null;
     
@@ -28,8 +28,9 @@ public class RegisterActivity extends Activity implements OnEulaAgreedTo {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-		mToolbar = new CustomTitlebarWrapper(this);
+    	TitleBar.RequestNoTitle(this);
 		setContentView(R.layout.register);
+		mToolbar = (TitleBar) findViewById(R.id.register_title);
 		mToolbar.SetTitle(getString(R.string.register));
 		
         final SharedPreferences 	prefs = getSharedPreferences(PREFERENCES_EULA, Activity.MODE_PRIVATE);

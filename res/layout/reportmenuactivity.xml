@@ -6,6 +6,11 @@
     android:orientation="vertical"
     style="?NI_AppBackgroundNormal" >
 
+    <com.geekjamboree.noteit.TitleBar
+        android:id="@+id/reportmenu_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    
     <com.geekjamboree.noteit.ExpandableLVRightIndicator
         android:id="@+android:id/list"
         android:layout_width="fill_parent"

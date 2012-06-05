@@ -70,7 +70,7 @@ public class ItemListActivity
 	boolean							mDisplayCategoryExtras = true;
 	Integer							mFontSize = 3;
 	boolean							mHideDoneItems = false;
-	CustomTitlebarWrapper			mToolbar;
+	TitleBar						mToolbar;
 	Button							mShoppingListButton;
 	boolean							mIsItemListFetched = false;
 	SharedPreferences				mPrefs;
@@ -615,8 +615,9 @@ public class ItemListActivity
         	return;
         }
         
-        mToolbar = new CustomTitlebarWrapper(this);
+    	TitleBar.RequestNoTitle(this);
         setContentView(R.layout.itemlists);
+        mToolbar = (TitleBar) findViewById(R.id.itemslist_title);
         mContentView = findViewById(R.id.layout_itemslist);
         mToolbar.SetTitle(app.getShoppingList().get(app.getCurrentShoppingListIndex()).mName);
         doSetupToolbarButtons(app.getShoppingList().get(app.getCurrentShoppingListIndex()).mName);
@@ -1369,9 +1370,7 @@ public class ItemListActivity
     
     protected void doSetupToolbarButtons(String listName) {
 
-    	ImageButton homeButton = new ImageButton(this);
-    	homeButton.setImageResource(R.drawable.home);
-    	mToolbar.addLeftAlignedButton(homeButton, true, true);
+    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home, true, true);
     	homeButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -1392,9 +1391,7 @@ public class ItemListActivity
 			}
 		});
 		
-    	ImageButton addButton = new ImageButton(this);
-    	addButton.setImageResource(R.drawable.add);
-    	mToolbar.addRightAlignedButton(addButton, true, false);
+    	ImageButton addButton = mToolbar.addRightAlignedButton(R.drawable.add, false, true);
     	addButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -1402,9 +1399,7 @@ public class ItemListActivity
 			}
 		});
     	
-    	ImageButton scanBarcodeButton = new ImageButton(this);
-    	scanBarcodeButton.setImageResource(R.drawable.barcode);
-    	mToolbar.addRightAlignedButton(scanBarcodeButton, true, false);
+    	ImageButton scanBarcodeButton = mToolbar.addRightAlignedButton(R.drawable.barcode, true, false);
     	scanBarcodeButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -1412,9 +1407,7 @@ public class ItemListActivity
 			}
 		});
     	
-    	ImageButton expandCollapse = new ImageButton(this);
-    	expandCollapse.setImageResource(R.drawable.expand_collapse);
-    	mToolbar.addRightAlignedButton(expandCollapse, true, true);
+    	ImageButton expandCollapse = mToolbar.addRightAlignedButton(R.drawable.expand_collapse, true, true);
     	expandCollapse.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {

@@ -25,7 +25,7 @@ import android.widget.TextView;
 public class DashBoardActivity extends Activity {
 
 	protected GridView 		mGridView;
-	CustomTitlebarWrapper	mToolbar;
+	TitleBar				mToolbar;
 	
 	protected final int DASHBOARD_SHOPPINGLISTS = 0;
 	protected final int DASHBOARD_CATEGORIES = 1;
@@ -99,8 +99,10 @@ public class DashBoardActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
         
 		super.onCreate(savedInstanceState);
-        mToolbar = new CustomTitlebarWrapper(this);
+    	TitleBar.RequestNoTitle(this);
         setContentView(R.layout.dashboard);
+        
+        mToolbar = (TitleBar) findViewById(R.id.dashboard_title);
         mToolbar.SetTitle(getResources().getText(R.string.app_name));
 		doSetupToolbarButton();
 		
@@ -199,18 +201,15 @@ public class DashBoardActivity extends Activity {
 	
 	protected void doSetupToolbarButton() {
 		
-		final ImageButton logOut = new ImageButton(this);
-		mToolbar.addRightAlignedButton(logOut, false, true);
-		logOut.setImageResource(R.drawable.sign_out);
+		ImageButton logOut = mToolbar.addRightAlignedButton(R.drawable.sign_out, false, true);
 		logOut.setOnClickListener(new View.OnClickListener() {
+			
 			public void onClick(View v) {
 				doSignOut();
 			}
 		});
 		
-        ImageButton settings = new ImageButton(this);
-        mToolbar.addRightAlignedButton(settings, false, true);
-        settings.setImageResource(R.drawable.settings);
+        ImageButton settings = mToolbar.addRightAlignedButton(R.drawable.settings, false, true);
         settings.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {

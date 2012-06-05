@@ -32,7 +32,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ListView;
 
@@ -42,7 +41,7 @@ public class ShoppingListActivity
 
 	ListView 				mListView;
 	ShoppingListAdapter		mAdapter;
-	CustomTitlebarWrapper 	mToolbar;
+	TitleBar 				mToolbar;
 	int						mFontSize = 3;
 	boolean					mIsShoppingListFetched = false;
 	boolean					mIsDisplayCount	= true;
@@ -112,8 +111,9 @@ public class ShoppingListActivity
     		mIsShoppingListFetched = savedInstanceState.getBoolean(IS_SHOPPINGLIST_FETCHED);
     	}
     	
-        mToolbar = new CustomTitlebarWrapper(this);
+    	TitleBar.RequestNoTitle(this);
         setContentView(R.layout.shoppinglists);
+        mToolbar = (TitleBar) findViewById(R.id.shoppinglist_title);
         mToolbar.SetTitle(getResources().getText(R.string.shoplistsactivity_title));
         doSetupToolbarButtons();
         
@@ -375,26 +375,7 @@ public class ShoppingListActivity
     
     protected void doSetupToolbarButtons() {
 
-    	ImageButton addButton = new ImageButton(this);
-    	addButton.setImageResource(R.drawable.add);
-    	addButton.setOnClickListener(new OnClickListener() {
-			
-			public void onClick(View v) {
-				doAddShoppingList();
-			}
-    	});
-		
-    	ImageButton settingsButton = new ImageButton(this);
-    	settingsButton.setImageResource(R.drawable.settings);
-    	settingsButton.setOnClickListener(new OnClickListener() {
-			
-			public void onClick(View v) {
-    			startActivity(new Intent(ShoppingListActivity.this, MainPreferenceActivity.class));
-			}
-		});
-    	
-    	ImageButton homeButton = new ImageButton(this);
-    	homeButton.setImageResource(R.drawable.home);
+    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home, true, true);
     	homeButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -405,9 +386,21 @@ public class ShoppingListActivity
 			}
 		});
 
-    	mToolbar.addLeftAlignedButton(homeButton, true, true);
-    	mToolbar.addRightAlignedButton(addButton, true, true);
-    	mToolbar.addRightAlignedButton(settingsButton, false, true);
+    	ImageButton addButton = mToolbar.addRightAlignedButton(R.drawable.add, true, true);
+    	addButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				doAddShoppingList();
+			}
+    	});
+		
+    	ImageButton settingsButton = mToolbar.addRightAlignedButton(R.drawable.settings, false, true);
+    	settingsButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+    			startActivity(new Intent(ShoppingListActivity.this, MainPreferenceActivity.class));
+			}
+		});
     }
     
     void doAddShoppingList() {

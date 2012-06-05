@@ -7,7 +7,12 @@
     android:orientation="vertical"
     android:background="@drawable/application_background_trademark">
     
-	<ScrollView
+    <com.geekjamboree.noteit.TitleBar
+        android:id="@+id/register_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    
+   	<ScrollView
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
 	    android:orientation="vertical">

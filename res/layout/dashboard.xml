@@ -7,6 +7,11 @@
     android:orientation="vertical"
     style="?NI_AppBackgroundNormal">
 
+    <com.geekjamboree.noteit.TitleBar
+        android:id="@+id/dashboard_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
     <GridView
         android:id="@+id/category_gridview"
         style="?NI_ListViewAttr"

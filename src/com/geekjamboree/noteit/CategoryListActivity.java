@@ -44,7 +44,7 @@ public class CategoryListActivity
 	
 	ArrayAdapterWithFontSize<Category> 	mAdapter;
 	CategoryListView					mListView;
-	CustomTitlebarWrapper 				mToolbar;
+	TitleBar 							mToolbar;
 	QuickAction							mQuickAction;
 	int									mSelectedCategory = 0;
 	
@@ -131,8 +131,9 @@ public class CategoryListActivity
     		mSelectedCategory = savedInstanceState.getInt(SELECTED_CATEGORY);
     	}
     	
-    	mToolbar = new CustomTitlebarWrapper(this);
+    	TitleBar.RequestNoTitle(this);
     	setContentView(R.layout.categories);
+    	mToolbar = (TitleBar) findViewById(R.id.categories_title);
     	mToolbar.SetTitle(getResources().getText(R.string.categoriesactivity_title));
         doSetupToolbarButtons();
         
@@ -274,26 +275,7 @@ public class CategoryListActivity
 
 	protected void doSetupToolbarButtons() {
 
-    	ImageButton addButton = new ImageButton(this);
-    	addButton.setImageResource(R.drawable.add);
-    	addButton.setOnClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
-				doAddCategory();
-			}
-    	});
-		
-    	ImageButton settingsButton = new ImageButton(this);
-    	settingsButton.setImageResource(R.drawable.settings);
-    	settingsButton.setOnClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
-    			startActivity(new Intent(CategoryListActivity.this, MainPreferenceActivity.class));
-			}
-		});
-
-    	ImageButton homeButton = new ImageButton(this);
-    	homeButton.setImageResource(R.drawable.home);
+    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home, true, true);
     	homeButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -304,9 +286,22 @@ public class CategoryListActivity
 			}
 		});
 
-    	mToolbar.addLeftAlignedButton(homeButton, true, true);
-    	mToolbar.addRightAlignedButton(addButton, false, true);
-    	mToolbar.addRightAlignedButton(settingsButton, false, true);
+    	ImageButton addButton = mToolbar.addRightAlignedButton(R.drawable.add, false, true);
+    	addButton.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				doAddCategory();
+			}
+    	});
+		
+    	ImageButton settingsButton = mToolbar.addRightAlignedButton(R.drawable.settings, false, true);
+    	settingsButton.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+    			startActivity(
+    				new Intent(CategoryListActivity.this, MainPreferenceActivity.class));
+			}
+		});
     }
     
     protected void doEditCategory(final int position) {

@@ -46,8 +46,8 @@ public class MainPreferenceActivity extends PreferenceActivity {
 
 	public void onCreate(Bundle savedInstanceState){
         
-		CustomTitlebarWrapper toolbar = new CustomTitlebarWrapper(this);
         super.onCreate(savedInstanceState);
+		TitleBar toolbar = new TitleBar(this);
 		toolbar.SetTitle(getResources().getText(R.string.preference_activity_title));
 		toolbar.showInderminateProgress(getString(R.string.progress_message));
 		try {

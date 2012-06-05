@@ -1,68 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.geekjamboree.noteit.ViewFlipperHack xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/titlebar_flipper"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/titlebar_merge"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="0dip"
-    android:minHeight="48dip"
-    android:inAnimation="@anim/titlebar_flipper_in"
-    style="?NI_TitleBackground">
+    android:layout_height="wrap_content">
 
-   	<LinearLayout
-	    android:id="@+id/titlebar_root"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_gravity="center_vertical"
-	    android:padding="0dip"
-	    android:orientation="horizontal">
-	
-	   <TextView
-	        android:id="@+id/titlebar_title"
-	        android:layout_height="wrap_content"
-	        android:layout_width="0dip"
-	        android:layout_weight="1"
-	        android:layout_gravity="center_vertical"
-	    	android:padding="8dip"
-	        android:text="@string/app_name"
-	        android:textAppearance="@android:style/TextAppearance.WindowTitle"
-	        android:textColor="#FFFFFF"
-	        android:singleLine="true"
-	        android:ellipsize="end"
-	        android:background="@android:color/transparent"/>
-	
-	</LinearLayout>
+    <include
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/customtitlebarwrapper" />
 
-   	<LinearLayout
-	    android:id="@+id/titlebar_progress_root"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:layout_gravity="center_vertical"
-	    android:padding="8dip"
-	    android:orientation="horizontal">
-    
-   	    <TextView 
-	        android:id="@+id/titlebar_progress_title"
-	        android:layout_height="wrap_content"
-	        android:layout_width="0dip"
-	        android:layout_weight="1"
-	        android:layout_gravity="left|center_vertical"
-	        android:text="@string/app_name"
-	        android:textAppearance="@android:style/TextAppearance.WindowTitle"
-	        android:textColor="#FFFFFF"
-	        android:singleLine="true"
-	        android:ellipsize="end"
-	        android:background="@android:color/transparent"/>
-
-   	 	<ProgressBar 
-	        android:id="@+id/titlebar_progress"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="right|center_vertical"
-	        android:paddingLeft="8dip"
-	        android:paddingRight="8dip"
-	        android:indeterminateOnly="true"
-	        style="?android:attr/progressBarStyleSmall" />
-   	 	
-	</LinearLayout>
-   		
-</com.geekjamboree.noteit.ViewFlipperHack>
+</merge>

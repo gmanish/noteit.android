@@ -125,7 +125,7 @@
         
   	</style>
     
-    <style name="NI_AppTheme.Trademark">
+    <style name="NI_AppTheme.Trademark" parent="@android:style/Theme.Holo.Light">
         
         <item name="android:windowTitleBackgroundStyle">@style/App_TitleBackground_Trademark</item>
 	    <item name="NI_ButtonStyle">@style/App_ButtonStyle</item>

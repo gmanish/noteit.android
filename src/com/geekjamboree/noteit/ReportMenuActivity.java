@@ -34,7 +34,7 @@ public class ReportMenuActivity extends ExpandableListActivity {
 	
 	// Report IDs
 	protected ExpandableLVRightIndicator 	mListView;
-	protected CustomTitlebarWrapper 		mToolbar;
+	protected TitleBar 						mToolbar;
 	protected SharedPreferences				mPrefs = null;
 	protected int 							mFontSize = 3;
 	
@@ -115,8 +115,9 @@ public class ReportMenuActivity extends ExpandableListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		mToolbar = new CustomTitlebarWrapper(this);
+    	TitleBar.RequestNoTitle(this);
 		setContentView(R.layout.reportmenuactivity);
+		mToolbar = (TitleBar) findViewById(R.id.reportmenu_title);
 
         mListView = (ExpandableLVRightIndicator) findViewById(android.R.id.list);
         if (mListView != null) {
@@ -257,9 +258,7 @@ public class ReportMenuActivity extends ExpandableListActivity {
 
 	protected void doSetupToolbarButtons() {
 
-    	ImageButton expandAll = new ImageButton(this);
-    	expandAll.setImageResource(R.drawable.expand);
-    	mToolbar.addRightAlignedButton(expandAll, true, true);
+    	ImageButton expandAll = mToolbar.addRightAlignedButton(R.drawable.expand, true, true);
     	expandAll.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -267,9 +266,7 @@ public class ReportMenuActivity extends ExpandableListActivity {
 			}
 		});
     	
-    	ImageButton collapseAll = new ImageButton(this);
-    	collapseAll.setImageResource(R.drawable.collapse);
-    	mToolbar.addRightAlignedButton(collapseAll, false, true);
+    	ImageButton collapseAll = mToolbar.addRightAlignedButton(R.drawable.collapse, false, true);
     	collapseAll.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -277,8 +274,7 @@ public class ReportMenuActivity extends ExpandableListActivity {
 			}
 		});
 
-    	ImageButton settingsButton = new ImageButton(this);
-    	settingsButton.setImageResource(R.drawable.settings);
+    	ImageButton settingsButton = mToolbar.addRightAlignedButton(R.drawable.settings, false, true);
     	settingsButton.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
@@ -286,8 +282,7 @@ public class ReportMenuActivity extends ExpandableListActivity {
 			}
 		});
 
-    	ImageButton homeButton = new ImageButton(this);
-    	homeButton.setImageResource(R.drawable.home);
+    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home, true, true);
     	homeButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -298,8 +293,8 @@ public class ReportMenuActivity extends ExpandableListActivity {
 			}
 		});
 
-    	mToolbar.addLeftAlignedButton(homeButton, true, true);
-    	mToolbar.addRightAlignedButton(settingsButton, false, true);
+    	;
+    	;
     }
 
     protected void doExpandAll() {

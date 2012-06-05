@@ -34,7 +34,7 @@ public class ReportCategoryChart extends Activity {
 	private CategorySeries 	mSeries = new CategorySeries("");
 	private DefaultRenderer mRenderer = new DefaultRenderer();
 	private GraphicalView 	mChartView;
-	CustomTitlebarWrapper	mToolbar;
+	TitleBar				mToolbar;
 	View					mRoot;
 	
 	@Override
@@ -50,8 +50,9 @@ public class ReportCategoryChart extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 	    
 		super.onCreate(savedInstanceState);
-        mToolbar = new CustomTitlebarWrapper(this);
+    	TitleBar.RequestNoTitle(this);
 	    setContentView(R.layout.report_categorychart);
+        mToolbar = (TitleBar) findViewById(R.id.reportcategory_title);
 	    mRoot = findViewById(R.id.report_category_chart_root);
 	    
 	    mRenderer.setApplyBackgroundColor(true);
@@ -176,17 +177,7 @@ public class ReportCategoryChart extends Activity {
 	
 	protected void doSetupToolbarButtons() {
 
-    	ImageButton settingsButton = new ImageButton(this);
-    	settingsButton.setImageResource(R.drawable.settings);
-    	settingsButton.setOnClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
-    			startActivity(new Intent(ReportCategoryChart.this, MainPreferenceActivity.class));
-			}
-		});
-
-    	ImageButton homeButton = new ImageButton(this);
-    	homeButton.setImageResource(R.drawable.home);
+    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home, true, true);
     	homeButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -197,19 +188,13 @@ public class ReportCategoryChart extends Activity {
 			}
 		});
     	
-//    	ImageButton shareButton = new ImageButton(this);
-//    	shareButton.setImageResource(R.drawable.email);
-//    	shareButton.setOnClickListener(new OnClickListener() {
-//			
-//			public void onClick(View v) {
-//				doEmail();
-//			}
-//		});
-    	
-    	mToolbar.addLeftAlignedButton(homeButton, true, true);
-//    	mToolbar.addRightAlignedButton(shareButton, true, false);
-    	mToolbar.addRightAlignedButton(settingsButton, true, true);
+    	ImageButton settingsButton = mToolbar.addRightAlignedButton(R.drawable.settings, true, true);
+    	settingsButton.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+    			startActivity(new Intent(ReportCategoryChart.this, MainPreferenceActivity.class));
+			}
+		});
     }
-	
 }
 
