@@ -97,7 +97,7 @@ class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 		String url 						= URL_IMAC;
 		if(("sdk".equals(Build.PRODUCT)) || ("google_sdk".equals(Build.PRODUCT)))
 			// We're running in the emulator connect with host loopback
-			url = URL_GEEKJAM;//URL_HOST_LOOPBACK;
+			url = URL_HOST_LOOPBACK;
 		else
 			url = URL_GEEKJAM; //URL_GEEKJAM;
 		return url;

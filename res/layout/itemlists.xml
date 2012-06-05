@@ -37,32 +37,17 @@
         android:id="@+id/bottom_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:padding="8dp"
+        android:orientation="vertical"
+        style="?NI_StatusBackground" >
 
-        <ImageView
-            style="?NI_StatusBorder"
-            android:layout_width="fill_parent"
-            android:layout_height="4dip"
-            android:contentDescription="@string/hello" />
-
-        <RelativeLayout
-            android:id="@+id/bottom_bar_main"
-            style="?NI_StatusBackground"
-            android:layout_width="fill_parent"
+        <TextView
+            android:id="@+id/bottom_remaining"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-        	android:padding="8dp">
-
-            <TextView
-                android:id="@+id/bottom_remaining"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="@string/app_name"
-                android:textAppearance="?TextAppearance_Footer" />
+            android:text="@string/app_name"
+            android:textAppearance="?TextAppearance_Footer" />
             
-        </RelativeLayout>
-        
     </LinearLayout>
 
   	<com.google.ads.AdView android:id="@+id/adView"

@@ -401,7 +401,7 @@ public class CategoryListActivity
 			}
 		}
 			
-		dialog.setButton(DialogInterface.BUTTON1, "OK", new DialogInterface.OnClickListener() {
+		dialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
 			
 			public void onClick(DialogInterface dialog, int which) {
 
@@ -415,7 +415,7 @@ public class CategoryListActivity
 			}
 		});
 		
-		dialog.setButton(DialogInterface.BUTTON2, "Cancel", new DialogInterface.OnClickListener() {
+		dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
 			
 			public void onClick(DialogInterface dialog, int which) {
 			}
