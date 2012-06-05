@@ -29,7 +29,7 @@ public class TitleBar extends LinearLayout {
 	
     static final int BUTTON_DIMENSION 	= 32; //dip
     static final int BUTTON_PADDING 	= 8; //dip
-    static final int BUTTON_MARGIN		= 8; //dip
+    static final int BUTTON_MARGIN		= 0; //dip, spacing between adjacent buttons
 
     public TitleBar(Context context) {
 		super(context);
@@ -99,7 +99,7 @@ public class TitleBar extends LinearLayout {
     	LinearLayout 				root = (LinearLayout) findViewById(R.id.titlebar_root);
     	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(
     			LinearLayout.LayoutParams.FILL_PARENT, 
-    			mButtonSize); // Fill Parent because this button needs to expand to fill available horizontal space 
+    			getButtonDim()); // Fill Parent because this button needs to expand to fill available horizontal space 
     	
     	// When we display the center fill button, we don't have the title
     	mTitleText.setVisibility(View.GONE);
@@ -122,7 +122,7 @@ public class TitleBar extends LinearLayout {
     		boolean separatorBefore, 
     		boolean separatorAfter) {
 
-    	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(mButtonSize, mButtonSize);
+    	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(getButtonDim(), getButtonDim());
     	
     	lp.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
     	lp.leftMargin = separatorBefore == true ? mButtonMargin : 0;
@@ -141,7 +141,7 @@ public class TitleBar extends LinearLayout {
     		boolean separatorBefore, 
     		boolean separatorAfter) {
     	
-    	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(mButtonSize, mButtonSize);
+    	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(getButtonDim(), getButtonDim());
 
     	lp.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
     	lp.leftMargin = separatorBefore == true ? mButtonMargin : 0;
@@ -157,5 +157,9 @@ public class TitleBar extends LinearLayout {
     
     public static void RequestNoTitle(Activity parent) {
     	parent.requestWindowFeature(Window.FEATURE_NO_TITLE);
+    }
+    
+    protected int getButtonDim() {
+    	return mButtonSize + 2 * mButtonPadding;
     }
 }
