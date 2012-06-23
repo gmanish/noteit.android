@@ -102,6 +102,7 @@ class AsyncInvokeURLTask extends AsyncTask<Void, Void, String> {
 			url = URL_GEEKJAM; //URL_GEEKJAM;
 		return url;
 	}
+	
 	protected String doGetInBackground(Void...params) {
 	    
 		String 				result = "";

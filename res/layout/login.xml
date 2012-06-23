@@ -8,7 +8,7 @@
     android:baselineAligned="false"
     android:background="@drawable/application_background_trademark">
 
-	<LinearLayout
+	<RelativeLayout
 	    android:id="@+id/ScreenHeader"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
@@ -21,19 +21,19 @@
 	        android:layout_width="wrap_content"
 	        android:contentDescription="@string/app_name"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="1"
+			android:layout_alignParentLeft="true"	        
 	        android:src="@drawable/noteit_logo"/>
 	        
 	    <Button
 	        android:id="@+id/buttonRegister"
-	        android:layout_width="100dip"
+	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_gravity="center_vertical"
-	        android:layout_weight=".5"
+	        android:layout_alignParentRight="true"
+	        android:layout_centerInParent="true"
 	        android:text="@string/register"
 	        style="@style/App_Trademark_Button" />
     
-    </LinearLayout>
+    </RelativeLayout>
 		
     <LinearLayout
         android:layout_width="fill_parent"
@@ -55,7 +55,8 @@
 	        android:layout_height="wrap_content"
 		    android:selectAllOnFocus="true"
 	        android:inputType="textEmailAddress"
-	        android:hint="@string/login_emailhint" >
+	        android:hint="@string/login_emailhint"
+	        style="?NI_EditTextStyle" >
 	        <requestFocus />
 	    </EditText>
 	
@@ -73,7 +74,8 @@
 		    android:layout_height="wrap_content"
 		    android:selectAllOnFocus="true"
 		    android:inputType="textPassword"
-		    android:hint="@string/password_hint" />
+		    android:hint="@string/password_hint"
+		    style="?NI_EditTextStyle" />
 	
 		<RelativeLayout
 		    android:layout_width="fill_parent"
@@ -88,13 +90,13 @@
 		        android:layout_centerVertical="true"
 		        style="@style/HyperLink_ButtonStyle"
 		        android:text="@string/login_forgot_password" />
-		    
+
 		    <Button
 		        android:id="@+id/buttonLogin"
-		        android:layout_width="100dip"
-		        android:layout_height="wrap_content"
 		        android:layout_alignParentRight="true"
-		        android:text="@string/login_login" />
+		        android:layout_alignParentTop="true"
+		        android:text="@string/login_login"
+		        style="@style/App_Text_Button" />
 		    
 		</RelativeLayout>
     </LinearLayout>

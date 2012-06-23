@@ -782,6 +782,9 @@ public class ItemListActivity
 		case R.id.itemlist_scan:
 			doScanBarcode();
 			break;
+		case R.id.itemlist_logout:
+			doSignOut();
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -2277,13 +2280,16 @@ public class ItemListActivity
 	}
 
 	public void onSensorChanged(int sensor, float[] values) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void onAccuracyChanged(int sensor, int accuracy) {
-		// TODO Auto-generated method stub
-		
 	}
 	
+	private void doSignOut() {
+		Intent intent = new Intent(this, LoginActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.putExtra(LoginActivity.DONT_LOGIN, true);
+		startActivity(intent);
+		finish();
+	}
 }

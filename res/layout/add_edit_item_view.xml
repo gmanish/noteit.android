@@ -36,11 +36,11 @@
 	        android:layout_gravity="center_vertical|right"
 	        android:src="?Prev_Small"
 	        android:contentDescription="@string/itemlist_previous"
-	        style="@style/App_ButtonStyle" />
+	        style="@style/App_ImageButtonStyle" />
 		
 		<ImageButton
 		    android:id="@+id/addedit_btnNext"
-		    style="@style/App_ButtonStyle"
+		    style="@style/App_ImageButtonStyle"
 	        android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 	        android:layout_gravity="center_vertical|right"
@@ -148,7 +148,7 @@
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:src="@drawable/help" 
-		    android:background="@color/app_button_background" />
+		    style="@style/App_ImageButtonStyle" />
 
 	</LinearLayout>
 		

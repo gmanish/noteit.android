@@ -23,6 +23,6 @@
         android:paddingLeft="8dip"
         android:background="@android:color/transparent"
         android:src="@drawable/btn_dialog_normal" 
-        style="@style/App_ButtonStyle" />
+        style="@style/App_ImageButtonStyle" />
 
 </LinearLayout>

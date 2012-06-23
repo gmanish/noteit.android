@@ -25,4 +25,8 @@
 		android:icon="@drawable/settings"    		
         android:title="@string/noteit_prefs" />
         
+   <item android:id="@+id/itemlist_logout"
+		android:icon="@drawable/sign_out"    		
+        android:title="@string/dashboard_signout" />
+   
 </menu>

@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="App_Trademark_Button" parent="@android:style/Widget.Button.Inset">
-        <item name="android:background">@color/app_tm_textbutton_background</item>
-        <item name="android:padding">10dip</item>
-        <item name="android:textAppearance">@style/TextAppearance_Trademark.PendingItem_Small</item>
+    <style name="App_Text_Button" parent="@style/App_Button">
+        <item name="android:textColor">@color/noteit_trademark_dark</item>
     </style>
     
-	<!--  Style Definitions for Trademark Theme -->
+    <style name="App_Trademark_Button" parent="@style/App_Text_Button">
+        <item name="android:background">@color/app_tm_textbutton_background</item>
+    </style>
+    
+    <!--  Style Definitions for Trademark Theme -->
     <style name="NI_AppBackgroundNormal.Trademark">
-        <item name="android:background">@drawable/application_background_trademark</item>
+        <item name="android:background">@drawable/all_bg</item>
     </style>
 
 	<style name="App_TitleBackground_Trademark">
@@ -117,8 +119,8 @@
 
     <style name="NI_ListViewAttr_Trademark" parent="@android:style/Widget.AbsListView">
         
-        <item name="android:divider">@drawable/listview_group_separator_trademark</item>
-        <item name="android:childDivider">@drawable/listview_item_separator_trademark</item>
+        <item name="android:divider">@drawable/listview_separator_trademark</item>
+        <item name="android:childDivider">@drawable/listview_separator_trademark</item>
         <item name="android:background">@drawable/application_background_trademark</item>
         <item name="android:groupIndicator">@color/listitem_group_indicator_trademark</item>
         <item name="android:dividerHeight">2dip</item>
@@ -127,13 +129,17 @@
         <item name="android:fadingEdgeLength">8dip</item>
         <item name="android:listSelector">@color/listview_selector_trademark</item> 
         
-  	</style>
+   	</style>
+    
+	<style name="EditTextStyle_Trademark" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">@color/noteit_trademark_dark</item>
+	</style>
     
     <style name="NI_AppTheme.Trademark" parent="@android:style/Theme.Holo">
         
         <item name="android:windowTitleBackgroundStyle">@style/App_TitleBackground_Trademark</item>
-	    <item name="NI_ButtonStyle">@style/App_ButtonStyle</item>
-        <item name="NI_EditTextStyle">@style/App_EditTextStyle</item>
+	    <item name="NI_ButtonStyle">@style/App_ImageButtonStyle</item>
+        <item name="NI_EditTextStyle">@style/EditTextStyle_Trademark</item>
         <item name="NI_TitleBackground">@style/App_TitleBackground_Trademark</item>
         <item name="NI_StatusBackground">@style/App_StatusBackground_Trademark</item>
         <item name="NI_AppBackgroundNormal">@style/NI_AppBackgroundNormal.Trademark</item>

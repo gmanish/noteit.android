@@ -101,14 +101,18 @@
     
     </style>
     
+	<style name="EditTextStyle_Dark" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">#0000FF</item>
+	</style>
+	    
     <style name="TA_Item_Small.Dark" parent="@android:style/TextAppearance.Small">
     </style>
 		
     <style name="NI_AppTheme.Dark">
         
         <item name="android:windowTitleBackgroundStyle">@style/App_TitleBackground</item>
-	    <item name="NI_ButtonStyle">@style/App_ButtonStyle</item>
-        <item name="NI_EditTextStyle">@style/App_EditTextStyle</item>
+	    <item name="NI_ButtonStyle">@style/App_ImageButtonStyle</item>
+        <item name="NI_EditTextStyle">@style/EditTextStyle_Dark</item>
         <item name="NI_TitleBackground">@style/App_TitleBackground</item>
         <item name="NI_StatusBackground">@style/App_StatusBackground</item>
         <item name="NI_AppBackgroundNormal">@style/NI_AppBackgroundNormal.Dark</item>
