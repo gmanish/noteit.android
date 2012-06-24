@@ -65,7 +65,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="@string/login_password"
-	        android:paddingTop="10dip"
+	        android:paddingTop="8dip"
 	        style="@style/TextAppearance.TradeMarkDark" />
 	
 		<EditText
@@ -80,7 +80,6 @@
 		<RelativeLayout
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content" >
-		    
 
 		    <Button
 		        android:id="@+id/buttonForgotPassword"
@@ -94,7 +93,7 @@
 		    <Button
 		        android:id="@+id/buttonLogin"
 		        android:layout_alignParentRight="true"
-		        android:layout_alignParentTop="true"
+		        android:layout_centerVertical="true"
 		        android:text="@string/login_login"
 		        style="@style/App_Text_Button" />
 		    

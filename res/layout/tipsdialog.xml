@@ -5,23 +5,23 @@
     android:layout_height="wrap_content"
     android:padding="8dip"
     android:orientation="horizontal"
-    style="?NI_TitleBackground" >
+    style="?Tips_Background" >
 
     <TextView
         android:id="@+id/textInfo"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/register_termsandconditions"
+        android:text="@string/register_termsandconditions" 
         style="?TextAppearance_Footer" />
 
     <ImageButton
         android:id="@+id/btnClose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="0dip"
         android:layout_gravity="top|right"
-        android:paddingLeft="8dip"
-        android:background="@android:color/transparent"
         android:src="@drawable/btn_dialog_normal" 
         style="@style/App_ImageButtonStyle" />
 

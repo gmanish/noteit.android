@@ -3,6 +3,7 @@ package com.geekjamboree.noteit;
 import android.app.Service;
 import android.content.Context;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,11 +46,12 @@ class FloatingPopup extends PopupWindow {
 				setContentView(mContentView);
 				setWidth(LayoutParams.WRAP_CONTENT);
 				setHeight(LayoutParams.WRAP_CONTENT);
+				setBackgroundDrawable(new ColorDrawable(android.R.color.transparent));
+				setAnimationStyle(android.R.anim.fade_in);
 				setTouchable(true);
-				setFocusable(false);
+				setFocusable(true);
 				setOutsideTouchable(true);
 				setTouchInterceptor(mTouchListener);
-				setAnimationStyle(R.style.Animations_PopDownMenu_Reflect);
 				TextView textView = (TextView) mContentView.findViewById(R.id.textInfo);
 				if (textView != null) {
 					textView.setText(text);

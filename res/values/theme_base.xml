@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="NI_ThemeBase" 	parent="@android:style/Theme" />
+    <style name="NI_ButtonBase"	parent="@android:style/Widget.Button.Small" />
+</resources>

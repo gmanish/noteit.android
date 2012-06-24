@@ -24,6 +24,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class LoginActivity 
@@ -271,26 +272,16 @@ public class LoginActivity
 	}
     
     protected void showIndeterminateProgress() {
-		ProgressBar progressBar = (ProgressBar) findViewById(R.id.login_progress);
-		if (progressBar != null) {
-			progressBar.setVisibility(View.VISIBLE);
-		}
-
-		TextView	progressMessage = (TextView) findViewById(R.id.login_progress_message);
-		if (progressMessage != null) {
-			progressMessage.setVisibility(View.VISIBLE);
+    	RelativeLayout progressPanel = (RelativeLayout) findViewById(R.id.login_bottom_root);
+		if (progressPanel != null) {
+			progressPanel.setVisibility(View.VISIBLE);
 		}
 	}
 	
 	protected void hideIndeterminateProgress() {
-		ProgressBar progressBar = (ProgressBar) findViewById(R.id.login_progress);
-		if (progressBar != null) {
-			progressBar.setVisibility(View.GONE);
-		}
-
-		TextView	progressMessage = (TextView) findViewById(R.id.login_progress_message);
-		if (progressMessage != null) {
-			progressMessage.setVisibility(View.GONE);
+		RelativeLayout progressPanel = (RelativeLayout) findViewById(R.id.login_bottom_root);
+		if (progressPanel != null) {
+			progressPanel.setVisibility(View.GONE);
 		}
 	}
 	

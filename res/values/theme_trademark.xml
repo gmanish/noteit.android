@@ -32,8 +32,8 @@
 	</style>
 
 	<!-- Colors used to provide a bevelled look to the titlebar -->
-	<color name="noteit_trademark_darker">#4a3312</color>
-	<color name="noteit_trademark_darkest">#4b2b00</color>
+	<color name="noteit_trademark_darker">#4d4026</color>
+	<color name="noteit_trademark_darkest">#40341f</color>
 	
 	<!-- Colors used to provide a bevelled look to the statusbar -->
 	<color name="noteit_trademark_dark_lighter">#4b453f</color>
@@ -115,6 +115,7 @@
 	    
 	<style name="TextAppearance_Trademark.Footer" parent="@android:style/TextAppearance.Small">
 	    <item name="android:textColor">@color/TextColor_Primary_Trademark_Light</item>
+	    <item name="android:textSize">12sp</item>
 	</style>
 
     <style name="NI_ListViewAttr_Trademark" parent="@android:style/Widget.AbsListView">
@@ -135,7 +136,7 @@
         <item name="android:textColor">@color/noteit_trademark_dark</item>
 	</style>
     
-    <style name="NI_AppTheme.Trademark" parent="@android:style/Theme.Holo">
+    <style name="NI_AppTheme.Trademark" parent="@style/NI_ThemeBase">
         
         <item name="android:windowTitleBackgroundStyle">@style/App_TitleBackground_Trademark</item>
 	    <item name="NI_ButtonStyle">@style/App_ImageButtonStyle</item>

@@ -127,10 +127,10 @@ public class TitleBar extends LinearLayout {
     	lp.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
     	lp.leftMargin = separatorBefore == true ? mButtonMargin : 0;
     	lp.rightMargin = separatorAfter == true ? mButtonMargin : 0;
-    	ImageButton button = new ImageButton(getContext());
+    	ImageButton button = new ImageButton(getContext(), null, R.attr.NI_ButtonStyle);
     	button.setLayoutParams(lp);
     	button.setPadding(mButtonPadding, mButtonPadding, mButtonPadding, mButtonPadding);
-    	button.setBackgroundResource(R.color.app_button_background);
+//    	button.setBackgroundResource(R.color.app_button_background);
     	button.setImageResource(id);
     	mTitleRoot.addView(button, mIndex++);
     	return button;
@@ -146,10 +146,10 @@ public class TitleBar extends LinearLayout {
     	lp.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
     	lp.leftMargin = separatorBefore == true ? mButtonMargin : 0;
     	lp.rightMargin = separatorAfter == true ? mButtonMargin : 0;
-    	ImageButton button = new ImageButton(getContext());
+    	ImageButton button = new ImageButton(getContext(), null, R.attr.NI_ButtonStyle);
     	button.setLayoutParams(lp);
     	button.setPadding(mButtonPadding, mButtonPadding, mButtonPadding, mButtonPadding);
-    	button.setBackgroundResource(R.color.app_button_background);
+//    	button.setBackgroundResource(R.color.app_button_background);
     	button.setImageResource(id);
     	mTitleRoot.addView(button);
     	return button;
