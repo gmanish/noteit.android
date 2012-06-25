@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:padding="8dip"
     android:orientation="horizontal"
-    style="?Tips_Background" >
+    android:background="@drawable/application_tips_trademark" >
 
     <TextView
         android:id="@+id/textInfo"
@@ -19,8 +19,7 @@
         android:id="@+id/btnClose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:padding="0dip"
+        android:paddingLeft="8dip"
         android:layout_gravity="top|right"
         android:src="@drawable/btn_dialog_normal" 
         style="@style/App_ImageButtonStyle" />

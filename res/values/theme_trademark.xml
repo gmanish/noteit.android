@@ -111,6 +111,7 @@
 
 	<style name="TextAppearance_Trademark.SubItem" parent="@android:style/TextAppearance.Small">
 	    <item name="android:textColor">@color/TextColor_Secondary_Trademark</item>
+	    <item name="android:textSize">12sp</item>
 	</style>
 	    
 	<style name="TextAppearance_Trademark.Footer" parent="@android:style/TextAppearance.Small">
