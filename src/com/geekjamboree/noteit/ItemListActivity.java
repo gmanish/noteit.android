@@ -573,10 +573,10 @@ public class ItemListActivity
 			if (listName != null) {
 				if (item.mUserID != ((NoteItApplication) getApplication()).getUserID())
 					listName.setCompoundDrawablesWithIntrinsicBounds(
-							getResourceIdFromAttribute(R.attr.SharedShoppingList), 0, 0, 0);
+							getResourceIdFromAttribute(R.attr.Spinner_SharedShoppingList), 0, 0, 0);
 				else 
 					listName.setCompoundDrawablesWithIntrinsicBounds(
-							getResourceIdFromAttribute(R.attr.ShoppingList_Cart), 0, 0, 0);
+							getResourceIdFromAttribute(R.attr.Spinner_ShoppingList_Cart), 0, 0, 0);
 			}
 
 			TextView listCount = (TextView) view.findViewById(R.id.shoppinglist_itemCount);
@@ -1607,7 +1607,7 @@ public class ItemListActivity
     	ArrayList<ShoppingList> shoppingList = app.getShoppingList();
     	ShoppingListAdapterWithIcons adapter = new ShoppingListAdapterWithIcons(
     			this, 
-    			R.layout.shoppinglists_item,
+    			R.layout.spinner_shoppinglists_item,
     			R.id.shoppinglist_name,
     			shoppingList);
     	AlertDialog shoppingLists = new AlertDialog.Builder(this)

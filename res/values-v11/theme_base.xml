@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="NI_ThemeBase" 	parent="@android:style/Theme.Holo" />
+    <style name="NI_ThemeBase" 	parent="@android:style/Theme.Holo">
+		<item name="Spinner_ShoppingList_Cart">@drawable/cart</item>
+		<item name="Spinner_SharedShoppingList">@drawable/cart_shared</item>
+    </style>
+    
     <style name="NI_ButtonBase"	parent="@android:style/Widget.Holo.Button.Small" />
+    	
 </resources>

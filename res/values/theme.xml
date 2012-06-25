@@ -15,7 +15,7 @@
     
     <style name="App_ImageButtonStyle" parent="@android:style/Widget.ImageButton">
         <item name="android:gravity">center</item>
-        <item name="android:background">@android:color/transparent</item>
+        <item name="android:background">@color/listview_selector_trademark</item>
 	</style>
 	
     <style name="HyperLink_ButtonStyle" parent="@style/App_ImageButtonStyle">

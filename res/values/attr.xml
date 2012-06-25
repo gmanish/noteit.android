@@ -42,6 +42,8 @@
 	<attr name="Dashboard_Reports" format="reference"></attr>
 	<attr name="ShoppingList_Cart" format="reference"></attr>
 	<attr name="SharedShoppingList" format="reference"></attr>
+	<attr name="Spinner_ShoppingList_Cart" format="reference"></attr>
+	<attr name="Spinner_SharedShoppingList" format="reference"></attr>
 	<attr name="Disclosure" format="reference"></attr>
 	<attr name="Category_Small" format="reference"></attr>
 	<attr name="Category_Shared_Small" format="reference"></attr>
