@@ -75,10 +75,12 @@
 
 	<style name="TextAppearance_Dark.SubItem" parent="@android:style/TextAppearance.Small">
 		<item name="android:textColor">#808080</item>
+	    <item name="android:textSize">12sp</item>
 	</style>
 	    
-	<style name="Footer" parent="@android:style/TextAppearance.Small">
+	<style name="TextAppearance_Dark.Footer" parent="@android:style/TextAppearance.Small">
 	    <item name="android:textColor">#808080</item>
+	    <item name="android:textSize">12sp</item>
     </style>
 
 	<!--  Style Definitions for Dark Theme -->
@@ -86,14 +88,13 @@
     </style>
     
     <style name="NI_AppBackgroundNormal.Dark">
-        <item name="android:background">@drawable/application_background_dark</item>
+        <item name="android:background">@drawable/all_bg_dark</item>
     </style>
     
     <style name="NI_ListViewAttr_Dark" parent="@android:style/Widget.AbsListView">
         
         <item name="android:divider">@drawable/listview_group_separator_dark</item>
         <item name="android:childDivider">@drawable/listview_item_separator_dark</item>
-        <item name="android:background">@drawable/application_background_dark</item>
         <item name="android:groupIndicator">@color/listitem_group_indicator_dark</item>
         <item name="android:dividerHeight">2dip</item>
 		<item name="android:cacheColorHint">#00000000</item>
@@ -108,7 +109,7 @@
     <style name="TA_Item_Small.Dark" parent="@android:style/TextAppearance.Small">
     </style>
 		
-    <style name="NI_AppTheme.Dark">
+    <style name="NI_AppTheme.Dark" parent="@style/NI_ThemeBase">
         
         <item name="android:windowTitleBackgroundStyle">@style/App_TitleBackground</item>
 	    <item name="NI_ButtonStyle">@style/App_ImageButtonStyle</item>
@@ -140,7 +141,7 @@
 		<item name="TextAppearance_Item_SubItem_Medium">@style/TextAppearance_Dark.SubItem</item>
 		<item name="TextAppearance_Item_SubItem_Large">@style/TextAppearance_Dark.SubItem</item>
 		
-		<item name="TextAppearance_Footer">@style/Footer</item>
+		<item name="TextAppearance_Footer">@style/TextAppearance_Dark.Footer</item>
 		
 		<item name="Report_Header_HTML">@string/reporting_category_head_dark</item>
 		<item name="Report_Item_HTML">@string/reporting_category_report_item_dark</item>
