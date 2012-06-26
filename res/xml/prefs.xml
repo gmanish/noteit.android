@@ -49,13 +49,6 @@
 		android:title="Shopping Lists"
 		android:key="Shopping_Lists" >
 	    
-	    <CheckBoxPreference
-	    	android:title="Display Pending Items Count"
-	    	android:key="Display_Pending_Item_Count"
-	    	android:summaryOff="Do not display the number of pending Items in every Shopping List."
-	    	android:summaryOn="Display number of pending Items in each Shopping List. Turn off for faster loading."
-	    	android:defaultValue="true" />
-
 	    <EditTextPreference 
 	        android:title="Taxes"
 	        android:key="taxes"

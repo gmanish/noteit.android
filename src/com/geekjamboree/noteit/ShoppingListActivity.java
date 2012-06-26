@@ -45,7 +45,6 @@ public class ShoppingListActivity
 	int						mFontSize = 3;
 	boolean					mIsShoppingListFetched = false;
 	boolean					mIsDisplayCount	= true;
-	SharedPreferences 		mPrefs;
 	static final String		IS_SHOPPINGLIST_FETCHED = "IS_SHOPPINGLIST_FETCHED";
 	
 
@@ -126,9 +125,6 @@ public class ShoppingListActivity
     			((NoteItApplication)getApplication()).getShoppingList());
 		mListView.setAdapter(mAdapter);
     	
-		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-    	mIsDisplayCount = mPrefs.getBoolean("Display_Pending_Item_Count", true);
-		
 		class ItemClickAndPostExecuteListener 
     		implements AdapterView.OnItemClickListener {
     		
@@ -151,7 +147,7 @@ public class ShoppingListActivity
 		Log.i("ShoppingListActivity.onCreate", "onCreate called");
 		if (!mIsShoppingListFetched) {
 			mToolbar.showInderminateProgress(getString(R.string.progress_message));
-        	((NoteItApplication) getApplication()).fetchShoppingLists(mIsDisplayCount, this);
+        	((NoteItApplication) getApplication()).fetchShoppingLists(true, this);
 		}
         else {
         	Log.i("ShoppingListActivity:onCreate", "Skipping fetchShoppingLists()");

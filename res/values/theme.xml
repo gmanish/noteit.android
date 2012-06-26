@@ -6,6 +6,11 @@
     <color name="noteit_trademark_light">#fcd42a</color>
     <color name="noteit_header_textcolor">#FDFDFD</color>
     
+	<style name="Theme.Splash" parent="android:Theme">
+		<item name="android:windowBackground">@drawable/bg_dark</item>
+		<item name="android:windowNoTitle">true</item>
+	</style>
+	
     <style name="App_Button" parent="@style/NI_ButtonBase">
         <item name="android:minWidth">90dip</item>
         <item name="android:minHeight">40dip</item>

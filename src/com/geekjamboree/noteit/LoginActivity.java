@@ -31,8 +31,8 @@ public class LoginActivity
 	extends Activity 
 	implements OnMethodExecuteListerner {
 	
-	static final String		DONT_LOGIN = "DONT_LOGIN";
-	static final String		DISPLAY_UNREAD_MESSAGES = "DISPLAY_UNREAD_MESSAGES";
+	public static final String		DONT_LOGIN = "DONT_LOGIN";
+	public static final String		DISPLAY_UNREAD_MESSAGES = "DISPLAY_UNREAD_MESSAGES";
 	
 	SharedPreferences		mPrefs;
 	boolean					mIsHashedPassword = false;
@@ -81,7 +81,6 @@ public class LoginActivity
             public void onClick(View view) {
             	doLogin();
             }
-
         });
         
         Button register = (Button) findViewById(R.id.buttonRegister);

@@ -35,6 +35,7 @@ class FloatingPopup extends PopupWindow {
 		public void onDismiss();
 	}
 	
+	@SuppressWarnings("deprecation")
 	private FloatingPopup(Context context, View anchor, String text, OnDismissListener listener) {
 		super(context);
 		mAnchor = anchor;
