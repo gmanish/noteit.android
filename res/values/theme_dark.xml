@@ -88,13 +88,13 @@
     </style>
     
     <style name="NI_AppBackgroundNormal.Dark">
-        <item name="android:background">@drawable/all_bg_dark</item>
+        <item name="android:background">@drawable/bg_dark</item>
     </style>
     
     <style name="NI_ListViewAttr_Dark" parent="@android:style/Widget.AbsListView">
         
-        <item name="android:divider">@drawable/listview_group_separator_dark</item>
-        <item name="android:childDivider">@drawable/listview_item_separator_dark</item>
+        <item name="android:divider">@drawable/listview_separator_trademark</item>
+        <item name="android:childDivider">@drawable/listview_separator_trademark</item>
         <item name="android:groupIndicator">@color/listitem_group_indicator_dark</item>
         <item name="android:dividerHeight">2dip</item>
 		<item name="android:cacheColorHint">#00000000</item>
@@ -164,7 +164,7 @@
 		<item name="Popup_Background">@drawable/popup</item>
 		<item name="Popup_Up">@drawable/arrow_up</item>
 		<item name="Popup_Down">@drawable/arrow_down</item>
-		<item name="Like_Small">@drawable/thumbs_up_dark_small</item>
+		<item name="Like_Small">@drawable/thumbs_up_light_small</item>
 		<item name="Reports_Small">@drawable/reports_small_light</item>
 		
 	</style>
