@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 
 public class SplashScreen extends Activity implements OnMethodExecuteListerner {
 
@@ -23,6 +24,7 @@ public class SplashScreen extends Activity implements OnMethodExecuteListerner {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.splash_screen);
 		mContentView = findViewById(R.id.splash_root);
 		

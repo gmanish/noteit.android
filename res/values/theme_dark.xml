@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+	<style name="Theme.Splash.Dark" parent="android:Theme">
+		<item name="android:windowBackground">@drawable/bg_dark</item>
+		<item name="android:windowNoTitle">true</item>
+	</style>
+    
 	<style name="App_TitleBackground">
 		<item name="android:background">@drawable/application_titlebar_dark</item>
     </style>
@@ -122,7 +127,8 @@
         <item name="NI_AppBackgroundNormal">@style/NI_AppBackgroundNormal.Dark</item>
         <item name="NI_ListViewAttr">@style/NI_ListViewAttr_Dark</item>
         <item name="NI_VerticalSeparator">@drawable/vertical_separator_dark</item>
-		<item name="AddEdit_Widget">@style/AddEdit_Widget_Dark</item>
+        <item name="NI_Splash_Style">@style/Theme.Splash.Dark</item>
+        <item name="AddEdit_Widget">@style/AddEdit_Widget_Dark</item>
 		
 		<item name="TextAppearance_Group_Small">@style/TextAppearance_Dark.GroupsItem_Small</item>
 		<item name="TextAppearance_Group_Medium">@style/TextAppearance_Dark.GroupsItem_Medium</item>

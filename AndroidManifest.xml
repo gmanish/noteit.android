@@ -17,7 +17,7 @@
         android:label="@string/app_name" 
         android:theme="@style/NI_AppTheme.Dark"
         android:name="NoteItApplication">
-        <activity android:name="SplashScreen" android:theme="@style/Theme.Splash">
+        <activity android:name="SplashScreen" android:theme="@attr/NI_Splash_Style">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -6,11 +6,6 @@
     <color name="noteit_trademark_light">#fcd42a</color>
     <color name="noteit_header_textcolor">#FDFDFD</color>
     
-	<style name="Theme.Splash" parent="android:Theme">
-		<item name="android:windowBackground">@drawable/bg_dark</item>
-		<item name="android:windowNoTitle">true</item>
-	</style>
-	
     <style name="App_Button" parent="@style/NI_ButtonBase">
         <item name="android:minWidth">90dip</item>
         <item name="android:minHeight">40dip</item>
@@ -20,9 +15,9 @@
     
     <style name="App_ImageButtonStyle" parent="@android:style/Widget.ImageButton">
         <item name="android:gravity">center</item>
-        <item name="android:background">@color/listview_selector_trademark</item>
-	</style>
-	
+        <item name="android:background">@color/app_button_background</item>
+    </style>
+    	
     <style name="HyperLink_ButtonStyle" parent="@style/App_ImageButtonStyle">
         <item name="android:textSize">12sp</item>
     	<item name="android:textColor">#0000C0</item>  

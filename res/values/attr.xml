@@ -6,7 +6,7 @@
 	<attr name="NI_ButtonStyle" format="reference"></attr>
 	<attr name="NI_EditTextStyle" format="reference"></attr>
 	<attr name="NI_VerticalSeparator" format="reference"></attr>
-	
+	<attr name="NI_Splash_Style" format="reference"></attr>	
 	<attr name="NI_ListViewAttr" format="reference"></attr>
 	
 	<attr name="AddEdit_Widget" format="reference"></attr>

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+	<style name="Theme.Splash.Trademark" parent="android:Theme">
+		<item name="android:windowBackground">@drawable/all_bg</item>
+		<item name="android:windowNoTitle">true</item>
+	</style>
+    
     <style name="App_Text_Button" parent="@style/App_Button">
         <item name="android:textColor">@color/noteit_trademark_dark</item>
     </style>
@@ -147,6 +152,7 @@
         <item name="NI_AppBackgroundNormal">@style/NI_AppBackgroundNormal.Trademark</item>
         <item name="NI_ListViewAttr">@style/NI_ListViewAttr_Trademark</item>
         <item name="NI_VerticalSeparator">@drawable/vertical_separator_trademark</item>
+        <item name="NI_Splash_Style">@style/Theme.Splash.Trademark</item>
         <item name="AddEdit_Widget">@style/AddEdit_Widget_Trademark</item>
 		
 		<item name="TextAppearance_Group_Small">@style/TextAppearance_Trademark.GroupsItem_Small</item>
