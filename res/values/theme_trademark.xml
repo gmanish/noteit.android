@@ -39,11 +39,7 @@
 	<!-- Colors used to provide a bevelled look to the titlebar -->
 	<color name="noteit_trademark_darker">#4d4026</color>
 	<color name="noteit_trademark_darkest">#40341f</color>
-	
-	<!-- Colors used to provide a bevelled look to the statusbar -->
-	<color name="noteit_trademark_dark_lighter">#4b453f</color>
-	<color name="noteit_trademark_dark_lightest">#776041</color>
-	
+		
 	<!-- Dark Text Colors  -->
 	<color name="TextColor_Primary_Trademark">@color/textcolor_primary_trademark</color>
 	<color name="TextColor_Secondary_Trademark">#665839</color>

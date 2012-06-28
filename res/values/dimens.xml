@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="listivew_text_height">25dp</dimen>
-    <dimen name="listview_icon_height">22px</dimen>
-    <dimen name="addedit_item_height">30dp</dimen>
-</resources>

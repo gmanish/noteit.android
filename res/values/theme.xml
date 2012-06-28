@@ -39,21 +39,11 @@
 	    <item name="android:textColor">@color/noteit_trademark_dark</item>
     </style>
 	
-	<style name="TextAppearance.TradeMarkLight" parent="@android:style/TextAppearance.Small">
-	    <item name="android:background">@color/noteit_trademark_light</item>
-	    <item name="android:textColor">#808080</item>
-    </style>
-   
 	<style name="TextAppearance.TradeMarkDark.Small" parent="@android:style/TextAppearance.Small">
 	    <item name="android:background">@android:color/transparent</item>
 	    <item name="android:textColor">@color/noteit_trademark_dark</item>
     </style>
 	
-	<style name="TextAppearance.TradeMarkLight.Small" parent="@android:style/TextAppearance.Small">
-	    <item name="android:background">@color/noteit_trademark_light</item>
-	    <item name="android:textColor">#808080</item>
-    </style>
-
 	<!-- Theme Definitions  --> 	
     <style name="NI_AppTheme" parent="android:Theme">
         <item name="android:windowNoTitle">true</item>

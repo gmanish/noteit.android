@@ -1168,12 +1168,13 @@ public class ItemListActivity
 		    mSelectedChild.get() < adapter.getChildrenCount(mSelectedGroup.get()) &&
 		    mSelectedChild.get() >= 0) {
 			
-	    	final NoteItApplication 	app = (NoteItApplication) getApplication();
-	    	ArrayList<ShoppingList> 	shoppingList = app.getShoppingList();
-	    	ArrayAdapter<ShoppingList> 	shopListAdapter = new ArrayAdapter<ShoppingList>(
-				this, 
-				android.R.layout.simple_dropdown_item_1line,
-				shoppingList);
+	    	final NoteItApplication 		app = (NoteItApplication) getApplication();
+	    	ArrayList<ShoppingList> 		shoppingList = app.getShoppingList();
+	    	ShoppingListAdapterWithIcons 	shopListAdapter = new ShoppingListAdapterWithIcons(
+	    			this, 
+	    			R.layout.spinner_shoppinglists_item,
+	    			R.id.shoppinglist_name,
+	    			shoppingList);
 	    	AlertDialog shoppingLists = new AlertDialog.Builder(this)
 	    		.setTitle(getResources().getString(R.string.itemlist_copytolist))
 	    		.setAdapter(shopListAdapter, new DialogInterface.OnClickListener() {
@@ -1227,15 +1228,16 @@ public class ItemListActivity
 		    mSelectedChild.get() < adapter.getChildrenCount(mSelectedGroup.get()) &&
 		    mSelectedChild.get() >= 0) {
 			
-	    	final NoteItApplication 	app = (NoteItApplication) getApplication();
-	    	ArrayList<ShoppingList> 	shoppingList = app.getShoppingList();
-	    	ArrayAdapter<ShoppingList> 	shopListadapter = new ArrayAdapter<ShoppingList>(
-				this, 
-				android.R.layout.simple_dropdown_item_1line,
-				shoppingList);
+	    	final NoteItApplication 		app = (NoteItApplication) getApplication();
+	    	ArrayList<ShoppingList> 		shoppingList = app.getShoppingList();
+	    	ShoppingListAdapterWithIcons 	shopListAdapter = new ShoppingListAdapterWithIcons(
+	    			this, 
+	    			R.layout.spinner_shoppinglists_item,
+	    			R.id.shoppinglist_name,
+	    			shoppingList);
 	    	AlertDialog shoppingLists = new AlertDialog.Builder(this)
 	    		.setTitle(getResources().getString(R.string.itemlist_movetolist))
-	    		.setAdapter(shopListadapter, new DialogInterface.OnClickListener() {
+	    		.setAdapter(shopListAdapter, new DialogInterface.OnClickListener() {
 					
 					public void onClick(DialogInterface dialog, int which) {
 

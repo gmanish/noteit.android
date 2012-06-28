@@ -115,13 +115,6 @@
     
     </style>
     
-	<style name="EditTextStyle_Dark" parent="@android:style/Widget.EditText">
-        <item name="android:textColor">#0000FF</item>
-	</style>
-	    
-    <style name="TA_Item_Small.Dark" parent="@android:style/TextAppearance.Small">
-    </style>
-		
     <style name="NI_AppTheme.Dark" parent="@style/NI_ThemeBase">
         
         <item name="android:windowTitleBackgroundStyle">@style/App_TitleBackground</item>
