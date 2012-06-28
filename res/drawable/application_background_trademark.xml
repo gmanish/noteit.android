@@ -6,4 +6,4 @@
  -->	
 <bitmap
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:src="@drawable/all_bg" />
+    android:src="@drawable/bg_trademark" />

@@ -2,7 +2,7 @@
 <resources>
 
 	<style name="Theme.Splash.Trademark" parent="android:Theme">
-		<item name="android:windowBackground">@drawable/all_bg</item>
+		<item name="android:windowBackground">@drawable/bg_trademark</item>
 		<item name="android:windowNoTitle">true</item>
 	</style>
     
@@ -16,7 +16,7 @@
     
     <!--  Style Definitions for Trademark Theme -->
     <style name="NI_AppBackgroundNormal.Trademark">
-        <item name="android:background">@drawable/all_bg</item>
+        <item name="android:background">@drawable/bg_trademark</item>
     </style>
 
 	<style name="App_TitleBackground_Trademark">
