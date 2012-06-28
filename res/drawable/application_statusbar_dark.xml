@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    
-<!--     <gradient 
-        android:startColor="#404040"
-        android:endColor="#404040"
-        android:angle="90" />
- -->
-	<solid 
-	    android:color="#202020"/>
-	
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+	<item>
+		<shape android:shape="rectangle">
+		    <solid android:color="@color/noteit_dark" />
+		</shape> 
+	</item>
+    <item android:top="2dip">
+		<shape android:shape="rectangle">
+		    <solid android:color="@color/noteit_dark_darker" />
+		</shape> 
+	</item>
+	<item android:top="4dip">
+		<shape android:shape="rectangle">
+		    <solid android:color="@color/noteit_dark_darkest" />
+		</shape> 
+	</item>
+</layer-list>
