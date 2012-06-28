@@ -44,6 +44,7 @@ public class MainPreferenceActivity extends PreferenceActivity {
 		}
 	};	
 
+	@SuppressWarnings("deprecation")
 	public void onCreate(Bundle savedInstanceState){
         
         super.onCreate(savedInstanceState);

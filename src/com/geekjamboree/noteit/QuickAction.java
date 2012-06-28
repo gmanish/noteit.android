@@ -11,6 +11,7 @@ import android.widget.ScrollView;
 import android.widget.RelativeLayout;
 import android.widget.PopupWindow.OnDismissListener;
 
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -196,7 +197,7 @@ class QuickAction extends PopupWindows implements OnDismissListener {
 		if (mOrientation == HORIZONTAL && mChildPos != 0) {
             View separator = mInflater.inflate(R.layout.horiz_separator, null);
             
-			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
             
             separator.setLayoutParams(params);
             separator.setPadding(5, 0, 5, 0);
@@ -240,8 +241,11 @@ class QuickAction extends PopupWindows implements OnDismissListener {
 			rootWidth		= mRootView.getMeasuredWidth();
 		}
 		
-		int screenWidth 	= mWindowManager.getDefaultDisplay().getWidth();
-		int screenHeight	= mWindowManager.getDefaultDisplay().getHeight();
+		DisplayMetrics metrics = new DisplayMetrics();
+		mWindowManager.getDefaultDisplay().getMetrics(metrics);
+		
+		int screenWidth = metrics.widthPixels;
+		int screenHeight = metrics.heightPixels;
 		
 		//automatically get X coord of popup (top left)
 		if ((anchorRect.left + rootWidth) > screenWidth) {

@@ -307,6 +307,7 @@ public class ItemListActivity
 		        }
 			};
 	
+	@SuppressWarnings("deprecation")
 	protected GestureDetector mGestureDetector = new GestureDetector(mGestureListener);
 	
 	protected View.OnTouchListener mTouchListener = 
@@ -448,6 +449,7 @@ public class ItemListActivity
 			}
 		}
 
+		@SuppressWarnings("deprecation")
 		public void onSensorChanged(SensorEvent se) {
 	  		
 	  		Log.d("onSensorChanged", "X: " + se.values[SensorManager.DATA_X] + " Y: " + se.values[SensorManager.DATA_Y] + " Z: " + se.values[SensorManager.DATA_Z]);
@@ -893,9 +895,10 @@ public class ItemListActivity
 		    					
 		    					dialog.setTitle(getResources().getString(R.string.addedit_Title));
 		    					dialog.setMessage(getResources().getString(R.string.itemlist_itemnotfound));
-		    					dialog.setButton(DialogInterface.BUTTON1, "Yes", new DialogInterface.OnClickListener() {
+		    					dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
 		    						
-		    						public void onClick(DialogInterface dialog, int which) {
+		    						@SuppressWarnings("deprecation")
+									public void onClick(DialogInterface dialog, int which) {
 		    							dialog.dismiss();
 	    			    				mTempItemToPassToDialog = app.new Item();
 	    			    				mTempItemToPassToDialog.mBarcodeFormat = NoteItApplication.barcodeFormatFromString(scanResult.getFormatName());
@@ -904,7 +907,7 @@ public class ItemListActivity
 		    						}
 		    					});
 		    			
-		    					dialog.setButton(DialogInterface.BUTTON2, "No", new DialogInterface.OnClickListener() {
+		    					dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
 		    						
 		    						public void onClick(DialogInterface dialog, int which) {
 		    							dialog.dismiss();
@@ -943,15 +946,18 @@ public class ItemListActivity
     protected void setUpQuickActions() {
 	}
     
-    protected void doAddItem() {
+    @SuppressWarnings("deprecation")
+	protected void doAddItem() {
     	showDialog(DIALOG_ADD_ITEM);
     }
     
-    protected void doEditItem() {
+    @SuppressWarnings("deprecation")
+	protected void doEditItem() {
     	showDialog(DIALOG_EDIT_ITEM);
     }
     
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
 	protected Dialog onCreateDialog(int id) {
 
     	switch (id) {
@@ -1016,6 +1022,7 @@ public class ItemListActivity
     	}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onPrepareDialog(int id, Dialog dialog) {
 		
@@ -1509,7 +1516,7 @@ public class ItemListActivity
 		dialog.setOwnerActivity(this);
 		final EditText editPrice = (EditText) dialogView.findViewById(R.id.dialog_addshoppinglist_editTextName);
 		dialog.setButton(
-				DialogInterface.BUTTON1, 
+				DialogInterface.BUTTON_NEGATIVE, 
 				getResources().getString(R.string.Skip), 
 				new DialogInterface.OnClickListener() {
 			
@@ -1520,7 +1527,7 @@ public class ItemListActivity
 			}
 		});
 		dialog.setButton(
-				DialogInterface.BUTTON2, 
+				DialogInterface.BUTTON_POSITIVE, 
 				getResources().getString(R.string.OK), 
 				new DialogInterface.OnClickListener() {
 		
@@ -1758,7 +1765,7 @@ public class ItemListActivity
 			.create();
 
 		editListName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-		dialog.setButton(DialogInterface.BUTTON1, "OK", new DialogInterface.OnClickListener() {
+		dialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
 			
 			public void onClick(DialogInterface dialog, int which) {
 				
@@ -1789,7 +1796,7 @@ public class ItemListActivity
 			}
 		});
 	
-		dialog.setButton(DialogInterface.BUTTON2, "Cancel", new DialogInterface.OnClickListener() {
+		dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
 			
 			public void onClick(DialogInterface dialog, int which) {
 				Log.e("AddShoppingList", "Cancel");
@@ -2079,7 +2086,7 @@ public class ItemListActivity
 	    public void setViewParams(View view, int height) {
 
 	    	 ViewGroup.LayoutParams params = new AbsListView.LayoutParams(
-		                ViewGroup.LayoutParams.FILL_PARENT, 
+		                ViewGroup.LayoutParams.MATCH_PARENT, 
 		                height);
 	        
 	        view.setLayoutParams(params);
@@ -2112,11 +2119,11 @@ public class ItemListActivity
     	        ViewGroup.LayoutParams 	params = (ViewGroup.LayoutParams) parent.getLayoutParams();
     	        
     	        if (params != null) {  
-    	            params.width = ViewGroup.LayoutParams.FILL_PARENT;
+    	            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
     	            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
     	        } else {
     	        	params = new AbsListView.LayoutParams(
-    		                ViewGroup.LayoutParams.FILL_PARENT, 
+    		                ViewGroup.LayoutParams.MATCH_PARENT, 
     		                ViewGroup.LayoutParams.WRAP_CONTENT);
     	        }	
 
@@ -2136,7 +2143,7 @@ public class ItemListActivity
 			        }
 			        
 			        textView.setText(thisItem.mName.toString());
-			        textView.setBackgroundColor(android.R.color.transparent);
+			        textView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 	        	}
 	        	
 	        	if (mDisplayExtras && quantity != null && thisItem.mQuantity > 0 ) {

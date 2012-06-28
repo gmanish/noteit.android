@@ -264,7 +264,7 @@ public class ShoppingListActivity
 			final EditText 	editListName = (EditText) dialogView.findViewById(R.id.dialog_addshoppinglist_editTextName);
 			editListName.setText(((ShoppingList)mListView.getItemAtPosition(index)).mName);
 
-			dialog.setButton(DialogInterface.BUTTON2, "OK", new DialogInterface.OnClickListener() {
+			dialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
 				
 				public void onClick(DialogInterface dialog, int which) {
 					String 	listName = editListName.getText().toString();
@@ -308,7 +308,7 @@ public class ShoppingListActivity
 			    				getResources().getString(R.string.shoppinglist_name_blank)).show(true);
 				}});
 				
-			dialog.setButton(DialogInterface.BUTTON1, "No", new DialogInterface.OnClickListener() {
+			dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
 				
 				public void onClick(DialogInterface dialog, int which) {
 					Log.e("AddShoppingList", "Cancel");
@@ -326,7 +326,7 @@ public class ShoppingListActivity
 			
 			dialog.setTitle(getResources().getString(R.string.shoplistsactivity_title));
 			dialog.setMessage(getResources().getString(R.string.shopping_list_confirm_delte));
-			dialog.setButton(DialogInterface.BUTTON1, "Yes", new DialogInterface.OnClickListener() {
+			dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
 				
 				public void onClick(DialogInterface dialog, int which) {
 
@@ -357,7 +357,7 @@ public class ShoppingListActivity
 				}
 			});
 	
-			dialog.setButton(DialogInterface.BUTTON2, "No", new DialogInterface.OnClickListener() {
+			dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
 				
 				public void onClick(DialogInterface dialog, int which) {
 					Log.e("AddShoppingList", "Cancel");
@@ -409,7 +409,7 @@ public class ShoppingListActivity
 			.setTitle(getResources().getString(R.string.shoppinglist_add_title))
 			.create();
 		
-		dialog.setButton(DialogInterface.BUTTON1, "OK", new DialogInterface.OnClickListener() {
+		dialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
 			
 			public void onClick(DialogInterface dialog, int which) {
 				EditText 	editListName = (EditText) dialogView.findViewById(R.id.dialog_addshoppinglist_editTextName);
@@ -444,7 +444,7 @@ public class ShoppingListActivity
 			}
 		);
 	
-		dialog.setButton(DialogInterface.BUTTON2, "Cancel", new DialogInterface.OnClickListener() {
+		dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
 			
 			public void onClick(DialogInterface dialog, int which) {
 				Log.e("AddShoppingList", "Cancel");

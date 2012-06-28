@@ -23,9 +23,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 public class LoginActivity 
 	extends Activity 
@@ -226,7 +224,7 @@ public class LoginActivity
 			.create();
 
 		editListName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-		dialog.setButton(DialogInterface.BUTTON1, "OK", new DialogInterface.OnClickListener() {
+		dialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
 			
 			public void onClick(DialogInterface dialog, int which) {
 				
@@ -259,7 +257,7 @@ public class LoginActivity
 			}
 		});
 	
-		dialog.setButton(DialogInterface.BUTTON2, "Cancel", new DialogInterface.OnClickListener() {
+		dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
 			
 			public void onClick(DialogInterface dialog, int which) {
 				Log.e("AddShoppingList", "Cancel");

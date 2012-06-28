@@ -1,6 +1,5 @@
 package com.geekjamboree.noteit;
 
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import android.view.LayoutInflater;
@@ -71,7 +70,7 @@ class PopupWindows {
 		onShow();
 
 		if (mBackground == null) 
-			mWindow.setBackgroundDrawable(new BitmapDrawable());
+			mWindow.setBackgroundDrawable(null);
 		else 
 			mWindow.setBackgroundDrawable(mBackground);
 

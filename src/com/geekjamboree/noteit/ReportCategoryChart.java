@@ -93,8 +93,8 @@ public class ReportCategoryChart extends Activity {
 				mChartView = ChartFactory.getPieChartView(this, mSeries, mRenderer);
 			    mRenderer.setClickEnabled(false);
 			    layout.addView(mChartView, new LayoutParams(
-					LayoutParams.FILL_PARENT,
-					LayoutParams.FILL_PARENT));
+					LayoutParams.MATCH_PARENT,
+					LayoutParams.MATCH_PARENT));
 			    mChartView.repaint();
 			}
 	    } else {
