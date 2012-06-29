@@ -7,7 +7,6 @@ import com.geekjamboree.noteit.NoteItApplication.Category;
 import com.geekjamboree.noteit.NoteItApplication.OnSuggestItemsListener;
 import com.geekjamboree.noteit.NoteItApplication.SuggestedItem;
 import com.geekjamboree.noteit.NoteItApplication.Unit;
-import com.geekjamboree.noteit.ThemeUtils;
 
 import android.app.Dialog;
 import android.content.Context;

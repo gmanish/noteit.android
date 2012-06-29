@@ -1,5 +1,6 @@
 package com.geekjamboree.noteit;
 
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 
 import android.view.LayoutInflater;
@@ -70,7 +71,7 @@ class PopupWindows {
 		onShow();
 
 		if (mBackground == null) 
-			mWindow.setBackgroundDrawable(null);
+			mWindow.setBackgroundDrawable(new ColorDrawable(android.R.color.transparent));
 		else 
 			mWindow.setBackgroundDrawable(mBackground);
 

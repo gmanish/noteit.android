@@ -82,7 +82,8 @@ public class ItemListActivity
 	AlertDialog 					mInstallScanAppDialog = null;
 	Item							mTempItemToPassToDialog = null;
 	View							mContentView = null;
-	static final int ADD_ITEM_REQUEST = 0;	
+	
+	static final int ADD_ITEM_REQUEST 	= 0;	
 	
 	static final int QA_ID_EDIT 		= 0;
 	static final int QA_ID_DELETE		= 1;
