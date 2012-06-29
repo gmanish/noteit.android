@@ -132,6 +132,7 @@ public class CategoryListActivity
     	}
     	
     	TitleBar.RequestNoTitle(this);
+    	ThemeUtils.onActivityCreateSetTheme(this);
     	setContentView(R.layout.categories);
     	mToolbar = (TitleBar) findViewById(R.id.categories_title);
     	mToolbar.SetTitle(getResources().getText(R.string.categoriesactivity_title));

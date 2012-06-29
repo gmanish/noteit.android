@@ -29,6 +29,7 @@ public class RegisterActivity extends Activity implements OnEulaAgreedTo {
 		
 		super.onCreate(savedInstanceState);
     	TitleBar.RequestNoTitle(this);
+    	ThemeUtils.onActivityCreateSetTheme(this);
 		setContentView(R.layout.register);
 		mToolbar = (TitleBar) findViewById(R.id.register_title);
 		mToolbar.SetTitle(getString(R.string.register));

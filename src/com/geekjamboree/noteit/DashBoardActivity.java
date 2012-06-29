@@ -100,6 +100,7 @@ public class DashBoardActivity extends Activity {
         
 		super.onCreate(savedInstanceState);
     	TitleBar.RequestNoTitle(this);
+    	ThemeUtils.onActivityCreateSetTheme(this);
         setContentView(R.layout.dashboard);
         
         mToolbar = (TitleBar) findViewById(R.id.dashboard_title);

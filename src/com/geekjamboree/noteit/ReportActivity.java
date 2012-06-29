@@ -65,6 +65,7 @@ public class ReportActivity extends Activity {
 		
 		super.onCreate(savedInstanceState);
     	TitleBar.RequestNoTitle(this);
+    	ThemeUtils.onActivityCreateSetTheme(this);
         setContentView(R.layout.reportactvity);
         mToolbar = (TitleBar) findViewById(R.id.reportactivity_title);
 		mTextView = (WebView) findViewById(R.id.webview);

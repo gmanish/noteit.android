@@ -234,10 +234,16 @@
 	<string name="reporting_resource_missing">A resource required to generate reports is missing. Try reinstalling the application. </string>
 
 	<string name="preference_activity_title">Note It! Settings</string>
+	
 	<string-array name="itemFontSize">
 	    <item>Large</item>
 	    <item>Medium</item>
 	    <item>Small</item>
+	</string-array>
+	
+	<string-array name="applicationThemes">
+	    <item>Note Book</item>
+	    <item>Brushed Metal</item>
 	</string-array>
 	
 	<string-array name="shoplist_share_options">

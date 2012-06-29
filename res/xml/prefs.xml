@@ -5,6 +5,13 @@
 	    android:title="Start Up"
 	    android:key="Login_Information" >
 	    
+		<ListPreference 
+	    	android:title="Application Theme"
+	    	android:key="app_theme"
+	    	android:summary="Changes will take effect the next time you start the application." 
+	    	android:entries="@array/applicationThemes"
+	    	android:defaultValue="1" />
+	    
 	    <EditTextPreference 
 	        android:title="Email"
 	        android:key="email"

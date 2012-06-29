@@ -51,6 +51,7 @@ public class ReportCategoryChart extends Activity {
 	    
 		super.onCreate(savedInstanceState);
     	TitleBar.RequestNoTitle(this);
+    	ThemeUtils.onActivityCreateSetTheme(this);
 	    setContentView(R.layout.report_categorychart);
         mToolbar = (TitleBar) findViewById(R.id.reportcategory_title);
 	    mRoot = findViewById(R.id.report_category_chart_root);

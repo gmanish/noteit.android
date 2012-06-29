@@ -111,6 +111,7 @@ public class ShoppingListActivity
     	}
     	
     	TitleBar.RequestNoTitle(this);
+    	ThemeUtils.onActivityCreateSetTheme(this);
         setContentView(R.layout.shoppinglists);
         mToolbar = (TitleBar) findViewById(R.id.shoppinglist_title);
         mToolbar.SetTitle(getResources().getText(R.string.shoplistsactivity_title));

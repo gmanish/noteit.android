@@ -116,6 +116,7 @@ public class ReportMenuActivity extends ExpandableListActivity {
 		super.onCreate(savedInstanceState);
 
     	TitleBar.RequestNoTitle(this);
+    	ThemeUtils.onActivityCreateSetTheme(this);
 		setContentView(R.layout.reportmenuactivity);
 		mToolbar = (TitleBar) findViewById(R.id.reportmenu_title);
 

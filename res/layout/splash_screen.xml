@@ -8,25 +8,37 @@
     style="?NI_Splash_Style">
 
 		<ImageView
-	        android:id="@+id/imageView1"
-	        android:layout_width="180dip"
-	        android:layout_height="180dip"
-	        android:layout_gravity="top|center_horizontal"
-	        android:src="@drawable/geek"/>
+		    android:id="@+id/imageGeek"
+		    android:layout_width="180dip"
+		    android:layout_height="180dip"
+		    android:layout_gravity="top|center_horizontal"
+		    android:scaleType="centerInside"
+		    android:src="@drawable/geek" />
 	
 	    <ImageView
-	        android:id="@+id/imageView2"
+	        android:id="@+id/imageName"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="center_horizontal"
-	        android:padding="10dip"
-	        android:src="@drawable/geek_text"/>
+	        android:paddingBottom="20dip"
+	        android:paddingLeft="10dip"
+	        android:paddingRight="10dip"
+	        android:paddingTop="10dip"
+	        android:src="@drawable/geek_text" />
 	
 		<ProgressBar
 		    android:id="@+id/progressBar1"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:layout_gravity="center_horizontal" />
-		
+		    android:layout_gravity="center_horizontal"
+		    android:layout_margin="10dip" />
+
+		<TextView
+		    android:id="@+id/textView1"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center_horizontal"
+		    android:text="@string/Login_Authenticating_message"
+		    android:textAppearance="?android:attr/textAppearanceSmall" />
 	
 </LinearLayout>

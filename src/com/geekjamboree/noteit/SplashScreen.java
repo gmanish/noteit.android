@@ -24,6 +24,8 @@ public class SplashScreen extends Activity implements OnMethodExecuteListerner {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
+		ThemeUtils.initializeThemes();
+    	ThemeUtils.onActivityCreateSetTheme(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.splash_screen);
 		mContentView = findViewById(R.id.splash_root);
@@ -34,8 +36,14 @@ public class SplashScreen extends Activity implements OnMethodExecuteListerner {
         String 	emailID 		= mPrefs.getString("email", "");
         String 	password 		= mPrefs.getString("password", "");
         
-        if (isRememberMe && !emailID.isEmpty() && !password.isEmpty())
+        if (isRememberMe && 
+        		!emailID.trim().contentEquals("") && 
+        		!password.trim().contentEquals("")) {
         	doLogin(emailID, password);
+        }
+        else {
+        	doLoginActivity();
+        }
 	}
 
 	private void doLogin(String emailID, String password) {
@@ -60,6 +68,11 @@ public class SplashScreen extends Activity implements OnMethodExecuteListerner {
 		
 		if (resultCode != 0) {
 			// Automatic Login failed, show the login screen
+    		CustomToast.makeText(
+    				getApplicationContext(),
+    				mContentView,
+    				message).show(true);
+    		
 			doLoginActivity();
 		} else {
 			// Login succeeded, proceed

@@ -618,6 +618,7 @@ public class ItemListActivity
         }
         
     	TitleBar.RequestNoTitle(this);
+    	ThemeUtils.onActivityCreateSetTheme(this);
         setContentView(R.layout.itemlists);
         mToolbar = (TitleBar) findViewById(R.id.itemslist_title);
         mContentView = findViewById(R.id.layout_itemslist);

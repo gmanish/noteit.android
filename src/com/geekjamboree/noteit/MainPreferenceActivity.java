@@ -71,6 +71,13 @@ public class MainPreferenceActivity extends PreferenceActivity {
 				itemTextSize.setDefaultValue(fontSizeIDs[2]); // default small
 			}
 			
+			ListPreference	themePref = (ListPreference) findPreference("app_theme");
+			if (themePref != null) {
+				CharSequence[] themeIDs = {"1", "2"}; // Note Book, Brushed Metal
+				themePref.setEntryValues(themeIDs);
+				themePref.setDefaultValue(themeIDs[0]);
+			}
+			
 			NoteItApplication 	app = (NoteItApplication) getApplication();
 			ListPreference 		currenciesPref = (ListPreference) findPreference("currency");
 			ArrayList<Currency> currencies = app.getCurrencies();
