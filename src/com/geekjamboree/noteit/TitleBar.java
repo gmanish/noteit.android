@@ -1,5 +1,7 @@
 package com.geekjamboree.noteit;
 
+import com.geekjamboree.noteit.R;
+
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils.TruncateAt;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,10 +29,14 @@ public class TitleBar extends LinearLayout {
 	static int 				mButtonSize = 0;
 	static int 				mButtonPadding = 0;
 	static int 				mButtonMargin = 0;
+	static int				mButtonSeparatorWidth = 0;
+	static int				mButtonSeparatorHeight = 0;
 	
-    static final int BUTTON_DIMENSION 	= 32; //dip
-    static final int BUTTON_PADDING 	= 8; //dip
-    static final int BUTTON_MARGIN		= 0; //dip, spacing between adjacent buttons
+    static final int BUTTON_DIMENSION 		= 32; //dip
+    static final int BUTTON_PADDING 		= 8; //dip
+    static final int BUTTON_MARGIN			= 0; //dip, spacing between adjacent buttons
+    static final int BUTTON_SEPARATOR_WIDTH	= 2; //dip
+    static final int BUTTON_SEPARATOR_HEIGHT= 36; //dip
 
     public TitleBar(Context context) {
 		super(context);
@@ -55,10 +62,12 @@ public class TitleBar extends LinearLayout {
     	if (mFlipper == null || mTitleText == null || mTitleRoot == null)
 			Log.e("TitleBar", "Could not inflate titlebar layout.");
 		
-		mScale 				= getResources().getDisplayMetrics().density;
-		mButtonSize 		= (int) (BUTTON_DIMENSION * mScale + 0.5f);
-		mButtonPadding 		= (int) (BUTTON_PADDING * mScale + 0.5f);
-		mButtonMargin 		= (int) (BUTTON_MARGIN * mScale + 0.5f);
+		mScale 					= getResources().getDisplayMetrics().density;
+		mButtonSize 			= (int) (BUTTON_DIMENSION * mScale + 0.5f);
+		mButtonPadding 			= (int) (BUTTON_PADDING * mScale + 0.5f);
+		mButtonMargin 			= (int) (BUTTON_MARGIN * mScale + 0.5f);
+		mButtonSeparatorWidth	= (int) (BUTTON_SEPARATOR_WIDTH * mScale + 0.5f);
+		mButtonSeparatorHeight	= (int) (BUTTON_SEPARATOR_HEIGHT * mScale + 0.5f);
 	}
 
     public void SetTitle(CharSequence charSequence){
@@ -153,6 +162,21 @@ public class TitleBar extends LinearLayout {
     	button.setImageResource(id);
     	mTitleRoot.addView(button);
     	return button;
+    }
+    
+    public void addVerticalSeparator(Activity activity, boolean leftAlligned) {
+    	
+    	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(mButtonSeparatorWidth, mButtonSeparatorHeight);
+
+    	lp.gravity = (leftAlligned ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL;
+    	ImageView sep = new ImageView(getContext());
+    	sep.setLayoutParams(lp);
+//    	sep.setPadding(mButtonPadding, mButtonPadding, mButtonPadding, mButtonPadding);
+    	sep.setBackgroundResource(ThemeUtils.getResourceIdFromAttribute(activity, R.attr.NI_VerticalSeparator));
+    	if (leftAlligned)
+    		mTitleRoot.addView(sep, mIndex++);
+    	else 
+    		mTitleRoot.addView(sep);
     }
     
     public static void RequestNoTitle(Activity parent) {

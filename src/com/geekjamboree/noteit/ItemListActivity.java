@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Paint;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -33,7 +32,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
@@ -576,10 +574,14 @@ public class ItemListActivity
 			if (listName != null) {
 				if (item.mUserID != ((NoteItApplication) getApplication()).getUserID())
 					listName.setCompoundDrawablesWithIntrinsicBounds(
-							getResourceIdFromAttribute(R.attr.Spinner_SharedShoppingList), 0, 0, 0);
+							ThemeUtils.getResourceIdFromAttribute(
+									ItemListActivity.this, 
+									R.attr.Spinner_SharedShoppingList), 0, 0, 0);
 				else 
 					listName.setCompoundDrawablesWithIntrinsicBounds(
-							getResourceIdFromAttribute(R.attr.Spinner_ShoppingList_Cart), 0, 0, 0);
+							ThemeUtils.getResourceIdFromAttribute(
+									ItemListActivity.this, 
+									R.attr.Spinner_ShoppingList_Cart), 0, 0, 0);
 			}
 
 			TextView listCount = (TextView) view.findViewById(R.id.shoppinglist_itemCount);
@@ -1395,6 +1397,8 @@ public class ItemListActivity
 			}
 		});
     	
+    	mToolbar.addVerticalSeparator(this, true);
+    	
     	mShoppingListButton = new Button(this);
     	mShoppingListButton.setText(listName);
     	mToolbar.addCenterFillButton(mShoppingListButton);
@@ -1405,6 +1409,8 @@ public class ItemListActivity
 			}
 		});
 		
+    	mToolbar.addVerticalSeparator(this, false);
+    	
     	ImageButton addButton = mToolbar.addRightAlignedButton(R.drawable.add, false, true);
     	addButton.setOnClickListener(new OnClickListener() {
 			
@@ -2283,13 +2289,6 @@ public class ItemListActivity
 	    }
 	}
 	
-	protected int getResourceIdFromAttribute(int attribId) {
-		Resources.Theme theme = getTheme();
-		TypedValue 		resID = new TypedValue();
-		theme.resolveAttribute(attribId, resID, false);
-		return resID.data;
-	}
-
 	public void onSensorChanged(int sensor, float[] values) {
 	}
 

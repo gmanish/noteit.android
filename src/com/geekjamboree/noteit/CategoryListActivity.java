@@ -17,11 +17,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -90,15 +88,23 @@ public class CategoryListActivity
 				
 				if (category != null && category.mUserID != app.getUserID()) {
 					textView.setCompoundDrawablesWithIntrinsicBounds(
-							getResourceIdFromAttribute(R.attr.Category_Shared_Small), 
+							ThemeUtils.getResourceIdFromAttribute(
+									CategoryListActivity.this, 
+									R.attr.Category_Shared_Small), 
 							0,
-							getResourceIdFromAttribute(R.attr.Hand_Small), 
+							ThemeUtils.getResourceIdFromAttribute(
+									CategoryListActivity.this,
+									R.attr.Hand_Small), 
 							0);
 				} else { 
 					textView.setCompoundDrawablesWithIntrinsicBounds(
-							getResourceIdFromAttribute(R.attr.Category_Small),
+							ThemeUtils.getResourceIdFromAttribute(
+									CategoryListActivity.this, 
+									R.attr.Category_Small),
 							0,
-							getResourceIdFromAttribute(R.attr.Hand_Small), 
+							ThemeUtils.getResourceIdFromAttribute(
+									CategoryListActivity.this, 
+									R.attr.Hand_Small), 
 							0);
 				}
 			}
@@ -286,6 +292,9 @@ public class CategoryListActivity
 				finish();
 			}
 		});
+    	
+    	mToolbar.addVerticalSeparator(this, true);
+    	mToolbar.addVerticalSeparator(this, false);
 
     	ImageButton addButton = mToolbar.addRightAlignedButton(R.drawable.add, false, true);
     	addButton.setOnClickListener(new View.OnClickListener() {
@@ -460,11 +469,4 @@ public class CategoryListActivity
 				}
 		});
     }
-    
-	protected int getResourceIdFromAttribute(int attribId) {
-		Resources.Theme theme = getTheme();
-		TypedValue 		resID = new TypedValue();
-		theme.resolveAttribute(attribId, resID, false);
-		return resID.data;
-	}
 }

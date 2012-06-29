@@ -259,6 +259,8 @@ public class ReportMenuActivity extends ExpandableListActivity {
 
 	protected void doSetupToolbarButtons() {
 
+    	mToolbar.addVerticalSeparator(this, false);
+
     	ImageButton expandAll = mToolbar.addRightAlignedButton(R.drawable.expand, true, true);
     	expandAll.setOnClickListener(new OnClickListener() {
 			
@@ -294,8 +296,7 @@ public class ReportMenuActivity extends ExpandableListActivity {
 			}
 		});
 
-    	;
-    	;
+    	mToolbar.addVerticalSeparator(this, true);
     }
 
     protected void doExpandAll() {

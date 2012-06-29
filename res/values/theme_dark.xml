@@ -124,7 +124,7 @@
         <item name="NI_StatusBackground">@style/App_StatusBackground</item>
         <item name="NI_AppBackgroundNormal">@style/NI_AppBackgroundNormal.Dark</item>
         <item name="NI_ListViewAttr">@style/NI_ListViewAttr_Dark</item>
-        <item name="NI_VerticalSeparator">@drawable/vertical_separator_dark</item>
+        <item name="NI_VerticalSeparator">@drawable/application_vertical_separator_dark</item>
         <item name="NI_Splash_Style">@style/Theme.Splash.Dark</item>
         <item name="AddEdit_Widget">@style/AddEdit_Widget_Dark</item>
 		

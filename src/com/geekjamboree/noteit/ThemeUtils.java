@@ -3,7 +3,9 @@ package com.geekjamboree.noteit;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.preference.PreferenceManager;
+import android.util.TypedValue;
 
 public class ThemeUtils {
 
@@ -44,4 +46,12 @@ public class ThemeUtils {
 			}
 		}
 	}
+	
+	public static int getResourceIdFromAttribute(Activity activity, int attribId) {
+		
+		Resources.Theme theme = activity.getTheme();
+		TypedValue 		resID = new TypedValue();
+		theme.resolveAttribute(attribId, resID, false);
+		return resID.data;
+	}	
 }

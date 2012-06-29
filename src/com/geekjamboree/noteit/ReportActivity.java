@@ -347,6 +347,9 @@ public class ReportActivity extends Activity {
 			}
 		});
     	
+    	mToolbar.addVerticalSeparator(this, true);
+    	mToolbar.addVerticalSeparator(this, false);
+    	
     	ImageButton shareButton = mToolbar.addRightAlignedButton(R.drawable.share, true, true);
     	shareButton.setOnClickListener(new OnClickListener() {
 			

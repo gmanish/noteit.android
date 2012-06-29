@@ -189,6 +189,9 @@ public class ReportCategoryChart extends Activity {
 			}
 		});
     	
+    	mToolbar.addVerticalSeparator(this, true);
+    	mToolbar.addVerticalSeparator(this, false);
+    	
     	ImageButton settingsButton = mToolbar.addRightAlignedButton(R.drawable.settings, true, true);
     	settingsButton.setOnClickListener(new View.OnClickListener() {
 			

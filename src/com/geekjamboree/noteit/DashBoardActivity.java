@@ -7,9 +7,7 @@ import com.geekjamboree.noteit.ItemListActivity.ItemType;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -111,17 +109,17 @@ public class DashBoardActivity extends Activity {
         
         adapter.addItem(
         	"Shopping Lists", 
-        	getResourceIdFromAttribute(R.attr.Dashboard_ShoppingList), 
+        	ThemeUtils.getResourceIdFromAttribute(this, R.attr.Dashboard_ShoppingList), 
         	DASHBOARD_SHOPPINGLISTS);
         
         adapter.addItem(
         	"Categories", 
-        	getResourceIdFromAttribute(R.attr.Dashboard_Category), 
+        	ThemeUtils.getResourceIdFromAttribute(this, R.attr.Dashboard_Category), 
         	DASHBOARD_CATEGORIES);
         
         adapter.addItem(
         	"Reports", 
-        	getResourceIdFromAttribute(R.attr.Dashboard_Reports), 
+        	ThemeUtils.getResourceIdFromAttribute(this, R.attr.Dashboard_Reports), 
         	DASHBOARD_REPORTS);
         
         mGridView = (GridView) findViewById(R.id.category_gridview);
@@ -218,13 +216,6 @@ public class DashBoardActivity extends Activity {
 				startActivity(intent);
 			}
 		});
-	}
-	
-	protected int getResourceIdFromAttribute(int attribId) {
-		Resources.Theme theme = getTheme();
-		TypedValue 		resID = new TypedValue();
-		theme.resolveAttribute(attribId, resID, false);
-		return resID.data;
 	}
 	
 	private void doSignOut() {

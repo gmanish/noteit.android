@@ -147,7 +147,7 @@
         <item name="NI_StatusBackground">@style/App_StatusBackground_Trademark</item>
         <item name="NI_AppBackgroundNormal">@style/NI_AppBackgroundNormal.Trademark</item>
         <item name="NI_ListViewAttr">@style/NI_ListViewAttr_Trademark</item>
-        <item name="NI_VerticalSeparator">@drawable/vertical_separator_trademark</item>
+        <item name="NI_VerticalSeparator">@drawable/application_vertical_separator_trademark</item>
         <item name="NI_Splash_Style">@style/Theme.Splash.Trademark</item>
         <item name="AddEdit_Widget">@style/AddEdit_Widget_Trademark</item>
 		

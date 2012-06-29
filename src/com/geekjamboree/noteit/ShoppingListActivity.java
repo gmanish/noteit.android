@@ -15,7 +15,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -23,7 +22,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem; 
 import android.content.DialogInterface;
-import android.content.res.Resources;
 
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -80,10 +78,14 @@ public class ShoppingListActivity
 			if (listName != null) {
 				if (item.mUserID != ((NoteItApplication) getApplication()).getUserID())
 					listName.setCompoundDrawablesWithIntrinsicBounds(
-							getResourceIdFromAttribute(R.attr.SharedShoppingList), 0, 0, 0);
+							ThemeUtils.getResourceIdFromAttribute(
+									ShoppingListActivity.this, 
+									R.attr.SharedShoppingList), 0, 0, 0);
 				else 
 					listName.setCompoundDrawablesWithIntrinsicBounds(
-							getResourceIdFromAttribute(R.attr.ShoppingList_Cart), 0, 0, 0);
+							ThemeUtils.getResourceIdFromAttribute(
+									ShoppingListActivity.this, 
+									R.attr.ShoppingList_Cart), 0, 0, 0);
 			}
 			return view;
 		}
@@ -383,6 +385,9 @@ public class ShoppingListActivity
 			}
 		});
 
+    	mToolbar.addVerticalSeparator(this, true);
+    	mToolbar.addVerticalSeparator(this, false);
+
     	ImageButton addButton = mToolbar.addRightAlignedButton(R.drawable.add, true, true);
     	addButton.setOnClickListener(new OnClickListener() {
 			
@@ -454,12 +459,5 @@ public class ShoppingListActivity
 		});
 
 		dialog.show();    
-	}
-    
-	protected int getResourceIdFromAttribute(int attribId) {
-		Resources.Theme theme = getTheme();
-		TypedValue 		resID = new TypedValue();
-		theme.resolveAttribute(attribId, resID, false);
-		return resID.data;
 	}
 }
