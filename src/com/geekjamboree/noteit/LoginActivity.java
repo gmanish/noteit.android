@@ -194,7 +194,7 @@ public class LoginActivity
 				                finish();
 							} else {
 					    		CustomToast.makeText(
-					    				getApplicationContext(),
+					    				LoginActivity.this,
 					    				mContentView,
 					    				message).show(true);
 							}
@@ -205,7 +205,7 @@ public class LoginActivity
 		} catch (Exception e) {
 			hideIndeterminateProgress();
     		CustomToast.makeText(
-    				getApplicationContext(),
+    				LoginActivity.this,
     				mContentView,
     				e.getMessage()).show(true);
 			Log.e("NoteItApplication.loginUser", e.getMessage());

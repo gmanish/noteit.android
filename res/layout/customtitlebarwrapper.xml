@@ -62,7 +62,7 @@
 	        android:paddingLeft="8dip"
 	        android:paddingRight="8dip"
 	        android:indeterminateOnly="true"
-	        style="?android:attr/progressBarStyleSmall" />
+	        style="?android:attr/progressBarStyleSmallTitle" />
    	 	
 	</LinearLayout>
    		

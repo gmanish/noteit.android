@@ -1,6 +1,7 @@
 package com.geekjamboree.noteit;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -47,9 +48,14 @@ public class ThemeUtils {
 		}
 	}
 	
-	public static int getResourceIdFromAttribute(Activity activity, int attribId) {
+	public static int getResourceIdFromAttribute(Context context, int attribId) {
 		
-		Resources.Theme theme = activity.getTheme();
+		return getResourceIdFromAttribute(context, attribId, false);
+	}
+	
+	public static int getResourceIdFromAttribute(Context context, int attribId, boolean resolveRefs) {
+		
+		Resources.Theme theme = context.getTheme();
 		TypedValue 		resID = new TypedValue();
 		theme.resolveAttribute(attribId, resID, false);
 		return resID.data;
