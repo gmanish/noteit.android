@@ -147,7 +147,7 @@
 		    android:contentDescription="@string/addedit_askLater"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:src="@drawable/help" 
+		    android:src="?Help" 
 		    style="@style/App_ImageButtonStyle" />
 
 	</LinearLayout>

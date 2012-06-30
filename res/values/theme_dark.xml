@@ -177,7 +177,7 @@
 		<item name="Popup_Down">@drawable/arrow_down</item>
 		<item name="Like_Small">@drawable/thumbs_up_light_small</item>
 		<item name="Reports_Small">@drawable/reports_small_light</item>
-		
+		<item name="Help">@drawable/help</item>
 		<item name="Tips_Background">@style/App_TipsBackground_Dark</item>
 	</style>
     
