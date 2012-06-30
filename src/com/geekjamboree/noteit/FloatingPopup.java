@@ -1,5 +1,6 @@
 package com.geekjamboree.noteit;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.graphics.Paint;
@@ -15,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+@SuppressLint("ViewConstructor")
 class FloatingPopup extends PopupWindow {
 	
 	View 				mAnchor = null;
