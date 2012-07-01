@@ -149,6 +149,7 @@
 	    <item name="NI_ButtonStyle">@style/App_ImageButtonStyle</item>
         <item name="NI_EditTextStyle">@style/EditTextStyle_Trademark</item>
         <item name="NI_TitleBackground">@style/App_TitleBackground_Trademark</item>
+    	<item name="NI_TitleBackgroundColor">@color/noteit_trademark_dark</item>
         <item name="NI_StatusBackground">@style/App_StatusBackground_Trademark</item>
         <item name="NI_AppBackgroundNormal">@style/NI_AppBackgroundNormal.Trademark</item>
         <item name="NI_ListViewAttr">@style/NI_ListViewAttr_Trademark</item>

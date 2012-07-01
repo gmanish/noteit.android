@@ -2,6 +2,7 @@
 <resources>
 	<attr name="NI_AppBackgroundNormal" format="reference"></attr>
     <attr name="NI_TitleBackground" format="reference"></attr>
+    <attr name="NI_TitleBackgroundColor" format="reference"></attr>
 	<attr name="NI_StatusBackground" format="reference"></attr>
 	<attr name="NI_TextButtonStyle" format="reference"></attr>
 	<attr name="NI_ButtonStyle" format="reference"></attr>

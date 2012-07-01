@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-	<PreferenceCategory 
+	<com.geekjamboree.noteit.NIPreferenceCategory 
 	    android:title="Start Up"
 	    android:key="Login_Information" >
 	    
@@ -34,9 +34,9 @@
 	    	android:summaryOn="Note It! will launch with the Dashboard open."
 	    	android:defaultValue="true" />
 
-	</PreferenceCategory>
+	</com.geekjamboree.noteit.NIPreferenceCategory>
 	
-	<PreferenceCategory
+	<com.geekjamboree.noteit.NIPreferenceCategory
 		android:title="Numbers and Units"
 		android:key="Numbers_and_Units" >
 		
@@ -50,9 +50,9 @@
 	    	android:key="MeasurementUnits"
 	    	android:summary="Set the preferred units of measurement." />
 	
-	</PreferenceCategory>
+	</com.geekjamboree.noteit.NIPreferenceCategory>
 
-	<PreferenceCategory
+	<com.geekjamboree.noteit.NIPreferenceCategory
 		android:title="Shopping Lists"
 		android:key="Shopping_Lists" >
 	    
@@ -64,9 +64,9 @@
 	        android:dialogMessage="Tax percentage"
 	        android:defaultValue="0" />
 	    
-	</PreferenceCategory>
+	</com.geekjamboree.noteit.NIPreferenceCategory>
 		
-	<PreferenceCategory
+	<com.geekjamboree.noteit.NIPreferenceCategory
 		android:title="Items"
 		android:key="Items_List" >
 	    
@@ -98,9 +98,9 @@
 	    	android:summaryOn="Hide items when they are marked done."
 	    	android:defaultValue="true" />
 
-	</PreferenceCategory>
+	</com.geekjamboree.noteit.NIPreferenceCategory>
 
-	<PreferenceCategory
+	<com.geekjamboree.noteit.NIPreferenceCategory
 		android:title="Suggestions"
 		android:key="Items_AutoComplete" >
 	    
@@ -118,9 +118,9 @@
 	    	android:summaryOn="Allow Note It! to use location for improved search and other services."
 	    	android:defaultValue="true" />
 
-	</PreferenceCategory>
+	</com.geekjamboree.noteit.NIPreferenceCategory>
 		
-	<PreferenceCategory
+	<com.geekjamboree.noteit.NIPreferenceCategory
 		android:title="Reports"
 		android:key="Items_Reporting" >
 	    
@@ -131,6 +131,6 @@
 	    	android:summaryOn="Attach an HTML version of Reports when Sharing."
 	    	android:defaultValue="true" />
 	    		    
-	</PreferenceCategory>
+	</com.geekjamboree.noteit.NIPreferenceCategory>
 
 </PreferenceScreen>

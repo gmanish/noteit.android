@@ -7,18 +7,22 @@ import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
 import com.geekjamboree.noteit.NoteItApplication.Preference;
 import com.geekjamboree.noteit.R;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.view.Window;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 
 public class MainPreferenceActivity extends PreferenceActivity {
 
-	public static final String 				kPref_HideDoneItems 		= "Delete_Bought_Items";
-	public static final boolean				kPref_HideDoneDefault		= true;
-	
+	public static final String 		kPref_HideDoneItems 		= "Delete_Bought_Items";
+	public static final boolean		kPref_HideDoneDefault		= true;
+	TitleBar						mToolbar;
+
 	SharedPreferences 									mPrefs;
 	SharedPreferences.OnSharedPreferenceChangeListener	mPrefChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
 		
@@ -48,20 +52,15 @@ public class MainPreferenceActivity extends PreferenceActivity {
 	@SuppressWarnings("deprecation")
 	public void onCreate(Bundle savedInstanceState){
         
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+		TitleBar.RequestNoTitle(this);
+    	ThemeUtils.onActivityCreateSetTheme(this);
         super.onCreate(savedInstanceState);
-        ThemeUtils.onActivityCreateSetTheme(this);
+        setContentView(R.layout.mainpreference);
+        mToolbar = (TitleBar) findViewById(R.id.prefs_title);
+        doSetupToolbarButtons();
+        
 		try {
 			addPreferencesFromResource(R.xml.prefs);
-			if (ThemeUtils.getPlatformVersion() >= 11) {
-				int resID = ThemeUtils.getResourceIdFromAttribute(this, R.attr.NI_AppBackgroundNormal, false);
-				if (resID > 0) {
-					resID = ThemeUtils.getResourceIdFromAttribute(this, resID, android.R.attr.background);
-					if (resID > 0) {
-						getListView().setBackgroundResource(resID);
-					}
-				}
-			}
 			mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 			ListPreference measurementUnits = (ListPreference)findPreference("MeasurementUnits");
 			if (measurementUnits != null) {
@@ -127,4 +126,21 @@ public class MainPreferenceActivity extends PreferenceActivity {
 		mPrefs.registerOnSharedPreferenceChangeListener(mPrefChangeListener);
 		super.onResume();
 	}
+	
+    protected void doSetupToolbarButtons() {
+
+    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home, true, true);
+    	homeButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				Intent intent = new Intent(MainPreferenceActivity.this, DashBoardActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				finish();
+			}
+		});
+    	
+    	mToolbar.addVerticalSeparator(this, true);
+    }
+	
 }

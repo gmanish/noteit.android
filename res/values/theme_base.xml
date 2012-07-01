@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="NI_ThemeBase" parent="@android:style/Theme">
+    <style name="NI_ThemeBase">
+    </style>
+
+    <style name="NI_ThemeBase.Dark" parent="@android:style/Theme">
 		<item name="Spinner_ShoppingList_Cart">@drawable/cart_dark</item>
 		<item name="Spinner_SharedShoppingList">@drawable/cart_shared_dark</item>
     </style>
-
-    <style name="NI_ThemeBase.Dark">
-    </style>
     
-    <style name="NI_ThemeBase.Light">
+    <style name="NI_ThemeBase.Light" parent="@android:style/Theme.Light">
+		<item name="Spinner_ShoppingList_Cart">@drawable/cart_dark</item>
+		<item name="Spinner_SharedShoppingList">@drawable/cart_shared_dark</item>
     </style>
     
     <style name="NI_ButtonBase"	parent="@android:style/Widget.Button.Small" />

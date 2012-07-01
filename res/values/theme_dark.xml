@@ -138,6 +138,7 @@
         <item name="NI_TextButtonStyle">@style/App_TextButton.Dark</item>
 	    <item name="NI_EditTextStyle">@style/EditTextStyle_Dark</item>
         <item name="NI_TitleBackground">@style/App_TitleBackground</item>
+        <item name="NI_TitleBackgroundColor">@color/noteit_dark</item>
         <item name="NI_StatusBackground">@style/App_StatusBackground</item>
         <item name="NI_AppBackgroundNormal">@style/NI_AppBackgroundNormal.Dark</item>
         <item name="NI_ListViewAttr">@style/NI_ListViewAttr_Dark</item>
