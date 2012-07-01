@@ -54,8 +54,13 @@ public class MainPreferenceActivity extends PreferenceActivity {
 		try {
 			addPreferencesFromResource(R.xml.prefs);
 			if (ThemeUtils.getPlatformVersion() >= 11) {
-				getListView().setBackgroundColor(getResources().getColor(
-						ThemeUtils.getResourceIdFromAttribute(this, R.attr.NI_BackgroundColor)));
+				int resID = ThemeUtils.getResourceIdFromAttribute(this, R.attr.NI_AppBackgroundNormal, false);
+				if (resID > 0) {
+					resID = ThemeUtils.getResourceIdFromAttribute(this, resID, android.R.attr.background);
+					if (resID > 0) {
+						getListView().setBackgroundResource(resID);
+					}
+				}
 			}
 			mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 			ListPreference measurementUnits = (ListPreference)findPreference("MeasurementUnits");

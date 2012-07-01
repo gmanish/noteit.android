@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.preference.PreferenceManager;
 import android.util.TypedValue;
 
@@ -61,6 +62,16 @@ public class ThemeUtils {
 		TypedValue 		resID = new TypedValue();
 		theme.resolveAttribute(attribId, resID, resolveRefs);
 		return resID.data;
+	}
+	
+	public static int getResourceIdFromAttribute(Context context, int styleId, int attribID) {
+
+		int 		resID = 0;
+		TypedArray 	ta = context.getTheme().obtainStyledAttributes(styleId, new int[]{attribID});
+		if (ta.getIndexCount() > 0) {
+			resID = ta.getResourceId(0, -1);
+		}
+		return resID;
 	}
 	
 	public static int getPlatformVersion() {
