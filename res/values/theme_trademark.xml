@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<style name="Theme.Splash.Trademark" parent="android:Theme">
 		<item name="android:windowBackground">@drawable/bg_trademark</item>
 		<item name="android:windowNoTitle">true</item>
 	</style>
     
-    <style name="App_Text_Button" parent="@style/App_Button">
+    <style name="App_TextButton.Trademark" parent="@style/App_Button">
         <item name="android:textColor">@color/noteit_trademark_dark</item>
     </style>
     
-    <style name="App_Trademark_Button" parent="@style/App_Text_Button">
+    <style name="App_Trademark_Button" parent="@style/App_TextButton.Trademark">
         <item name="android:background">@color/app_tm_textbutton_background</item>
+    </style>
+    
+    <style name="App_CustomDialog.Trademark" parent="@style/NI_DialogBase.Light">
+        <item name="android:background">@drawable/bg_trademark</item>
     </style>
     
     <!--  Style Definitions for Trademark Theme -->
@@ -138,9 +142,10 @@
         <item name="android:textColor">@color/noteit_trademark_dark</item>
 	</style>
     
-    <style name="NI_AppTheme.Trademark" parent="@style/NI_ThemeBase">
+    <style name="NI_AppTheme.Trademark" parent="@style/NI_ThemeBase.Light">
         
         <item name="android:windowTitleBackgroundStyle">@style/App_TitleBackground_Trademark</item>
+        <item name="NI_TextButtonStyle">@style/App_TextButton.Trademark</item>
 	    <item name="NI_ButtonStyle">@style/App_ImageButtonStyle</item>
         <item name="NI_EditTextStyle">@style/EditTextStyle_Trademark</item>
         <item name="NI_TitleBackground">@style/App_TitleBackground_Trademark</item>
@@ -150,6 +155,8 @@
         <item name="NI_VerticalSeparator">@drawable/application_vertical_separator_trademark</item>
         <item name="NI_Splash_Style">@style/Theme.Splash.Trademark</item>
         <item name="AddEdit_Widget">@style/AddEdit_Widget_Trademark</item>
+		<item name="NI_DialogStyle">@style/App_CustomDialog.Trademark</item>
+		<item name="NI_BackgroundColor">@color/noteit_trademark_light</item>
 		
 		<item name="TextAppearance_Group_Small">@style/TextAppearance_Trademark.GroupsItem_Small</item>
 		<item name="TextAppearance_Group_Medium">@style/TextAppearance_Trademark.GroupsItem_Medium</item>

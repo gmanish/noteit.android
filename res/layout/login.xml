@@ -95,7 +95,7 @@
 		        android:layout_alignParentRight="true"
 		        android:layout_centerVertical="true"
 		        android:text="@string/login_login"
-		        style="@style/App_Text_Button" />
+		        style="?NI_TextButtonStyle" />
 		    
 		</RelativeLayout>
     </LinearLayout>

@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.view.Window;
 
 public class MainPreferenceActivity extends PreferenceActivity {
 
@@ -47,13 +48,15 @@ public class MainPreferenceActivity extends PreferenceActivity {
 	@SuppressWarnings("deprecation")
 	public void onCreate(Bundle savedInstanceState){
         
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-		TitleBar toolbar = new TitleBar(this);
-		toolbar.SetTitle(getResources().getText(R.string.preference_activity_title));
-		toolbar.showInderminateProgress(getString(R.string.progress_message));
+        ThemeUtils.onActivityCreateSetTheme(this);
 		try {
 			addPreferencesFromResource(R.xml.prefs);
-	
+			if (ThemeUtils.getPlatformVersion() >= 11) {
+				getListView().setBackgroundColor(getResources().getColor(
+						ThemeUtils.getResourceIdFromAttribute(this, R.attr.NI_BackgroundColor)));
+			}
 			mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 			ListPreference measurementUnits = (ListPreference)findPreference("MeasurementUnits");
 			if (measurementUnits != null) {
@@ -105,7 +108,6 @@ public class MainPreferenceActivity extends PreferenceActivity {
 			
 			mPrefs.registerOnSharedPreferenceChangeListener(mPrefChangeListener);
 		} finally {
-			toolbar.hideIndeterminateProgress();
 		}
 	}
 

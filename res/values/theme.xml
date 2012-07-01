@@ -7,7 +7,7 @@
     <color name="noteit_header_textcolor">#FDFDFD</color>
     
     <style name="App_Button" parent="@style/NI_ButtonBase">
-        <item name="android:minWidth">90dip</item>
+        <item name="android:minWidth">40dip</item>
         <item name="android:minHeight">40dip</item>
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>
@@ -25,10 +25,7 @@
     	<item name="android:background">@android:color/transparent</item>
     </style>
     
-	<style name="App_CustomDialog" parent="android:style/Theme.Dialog">
-	    <!-- 
- 	    <item name="android:windowBackground">@drawable/filled_roundededges_box_dark</item>
- 	     -->
+	<style name="App_CustomDialog">
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowSoftInputMode">stateVisible</item>

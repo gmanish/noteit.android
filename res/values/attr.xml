@@ -3,11 +3,14 @@
 	<attr name="NI_AppBackgroundNormal" format="reference"></attr>
     <attr name="NI_TitleBackground" format="reference"></attr>
 	<attr name="NI_StatusBackground" format="reference"></attr>
+	<attr name="NI_TextButtonStyle" format="reference"></attr>
 	<attr name="NI_ButtonStyle" format="reference"></attr>
 	<attr name="NI_EditTextStyle" format="reference"></attr>
 	<attr name="NI_VerticalSeparator" format="reference"></attr>
 	<attr name="NI_Splash_Style" format="reference"></attr>	
 	<attr name="NI_ListViewAttr" format="reference"></attr>
+	<attr name="NI_DialogStyle" format="reference"></attr>
+	<attr name="NI_BackgroundColor" format="reference"></attr>
 	
 	<attr name="AddEdit_Widget" format="reference"></attr>
 	

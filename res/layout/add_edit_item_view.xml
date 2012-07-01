@@ -3,7 +3,7 @@
     android:id="@+id/addedit_view" 
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    style="?NI_AppBackgroundNormal">
+    style="?NI_DialogStyle">
     
 <RelativeLayout
     android:id="@+id/addedit_relLayout"
@@ -51,21 +51,23 @@
 	
 	<AutoCompleteTextView
 	    android:id="@+id/addedit_editName"
-	    style="?AddEdit_Widget"
+	    style="?NI_EditTextStyle"
 	    android:layout_width="fill_parent"
-        android:layout_marginBottom="5dp"
-        android:layout_below="@+id/addedit_titlebar"
-        android:inputType="textCapWords"
-        android:completionThreshold="3"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:ellipsize="none"
-        android:hint="@string/addedit_Name_Hint" />
+	    android:layout_height="match_parent"
+	    android:layout_below="@+id/addedit_titlebar"
+	    android:layout_marginBottom="5dp"
+	    android:completionThreshold="3"
+	    android:ellipsize="none"
+	    android:hint="@string/addedit_Name_Hint"
+	    android:inputType="textCapWords|textNoSuggestions"
+	    android:selectAllOnFocus="true"
+	    android:singleLine="true"/>
    	
 	<Spinner
 	    android:id="@+id/addedit_spinCategories"
 	    style="?AddEdit_Widget"
 	    android:layout_width="fill_parent"
+	    android:layout_height="match_parent"
 	    android:layout_below="@+id/addedit_editName"
 	    android:layout_marginBottom="5dp" />
 
@@ -80,35 +82,39 @@
 
 		<Button
 		    android:id="@+id/addedit_btndecrement"
-		    style="?AddEdit_Widget"
+		    style="?NI_TextButtonStyle"
 		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
 		    android:layout_weight="0.1"
 		    android:focusable="false"
 		    android:text="@string/addedit_decrement" />
         
 		<EditText
 		    android:id="@+id/addedit_txtQuantity"
-		    style="?AddEdit_Widget"
+		    style="?NI_EditTextStyle"
 		    android:layout_width="wrap_content"
-		    android:minWidth="90dp"
+		    android:layout_height="wrap_content"
 		    android:layout_weight="0.4"
-        	android:selectAllOnFocus="true"
+		    android:hint="@string/addedit_quantityHint"
 		    android:inputType="numberDecimal"
-		    android:hint="@string/addedit_quantityHint" />
+		    android:minWidth="90dp"
+		    android:selectAllOnFocus="true" />
 		
 		<Button
 		    android:id="@+id/addedit_btnIncrement"
-		    style="?AddEdit_Widget"
+		    style="?NI_TextButtonStyle"
 		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
 		    android:layout_weight="0.1"
 		    android:focusable="false"
 		    android:text="@string/addedit_increment" />
 
 	    <Spinner
 	        android:id="@+id/addedit_units"
-		    style="?AddEdit_Widget"
+	        style="?AddEdit_Widget"
 	        android:layout_width="wrap_content"
-		    android:layout_weight="0.4" />
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0.4" />
 	    		
 	</LinearLayout>
 
@@ -123,14 +129,15 @@
 		
 		<EditText
 		    android:id="@+id/addedit_editprice"
-		    style="?AddEdit_Widget"
+		    style="?NI_EditTextStyle"
 		    android:layout_width="0dip"
-		    android:layout_weight="1"
+		    android:layout_height="wrap_content"
 		    android:layout_gravity="center_vertical"
+		    android:layout_weight="1"
 		    android:gravity="left|center_vertical"
-	        android:selectAllOnFocus="true"
+		    android:hint="@string/addedit_priceHint"
 		    android:inputType="numberDecimal"
-		    android:hint="@string/addedit_priceHint" />
+		    android:selectAllOnFocus="true" />
 		
 		<CheckBox
 		    android:id="@+id/addedit_AskLater"
@@ -175,21 +182,24 @@
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_gravity="right|center_vertical"
-		    android:text="@string/addedit_Continue" />
+		    android:text="@string/addedit_Continue"
+		    style="?NI_TextButtonStyle" />
 
 		<Button
 		    android:id="@+id/addedit_btnDone"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_gravity="right|center_vertical"
-		    android:text="@string/addedit_Done" />
+		    android:text="@string/addedit_Done"
+		    style="?NI_TextButtonStyle" />
 		
 		<Button
 		    android:id="@+id/addedit_btnCancel"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_gravity="right|center_vertical"
-		    android:text="@string/Cancel" />
+		    android:text="@string/Cancel"
+		    style="?NI_TextButtonStyle" />
 		
 	</LinearLayout>
 

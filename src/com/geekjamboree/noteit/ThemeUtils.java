@@ -44,8 +44,10 @@ public class ThemeUtils {
 					activity.setTheme(sTheme = R.style.NI_AppTheme_Dark);
 					break;
 				}
+				activity.getApplication().setTheme(sTheme);
 			}
 		}
+		
 	}
 	
 	public static int getResourceIdFromAttribute(Context context, int attribId) {
@@ -57,7 +59,23 @@ public class ThemeUtils {
 		
 		Resources.Theme theme = context.getTheme();
 		TypedValue 		resID = new TypedValue();
-		theme.resolveAttribute(attribId, resID, false);
+		theme.resolveAttribute(attribId, resID, resolveRefs);
 		return resID.data;
-	}	
+	}
+	
+	public static int getPlatformVersion() {
+	    try {
+	        java.lang.reflect.Field verField = Class.forName("android.os.Build$VERSION").getField("SDK_INT");
+	        int ver = verField.getInt(verField);
+	        return ver;
+	    } catch (Exception e) {
+	        try {
+	            java.lang.reflect.Field verField = Class.forName("android.os.Build$VERSION").getField("SDK");
+	            String verString = (String) verField.get(verField);
+	            return Integer.parseInt(verString);
+	        } catch(Exception err) {
+	            return -1;
+	        }
+	    }
+	}
 }

@@ -19,7 +19,19 @@
 	    <item name="android:textColor">#000000</item>
 	</style>
 
-	<style name="App_TipsBackground_Dark">
+    <style name="App_TextButton.Dark" parent="@style/App_Button">
+        <item name="android:textColor">@color/TextColor_Primary_Dark</item>
+    </style>
+	
+	<style name="EditTextStyle_Dark" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">@color/TextColor_Primary_Dark</item>
+	</style>
+	
+	<style name="App_CustomDialog.Dark" parent="@style/NI_DialogBase.Dark">
+        <item name="android:background">@drawable/bg_dark</item>
+    </style>
+	
+    <style name="App_TipsBackground_Dark">
 	    <item name="android:background">@drawable/application_tips_dark</item>
 	</style>
 			
@@ -28,8 +40,8 @@
 	<color name="noteit_dark_darker">#474545</color>
 	<color name="noteit_dark_darkest">#3b3939</color>
 	
-	<color name="TextColor_Primary_Dark">#BBBBBB</color>
-	<color name="TextColor_Secondary_Dark">#808080</color>
+	<color name="TextColor_Primary_Dark">#FFF</color>
+	<color name="TextColor_Secondary_Dark">#a1a1a1</color>
 
 	<style name="TextAppearance_Dark" parent="@android:style/TextAppearance">
 	    <item name="android:background">@android:color/transparent</item>
@@ -119,11 +131,12 @@
     
     </style>
     
-    <style name="NI_AppTheme.Dark" parent="@style/NI_ThemeBase">
+    <style name="NI_AppTheme.Dark" parent="@style/NI_ThemeBase.Dark">
         
         <item name="android:windowTitleBackgroundStyle">@style/App_TitleBackground</item>
 	    <item name="NI_ButtonStyle">@style/App_ImageButtonStyle</item>
-        <item name="NI_EditTextStyle">@style/EditTextStyle_Trademark</item>
+        <item name="NI_TextButtonStyle">@style/App_TextButton.Dark</item>
+	    <item name="NI_EditTextStyle">@style/EditTextStyle_Dark</item>
         <item name="NI_TitleBackground">@style/App_TitleBackground</item>
         <item name="NI_StatusBackground">@style/App_StatusBackground</item>
         <item name="NI_AppBackgroundNormal">@style/NI_AppBackgroundNormal.Dark</item>
@@ -131,7 +144,9 @@
         <item name="NI_VerticalSeparator">@drawable/application_vertical_separator_dark</item>
         <item name="NI_Splash_Style">@style/Theme.Splash.Dark</item>
         <item name="AddEdit_Widget">@style/AddEdit_Widget_Dark</item>
-		
+		<item name="NI_DialogStyle">@style/App_CustomDialog.Dark</item>
+		<item name="NI_BackgroundColor">@color/noteit_dark</item>
+				
 		<item name="TextAppearance_Group_Small">@style/TextAppearance_Dark.GroupsItem_Small</item>
 		<item name="TextAppearance_Group_Medium">@style/TextAppearance_Dark.GroupsItem_Medium</item>
 		<item name="TextAppearance_Group_Large">@style/TextAppearance_Dark.GroupsItem_Large</item>
