@@ -6,7 +6,6 @@
     style="?NI_DialogStyle">
     
 <RelativeLayout
-    android:id="@+id/addedit_relLayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -129,7 +128,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layout_price"

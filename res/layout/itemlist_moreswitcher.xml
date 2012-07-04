@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.geekjamboree.noteit.ViewFlipperHack 
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/itemlist_more_root"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="16dip"
@@ -26,14 +25,12 @@
         android:orientation="horizontal">
 
         <ProgressBar 
-	       android:id="@+id/itemlist_moreprogress"
 	       android:layout_width="wrap_content"
 	       android:layout_height="wrap_content"
 	       android:indeterminate="true"
 	       style="?android:attr/progressBarStyleSmall" />
 
         <TextView
-            android:id="@+id/itemlist_loading"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"

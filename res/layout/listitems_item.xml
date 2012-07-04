@@ -6,7 +6,6 @@
 -->
 	
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/itemlist_root"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="16dip"
@@ -16,7 +15,6 @@
     android:orientation="vertical" >
 
     <LinearLayout 
-        android:id="@+id/itemlist_itemgroup"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
 	    android:paddingTop="8dip"

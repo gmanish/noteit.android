@@ -9,7 +9,6 @@
     android:background="@drawable/application_background_trademark">
 
 	<RelativeLayout
-	    android:id="@+id/ScreenHeader"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal"
@@ -17,7 +16,6 @@
 	    android:background="@color/noteit_trademark_dark">
     
 	    <ImageView
-	        android:id="@+id/imageviewLogo"
 	        android:layout_width="wrap_content"
 	        android:contentDescription="@string/app_name"
 	        android:layout_height="wrap_content"
@@ -43,7 +41,6 @@
         android:orientation="vertical" >
 	    
 	    <TextView
-	        android:id="@+id/textEmailID"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="@string/login_email"
@@ -61,7 +58,6 @@
 	    </EditText>
 	
 	    <TextView
-	        android:id="@+id/textPassword"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="@string/login_password"
@@ -117,7 +113,6 @@
             android:indeterminate="true" />
 
         <TextView
-            android:id="@+id/login_progress_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="8dp"
