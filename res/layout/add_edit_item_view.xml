@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/addedit_view" 
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     style="?NI_DialogStyle">
     
 <RelativeLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:padding="10dip" >
 
     <LinearLayout
@@ -16,6 +15,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dip"
+        android:minHeight="48dip"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
@@ -52,7 +52,7 @@
         style="?NI_EditTextStyle"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/addedit_titlebar"
+        android:layout_below="@id/addedit_titlebar"
         android:layout_marginBottom="5dp"
         android:completionThreshold="3"
         android:ellipsize="none"
@@ -66,14 +66,14 @@
         style="?AddEdit_Widget"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/addedit_editName"
+        android:layout_below="@id/addedit_editName"
         android:layout_marginBottom="5dp" />
 
     <LinearLayout
         android:id="@+id/addedit_updowncontrol"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/addedit_spinCategories"
+        android:layout_below="@id/addedit_spinCategories"
         android:layout_marginBottom="5dp"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
@@ -97,7 +97,7 @@
         android:id="@+id/layout_price"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/addedit_updowncontrol"
+        android:layout_below="@id/addedit_updowncontrol"
         android:layout_marginBottom="5dp"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
@@ -130,7 +130,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/layout_price"
+        android:layout_below="@id/layout_price"
         android:layout_marginTop="10dp"
         android:gravity="center_vertical|fill_horizontal"
         android:orientation="horizontal" >

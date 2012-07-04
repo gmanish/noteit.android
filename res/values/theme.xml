@@ -27,12 +27,6 @@
     	<item name="android:background">@android:color/transparent</item>
     </style>
     
-	<style name="App_CustomDialog">
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowSoftInputMode">stateVisible</item>
-    </style>
-	
 	<style name="TextAppearance.TradeMarkDark" parent="@android:style/TextAppearance">
 	    <item name="android:background">@android:color/transparent</item>
 	    <item name="android:textColor">@color/noteit_trademark_dark</item>

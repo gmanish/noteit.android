@@ -15,11 +15,10 @@
     </style>
     
     <style name="App_CustomDialog.Trademark" parent="@style/NI_DialogBase.Light">
-        <item name="android:background">@drawable/bg_trademark</item>
+        <item name="android:windowBackground">@drawable/bg_trademark</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowSoftInputMode">stateVisible</item>
-    </style>
+	</style>
     
     <!--  Style Definitions for Trademark Theme -->
     <style name="NI_AppBackgroundNormal.Trademark">

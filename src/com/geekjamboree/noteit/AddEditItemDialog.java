@@ -58,7 +58,7 @@ class AddEditItemDialog extends Dialog {
 			NoteItApplication application,
 			addItemListener inListener) {   // opens the dialog in Add mode
 		
-		super(context, R.style.App_CustomDialog);
+		super(context, ThemeUtils.getResourceIdFromAttribute(context, R.attr.NI_DialogStyle));
 		mApplication = application;
 		mItemID = 0;
 		mIsAddItem = true;
@@ -73,7 +73,7 @@ class AddEditItemDialog extends Dialog {
 			navigateItemsListener inNavigationListener,
 			long itemID) {
 		
-		super(context, R.style.App_CustomDialog);
+		super(context, ThemeUtils.getResourceIdFromAttribute(context, R.attr.NI_DialogStyle));
 		mApplication = application;
 		mItemID = itemID;
 		mIsAddItem = false;
