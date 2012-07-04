@@ -1,0 +1,677 @@
+com.geekjamboree.noteit.ActionItem:
+    private android.graphics.Bitmap thumb
+    private boolean selected
+    50:51:public ActionItem(int,java.lang.String)
+    59:60:public ActionItem(android.graphics.drawable.Drawable)
+    69:70:public ActionItem(int,android.graphics.drawable.Drawable)
+    78:79:public void setTitle(java.lang.String)
+    96:97:public void setIcon(android.graphics.drawable.Drawable)
+    113:114:public void setActionId(int)
+    129:130:public void setSticky(boolean)
+    145:146:public void setSelected(boolean)
+    154:154:public boolean isSelected()
+    163:164:public void setThumb(android.graphics.Bitmap)
+    172:172:public android.graphics.Bitmap getThumb()
+com.geekjamboree.noteit.AddEditItemDialog:
+    static final int UNITS_GENERIC
+    static final int UNITS_METRIC
+    static final int UNITS_IMPERIAL
+    android.widget.AutoCompleteTextView mItemName
+    414:414:public void initDialog()
+com.geekjamboree.noteit.AddEditItemDialog$DialogFieldException:
+    private static final long serialVersionUID
+    172:173:AddEditItemDialog$DialogFieldException(com.geekjamboree.noteit.AddEditItemDialog)
+com.geekjamboree.noteit.BuildConfig
+com.geekjamboree.noteit.CategoryListActivity:
+    static final int QA_ID_EDIT
+    static final int QA_ID_DELETE
+    static final int QA_ID_BOUGHT
+    static final java.lang.String SELECTED_CATEGORY
+com.geekjamboree.noteit.Eula:
+    private static final java.lang.String ASSET_EULA
+    private static final java.lang.String PREFERENCE_EULA_ACCEPTED
+    private static final java.lang.String PREFERENCES_EULA
+    36:36:Eula()
+com.geekjamboree.noteit.IntentIntegrator:
+    public static final int REQUEST_CODE
+    public static final java.lang.String DEFAULT_TITLE
+    public static final java.lang.String DEFAULT_MESSAGE
+    public static final java.lang.String DEFAULT_YES
+    public static final java.lang.String DEFAULT_NO
+    private static final java.lang.String BS_PACKAGE
+    143:143:public java.lang.String getTitle()
+    147:148:public void setTitle(java.lang.String)
+    151:152:public void setTitleByID(int)
+    155:155:public java.lang.String getMessage()
+    159:160:public void setMessage(java.lang.String)
+    163:164:public void setMessageByID(int)
+    167:167:public java.lang.String getButtonYes()
+    171:172:public void setButtonYes(java.lang.String)
+    175:176:public void setButtonYesByID(int)
+    179:179:public java.lang.String getButtonNo()
+    183:184:public void setButtonNo(java.lang.String)
+    187:188:public void setButtonNoByID(int)
+    191:191:public java.util.Collection getTargetApplications()
+    195:196:public void setTargetApplications(java.util.Collection)
+    199:200:public void setSingleTargetApplication(java.lang.String)
+    319:333:public void shareText(java.lang.CharSequence)
+com.geekjamboree.noteit.IntentResult:
+    66:66:public byte[] getRawBytes()
+    73:73:public java.lang.Integer getOrientation()
+    80:80:public java.lang.String getErrorCorrectionLevel()
+com.geekjamboree.noteit.ItemListActivity:
+    static final int ADD_ITEM_REQUEST
+    static final int QA_ID_EDIT
+    static final int QA_ID_DELETE
+    static final int QA_ID_BOUGHT
+    static final int QA_ID_COPY
+    static final int QA_ID_MOVE
+    static final int QA_EXPAND
+    static final int QA_COLLAPSE
+    static final int QA_ID_LIKE
+    static final int ITEM_FONT_LARGE
+    static final int ITEM_FONT_MEDIUM
+    static final int ITEM_FONT_SMALL
+    static final int DIALOG_ADD_ITEM
+    static final int DIALOG_EDIT_ITEM
+    static final java.lang.String SELECTED_GROUP
+    static final java.lang.String SELECTED_CHILD
+    static final java.lang.String SELECTED_ITEM_ID
+    static final java.lang.String IS_ITEMLIST_FETCHED
+    951:951:protected void setUpQuickActions()
+    1335:1362:void doDislikeItem()
+    2293:2293:public void onSensorChanged(int,float[])
+    2296:2296:public void onAccuracyChanged(int,int)
+com.geekjamboree.noteit.ItemListActivity$18
+com.geekjamboree.noteit.ItemListActivity$ItemsExpandableListAdapter:
+    1917:1921:public void AddCategory(com.geekjamboree.noteit.NoteItApplication$Category)
+    1978:1984:public java.lang.Object getNextChild(int,int)
+    1989:1998:public java.lang.Object getPrevChild(int,int)
+    2098:2104:public void setViewParams(android.view.View,int)
+com.geekjamboree.noteit.ItemListActivity$OnShakeListener
+com.geekjamboree.noteit.ItemListActivity$ShakeEventListener
+com.geekjamboree.noteit.LoginActivity:
+    public static final java.lang.String DONT_LOGIN
+    public static final java.lang.String DISPLAY_UNREAD_MESSAGES
+com.geekjamboree.noteit.MainPreferenceActivity:
+    public static final java.lang.String kPref_HideDoneItems
+    public static final boolean kPref_HideDoneDefault
+com.geekjamboree.noteit.MessageBox:
+    7:7:MessageBox()
+com.geekjamboree.noteit.NoteItApplication:
+    static final int MIN_PASSWORD_LENGTH
+    static final int BARCODE_FORMAT_UNKNOWN
+    static final int BARCODE_FORMAT_UPC_A
+    static final int BARCODE_FORMAT_UPC_E
+    static final int BARCODE_FORMAT_EAN_8
+    static final int BARCODE_FORMAT_EAN_13
+    static final int BARCODE_FORMAT_RSS_14
+    private static final int mItemsBatchSize
+    774:782:public java.lang.String getCurrencyForId(int)
+    1083:1083:public int getUnitsCount()
+    1382:1382:public int getCategoryCount()
+com.geekjamboree.noteit.NoteItApplication$Category:
+    public static final int CATEGORY_ID
+    public static final int CATEGORY_NAME
+com.geekjamboree.noteit.NoteItApplication$Country
+com.geekjamboree.noteit.NoteItApplication$Currency:
+    public static final int kDefaultCurrencyId
+com.geekjamboree.noteit.NoteItApplication$Item:
+    public static final int ITEM_INSTANCEID
+    public static final int ITEM_USERID
+    public static final int ITEM_LISTID
+    public static final int ITEM_CATEGORYID
+    public static final int ITEM_NAME
+    public static final int ITEM_UNITCOST
+    public static final int ITEM_QUANTITY
+    public static final int ITEM_UNITID
+    public static final int ITEM_DATEADDED
+    public static final int ITEM_DATEPURCHASED
+    public static final int ITEM_CLASSID
+    public static final int ITEM_ISPURCHASED
+    public static final int ITEM_ISASKLATER
+    public static final int ITEM_ALL
+    public java.sql.Date mDateAdded
+    318:322:public NoteItApplication$Item(com.geekjamboree.noteit.NoteItApplication,long,long,java.lang.String)
+    324:328:public NoteItApplication$Item(com.geekjamboree.noteit.NoteItApplication,long,java.lang.String,long)
+com.geekjamboree.noteit.NoteItApplication$ItemAndStats:
+    public static final int kNormalDeviation
+    public static final int kUp_OneStandardDev
+    public static final int kUp_TwoStandardDev
+    public static final int kUP_AlarmingDev
+    public static final int kDown_OneStandardDev
+    public static final int kDown_TwoStandardDev
+    public static final int kDown_AlarmingDev
+    383:388:public NoteItApplication$ItemAndStats(com.geekjamboree.noteit.NoteItApplication,com.geekjamboree.noteit.NoteItApplication$Item,float,float)
+com.geekjamboree.noteit.NoteItApplication$Preference:
+    159:161:public org.json.JSONObject getJSON()
+com.geekjamboree.noteit.NoteItApplication$Unit:
+    static final int METRIC
+    static final int IMPERIAL
+com.geekjamboree.noteit.NumberPicker:
+    private static final int DEFAULT_MAX
+    private static final int DEFAULT_MIN
+    108:109:public NumberPicker(android.content.Context)
+    154:155:public void setOnChangeListener(com.geekjamboree.noteit.NumberPicker$OnChangedListener)
+    158:159:public void setFormatter(com.geekjamboree.noteit.NumberPicker$Formatter)
+    169:173:public void setRange(int,int)
+    185:190:public void setRange(int,int,java.lang.String[])
+    193:195:public void setCurrent(int)
+    202:203:public void setSpeed(long)
+    424:424:public int getCurrent()
+com.geekjamboree.noteit.PopupWindows:
+    93:94:public void setBackgroundDrawable(android.graphics.drawable.Drawable)
+    113:116:public void setContentView(int)
+com.geekjamboree.noteit.QuickAction:
+    public static final int HORIZONTAL
+    public static final int VERTICAL
+    public static final int ANIM_GROW_FROM_LEFT
+    public static final int ANIM_GROW_FROM_RIGHT
+    public static final int ANIM_GROW_FROM_CENTER
+    public static final int ANIM_REFLECT
+    public static final int ANIM_AUTO
+    134:135:public void setAnimStyle(int)
+    363:366:public void setOnDismissListener(com.geekjamboree.noteit.QuickAction$OnDismissListener)
+com.geekjamboree.noteit.R
+com.geekjamboree.noteit.R$anim
+com.geekjamboree.noteit.R$array
+com.geekjamboree.noteit.R$attr
+com.geekjamboree.noteit.R$color
+com.geekjamboree.noteit.R$drawable
+com.geekjamboree.noteit.R$id
+com.geekjamboree.noteit.R$layout
+com.geekjamboree.noteit.R$menu
+com.geekjamboree.noteit.R$string
+com.geekjamboree.noteit.R$style
+com.geekjamboree.noteit.R$xml
+com.geekjamboree.noteit.RegisterActivity:
+    private static final java.lang.String PREFERENCE_EULA_ACCEPTED
+    private static final java.lang.String PREFERENCES_EULA
+com.geekjamboree.noteit.ReportActivity:
+    public static final java.lang.String REPORT_TYPE
+    public static final int REPORT_CATEGORY_PURCHASED_THISMONTH
+    public static final int REPORT_CATEGORY_PURCHASED_LASTMONTH
+    public static final int REPORT_PURCHASED_ALL
+    public static final int REPORT_ITEM_PURCHASED_TODAY
+    public static final int REPORT_ITEM_PURCHASED_YESTERDAY
+    public static final int REPORT_ITEM_PURCHASED_THISWEEK
+    public static final int REPORT_ITEM_PURCHASED_LASTWEEK
+    public static final int REPORT_ITEM_PENDING_ALL
+    public static final java.lang.String TEXT_REPORT
+    public static final java.lang.String HTML_REPORT
+    public static final java.lang.String TEXT_TITLE
+    android.view.View mRoot
+    328:334:protected java.lang.String getTitle(int)
+com.geekjamboree.noteit.ReportCategoryChart:
+    public static final java.lang.String REPORT_TYPE
+    public static final int REPORT_CATEGORY_PURCHASED_THISMONTH
+    public static final int REPORT_CATEGORY_PURCHASED_LASTMONTH
+com.geekjamboree.noteit.ShoppingListActivity:
+    static final java.lang.String IS_SHOPPINGLIST_FETCHED
+com.geekjamboree.noteit.ThemeUtils:
+    public static final int THEME_DEFAULT
+    public static final int THEME_NOTEBOOK
+    public static final int THEME_BRUSHED_METAL
+    12:12:public ThemeUtils()
+    25:28:public static void changeToTheme(android.app.Activity,int)
+    69:74:public static int getResourceIdFromAttribute(android.content.Context,int,int)
+    79:88:public static int getPlatformVersion()
+com.geekjamboree.noteit.TitleBar:
+    static final int BUTTON_DIMENSION
+    static final int BUTTON_PADDING
+    static final int BUTTON_MARGIN
+    static final int BUTTON_SEPARATOR_WIDTH
+    static final int BUTTON_SEPARATOR_HEIGHT
+com.google.ads.Ad:
+    public abstract boolean isReady()
+    public abstract void loadAd(com.google.ads.AdRequest)
+    public abstract void setAdListener(com.google.ads.AdListener)
+    public abstract void stopLoading()
+com.google.ads.AdActivity:
+    public static final java.lang.String BASE_URL_PARAM
+    public static final java.lang.String HTML_PARAM
+    public static final java.lang.String URL_PARAM
+    public static final java.lang.String INTENT_ACTION_PARAM
+    public static final java.lang.String TYPE_PARAM
+    public static final java.lang.String ORIENTATION_PARAM
+com.google.ads.AdRequest:
+    public static final java.lang.String VERSION
+    public static final java.lang.String LOGTAG
+    226:227:public com.google.ads.AdRequest setGender(com.google.ads.AdRequest$Gender)
+    235:235:public com.google.ads.AdRequest$Gender getGender()
+    248:260:public com.google.ads.AdRequest setBirthday(java.lang.String)
+    269:275:public com.google.ads.AdRequest setBirthday(java.util.Date)
+    285:291:public com.google.ads.AdRequest setBirthday(java.util.Calendar)
+    299:299:public java.util.Date getBirthday()
+    307:308:public com.google.ads.AdRequest clearBirthday()
+    325:326:public com.google.ads.AdRequest setPlusOneOptOut(boolean)
+    339:339:public boolean getPlusOneOptOut()
+    365:370:public com.google.ads.AdRequest addKeyword(java.lang.String)
+    383:388:public com.google.ads.AdRequest addKeywords(java.util.Set)
+    399:403:public java.util.Set getKeywords()
+    413:417:private synchronized com.google.ads.mediation.admob.AdMobAdapterExtras a()
+    432:433:public com.google.ads.AdRequest setExtras(java.util.Map)
+    450:456:public com.google.ads.AdRequest addExtra(java.lang.String,java.lang.Object)
+    483:484:public com.google.ads.AdRequest removeNetworkExtras(java.lang.Class)
+    507:508:public com.google.ads.AdRequest setMediationExtras(java.util.Map)
+    522:527:public com.google.ads.AdRequest addMediationExtra(java.lang.String,java.lang.Object)
+    538:539:public com.google.ads.AdRequest setLocation(android.location.Location)
+    547:547:public android.location.Location getLocation()
+    562:563:public com.google.ads.AdRequest setTesting(boolean)
+    673:678:public com.google.ads.AdRequest addTestDevice(java.lang.String)
+com.google.ads.AdSize:
+    public static final int FULL_WIDTH
+    public static final int AUTO_HEIGHT
+    public static final int LANDSCAPE_AD_HEIGHT
+    public static final int PORTRAIT_AD_HEIGHT
+    public static final int LARGE_AD_HEIGHT
+    142:151:public AdSize(int,int)
+    268:268:public int getWidthInPixels(android.content.Context)
+    278:278:public int getHeightInPixels(android.content.Context)
+    294:294:public boolean isSizeAppropriate(int,int)
+    317:337:public varargs com.google.ads.AdSize findBestSize(com.google.ads.AdSize[])
+com.google.ads.AdView:
+    263:264:public void destroy()
+    483:487:public boolean isReady()
+    534:535:public void setAdListener(com.google.ads.AdListener)
+    546:549:public void stopLoading()
+com.google.ads.InterstitialAd:
+    private com.google.ads.internal.d a
+    private com.google.ads.m b
+    86:87:public InterstitialAd(android.app.Activity,java.lang.String)
+    101:105:public InterstitialAd(android.app.Activity,java.lang.String,boolean)
+    114:114:public boolean isReady()
+    126:127:public void loadAd(com.google.ads.AdRequest)
+    136:137:public void show()
+    148:149:public void setAdListener(com.google.ads.AdListener)
+    158:159:public void stopLoading()
+com.google.ads.e:
+    112:122:public void b()
+    199:205:private boolean a(com.google.ads.h,java.lang.String)
+    211:222:public void a(com.google.ads.h,boolean)
+    227:241:public void a(com.google.ads.h,android.view.View)
+    245:254:public void a(com.google.ads.h)
+    258:267:public void b(com.google.ads.h)
+    271:280:public void c(com.google.ads.h)
+    291:300:public boolean c()
+    462:464:private com.google.ads.h e()
+    51:51:static synthetic com.google.ads.h c(com.google.ads.e)
+com.google.ads.e$2
+com.google.ads.e$3
+com.google.ads.e$4
+com.google.ads.e$5
+com.google.ads.e$6
+com.google.ads.f:
+    79:79:public java.util.List e()
+com.google.ads.h:
+    118:118:public com.google.ads.f a()
+    202:228:public synchronized void f()
+    255:255:synchronized com.google.ads.mediation.MediationAdapter h()
+    262:262:com.google.ads.e i()
+    266:267:synchronized void a(android.view.View)
+com.google.ads.h$2
+com.google.ads.internal.c:
+    433:449:protected void a()
+com.google.ads.internal.d:
+    294:302:public synchronized void b()
+    497:497:public synchronized boolean q()
+    678:683:public synchronized void a(com.google.ads.f,boolean)
+    808:819:private void b(com.google.ads.f,java.lang.Boolean)
+    999:1028:public synchronized void y()
+    1037:1046:public synchronized void z()
+    1150:1150:public java.lang.Boolean C()
+com.google.ads.j:
+    private boolean b
+    32:64:public void onReceivedAd(com.google.ads.mediation.MediationBannerAdapter)
+    70:82:public void onFailedToReceiveAd(com.google.ads.mediation.MediationBannerAdapter,com.google.ads.AdRequest$ErrorCode)
+    87:90:public void onPresentScreen(com.google.ads.mediation.MediationBannerAdapter)
+    94:97:public void onDismissScreen(com.google.ads.mediation.MediationBannerAdapter)
+    101:104:public void onLeaveApplication(com.google.ads.mediation.MediationBannerAdapter)
+    108:112:public void onClick(com.google.ads.mediation.MediationBannerAdapter)
+com.google.ads.k:
+    27:38:public void onReceivedAd(com.google.ads.mediation.MediationInterstitialAdapter)
+    43:56:public void onFailedToReceiveAd(com.google.ads.mediation.MediationInterstitialAdapter,com.google.ads.AdRequest$ErrorCode)
+    61:64:public void onPresentScreen(com.google.ads.mediation.MediationInterstitialAdapter)
+    69:72:public void onDismissScreen(com.google.ads.mediation.MediationInterstitialAdapter)
+    76:79:public void onLeaveApplication(com.google.ads.mediation.MediationInterstitialAdapter)
+com.google.ads.mediation.EmptyNetworkExtras
+com.google.ads.mediation.MediationAdRequest:
+    50:50:public com.google.ads.AdRequest$Gender getGender()
+    57:57:public java.util.Date getBirthday()
+    67:81:public java.lang.Integer getAgeInYears()
+    88:92:public java.util.Set getKeywords()
+    100:104:public android.location.Location getLocation()
+    114:114:public boolean isTesting()
+com.google.ads.mediation.MediationBannerAdapter:
+    public abstract android.view.View getBannerView()
+com.google.ads.mediation.MediationBannerListener:
+    public abstract void onReceivedAd(com.google.ads.mediation.MediationBannerAdapter)
+    public abstract void onFailedToReceiveAd(com.google.ads.mediation.MediationBannerAdapter,com.google.ads.AdRequest$ErrorCode)
+    public abstract void onPresentScreen(com.google.ads.mediation.MediationBannerAdapter)
+    public abstract void onDismissScreen(com.google.ads.mediation.MediationBannerAdapter)
+    public abstract void onLeaveApplication(com.google.ads.mediation.MediationBannerAdapter)
+    public abstract void onClick(com.google.ads.mediation.MediationBannerAdapter)
+com.google.ads.mediation.MediationInterstitialAdapter:
+    public abstract void showInterstitial()
+com.google.ads.mediation.MediationInterstitialListener:
+    public abstract void onReceivedAd(com.google.ads.mediation.MediationInterstitialAdapter)
+    public abstract void onFailedToReceiveAd(com.google.ads.mediation.MediationInterstitialAdapter,com.google.ads.AdRequest$ErrorCode)
+    public abstract void onPresentScreen(com.google.ads.mediation.MediationInterstitialAdapter)
+    public abstract void onDismissScreen(com.google.ads.mediation.MediationInterstitialAdapter)
+    public abstract void onLeaveApplication(com.google.ads.mediation.MediationInterstitialAdapter)
+com.google.ads.mediation.admob.AdMobAdapter
+com.google.ads.mediation.admob.AdMobAdapter$1
+com.google.ads.mediation.admob.AdMobAdapter$a
+com.google.ads.mediation.admob.AdMobAdapter$b
+com.google.ads.mediation.admob.AdMobAdapterExtras:
+    29:36:public AdMobAdapterExtras(com.google.ads.mediation.admob.AdMobAdapterExtras)
+    49:50:public com.google.ads.mediation.admob.AdMobAdapterExtras setPlusOneOptOut(boolean)
+    75:76:public com.google.ads.mediation.admob.AdMobAdapterExtras setUseExactAdSize(boolean)
+    85:85:public boolean getUseExactAdSize()
+    108:112:public com.google.ads.mediation.admob.AdMobAdapterExtras setExtras(java.util.Map)
+    134:135:public com.google.ads.mediation.admob.AdMobAdapterExtras addExtra(java.lang.String,java.lang.Object)
+com.google.ads.mediation.admob.AdMobAdapterServerParameters
+com.google.ads.mediation.customevent.CustomEventAdapter
+com.google.ads.mediation.customevent.CustomEventAdapter$a
+com.google.ads.mediation.customevent.CustomEventAdapter$b
+com.google.ads.mediation.customevent.CustomEventBanner
+com.google.ads.mediation.customevent.CustomEventBannerListener
+com.google.ads.mediation.customevent.CustomEventInterstitial
+com.google.ads.mediation.customevent.CustomEventInterstitialListener
+com.google.ads.mediation.customevent.CustomEventListener
+com.google.ads.mediation.customevent.CustomEventServerParameters
+com.google.ads.searchads.SearchAdRequest:
+    91:92:public void setQuery(java.lang.String)
+    101:108:public void setBackgroundColor(int)
+    120:127:public void setBackgroundGradient(int,int)
+    137:138:public void setHeaderTextColor(int)
+    148:149:public void setDescriptionTextColor(int)
+    159:160:public void setAnchorTextColor(int)
+    168:169:public void setFontFace(java.lang.String)
+    178:179:public void setHeaderTextSize(int)
+    189:190:public void setBorderColor(int)
+    197:198:public void setBorderType(com.google.ads.searchads.SearchAdRequest$BorderType)
+    207:208:public void setBorderThickness(int)
+    215:216:public void setCustomChannels(java.lang.String)
+com.google.ads.util.a:
+    37:38:public static void a(boolean)
+    53:55:public static void a(java.lang.Object)
+org.achartengine.ChartFactory:
+    public static final java.lang.String CHART
+    public static final java.lang.String TITLE
+    51:53:private ChartFactory()
+    68:70:public static final org.achartengine.GraphicalView getLineChartView(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer)
+    86:88:public static final org.achartengine.GraphicalView getCubeLineChartView(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer,float)
+    104:106:public static final org.achartengine.GraphicalView getScatterChartView(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer)
+    122:124:public static final org.achartengine.GraphicalView getBubbleChartView(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer)
+    142:145:public static final org.achartengine.GraphicalView getTimeChartView(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer,java.lang.String)
+    162:164:public static final org.achartengine.GraphicalView getBarChartView(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer,org.achartengine.chart.BarChart$Type)
+    181:183:public static final org.achartengine.GraphicalView getRangeBarChartView(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer,org.achartengine.chart.BarChart$Type)
+    200:207:public static final org.achartengine.GraphicalView getCombinedXYChartView(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer,java.lang.String[])
+    243:245:public static final org.achartengine.GraphicalView getDialChartView(android.content.Context,org.achartengine.model.CategorySeries,org.achartengine.renderer.DialRenderer)
+    262:264:public static final org.achartengine.GraphicalView getDoughnutChartView(android.content.Context,org.achartengine.model.MultipleCategorySeries,org.achartengine.renderer.DefaultRenderer)
+    282:282:public static final android.content.Intent getLineChartIntent(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer)
+    300:300:public static final android.content.Intent getCubicLineChartIntent(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer,float)
+    317:317:public static final android.content.Intent getScatterChartIntent(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer)
+    334:334:public static final android.content.Intent getBubbleChartIntent(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer)
+    353:353:public static final android.content.Intent getTimeChartIntent(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer,java.lang.String)
+    371:371:public static final android.content.Intent getBarChartIntent(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer,org.achartengine.chart.BarChart$Type)
+    392:397:public static final android.content.Intent getLineChartIntent(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer,java.lang.String)
+    419:424:public static final android.content.Intent getCubicLineChartIntent(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer,float,java.lang.String)
+    442:447:public static final android.content.Intent getScatterChartIntent(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer,java.lang.String)
+    465:470:public static final android.content.Intent getBubbleChartIntent(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer,java.lang.String)
+    490:496:public static final android.content.Intent getTimeChartIntent(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer,java.lang.String,java.lang.String)
+    515:520:public static final android.content.Intent getBarChartIntent(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer,org.achartengine.chart.BarChart$Type,java.lang.String)
+    540:545:public static final android.content.Intent getRangeBarChartIntent(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer,org.achartengine.chart.BarChart$Type,java.lang.String)
+    565:575:public static final android.content.Intent getCombinedXYChartIntent(android.content.Context,org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer,java.lang.String[],java.lang.String)
+    593:598:public static final android.content.Intent getPieChartIntent(android.content.Context,org.achartengine.model.CategorySeries,org.achartengine.renderer.DefaultRenderer,java.lang.String)
+    616:621:public static final android.content.Intent getDoughnutChartIntent(android.content.Context,org.achartengine.model.MultipleCategorySeries,org.achartengine.renderer.DefaultRenderer,java.lang.String)
+    639:644:public static final android.content.Intent getDialChartIntent(android.content.Context,org.achartengine.model.CategorySeries,org.achartengine.renderer.DialRenderer,java.lang.String)
+    658:663:private static void checkParameters(org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer)
+    692:697:private static void checkParameters(org.achartengine.model.MultipleCategorySeries,org.achartengine.renderer.DefaultRenderer)
+    700:705:private static boolean checkMultipleSeriesItems(org.achartengine.model.MultipleCategorySeries,int)
+org.achartengine.GraphicalView:
+    135:135:public org.achartengine.model.SeriesSelection getCurrentSeriesAndPoint()
+    145:149:public double[] toRealPoint(int)
+    186:190:public void setZoomRate(float)
+    231:240:public void addZoomListener(org.achartengine.tools.ZoomListener,boolean,boolean)
+    248:253:public synchronized void removeZoomListener(org.achartengine.tools.ZoomListener)
+    261:262:public void addPanListener(org.achartengine.tools.PanListener)
+    270:271:public void removePanListener(org.achartengine.tools.PanListener)
+    313:318:public void repaint(int,int,int,int)
+    326:334:public android.graphics.Bitmap toBitmap()
+org.achartengine.GraphicalView$2
+org.achartengine.ITouchHandler:
+    public abstract void addZoomListener(org.achartengine.tools.ZoomListener)
+    public abstract void removeZoomListener(org.achartengine.tools.ZoomListener)
+    public abstract void addPanListener(org.achartengine.tools.PanListener)
+    public abstract void removePanListener(org.achartengine.tools.PanListener)
+org.achartengine.TouchHandler:
+    167:170:public void addZoomListener(org.achartengine.tools.ZoomListener)
+    178:181:public void removeZoomListener(org.achartengine.tools.ZoomListener)
+    189:192:public void addPanListener(org.achartengine.tools.PanListener)
+    200:203:public void removePanListener(org.achartengine.tools.PanListener)
+org.achartengine.TouchHandlerOld:
+    105:105:public void addZoomListener(org.achartengine.tools.ZoomListener)
+    113:113:public void removeZoomListener(org.achartengine.tools.ZoomListener)
+    121:124:public void addPanListener(org.achartengine.tools.PanListener)
+    132:135:public void removePanListener(org.achartengine.tools.PanListener)
+org.achartengine.chart.AbstractChart:
+    449:449:public org.achartengine.model.SeriesSelection getSeriesAndPointForScreenCoordinate(org.achartengine.model.Point)
+org.achartengine.chart.BarChart
+org.achartengine.chart.BarChart$Type
+org.achartengine.chart.BubbleChart
+org.achartengine.chart.ClickableArea:
+    33:33:public android.graphics.RectF getRect()
+    37:37:public double getX()
+    41:41:public double getY()
+org.achartengine.chart.CombinedXYChart
+org.achartengine.chart.CubicLineChart
+org.achartengine.chart.DialChart
+org.achartengine.chart.DoughnutChart
+org.achartengine.chart.LineChart
+org.achartengine.chart.PieChart:
+    128:128:public org.achartengine.model.SeriesSelection getSeriesAndPointForScreenCoordinate(org.achartengine.model.Point)
+org.achartengine.chart.PieMapper:
+    71:84:public double getAngle(org.achartengine.model.Point)
+    97:102:public boolean isOnPieChart(org.achartengine.model.Point)
+    112:122:public org.achartengine.model.SeriesSelection getSeriesAndPointForScreenCoordinate(org.achartengine.model.Point)
+org.achartengine.chart.PieSegment:
+    31:31:public boolean isInSegment(double)
+    35:35:protected float getStartAngle()
+    39:39:protected float getEndAngle()
+    43:43:protected int getDataIndex()
+    47:47:protected float getValue()
+org.achartengine.chart.PointStyle:
+    62:70:public static org.achartengine.chart.PointStyle getPointStyleForName(java.lang.String)
+    79:87:public static int getIndexForName(java.lang.String)
+org.achartengine.chart.RangeBarChart
+org.achartengine.chart.RoundChart:
+    protected static final int SHAPE_WIDTH
+    protected static final int NO_VALUE
+org.achartengine.chart.ScatterChart:
+    public static final java.lang.String TYPE
+    private static final float SIZE
+    private static final int SHAPE_WIDTH
+    41:42:ScatterChart()
+    51:53:public ScatterChart(org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer)
+    58:60:protected void setDatasetRenderer(org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer)
+    263:263:public java.lang.String getChartType()
+org.achartengine.chart.TimeChart
+org.achartengine.chart.XYChart:
+    84:87:public XYChart(org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer)
+    92:94:protected void setDatasetRenderer(org.achartengine.model.XYMultipleSeriesDataset,org.achartengine.renderer.XYMultipleSeriesRenderer)
+    438:438:protected android.graphics.Rect getScreenR()
+    442:443:protected void setScreenR(android.graphics.Rect)
+    774:775:public void setCalcRange(double[],int)
+    778:778:public double[] toRealPoint(float,float)
+    782:782:public double[] toScreenPoint(double[])
+    812:824:public double[] toScreenPoint(double[],int)
+    830:848:public org.achartengine.model.SeriesSelection getSeriesAndPointForScreenCoordinate(org.achartengine.model.Point)
+    902:902:public double getDefaultMinimum()
+    public abstract java.lang.String getChartType()
+org.achartengine.model.CategorySeries:
+    48:48:public java.lang.String getTitle()
+    57:58:public synchronized void add(double)
+    79:81:public synchronized void set(int,java.lang.String,double)
+    89:91:public synchronized void remove(int)
+    97:99:public synchronized void clear()
+    136:141:public org.achartengine.model.XYSeries toXYSeries()
+org.achartengine.model.MultipleCategorySeries
+org.achartengine.model.Point:
+    46:47:public void setX(float)
+    50:51:public void setY(float)
+org.achartengine.model.RangeCategorySeries
+org.achartengine.model.SeriesSelection
+org.achartengine.model.TimeSeries
+org.achartengine.model.XYMultipleSeriesDataset:
+    25:27:public XYMultipleSeriesDataset()
+    35:36:public synchronized void addSeries(org.achartengine.model.XYSeries)
+    45:46:public synchronized void addSeries(int,org.achartengine.model.XYSeries)
+    54:55:public synchronized void removeSeries(int)
+    63:64:public synchronized void removeSeries(org.achartengine.model.XYSeries)
+org.achartengine.model.XYSeries:
+    53:54:public XYSeries(java.lang.String)
+    62:66:public XYSeries(java.lang.String,int)
+    76:86:private void initRange()
+    95:99:private void updateRange(double,double)
+    116:117:public void setTitle(java.lang.String)
+    126:128:public synchronized void add(double,double)
+    136:142:public synchronized void remove(int)
+    148:150:public synchronized void clear()
+    159:159:public synchronized double getX(int)
+org.achartengine.model.XYValueSeries
+org.achartengine.renderer.DefaultRenderer:
+    public static final int NO_COLOR
+    public static final int BACKGROUND_COLOR
+    public static final int TEXT_COLOR
+    122:123:public void setChartTitle(java.lang.String)
+    159:160:public void addSeriesRenderer(int,org.achartengine.renderer.SimpleSeriesRenderer)
+    168:169:public void removeSeriesRenderer(org.achartengine.renderer.SimpleSeriesRenderer)
+    196:196:public org.achartengine.renderer.SimpleSeriesRenderer[] getSeriesRenderers()
+    250:251:public void setAxesColor(int)
+    269:270:public void setLabelsColor(int)
+    305:306:public void setShowAxes(boolean)
+    323:324:public void setShowLabels(boolean)
+    350:351:public void setShowGridX(boolean)
+    359:360:public void setShowGridY(boolean)
+    368:370:public void setShowGrid(boolean)
+    387:388:public void setShowCustomTextGrid(boolean)
+    405:406:public void setShowLegend(boolean)
+    423:424:public void setFitLegend(boolean)
+    469:471:public void setTextTypeface(java.lang.String,int)
+    488:489:public void setAntialiasing(boolean)
+    534:535:public void setZoomEnabled(boolean)
+    552:553:public void setZoomButtonsVisible(boolean)
+    570:571:public void setExternalZoomEnabled(boolean)
+    597:598:public void setPanEnabled(boolean)
+    606:607:public void setZoomRate(float)
+    642:643:public void setSelectableBuffer(int)
+    660:661:public void setLegendHeight(int)
+    699:700:public void setInScroll(boolean)
+    710:710:public float getStartAngle()
+org.achartengine.renderer.DialRenderer
+org.achartengine.renderer.DialRenderer$Type
+org.achartengine.renderer.SimpleSeriesRenderer:
+    private double mGradientStartValue
+    private int mGradientStartColor
+    private double mGradientStopValue
+    private int mGradientStopColor
+    83:84:public void setDisplayChartValues(boolean)
+    101:102:public void setChartValuesTextSize(float)
+    120:121:public void setChartValuesTextAlign(android.graphics.Paint$Align)
+    138:139:public void setChartValuesSpacing(float)
+    156:157:public void setStroke(org.achartengine.renderer.BasicStroke)
+    164:164:public boolean isGradientEnabled()
+    172:173:public void setGradientEnabled(boolean)
+    180:180:public double getGradientStartValue()
+    188:188:public int getGradientStartColor()
+    197:199:public void setGradientStart(double,int)
+    206:206:public double getGradientStopValue()
+    214:214:public int getGradientStopColor()
+    223:225:public void setGradientStop(double,int)
+org.achartengine.renderer.XYMultipleSeriesRenderer:
+    168:169:public void setOrientation(org.achartengine.renderer.XYMultipleSeriesRenderer$Orientation)
+    186:187:public void setXTitle(java.lang.String)
+    214:215:public void setYTitle(java.lang.String)
+    224:225:public void setYTitle(java.lang.String,int)
+    242:243:public void setAxisTitleTextSize(float)
+    251:251:public double getXAxisMin()
+    260:261:public void setXAxisMin(double)
+    269:269:public boolean isMinXSet()
+    278:278:public double getXAxisMax()
+    287:288:public void setXAxisMax(double)
+    296:296:public boolean isMaxXSet()
+    305:305:public double getYAxisMin()
+    314:315:public void setYAxisMin(double)
+    323:323:public boolean isMinYSet()
+    332:332:public double getYAxisMax()
+    341:342:public void setYAxisMax(double)
+    350:350:public boolean isMaxYSet()
+    500:501:public void setXLabels(int)
+    511:512:public void addTextLabel(double,java.lang.String)
+    521:522:public void addXTextLabel(double,java.lang.String)
+    549:550:public void clearTextLabels()
+    556:557:public void clearXTextLabels()
+    566:567:public void addYTextLabel(double,java.lang.String)
+    577:578:public void addYTextLabel(double,java.lang.String,int)
+    587:587:public java.lang.String getYTextLabel(java.lang.Double)
+    607:607:public java.lang.Double[] getYTextLabelLocations()
+    624:625:public void clearYTextLabels()
+    642:643:public void setYLabels(int)
+    652:656:public void setDisplayChartValues(boolean)
+    665:669:public void setChartValuesTextSize(float)
+    705:707:public void setPanEnabled(boolean,boolean)
+    743:745:public void setZoomEnabled(boolean,boolean)
+    754:754:public double getBarsSpacing()
+    763:763:public double getBarSpacing()
+    774:775:public void setBarSpacing(double)
+    810:811:public void setGridColor(int)
+    830:831:public void setPanLimits(double[])
+    850:851:public void setZoomLimits(double[])
+    868:869:public void setXLabelsAngle(float)
+    886:887:public void setYLabelsAngle(float)
+    895:895:public float getPointSize()
+    904:905:public void setPointSize(float)
+    908:909:public void setRange(double[])
+    945:945:public double[] getInitialRange()
+    965:966:public void setInitialRange(double[])
+    976:977:public void setInitialRange(double[],int)
+    1003:1004:public void setXLabelsColor(int)
+    1013:1014:public void setYLabelsColor(int,int)
+    1031:1032:public void setXLabelsAlign(android.graphics.Paint$Align)
+    1045:1046:public void setYLabelsAlign(android.graphics.Paint$Align)
+    1053:1054:public void setYAxisAlign(android.graphics.Paint$Align,int)
+    1062:1063:public void setYLabelsAlign(android.graphics.Paint$Align,int)
+org.achartengine.renderer.XYSeriesRenderer:
+    43:43:public boolean isFillBelowLine()
+    53:54:public void setFillBelowLine(boolean)
+    71:72:public void setFillPoints(boolean)
+    80:80:public int getFillBelowLineColor()
+    89:90:public void setFillBelowLineColor(int)
+    107:108:public void setPointStyle(org.achartengine.chart.PointStyle)
+    116:116:public float getLineWidth()
+    125:126:public void setLineWidth(float)
+org.achartengine.tools.Pan:
+    157:158:public synchronized void addPanListener(org.achartengine.tools.PanListener)
+    166:167:public synchronized void removePanListener(org.achartengine.tools.PanListener)
+org.achartengine.tools.Zoom:
+    public static final int ZOOM_AXIS_XY
+    public static final int ZOOM_AXIS_X
+    public static final int ZOOM_AXIS_Y
+    177:178:public synchronized void addZoomListener(org.achartengine.tools.ZoomListener)
+    186:187:public synchronized void removeZoomListener(org.achartengine.tools.ZoomListener)
+org.achartengine.tools.ZoomEvent:
+    45:45:public boolean isZoomIn()
+    54:54:public float getZoomRate()
+org.achartengine.util.IndexXYMap:
+    32:33:public IndexXYMap()
+    54:54:public double getMaxXDifference()
+    70:70:public java.lang.Object getXByIndex(int)
+    91:92:public org.achartengine.util.XYEntry getByIndex(int)
+    101:102:public org.achartengine.util.XYEntry removeByIndex(int)
+org.achartengine.util.MathHelper:
+    public static final double NULL_VALUE
+    35:37:private MathHelper()
+    46:57:public static double[] minmax(java.util.List)
+org.achartengine.util.XYEntry

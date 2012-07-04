@@ -16,6 +16,9 @@
     
     <style name="App_CustomDialog.Trademark" parent="@style/NI_DialogBase.Light">
         <item name="android:background">@drawable/bg_trademark</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowSoftInputMode">stateVisible</item>
     </style>
     
     <!--  Style Definitions for Trademark Theme -->
@@ -203,6 +206,8 @@
 		<item name="Like_Small">@drawable/thumbs_up_dark_small</item>
 		<item name="Reports_Small">@drawable/reports_small_dark</item>
 		<item name="Help">@drawable/help_dark</item>
+		<item name="Increment">@drawable/increment_dark</item>
+		<item name="Decrement">@drawable/decrement_dark</item>
 		<item name="Tips_Background">@style/App_TipsBackground_Trademark</item>
 					
 	</style>

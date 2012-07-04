@@ -61,6 +61,8 @@
 	<attr name="Like_Small" format="reference"></attr>
 	<attr name="Reports_Small" format="reference"></attr>
 	<attr name="Help" format="reference"></attr>
+	<attr name="Increment" format="reference"></attr>
+	<attr name="Decrement" format="reference"></attr>
 	<attr name="Tips_Background" format="reference"></attr>
 					
 </resources>

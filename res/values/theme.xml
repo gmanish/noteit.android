@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- #67593A -->
     <color name="noteit_trademark_dark">#5a4d31</color>
@@ -7,7 +7,7 @@
     <color name="noteit_header_textcolor">#FDFDFD</color>
     
     <style name="App_Button" parent="@style/NI_ButtonBase">
-        <item name="android:minWidth">40dip</item>
+        <item name="android:minWidth">90dip</item>
         <item name="android:minHeight">40dip</item>
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>
@@ -15,6 +15,8 @@
     
     <style name="App_ImageButtonStyle" parent="@android:style/Widget.ImageButton">
         <item name="android:gravity">center</item>
+        <item name="android:minHeight">32dip</item>
+        <item name="android:minWidth">32dip</item>
         <item name="android:background">@color/app_button_background</item>
     </style>
     	

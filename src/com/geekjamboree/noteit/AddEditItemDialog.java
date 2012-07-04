@@ -98,8 +98,8 @@ class AddEditItemDialog extends Dialog {
 
 	// controls
 	EditText				mEditName;
-	EditText				mEditQuantity;
-	EditText				mEditCost;
+	NumberPicker			mEditQuantity;
+	NumberPicker			mEditCost;
 	TextView				mTextTotal;
 	Spinner					mSpinCategories;
 	Spinner					mSpinUnits;
@@ -240,22 +240,20 @@ class AddEditItemDialog extends Dialog {
         }
         
         mEditName = (EditText) findViewById(R.id.addedit_editName);
-        mEditQuantity = (EditText) findViewById(R.id.addedit_txtQuantity);
-        mEditCost = (EditText) findViewById(R.id.addedit_editprice);
+        mEditQuantity = (NumberPicker) findViewById(R.id.addedit_txtQuantity);
+        mEditCost = (NumberPicker) findViewById(R.id.addedit_editprice);
         mAskLater = (CheckBox) findViewById(R.id.addedit_AskLater);
         mTextTotal = (TextView) findViewById(R.id.addedit_labelTotal);
-        mEditCost.setOnKeyListener(new View.OnKeyListener() {
+        mEditCost.setOnChangeListener(new NumberPicker.OnChangedListener() {
 			
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
+			public void onChanged(NumberPicker picker, float oldVal, float newVal) {
 				doUpdateTotal();
-				return false;
 			}
 		});
-        mEditQuantity.setOnKeyListener(new View.OnKeyListener() {
+        mEditQuantity.setOnChangeListener(new NumberPicker.OnChangedListener() {
 			
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
+			public void onChanged(NumberPicker picker, float oldVal, float newVal) {
 				doUpdateTotal();
-				return false;
 			}
 		});
         
@@ -361,7 +359,7 @@ class AddEditItemDialog extends Dialog {
         
         if (!mIsAddItem) {
         	// In the edit mode "Add More" button does not make sense
-        	continueBtn.setVisibility(View.INVISIBLE);
+        	continueBtn.setVisibility(View.GONE);
         } else {
         	// In the Add mode, next and prev don't make sense
         	nextBtn.setVisibility(View.GONE);
@@ -462,8 +460,8 @@ class AddEditItemDialog extends Dialog {
 	    	}
 		}
     	
-    	mEditQuantity.setText(String.valueOf(item.mQuantity));
-    	mEditCost.setText(String.valueOf(item.mUnitPrice));
+    	mEditQuantity.setCurrent(item.mQuantity);
+    	mEditCost.setCurrent(item.mUnitPrice);
     	mAskLater.setChecked(item.mIsAskLater > 0);
     	
     	ArrayAdapter<Category> adapter = (ArrayAdapter<Category>)mSpinCategories.getAdapter();
@@ -539,11 +537,8 @@ class AddEditItemDialog extends Dialog {
     	if (item.mName.trim().matches(""))
     		throw new DialogFieldException(getContext().getResources().getString(R.string.addedit_nameblank));
    	
-    	if (!mEditQuantity.getEditableText().toString().matches(""))
-    		item.mQuantity = Float.valueOf(mEditQuantity.getEditableText().toString());
-    	
-    	if (!mEditCost.getEditableText().toString().matches(""))
-    		item.mUnitPrice = Float.valueOf(mEditCost.getEditableText().toString());
+		item.mQuantity = mEditQuantity.getCurrent();
+   		item.mUnitPrice = mEditCost.getCurrent();
 
     	return item;
     }
@@ -551,22 +546,20 @@ class AddEditItemDialog extends Dialog {
     public void clearDialogFields() {
 
     	mEditName.setText("");
-    	mEditQuantity.setText("");
-    	mEditCost.setText("");
+    	mEditQuantity.setCurrent(1.0f);
+    	mEditCost.setCurrent(1.0f);
     	mEditName.requestFocus();
     }
     
     void doUpdateTotal() {
 		
-    	String 			strcost = mEditCost.getEditableText().toString();
-		String 			strquantity = mEditQuantity.getEditableText().toString();
 		float 			newValue = 0;
 		float 			quantity = 0;
 		final String 	format = getContext().getResources().getString(R.string.addedit_total);
 		
 		try {
-			newValue = Float.valueOf(strcost.trim());
-			quantity = Float.valueOf(strquantity.trim());
+			newValue = mEditCost.getCurrent();
+			quantity = mEditQuantity.getCurrent();
 		} catch (Exception e) {
 			newValue = 0;
 			quantity = 0;

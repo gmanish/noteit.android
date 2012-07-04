@@ -141,6 +141,7 @@ public class MainPreferenceActivity extends PreferenceActivity {
 		});
     	
     	mToolbar.addVerticalSeparator(this, true);
+    	mToolbar.SetTitle(getResources().getString(R.string.preference_activity_title));
     }
 	
 }

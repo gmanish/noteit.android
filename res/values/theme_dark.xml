@@ -29,7 +29,10 @@
 	
 	<style name="App_CustomDialog.Dark" parent="@style/NI_DialogBase.Dark">
         <item name="android:background">@drawable/bg_dark</item>
-    </style>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowSoftInputMode">stateVisible</item>
+	</style>
 	
     <style name="App_TipsBackground_Dark">
 	    <item name="android:background">@drawable/application_tips_dark</item>
@@ -194,6 +197,8 @@
 		<item name="Like_Small">@drawable/thumbs_up_light_small</item>
 		<item name="Reports_Small">@drawable/reports_small_light</item>
 		<item name="Help">@drawable/help</item>
+		<item name="Increment">@drawable/increment</item>
+		<item name="Decrement">@drawable/decrement</item>
 		<item name="Tips_Background">@style/App_TipsBackground_Dark</item>
 	</style>
     

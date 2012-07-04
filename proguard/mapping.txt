@@ -1,0 +1,2576 @@
+com.geekjamboree.noteit.ActionItem -> com.geekjamboree.noteit.a:
+    android.graphics.drawable.Drawable icon -> a
+    java.lang.String title -> b
+    int actionId -> c
+    boolean sticky -> d
+    java.lang.String getTitle() -> a
+    android.graphics.drawable.Drawable getIcon() -> b
+    int getActionId() -> c
+    boolean isSticky() -> d
+com.geekjamboree.noteit.AddEditItemDialog -> com.geekjamboree.noteit.b:
+    com.geekjamboree.noteit.NoteItApplication mApplication -> a
+    com.geekjamboree.noteit.AddEditItemDialog$baseListener mListener -> b
+    boolean mIsAddItem -> c
+    int mIgnoreAutoComplete -> d
+    long mItemID -> e
+    com.geekjamboree.noteit.NoteItApplication$Item mOriginalItem -> f
+    com.geekjamboree.noteit.AddEditItemDialog$navigateItemsListener mNavigationListener -> g
+    android.widget.ArrayAdapter mAutoCompleteAdapter -> h
+    android.widget.EditText mEditName -> i
+    android.widget.EditText mEditQuantity -> j
+    android.widget.EditText mEditCost -> k
+    android.widget.TextView mTextTotal -> l
+    android.widget.Spinner mSpinCategories -> m
+    android.widget.Spinner mSpinUnits -> n
+    android.widget.CheckBox mAskLater -> o
+    android.view.View mContentView -> p
+    android.widget.AdapterView$OnItemClickListener mItemClickListener -> q
+    android.view.View$OnKeyListener mOnKeyListener -> r
+    void setItemID(long) -> a
+    void setItem(com.geekjamboree.noteit.NoteItApplication$Item) -> a
+    void onCreate(android.os.Bundle) -> onCreate
+    void saveItem() -> a
+    void populateView(com.geekjamboree.noteit.NoteItApplication$Item,int) -> a
+    void doFetchAndDisplayItem(long) -> b
+    void clearDialogFields() -> b
+    void doUpdateTotal() -> c
+com.geekjamboree.noteit.AddEditItemDialog$1 -> com.geekjamboree.noteit.c:
+    com.geekjamboree.noteit.AddEditItemDialog this$0 -> a
+    void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
+    com.geekjamboree.noteit.AddEditItemDialog access$0(com.geekjamboree.noteit.AddEditItemDialog$1) -> a
+com.geekjamboree.noteit.AddEditItemDialog$1$1 -> com.geekjamboree.noteit.d:
+    com.geekjamboree.noteit.AddEditItemDialog$1 this$1 -> a
+    void onPostExecute$1712e425(long,java.util.ArrayList) -> a
+com.geekjamboree.noteit.AddEditItemDialog$10 -> com.geekjamboree.noteit.e:
+    com.geekjamboree.noteit.AddEditItemDialog this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.AddEditItemDialog$11 -> com.geekjamboree.noteit.f:
+    com.geekjamboree.noteit.AddEditItemDialog this$0 -> a
+    void onItemSelected(android.widget.AdapterView,android.view.View,int,long) -> onItemSelected
+    void onNothingSelected(android.widget.AdapterView) -> onNothingSelected
+com.geekjamboree.noteit.AddEditItemDialog$12 -> com.geekjamboree.noteit.g:
+    com.geekjamboree.noteit.AddEditItemDialog this$0 -> a
+    void onPostExecute(long,com.geekjamboree.noteit.NoteItApplication$Item,java.lang.String) -> a
+com.geekjamboree.noteit.AddEditItemDialog$2 -> com.geekjamboree.noteit.h:
+    com.geekjamboree.noteit.AddEditItemDialog this$0 -> a
+    boolean onKey(android.view.View,int,android.view.KeyEvent) -> onKey
+    com.geekjamboree.noteit.AddEditItemDialog access$0(com.geekjamboree.noteit.AddEditItemDialog$2) -> a
+com.geekjamboree.noteit.AddEditItemDialog$2$1 -> com.geekjamboree.noteit.i:
+    com.geekjamboree.noteit.AddEditItemDialog$2 this$1 -> a
+    void onPostExecute$1712e425(long,java.util.ArrayList) -> a
+com.geekjamboree.noteit.AddEditItemDialog$3 -> com.geekjamboree.noteit.j:
+    com.geekjamboree.noteit.AddEditItemDialog this$0 -> a
+    android.widget.ImageButton val$askLater -> b
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.AddEditItemDialog$4 -> com.geekjamboree.noteit.k:
+    com.geekjamboree.noteit.AddEditItemDialog this$0 -> a
+    boolean onKey(android.view.View,int,android.view.KeyEvent) -> onKey
+com.geekjamboree.noteit.AddEditItemDialog$5 -> com.geekjamboree.noteit.l:
+    com.geekjamboree.noteit.AddEditItemDialog this$0 -> a
+    boolean onKey(android.view.View,int,android.view.KeyEvent) -> onKey
+com.geekjamboree.noteit.AddEditItemDialog$6 -> com.geekjamboree.noteit.m:
+    com.geekjamboree.noteit.AddEditItemDialog this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.AddEditItemDialog$7 -> com.geekjamboree.noteit.n:
+    com.geekjamboree.noteit.AddEditItemDialog this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.AddEditItemDialog$8 -> com.geekjamboree.noteit.o:
+    com.geekjamboree.noteit.AddEditItemDialog this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.AddEditItemDialog$9 -> com.geekjamboree.noteit.p:
+    com.geekjamboree.noteit.AddEditItemDialog this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.AddEditItemDialog$DialogFieldException -> com.geekjamboree.noteit.q:
+    com.geekjamboree.noteit.AddEditItemDialog this$0 -> a
+com.geekjamboree.noteit.AddEditItemDialog$addItemListener -> com.geekjamboree.noteit.r:
+    void onAddItem(com.geekjamboree.noteit.NoteItApplication$Item) -> a
+com.geekjamboree.noteit.AddEditItemDialog$baseListener -> com.geekjamboree.noteit.s:
+com.geekjamboree.noteit.AddEditItemDialog$editItemListener -> com.geekjamboree.noteit.t:
+    void onEditItem(com.geekjamboree.noteit.NoteItApplication$Item,com.geekjamboree.noteit.NoteItApplication$Item,int) -> a
+com.geekjamboree.noteit.AddEditItemDialog$navigateItemsListener -> com.geekjamboree.noteit.u:
+    long onPreviousItem() -> a
+    long onNextItem() -> b
+com.geekjamboree.noteit.ArrayAdapterWithFontSize -> com.geekjamboree.noteit.v:
+    int mFontSize -> a
+    int mTextViewResId -> b
+    android.content.Context mContext -> c
+    com.geekjamboree.noteit.ItemListActivity$ItemType mItemType -> d
+    android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
+    int getPreferredTextAppearance() -> a
+com.geekjamboree.noteit.AsyncInvokeURLTask -> com.geekjamboree.noteit.w:
+    java.lang.String mNoteItWebUrl -> b
+    java.util.ArrayList mParams -> c
+    com.geekjamboree.noteit.AsyncInvokeURLTask$OnPostExecuteListener mPostExecuteListener -> d
+    com.geekjamboree.noteit.AsyncInvokeURLTask$RequestMethod mRequestMethod -> e
+    javax.net.ssl.HostnameVerifier DO_NOT_VERIFY -> a
+    java.lang.String getNoteItURL() -> a
+    java.lang.String doGetInBackground$606be067() -> b
+    java.lang.String doPostInBackground$606be067() -> c
+    java.lang.String convertStreamToString(java.io.InputStream) -> a
+    java.lang.String getJSONFormattedErrorString(long,java.lang.String) -> a
+    void onPostExecute(java.lang.Object) -> onPostExecute
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+com.geekjamboree.noteit.AsyncInvokeURLTask$1 -> com.geekjamboree.noteit.x:
+    boolean verify(java.lang.String,javax.net.ssl.SSLSession) -> verify
+com.geekjamboree.noteit.AsyncInvokeURLTask$2 -> com.geekjamboree.noteit.y:
+    java.security.cert.X509Certificate[] getAcceptedIssuers() -> getAcceptedIssuers
+    void checkClientTrusted(java.security.cert.X509Certificate[],java.lang.String) -> checkClientTrusted
+    void checkServerTrusted(java.security.cert.X509Certificate[],java.lang.String) -> checkServerTrusted
+com.geekjamboree.noteit.AsyncInvokeURLTask$OnPostExecuteListener -> com.geekjamboree.noteit.z:
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.AsyncInvokeURLTask$RequestMethod -> com.geekjamboree.noteit.aa:
+    com.geekjamboree.noteit.AsyncInvokeURLTask$RequestMethod POST -> a
+    com.geekjamboree.noteit.AsyncInvokeURLTask$RequestMethod GET -> b
+    com.geekjamboree.noteit.AsyncInvokeURLTask$RequestMethod[] ENUM$VALUES -> c
+    com.geekjamboree.noteit.AsyncInvokeURLTask$RequestMethod[] values() -> values
+    com.geekjamboree.noteit.AsyncInvokeURLTask$RequestMethod valueOf(java.lang.String) -> valueOf
+com.geekjamboree.noteit.CategoryListActivity -> com.geekjamboree.noteit.CategoryListActivity:
+    com.geekjamboree.noteit.ArrayAdapterWithFontSize mAdapter -> a
+    com.geekjamboree.noteit.CategoryListView mListView -> b
+    com.geekjamboree.noteit.TitleBar mToolbar -> c
+    com.geekjamboree.noteit.QuickAction mQuickAction -> d
+    int mSelectedCategory -> e
+    android.content.SharedPreferences$OnSharedPreferenceChangeListener mPrefChangeListener -> f
+    void onCreate(android.os.Bundle) -> onCreate
+    boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
+    boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
+    void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
+    void onResume() -> onResume
+    void onPause() -> onPause
+    void onDrop(int,int) -> a
+    void doEditCategory(int) -> a
+    void doDeleteCategory(int) -> b
+    void doShowCategoryNameDialog(boolean,int,com.geekjamboree.noteit.CategoryListActivity$CategoryNameDialogListener) -> a
+    void doAddCategory() -> a
+com.geekjamboree.noteit.CategoryListActivity$1 -> com.geekjamboree.noteit.ab:
+    com.geekjamboree.noteit.CategoryListActivity this$0 -> a
+    void onSharedPreferenceChanged(android.content.SharedPreferences,java.lang.String) -> onSharedPreferenceChanged
+com.geekjamboree.noteit.CategoryListActivity$10 -> com.geekjamboree.noteit.ac:
+    com.geekjamboree.noteit.CategoryListActivity this$0 -> a
+    void onPostExecute(long,java.lang.String) -> a
+com.geekjamboree.noteit.CategoryListActivity$11 -> com.geekjamboree.noteit.ad:
+    com.geekjamboree.noteit.CategoryListActivity this$0 -> a
+    android.view.View val$dialogView -> b
+    com.geekjamboree.noteit.CategoryListActivity$CategoryNameDialogListener val$listener -> c
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.geekjamboree.noteit.CategoryListActivity$12 -> com.geekjamboree.noteit.ae:
+    com.geekjamboree.noteit.CategoryListActivity this$0 -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.geekjamboree.noteit.CategoryListActivity$13 -> com.geekjamboree.noteit.af:
+    com.geekjamboree.noteit.CategoryListActivity this$0 -> a
+    void onDialogOK(java.lang.String) -> a
+com.geekjamboree.noteit.CategoryListActivity$13$1 -> com.geekjamboree.noteit.ag:
+    com.geekjamboree.noteit.CategoryListActivity$13 this$1 -> a
+    void onPostExecute$45bd436b(long,java.lang.String) -> a
+com.geekjamboree.noteit.CategoryListActivity$2 -> com.geekjamboree.noteit.ah:
+    com.geekjamboree.noteit.CategoryListActivity this$0 -> a
+    void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
+com.geekjamboree.noteit.CategoryListActivity$3 -> com.geekjamboree.noteit.ai:
+    com.geekjamboree.noteit.CategoryListActivity this$0 -> a
+    void onItemClick$2dcd758d(int) -> a
+com.geekjamboree.noteit.CategoryListActivity$4 -> com.geekjamboree.noteit.aj:
+    com.geekjamboree.noteit.CategoryListActivity this$0 -> a
+    void onDismiss() -> onDismiss
+com.geekjamboree.noteit.CategoryListActivity$5 -> com.geekjamboree.noteit.ak:
+    com.geekjamboree.noteit.CategoryListActivity this$0 -> a
+    void onPostExecute(long,java.lang.String) -> a
+com.geekjamboree.noteit.CategoryListActivity$6 -> com.geekjamboree.noteit.al:
+    com.geekjamboree.noteit.CategoryListActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.CategoryListActivity$7 -> com.geekjamboree.noteit.am:
+    com.geekjamboree.noteit.CategoryListActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.CategoryListActivity$8 -> com.geekjamboree.noteit.an:
+    com.geekjamboree.noteit.CategoryListActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.CategoryListActivity$9 -> com.geekjamboree.noteit.ao:
+    com.geekjamboree.noteit.CategoryListActivity this$0 -> a
+    int val$position -> b
+    void onDialogOK(java.lang.String) -> a
+com.geekjamboree.noteit.CategoryListActivity$9$1 -> com.geekjamboree.noteit.ap:
+    com.geekjamboree.noteit.CategoryListActivity$9 this$1 -> a
+    int val$position -> b
+    java.lang.String val$categoryName -> c
+    void onPostExecute(long,java.lang.String) -> a
+com.geekjamboree.noteit.CategoryListActivity$CategoryListAdapter -> com.geekjamboree.noteit.aq:
+    com.geekjamboree.noteit.CategoryListActivity this$0 -> e
+    void onDrop(int,int) -> a
+    android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
+    com.geekjamboree.noteit.CategoryListActivity access$0(com.geekjamboree.noteit.CategoryListActivity$CategoryListAdapter) -> a
+com.geekjamboree.noteit.CategoryListActivity$CategoryListAdapter$1 -> com.geekjamboree.noteit.ar:
+    com.geekjamboree.noteit.CategoryListActivity$CategoryListAdapter this$1 -> a
+    void onPostExecute(long,java.lang.String) -> a
+com.geekjamboree.noteit.CategoryListActivity$CategoryNameDialogListener -> com.geekjamboree.noteit.as:
+    void onDialogOK(java.lang.String) -> a
+com.geekjamboree.noteit.CategoryListView -> com.geekjamboree.noteit.CategoryListView:
+    int mDragDropIndicatorWidth -> a
+    void onSizeChanged(int,int,int,int) -> onSizeChanged
+com.geekjamboree.noteit.CustomToast -> com.geekjamboree.noteit.at:
+    android.content.Context mContext -> a
+    android.view.View mAnchor -> b
+    java.lang.String mMessage -> c
+    com.geekjamboree.noteit.FloatingPopup$OnDismissListener mDismissListener -> d
+    void show$1385ff() -> a
+    com.geekjamboree.noteit.CustomToast makeText(android.content.Context,android.view.View,java.lang.String) -> a
+    com.geekjamboree.noteit.CustomToast makeText(android.content.Context,android.view.View,java.lang.String,com.geekjamboree.noteit.FloatingPopup$OnDismissListener) -> a
+com.geekjamboree.noteit.DashBoardActivity -> com.geekjamboree.noteit.DashBoardActivity:
+    android.widget.GridView mGridView -> a
+    com.geekjamboree.noteit.TitleBar mToolbar -> b
+    int DASHBOARD_SHOPPINGLISTS -> c
+    int DASHBOARD_CATEGORIES -> d
+    int DASHBOARD_REPORTS -> e
+    void onCreate(android.os.Bundle) -> onCreate
+    boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
+    boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
+    void doDashboardShoppingLists() -> a
+    void doDashboardCategories() -> b
+    void doDashboardReports() -> c
+    void doSignOut() -> d
+    void access$0(com.geekjamboree.noteit.DashBoardActivity) -> a
+com.geekjamboree.noteit.DashBoardActivity$1 -> com.geekjamboree.noteit.au:
+    com.geekjamboree.noteit.DashBoardActivity this$0 -> a
+    void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
+com.geekjamboree.noteit.DashBoardActivity$2 -> com.geekjamboree.noteit.av:
+    com.geekjamboree.noteit.DashBoardActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.DashBoardActivity$3 -> com.geekjamboree.noteit.aw:
+    com.geekjamboree.noteit.DashBoardActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.DashBoardActivity$DashBoardAdapter -> com.geekjamboree.noteit.ax:
+    android.view.LayoutInflater mLayoutInflater -> b
+    java.util.ArrayList mItems -> c
+    android.content.Context mContext -> d
+    com.geekjamboree.noteit.DashBoardActivity this$0 -> a
+    void addItem(java.lang.String,int,int) -> a
+    int getCount() -> getCount
+    java.lang.Object getItem(int) -> getItem
+    long getItemId(int) -> getItemId
+    android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
+com.geekjamboree.noteit.DashBoardActivity$DashboardItem -> com.geekjamboree.noteit.ay:
+    java.lang.String mText -> a
+    int mImageResourceID -> b
+    int mID -> c
+    com.geekjamboree.noteit.DashBoardActivity this$0 -> d
+com.geekjamboree.noteit.DragDropListView -> com.geekjamboree.noteit.DragDropListView:
+    boolean mIsDown -> b
+    boolean mIsDragging -> c
+    int mStartPosition -> d
+    int mEndPosition -> e
+    android.widget.ImageView mDragView -> f
+    int mYDragOffset -> g
+    com.geekjamboree.noteit.DragDropListener mDragDropListener -> h
+    int mDragDropIndicatorLeft -> i
+    int mDragDropIndicatorRight -> j
+    void setDragDropListener(com.geekjamboree.noteit.DragDropListener) -> a
+    void setDragDropIndicatorBounds(int,int) -> a
+    boolean onTouchEvent(android.view.MotionEvent) -> onTouchEvent
+com.geekjamboree.noteit.DragDropListener -> com.geekjamboree.noteit.az:
+    void onDrop(int,int) -> a
+com.geekjamboree.noteit.Eula -> com.geekjamboree.noteit.ba:
+    boolean show(android.app.Activity) -> a
+    java.lang.CharSequence readEula(android.app.Activity) -> b
+    void closeStream(java.io.Closeable) -> a
+com.geekjamboree.noteit.Eula$1 -> com.geekjamboree.noteit.bb:
+    android.content.SharedPreferences val$preferences -> a
+    android.app.Activity val$activity -> b
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.geekjamboree.noteit.Eula$2 -> com.geekjamboree.noteit.bc:
+    android.app.Activity val$activity -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.geekjamboree.noteit.Eula$3 -> com.geekjamboree.noteit.bd:
+    android.app.Activity val$activity -> a
+    void onCancel(android.content.DialogInterface) -> onCancel
+com.geekjamboree.noteit.Eula$OnEulaAgreedTo -> com.geekjamboree.noteit.be:
+    void onEulaAgreedTo() -> a
+com.geekjamboree.noteit.ExpandableLVRightIndicator -> com.geekjamboree.noteit.ExpandableLVRightIndicator:
+    int groupIndicatorWidth -> a
+    int mRightMargin -> b
+    void onSizeChanged(int,int,int,int) -> onSizeChanged
+    int getRightMargin() -> a
+    int getGroupCount() -> b
+com.geekjamboree.noteit.FloatingPopup -> com.geekjamboree.noteit.bf:
+    android.view.View mAnchor -> a
+    android.view.View mContentView -> b
+    com.geekjamboree.noteit.FloatingPopup$OnDismissListener mDismissListener -> c
+    android.view.View$OnTouchListener mTouchListener -> d
+    void dismissWithNotification() -> a
+    com.geekjamboree.noteit.FloatingPopup MakePopup(android.content.Context,android.view.View,java.lang.String) -> a
+    com.geekjamboree.noteit.FloatingPopup MakePopup(android.content.Context,android.view.View,java.lang.String,com.geekjamboree.noteit.FloatingPopup$OnDismissListener) -> a
+    void show(boolean) -> a
+com.geekjamboree.noteit.FloatingPopup$1 -> com.geekjamboree.noteit.bg:
+    com.geekjamboree.noteit.FloatingPopup this$0 -> a
+    boolean onTouch(android.view.View,android.view.MotionEvent) -> onTouch
+com.geekjamboree.noteit.FloatingPopup$2 -> com.geekjamboree.noteit.bh:
+    com.geekjamboree.noteit.FloatingPopup this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.FloatingPopup$OnDismissListener -> com.geekjamboree.noteit.bi:
+    void onDismiss() -> a
+com.geekjamboree.noteit.InboxMessages -> com.geekjamboree.noteit.bj:
+    com.geekjamboree.noteit.NoteItApplication mApp -> a
+    android.content.Context mContext -> b
+    android.view.View mAnchor -> c
+    void doDisplayUnreadMessages() -> a
+    void doDisplayMessage(java.util.ArrayList,int) -> a
+com.geekjamboree.noteit.InboxMessages$1 -> com.geekjamboree.noteit.bk:
+    com.geekjamboree.noteit.InboxMessages this$0 -> a
+    void onPostExecute$1712e425(long,java.util.ArrayList) -> a
+com.geekjamboree.noteit.InboxMessages$2 -> com.geekjamboree.noteit.bl:
+    com.geekjamboree.noteit.InboxMessages this$0 -> a
+    java.util.ArrayList val$messages -> b
+    int val$index -> c
+    void onPostExecute$1712e425(long,java.util.ArrayList) -> a
+com.geekjamboree.noteit.InboxMessages$2$1 -> com.geekjamboree.noteit.bm:
+    com.geekjamboree.noteit.InboxMessages$2 this$1 -> a
+    java.util.ArrayList val$message -> b
+    java.util.ArrayList val$messages -> c
+    int val$index -> d
+    void onDismiss() -> a
+com.geekjamboree.noteit.IntentIntegrator -> com.geekjamboree.noteit.bn:
+    java.lang.String TAG -> h
+    java.util.Collection PRODUCT_CODE_TYPES -> a
+    java.util.Collection ONE_D_CODE_TYPES -> b
+    java.util.Collection QR_CODE_TYPES -> c
+    java.util.Collection DATA_MATRIX_TYPES -> d
+    java.util.Collection ALL_CODE_TYPES -> e
+    java.util.Collection TARGET_BARCODE_SCANNER_ONLY -> f
+    java.util.Collection TARGET_ALL_KNOWN -> g
+    android.app.Activity activity -> i
+    java.lang.String title -> j
+    java.lang.String message -> k
+    java.lang.String buttonYes -> l
+    java.lang.String buttonNo -> m
+    java.util.Collection targetApplications -> n
+    android.app.AlertDialog initiateScan() -> a
+    java.lang.String findTargetAppPackage(android.content.Intent) -> a
+    com.geekjamboree.noteit.IntentResult parseActivityResult(int,int,android.content.Intent) -> a
+    android.app.Activity access$0(com.geekjamboree.noteit.IntentIntegrator) -> a
+    java.lang.String access$1() -> b
+com.geekjamboree.noteit.IntentIntegrator$1 -> com.geekjamboree.noteit.bo:
+    com.geekjamboree.noteit.IntentIntegrator this$0 -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.geekjamboree.noteit.IntentIntegrator$2 -> com.geekjamboree.noteit.bp:
+    com.geekjamboree.noteit.IntentIntegrator this$0 -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.geekjamboree.noteit.IntentResult -> com.geekjamboree.noteit.bq:
+    java.lang.String contents -> a
+    java.lang.String formatName -> b
+    byte[] rawBytes -> c
+    java.lang.Integer orientation -> d
+    java.lang.String errorCorrectionLevel -> e
+    java.lang.String getContents() -> a
+    java.lang.String getFormatName() -> b
+    java.lang.String toString() -> toString
+com.geekjamboree.noteit.ItemListActivity -> com.geekjamboree.noteit.ItemListActivity:
+    com.geekjamboree.noteit.QuickAction mQuickAction -> a
+    com.geekjamboree.noteit.QuickAction mExpandCollapseQA -> b
+    java.util.concurrent.atomic.AtomicInteger mSelectedGroup -> c
+    java.util.concurrent.atomic.AtomicInteger mSelectedChild -> d
+    long mSelectedItemID -> e
+    boolean mDisplayExtras -> f
+    boolean mDisplayCategoryExtras -> g
+    java.lang.Integer mFontSize -> h
+    boolean mHideDoneItems -> i
+    com.geekjamboree.noteit.TitleBar mToolbar -> j
+    android.widget.Button mShoppingListButton -> k
+    boolean mIsItemListFetched -> l
+    android.content.SharedPreferences mPrefs -> m
+    java.lang.String mCurrencyFormat -> n
+    boolean mLoadingMore -> o
+    float mPendingTotal -> p
+    com.geekjamboree.noteit.ViewFlipperHack mLoadMoreFlipper -> q
+    android.view.LayoutInflater mLayoutInflater -> r
+    android.app.AlertDialog mInstallScanAppDialog -> s
+    com.geekjamboree.noteit.NoteItApplication$Item mTempItemToPassToDialog -> t
+    android.view.View mContentView -> u
+    android.view.ViewConfiguration mVC -> v
+    int mSwipeMinDistance -> w
+    int mSwipeThresholdVelocity -> x
+    int mSwipeMaxVDistance -> y
+    int MAX_SWIPE_DISTANCE -> z
+    android.widget.AbsListView$OnScrollListener mScrollListener -> A
+    android.content.SharedPreferences$OnSharedPreferenceChangeListener mPrefChangeListener -> B
+    android.view.GestureDetector$SimpleOnGestureListener mGestureListener -> C
+    android.view.GestureDetector mGestureDetector -> D
+    android.view.View$OnTouchListener mTouchListener -> E
+    com.geekjamboree.noteit.ItemListActivity$OnChildGestureListener mChildClickListener -> F
+    void onCreate(android.os.Bundle) -> onCreate
+    void onDestroy() -> onDestroy
+    boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
+    void fetchItems(com.geekjamboree.noteit.NoteItApplication$OnFetchItemsListener) -> a
+    boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
+    void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
+    void onPause() -> onPause
+    void onResume() -> onResume
+    void onPostExecute$1712e425(long,java.util.ArrayList) -> a
+    void onActivityResult(int,int,android.content.Intent) -> onActivityResult
+    void doAddItem() -> a
+    void doEditItem() -> b
+    android.app.Dialog onCreateDialog(int) -> onCreateDialog
+    void onPrepareDialog(int,android.app.Dialog) -> onPrepareDialog
+    void doDeleteItem() -> c
+    void doAddItem(com.geekjamboree.noteit.NoteItApplication$Item) -> a
+    void doEditItem(com.geekjamboree.noteit.NoteItApplication$Item,com.geekjamboree.noteit.NoteItApplication$Item,int) -> a
+    void doCopyItem() -> d
+    void doMoveItem() -> e
+    void doToggleMarkDone() -> f
+    void doLikeItem() -> g
+    void doExpandAll() -> h
+    void doCollapseAll() -> i
+    void addFooterToListView(boolean) -> a
+    void doCommitToggleItemDone(com.geekjamboree.noteit.NoteItApplication$Item,boolean,float) -> a
+    void doDisplayShoppingLists() -> j
+    void doDisplayItems(java.util.ArrayList) -> a
+    void doFetchAndDisplayPendingTotal() -> k
+    void doAddToPendingTotal(float) -> a
+    void doDeductFromPendingTotal(float) -> b
+    void doDisplayPendingTotal() -> l
+    void doShareWithUser() -> m
+    void doPickApp() -> n
+    java.lang.String formatItemsList() -> p
+    void doScanBarcode() -> o
+    void access$0$69d6ce94(com.geekjamboree.noteit.ItemListActivity) -> a
+com.geekjamboree.noteit.ItemListActivity$1 -> com.geekjamboree.noteit.br:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    void onScrollStateChanged(android.widget.AbsListView,int) -> onScrollStateChanged
+    void onScroll(android.widget.AbsListView,int,int,int) -> onScroll
+com.geekjamboree.noteit.ItemListActivity$10 -> com.geekjamboree.noteit.bs:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    void onEditItem(com.geekjamboree.noteit.NoteItApplication$Item,com.geekjamboree.noteit.NoteItApplication$Item,int) -> a
+com.geekjamboree.noteit.ItemListActivity$11 -> com.geekjamboree.noteit.bt:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    long onPreviousItem() -> a
+    long onNextItem() -> b
+com.geekjamboree.noteit.ItemListActivity$12 -> com.geekjamboree.noteit.bu:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$Item val$selItem -> b
+    void onPostExecute(long,java.lang.String) -> a
+com.geekjamboree.noteit.ItemListActivity$13 -> com.geekjamboree.noteit.bv:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication val$app -> b
+    com.geekjamboree.noteit.ItemListActivity$ItemsExpandableListAdapter val$adapter -> c
+    void onPostExecute(long,com.geekjamboree.noteit.NoteItApplication$Item,java.lang.String) -> a
+com.geekjamboree.noteit.ItemListActivity$14 -> com.geekjamboree.noteit.bw:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    int val$bitMask -> b
+    com.geekjamboree.noteit.NoteItApplication$Item val$oldItem -> c
+    void onPostExecute(long,com.geekjamboree.noteit.NoteItApplication$Item,java.lang.String) -> a
+com.geekjamboree.noteit.ItemListActivity$15 -> com.geekjamboree.noteit.bx:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    com.geekjamboree.noteit.ItemListActivity$ItemsExpandableListAdapter val$adapter -> b
+    com.geekjamboree.noteit.NoteItApplication val$app -> c
+    void onClick(android.content.DialogInterface,int) -> onClick
+    com.geekjamboree.noteit.ItemListActivity access$0(com.geekjamboree.noteit.ItemListActivity$15) -> a
+com.geekjamboree.noteit.ItemListActivity$15$1 -> com.geekjamboree.noteit.by:
+    com.geekjamboree.noteit.ItemListActivity$15 this$1 -> a
+    void onPostExecute(long,java.lang.String) -> a
+com.geekjamboree.noteit.ItemListActivity$16 -> com.geekjamboree.noteit.bz:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    com.geekjamboree.noteit.ItemListActivity$ItemsExpandableListAdapter val$adapter -> b
+    com.geekjamboree.noteit.NoteItApplication val$app -> c
+    void onClick(android.content.DialogInterface,int) -> onClick
+    com.geekjamboree.noteit.ItemListActivity access$0(com.geekjamboree.noteit.ItemListActivity$16) -> a
+com.geekjamboree.noteit.ItemListActivity$16$1 -> com.geekjamboree.noteit.ca:
+    com.geekjamboree.noteit.ItemListActivity$16 this$1 -> a
+    com.geekjamboree.noteit.ItemListActivity$ItemsExpandableListAdapter val$adapter -> b
+    com.geekjamboree.noteit.NoteItApplication$Item val$selItem -> c
+    void onPostExecute(long,com.geekjamboree.noteit.NoteItApplication$Item,java.lang.String) -> a
+com.geekjamboree.noteit.ItemListActivity$17 -> com.geekjamboree.noteit.cb:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$Item val$selItem -> b
+    void onPostExecute(long,int,java.lang.String) -> a
+com.geekjamboree.noteit.ItemListActivity$19 -> com.geekjamboree.noteit.cc:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.ItemListActivity$2 -> com.geekjamboree.noteit.cd:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    void onSharedPreferenceChanged(android.content.SharedPreferences,java.lang.String) -> onSharedPreferenceChanged
+com.geekjamboree.noteit.ItemListActivity$20 -> com.geekjamboree.noteit.ce:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.ItemListActivity$21 -> com.geekjamboree.noteit.cf:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.ItemListActivity$22 -> com.geekjamboree.noteit.cg:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.ItemListActivity$23 -> com.geekjamboree.noteit.ch:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.ItemListActivity$24 -> com.geekjamboree.noteit.ci:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    void onItemClick$2dcd758d(int) -> a
+com.geekjamboree.noteit.ItemListActivity$25 -> com.geekjamboree.noteit.cj:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.ItemListActivity$26 -> com.geekjamboree.noteit.ck:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$Item val$item -> b
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.geekjamboree.noteit.ItemListActivity$27 -> com.geekjamboree.noteit.cl:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    android.widget.EditText val$editPrice -> b
+    com.geekjamboree.noteit.NoteItApplication$Item val$item -> c
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.geekjamboree.noteit.ItemListActivity$28 -> com.geekjamboree.noteit.cm:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$Item val$item -> b
+    com.geekjamboree.noteit.NoteItApplication val$app -> c
+    void onPostExecute(long,com.geekjamboree.noteit.NoteItApplication$Item,java.lang.String) -> a
+com.geekjamboree.noteit.ItemListActivity$29 -> com.geekjamboree.noteit.cn:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication val$app -> b
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.geekjamboree.noteit.ItemListActivity$3 -> com.geekjamboree.noteit.co:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    boolean onFling(android.view.MotionEvent,android.view.MotionEvent,float,float) -> onFling
+    boolean onSingleTapUp(android.view.MotionEvent) -> onSingleTapUp
+com.geekjamboree.noteit.ItemListActivity$30 -> com.geekjamboree.noteit.cp:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    void onPostExecute$60d7a4c5(long,float) -> a
+com.geekjamboree.noteit.ItemListActivity$31 -> com.geekjamboree.noteit.cq:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.geekjamboree.noteit.ItemListActivity$32 -> com.geekjamboree.noteit.cr:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    android.widget.EditText val$editListName -> b
+    void onClick(android.content.DialogInterface,int) -> onClick
+    com.geekjamboree.noteit.ItemListActivity access$0(com.geekjamboree.noteit.ItemListActivity$32) -> a
+com.geekjamboree.noteit.ItemListActivity$32$1 -> com.geekjamboree.noteit.cs:
+    com.geekjamboree.noteit.ItemListActivity$32 this$1 -> a
+    java.lang.String val$emailID -> b
+    void onPostExecute(long,java.lang.String) -> a
+com.geekjamboree.noteit.ItemListActivity$33 -> com.geekjamboree.noteit.ct:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.geekjamboree.noteit.ItemListActivity$34 -> com.geekjamboree.noteit.cu:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    void onPostExecute(long,java.lang.String) -> a
+com.geekjamboree.noteit.ItemListActivity$4 -> com.geekjamboree.noteit.cv:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    boolean onTouch(android.view.View,android.view.MotionEvent) -> onTouch
+com.geekjamboree.noteit.ItemListActivity$5 -> com.geekjamboree.noteit.cw:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    boolean onChildClick$7a6c5de0(android.view.View,int,int) -> a
+    boolean onChildLeftSwipe$7a6c5de0(android.widget.ExpandableListView,int,int) -> a
+    boolean onChildRightSwipe$7a6c5de0(android.widget.ExpandableListView,int,int) -> b
+com.geekjamboree.noteit.ItemListActivity$6 -> com.geekjamboree.noteit.cx:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    void onItemClick$2dcd758d(int) -> a
+com.geekjamboree.noteit.ItemListActivity$7 -> com.geekjamboree.noteit.cy:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    void onDismiss() -> onDismiss
+com.geekjamboree.noteit.ItemListActivity$8 -> com.geekjamboree.noteit.cz:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication val$app -> b
+    com.geekjamboree.noteit.IntentResult val$scanResult -> c
+    void onSearchResults(long,com.geekjamboree.noteit.NoteItApplication$Item,java.lang.String) -> a
+com.geekjamboree.noteit.ItemListActivity$8$1 -> com.geekjamboree.noteit.da:
+    com.geekjamboree.noteit.ItemListActivity$8 this$1 -> a
+    com.geekjamboree.noteit.NoteItApplication val$app -> b
+    com.geekjamboree.noteit.IntentResult val$scanResult -> c
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.geekjamboree.noteit.ItemListActivity$8$2 -> com.geekjamboree.noteit.db:
+    com.geekjamboree.noteit.ItemListActivity$8 this$1 -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.geekjamboree.noteit.ItemListActivity$9 -> com.geekjamboree.noteit.dc:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    void onAddItem(com.geekjamboree.noteit.NoteItApplication$Item) -> a
+com.geekjamboree.noteit.ItemListActivity$ItemType -> com.geekjamboree.noteit.dd:
+    com.geekjamboree.noteit.ItemListActivity$ItemType PENDING -> a
+    com.geekjamboree.noteit.ItemListActivity$ItemType DONE -> b
+    com.geekjamboree.noteit.ItemListActivity$ItemType GROUP -> c
+    com.geekjamboree.noteit.ItemListActivity$ItemType BOLD -> d
+    com.geekjamboree.noteit.ItemListActivity$ItemType[] ENUM$VALUES -> e
+    com.geekjamboree.noteit.ItemListActivity$ItemType[] values() -> values
+    com.geekjamboree.noteit.ItemListActivity$ItemType valueOf(java.lang.String) -> valueOf
+com.geekjamboree.noteit.ItemListActivity$ItemsExpandableListAdapter -> com.geekjamboree.noteit.de:
+    java.util.ArrayList mCategories -> c
+    java.util.ArrayList mItems -> d
+    android.content.Context mContext -> e
+    java.lang.String mUnitPriceFormat -> f
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    boolean $assertionsDisabled -> b
+    long AddItem(com.geekjamboree.noteit.NoteItApplication$Item,com.geekjamboree.noteit.NoteItApplication$Category) -> a
+    void DeleteItem(com.geekjamboree.noteit.NoteItApplication$Item) -> a
+    java.lang.Object getChild(int,int) -> getChild
+    long getChildId(int,int) -> getChildId
+    boolean getNextChildPosition(java.util.concurrent.atomic.AtomicInteger,java.util.concurrent.atomic.AtomicInteger) -> a
+    boolean getPrevChildPosition(java.util.concurrent.atomic.AtomicInteger,java.util.concurrent.atomic.AtomicInteger) -> b
+    int getTotalChildrenCount() -> a
+    int getChildrenCount(int) -> getChildrenCount
+    java.lang.Object getGroup(int) -> getGroup
+    int getGroupCount() -> getGroupCount
+    long getGroupId(int) -> getGroupId
+    boolean hasStableIds() -> hasStableIds
+    boolean isChildSelectable(int,int) -> isChildSelectable
+    android.view.View getChildView(int,int,boolean,android.view.View,android.view.ViewGroup) -> getChildView
+    android.view.View getGroupView(int,boolean,android.view.View,android.view.ViewGroup) -> getGroupView
+    int getUnpurchasedChildrenCount(int) -> a
+com.geekjamboree.noteit.ItemListActivity$OnChildGestureListener -> com.geekjamboree.noteit.df:
+    boolean onChildClick$7a6c5de0(android.view.View,int,int) -> a
+    boolean onChildLeftSwipe$7a6c5de0(android.widget.ExpandableListView,int,int) -> a
+    boolean onChildRightSwipe$7a6c5de0(android.widget.ExpandableListView,int,int) -> b
+com.geekjamboree.noteit.ItemListActivity$ProductSearchMethod -> com.geekjamboree.noteit.dg:
+    com.geekjamboree.noteit.ItemListActivity$ProductSearchMethod GOOGLE_SEARCH -> a
+    com.geekjamboree.noteit.ItemListActivity$ProductSearchMethod SEARCH_UPC -> b
+    com.geekjamboree.noteit.ItemListActivity$ProductSearchMethod NOTE_IT -> c
+    com.geekjamboree.noteit.ItemListActivity$ProductSearchMethod[] ENUM$VALUES -> d
+    com.geekjamboree.noteit.ItemListActivity$ProductSearchMethod[] values() -> values
+    com.geekjamboree.noteit.ItemListActivity$ProductSearchMethod valueOf(java.lang.String) -> valueOf
+com.geekjamboree.noteit.ItemListActivity$ShoppingListAdapterWithIcons -> com.geekjamboree.noteit.dh:
+    com.geekjamboree.noteit.ItemListActivity this$0 -> a
+    android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
+com.geekjamboree.noteit.LoginActivity -> com.geekjamboree.noteit.LoginActivity:
+    android.content.SharedPreferences mPrefs -> a
+    boolean mIsHashedPassword -> b
+    android.view.View mContentView -> c
+    void onCreate(android.os.Bundle) -> onCreate
+    void onPause() -> onPause
+    void onPostExecute(long,java.lang.String) -> a
+    void doForgotPassword() -> a
+    void hideIndeterminateProgress() -> b
+    void doLogin() -> c
+    void access$0(com.geekjamboree.noteit.LoginActivity) -> a
+com.geekjamboree.noteit.LoginActivity$1 -> com.geekjamboree.noteit.di:
+    com.geekjamboree.noteit.LoginActivity this$0 -> a
+    boolean onKey(android.view.View,int,android.view.KeyEvent) -> onKey
+com.geekjamboree.noteit.LoginActivity$2 -> com.geekjamboree.noteit.dj:
+    com.geekjamboree.noteit.LoginActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.LoginActivity$3 -> com.geekjamboree.noteit.dk:
+    com.geekjamboree.noteit.LoginActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.LoginActivity$4 -> com.geekjamboree.noteit.dl:
+    com.geekjamboree.noteit.LoginActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.LoginActivity$5 -> com.geekjamboree.noteit.dm:
+    com.geekjamboree.noteit.LoginActivity this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication val$app -> b
+    void onPostExecute$1712e425(long,java.lang.String) -> a
+com.geekjamboree.noteit.LoginActivity$6 -> com.geekjamboree.noteit.dn:
+    com.geekjamboree.noteit.LoginActivity this$0 -> a
+    android.widget.EditText val$editListName -> b
+    void onClick(android.content.DialogInterface,int) -> onClick
+    com.geekjamboree.noteit.LoginActivity access$0(com.geekjamboree.noteit.LoginActivity$6) -> a
+com.geekjamboree.noteit.LoginActivity$6$1 -> com.geekjamboree.noteit.do:
+    com.geekjamboree.noteit.LoginActivity$6 this$1 -> a
+    java.lang.String val$emailID -> b
+    void onPostExecute(long,java.lang.String) -> a
+com.geekjamboree.noteit.LoginActivity$7 -> com.geekjamboree.noteit.dp:
+    com.geekjamboree.noteit.LoginActivity this$0 -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.geekjamboree.noteit.MainPreferenceActivity -> com.geekjamboree.noteit.MainPreferenceActivity:
+    com.geekjamboree.noteit.TitleBar mToolbar -> a
+    android.content.SharedPreferences mPrefs -> b
+    android.content.SharedPreferences$OnSharedPreferenceChangeListener mPrefChangeListener -> c
+    void onCreate(android.os.Bundle) -> onCreate
+    void onPause() -> onPause
+    void onResume() -> onResume
+com.geekjamboree.noteit.MainPreferenceActivity$1 -> com.geekjamboree.noteit.dq:
+    com.geekjamboree.noteit.MainPreferenceActivity this$0 -> a
+    void onSharedPreferenceChanged(android.content.SharedPreferences,java.lang.String) -> onSharedPreferenceChanged
+    com.geekjamboree.noteit.MainPreferenceActivity access$0(com.geekjamboree.noteit.MainPreferenceActivity$1) -> a
+com.geekjamboree.noteit.MainPreferenceActivity$1$1 -> com.geekjamboree.noteit.dr:
+    com.geekjamboree.noteit.MainPreferenceActivity$1 this$1 -> a
+    void onPostExecute(long,java.lang.String) -> a
+com.geekjamboree.noteit.MainPreferenceActivity$2 -> com.geekjamboree.noteit.ds:
+    com.geekjamboree.noteit.MainPreferenceActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.MessageBox -> com.geekjamboree.noteit.dt:
+    android.app.AlertDialog createMessageBox(android.content.Context,java.lang.String,java.lang.String) -> a
+com.geekjamboree.noteit.NIPreferenceCategory -> com.geekjamboree.noteit.NIPreferenceCategory:
+    android.view.View onCreateView(android.view.ViewGroup) -> onCreateView
+com.geekjamboree.noteit.NoteItApplication -> com.geekjamboree.noteit.NoteItApplication:
+    long mUserID -> a
+    long mCurrentShoppingListID -> b
+    java.util.ArrayList mShoppingLists -> c
+    java.util.ArrayList mCategories -> d
+    java.util.ArrayList mItems -> e
+    java.util.ArrayList mUnits -> f
+    java.util.ArrayList mCurrencies -> g
+    com.geekjamboree.noteit.NoteItApplication$Preference mUserPrefs -> h
+    int mItemsStartPos -> i
+    boolean mItemsMorePending -> j
+    int[] $SWITCH_TABLE$com$geekjamboree$noteit$ItemListActivity$ItemType -> k
+    int barcodeFormatFromString(java.lang.String) -> a
+    int getItemBatchSize() -> a
+    java.util.ArrayList getCurrencies() -> b
+    com.geekjamboree.noteit.NoteItApplication$Preference getUserPrefs() -> c
+    void setUserPrefs(com.geekjamboree.noteit.NoteItApplication$Preference) -> a
+    void registerUser(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner) -> a
+    void loginUser(java.lang.String,java.lang.String,boolean,com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner) -> a
+    void do_forgot_password(java.lang.String,com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner) -> a
+    long getUserID() -> d
+    void setUserID(long) -> a
+    void doInitialize(java.lang.String,java.lang.String,boolean,com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner) -> b
+    java.lang.String getCurrencyFormat(boolean) -> a
+    void saveUserPreferences(com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner) -> a
+    void fetchShoppingLists(boolean,com.geekjamboree.noteit.NoteItApplication$OnFetchShoppingListsListener) -> a
+    void addShoppingList(java.lang.String,com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner) -> b
+    void deleteShoppingList(long,com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner) -> a
+    void editShoppingList(com.geekjamboree.noteit.NoteItApplication$ShoppingList,com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner) -> a
+    void shareShoppingList(long,java.lang.String,com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner) -> a
+    java.util.ArrayList getUnits() -> e
+    com.geekjamboree.noteit.NoteItApplication$Unit getUnitFromID(int) -> a
+    int getShoppingListCount() -> f
+    com.geekjamboree.noteit.NoteItApplication$ShoppingList getShoppingList(int) -> b
+    void setCurrentShoppingListIndex(int) -> c
+    long getCurrentShoppingListID() -> g
+    int getCurrentShoppingListIndex() -> h
+    java.util.ArrayList getShoppingList() -> i
+    void fetchCategories(com.geekjamboree.noteit.NoteItApplication$OnFetchCategoriesListener) -> a
+    void addCategory(com.geekjamboree.noteit.NoteItApplication$Category,com.geekjamboree.noteit.NoteItApplication$OnAddCategoryListener) -> a
+    void editCategory$53db8377(com.geekjamboree.noteit.NoteItApplication$Category,com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner) -> a
+    void reorderCategory(int,int,com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner) -> a
+    void deleteCategory(int,com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner) -> a
+    com.geekjamboree.noteit.NoteItApplication$Category getCategory(int) -> d
+    com.geekjamboree.noteit.NoteItApplication$Category getCategory(long) -> b
+    java.util.ArrayList getCategories() -> j
+    boolean isMoreItemsPending() -> k
+    void fetchItems$670cc04a(boolean,com.geekjamboree.noteit.NoteItApplication$OnFetchItemsListener) -> a
+    void fetchPurchasedInstances(long,com.geekjamboree.noteit.NoteItApplication$OnFetchItemsListener) -> a
+    java.util.ArrayList getItems() -> l
+    void getItem(long,com.geekjamboree.noteit.NoteItApplication$OnGetItemListener) -> a
+    void addItem(com.geekjamboree.noteit.NoteItApplication$Item,com.geekjamboree.noteit.NoteItApplication$OnAddItemListener) -> a
+    void copyItem(long,long,com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner) -> a
+    void editItem(int,com.geekjamboree.noteit.NoteItApplication$Item,com.geekjamboree.noteit.NoteItApplication$OnAddItemListener) -> a
+    void deleteItem(long,com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner) -> b
+    void setItemMetadata$6a220411(long,com.geekjamboree.noteit.NoteItApplication$OnItemVoteListener) -> a
+    void markAllItemsDone$508ad47c(long,com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner) -> c
+    void getPendingTotal(long,com.geekjamboree.noteit.NoteItApplication$OnGetPendingTotalListener) -> a
+    void suggestItems(java.lang.String,com.geekjamboree.noteit.NoteItApplication$OnSuggestItemsListener) -> a
+    void fetchUnits$31c6266d(com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner) -> b
+    void fetchInboxMessageHeaders$5fb1f224(com.geekjamboree.noteit.NoteItApplication$OnFetchMessagesListener) -> a
+    void getMessage(long,com.geekjamboree.noteit.NoteItApplication$OnFetchMessagesListener) -> a
+    void setMessageRead$14f1d9ae(long) -> c
+    void searchItemByBarcode(int,java.lang.String,com.geekjamboree.noteit.NoteItApplication$OnSearchBarcodeListener) -> a
+    void doReAdjustRanks(int,int) -> a
+    java.lang.String hashString(java.lang.String) -> b
+    void getReport$440241da(java.sql.Date,java.sql.Date,com.geekjamboree.noteit.NoteItApplication$OnGetCategoryReportListener) -> a
+    void getReport(boolean,java.sql.Date,java.sql.Date,com.geekjamboree.noteit.NoteItApplication$OnGetItemReportListener) -> a
+    int getPreferredTextAppearance(android.content.Context,int,com.geekjamboree.noteit.ItemListActivity$ItemType) -> a
+    void access$0(com.geekjamboree.noteit.NoteItApplication,long) -> a
+    java.util.ArrayList access$1(com.geekjamboree.noteit.NoteItApplication) -> a
+    java.util.ArrayList access$2(com.geekjamboree.noteit.NoteItApplication) -> b
+    int access$3(com.geekjamboree.noteit.NoteItApplication) -> c
+    void access$4(com.geekjamboree.noteit.NoteItApplication,int) -> a
+    void access$5(com.geekjamboree.noteit.NoteItApplication,boolean) -> a
+    java.util.ArrayList access$6(com.geekjamboree.noteit.NoteItApplication) -> d
+    java.util.ArrayList access$7(com.geekjamboree.noteit.NoteItApplication) -> e
+    java.util.ArrayList access$8(com.geekjamboree.noteit.NoteItApplication) -> f
+    com.geekjamboree.noteit.NoteItApplication$Item access$9(com.geekjamboree.noteit.NoteItApplication,org.json.JSONObject) -> a
+    int[] $SWITCH_TABLE$com$geekjamboree$noteit$ItemListActivity$ItemType() -> m
+com.geekjamboree.noteit.NoteItApplication$1 -> com.geekjamboree.noteit.du:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner val$listener -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$10 -> com.geekjamboree.noteit.dv:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnGetPendingTotalListener val$listener -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$11 -> com.geekjamboree.noteit.dw:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner val$listener -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$12 -> com.geekjamboree.noteit.dx:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnFetchMessagesListener val$listener -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$13 -> com.geekjamboree.noteit.dy:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnFetchMessagesListener val$listener -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$14 -> com.geekjamboree.noteit.dz:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner val$listener -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$15 -> com.geekjamboree.noteit.ea:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    com.geekjamboree.noteit.ItemListActivity$ProductSearchMethod val$searchMethod -> b
+    com.geekjamboree.noteit.NoteItApplication$OnSearchBarcodeListener val$listener -> c
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$16 -> com.geekjamboree.noteit.eb:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnGetCategoryReportListener val$listener -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$17 -> com.geekjamboree.noteit.ec:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnGetItemReportListener val$listener -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$1AddCategoryTask -> com.geekjamboree.noteit.ed:
+    com.geekjamboree.noteit.NoteItApplication$OnAddCategoryListener mListener -> a
+    com.geekjamboree.noteit.NoteItApplication this$0 -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$1AddItemTask -> com.geekjamboree.noteit.ee:
+    com.geekjamboree.noteit.NoteItApplication$OnAddItemListener mListener -> a
+    com.geekjamboree.noteit.NoteItApplication this$0 -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$1AddShoppingListTask -> com.geekjamboree.noteit.ef:
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner mListener -> a
+    com.geekjamboree.noteit.NoteItApplication this$0 -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$1CopyItemTask -> com.geekjamboree.noteit.eg:
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner mListener -> a
+    com.geekjamboree.noteit.NoteItApplication this$0 -> b
+    long val$targetListId -> c
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$1DeleteCategoryListener -> com.geekjamboree.noteit.eh:
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner mListener -> a
+    com.geekjamboree.noteit.NoteItApplication this$0 -> b
+    int val$index -> c
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$1DeleteItemTask -> com.geekjamboree.noteit.ei:
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner mListener -> a
+    com.geekjamboree.noteit.NoteItApplication this$0 -> b
+    long val$itemID -> c
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$1DeleteShoppingListTask -> com.geekjamboree.noteit.ej:
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner mListener -> a
+    com.geekjamboree.noteit.NoteItApplication this$0 -> b
+    long val$listID -> c
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$1EditCategoryListener -> com.geekjamboree.noteit.ek:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner val$listener -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$1EditItemTask -> com.geekjamboree.noteit.el:
+    com.geekjamboree.noteit.NoteItApplication$OnAddItemListener mListener -> a
+    com.geekjamboree.noteit.NoteItApplication this$0 -> b
+    com.geekjamboree.noteit.NoteItApplication$Item val$item -> c
+    int val$bitMask -> d
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$1EditShoppingListTask -> com.geekjamboree.noteit.em:
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner mListener -> a
+    com.geekjamboree.noteit.NoteItApplication this$0 -> b
+    com.geekjamboree.noteit.NoteItApplication$ShoppingList val$listDetail -> c
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$1FetchItemsTask -> com.geekjamboree.noteit.en:
+    com.geekjamboree.noteit.NoteItApplication$OnFetchItemsListener mListener -> a
+    com.geekjamboree.noteit.NoteItApplication this$0 -> b
+    java.util.ArrayList val$items -> c
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$1FetchShoppingListsTask -> com.geekjamboree.noteit.eo:
+    com.geekjamboree.noteit.NoteItApplication$OnFetchShoppingListsListener mListener -> a
+    com.geekjamboree.noteit.NoteItApplication this$0 -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$1GetCategoriesTask -> com.geekjamboree.noteit.ep:
+    com.geekjamboree.noteit.NoteItApplication$OnFetchCategoriesListener mListener -> a
+    com.geekjamboree.noteit.NoteItApplication this$0 -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$1GetItemTask -> com.geekjamboree.noteit.eq:
+    com.geekjamboree.noteit.NoteItApplication$OnGetItemListener mListener -> a
+    com.geekjamboree.noteit.NoteItApplication this$0 -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$1ReorderCategoryListener -> com.geekjamboree.noteit.er:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    int val$source -> b
+    int val$target -> c
+    com.geekjamboree.noteit.NoteItApplication$Category val$sourceCategory -> d
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner val$listener -> e
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$1SuggestItemsTask -> com.geekjamboree.noteit.es:
+    com.geekjamboree.noteit.NoteItApplication$OnSuggestItemsListener mListener -> a
+    com.geekjamboree.noteit.NoteItApplication this$0 -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$1getUnitsTask -> com.geekjamboree.noteit.et:
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner mListener -> a
+    com.geekjamboree.noteit.NoteItApplication this$0 -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$2 -> com.geekjamboree.noteit.eu:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner val$inPostExecute -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$3 -> com.geekjamboree.noteit.ev:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner val$listener -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$4 -> com.geekjamboree.noteit.ew:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    java.lang.String val$email -> b
+    java.lang.String val$password -> c
+    boolean val$isHashedPassword -> d
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner val$listener -> e
+    void onPostExecute(long,java.lang.String) -> a
+com.geekjamboree.noteit.NoteItApplication$4$1 -> com.geekjamboree.noteit.ex:
+    com.geekjamboree.noteit.NoteItApplication$4 this$1 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner val$listener -> b
+    void onPostExecute(long,java.lang.String) -> a
+com.geekjamboree.noteit.NoteItApplication$4$1$1 -> com.geekjamboree.noteit.ey:
+    com.geekjamboree.noteit.NoteItApplication$4$1 this$2 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner val$listener -> b
+    void onPostExecute(long,java.lang.String) -> a
+com.geekjamboree.noteit.NoteItApplication$4$1$1$1 -> com.geekjamboree.noteit.ez:
+    com.geekjamboree.noteit.NoteItApplication$4$1$1 this$3 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner val$listener -> b
+    void onPostExecute$1712e425(long,java.lang.String) -> a
+com.geekjamboree.noteit.NoteItApplication$5 -> com.geekjamboree.noteit.fa:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner val$listener -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$6 -> com.geekjamboree.noteit.fb:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner val$listener -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$7 -> com.geekjamboree.noteit.fc:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnFetchItemsListener val$listener -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$8 -> com.geekjamboree.noteit.fd:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnItemVoteListener val$inListener -> b
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$9 -> com.geekjamboree.noteit.fe:
+    com.geekjamboree.noteit.NoteItApplication this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner val$listener -> b
+    long val$list_ID -> c
+    void onPostExecute(org.json.JSONObject) -> a
+com.geekjamboree.noteit.NoteItApplication$Category -> com.geekjamboree.noteit.ff:
+    java.lang.String mName -> a
+    long mID -> b
+    long mUserID -> c
+    long mRank -> d
+    com.geekjamboree.noteit.NoteItApplication this$0 -> e
+    java.lang.String toString() -> toString
+    boolean equals(java.lang.Object) -> equals
+com.geekjamboree.noteit.NoteItApplication$CategoryReportItem -> com.geekjamboree.noteit.fg:
+    long mCategoryId -> a
+    java.lang.String mCategoryName -> b
+    float mPrice -> c
+    com.geekjamboree.noteit.NoteItApplication this$0 -> d
+com.geekjamboree.noteit.NoteItApplication$Currency -> com.geekjamboree.noteit.fh:
+    int mCurrencyId -> a
+    java.lang.String mCurrencyCode -> b
+    java.lang.String mCurrencySymbol -> c
+    java.lang.String mCurrencyName -> d
+    int mCurrencyIsRight -> e
+    com.geekjamboree.noteit.NoteItApplication this$0 -> f
+    boolean equals(java.lang.Object) -> equals
+com.geekjamboree.noteit.NoteItApplication$Item -> com.geekjamboree.noteit.fi:
+    java.lang.String mName -> a
+    long mID -> b
+    long mClassID -> c
+    long mCategoryID -> d
+    long mListID -> e
+    float mQuantity -> f
+    float mUnitPrice -> g
+    int mUnitID -> h
+    int mIsPurchased -> i
+    int mIsAskLater -> j
+    java.lang.String mBarcode -> k
+    int mBarcodeFormat -> l
+    int mLikeCount -> m
+    com.geekjamboree.noteit.NoteItApplication this$0 -> n
+    void copyFrom(com.geekjamboree.noteit.NoteItApplication$Item) -> a
+    java.lang.String toString() -> toString
+    boolean equals(java.lang.Object) -> equals
+    java.lang.String getCategoryName() -> a
+    int compareTo(java.lang.Object) -> compareTo
+com.geekjamboree.noteit.NoteItApplication$ItemAndStats -> com.geekjamboree.noteit.fj:
+    double mMean -> o
+    double mSampleDeviation -> p
+    com.geekjamboree.noteit.NoteItApplication this$0 -> q
+    void copyFrom(com.geekjamboree.noteit.NoteItApplication$Item) -> a
+    int getDeviationRange() -> a
+com.geekjamboree.noteit.NoteItApplication$ItemReportItem -> com.geekjamboree.noteit.fk:
+    long mItemID -> a
+    java.lang.String mItemName -> b
+    float mPrice -> c
+    com.geekjamboree.noteit.NoteItApplication this$0 -> d
+com.geekjamboree.noteit.NoteItApplication$Message -> com.geekjamboree.noteit.fl:
+    long mMessageId -> a
+    long mUserId -> b
+    long mFromUserId -> c
+    java.sql.Timestamp mDateReceived -> d
+    java.lang.String mSubject -> e
+    java.lang.String mText -> f
+    boolean mIsRead -> g
+    com.geekjamboree.noteit.NoteItApplication this$0 -> h
+com.geekjamboree.noteit.NoteItApplication$OnAddCategoryListener -> com.geekjamboree.noteit.fm:
+    void onPostExecute$45bd436b(long,java.lang.String) -> a
+com.geekjamboree.noteit.NoteItApplication$OnAddItemListener -> com.geekjamboree.noteit.fn:
+    void onPostExecute(long,com.geekjamboree.noteit.NoteItApplication$Item,java.lang.String) -> a
+com.geekjamboree.noteit.NoteItApplication$OnFetchCategoriesListener -> com.geekjamboree.noteit.fo:
+    void onPostExecute$1712e425(long,java.lang.String) -> a
+com.geekjamboree.noteit.NoteItApplication$OnFetchItemsListener -> com.geekjamboree.noteit.fp:
+    void onPostExecute$1712e425(long,java.util.ArrayList) -> a
+com.geekjamboree.noteit.NoteItApplication$OnFetchMessagesListener -> com.geekjamboree.noteit.fq:
+    void onPostExecute$1712e425(long,java.util.ArrayList) -> a
+com.geekjamboree.noteit.NoteItApplication$OnFetchShoppingListsListener -> com.geekjamboree.noteit.fr:
+    void onPostExecute$1712e425(long,java.lang.String) -> a
+com.geekjamboree.noteit.NoteItApplication$OnGetCategoryReportListener -> com.geekjamboree.noteit.fs:
+    void onPostExecute(long,java.util.ArrayList,java.lang.String) -> a
+com.geekjamboree.noteit.NoteItApplication$OnGetItemListener -> com.geekjamboree.noteit.ft:
+    void onPostExecute(long,com.geekjamboree.noteit.NoteItApplication$Item,java.lang.String) -> a
+com.geekjamboree.noteit.NoteItApplication$OnGetItemReportListener -> com.geekjamboree.noteit.fu:
+    void onPostExecute(long,java.util.ArrayList,java.lang.String) -> a
+com.geekjamboree.noteit.NoteItApplication$OnGetPendingTotalListener -> com.geekjamboree.noteit.fv:
+    void onPostExecute$60d7a4c5(long,float) -> a
+com.geekjamboree.noteit.NoteItApplication$OnItemVoteListener -> com.geekjamboree.noteit.fw:
+    void onPostExecute(long,int,java.lang.String) -> a
+com.geekjamboree.noteit.NoteItApplication$OnMethodExecuteListerner -> com.geekjamboree.noteit.fx:
+    void onPostExecute(long,java.lang.String) -> a
+com.geekjamboree.noteit.NoteItApplication$OnSearchBarcodeListener -> com.geekjamboree.noteit.fy:
+    void onSearchResults(long,com.geekjamboree.noteit.NoteItApplication$Item,java.lang.String) -> a
+com.geekjamboree.noteit.NoteItApplication$OnSuggestItemsListener -> com.geekjamboree.noteit.fz:
+    void onPostExecute$1712e425(long,java.util.ArrayList) -> a
+com.geekjamboree.noteit.NoteItApplication$Preference -> com.geekjamboree.noteit.ga:
+    int mCurrencyId -> a
+    com.geekjamboree.noteit.NoteItApplication this$0 -> b
+com.geekjamboree.noteit.NoteItApplication$ShoppingList -> com.geekjamboree.noteit.gb:
+    java.lang.String mName -> a
+    long mID -> b
+    long mItemCount -> c
+    long mUserID -> d
+    com.geekjamboree.noteit.NoteItApplication this$0 -> e
+    java.lang.String toString() -> toString
+    boolean equals(java.lang.Object) -> equals
+    void incrementCount() -> a
+    void decrementCount() -> b
+com.geekjamboree.noteit.NoteItApplication$SuggestedItem -> com.geekjamboree.noteit.gc:
+    long mItemId -> a
+    java.lang.String mItemName -> b
+    com.geekjamboree.noteit.NoteItApplication this$0 -> c
+    java.lang.String toString() -> toString
+com.geekjamboree.noteit.NoteItApplication$Unit -> com.geekjamboree.noteit.gd:
+    java.lang.String mName -> a
+    java.lang.String mAbbreviation -> b
+    int mID -> c
+    int mType -> d
+    com.geekjamboree.noteit.NoteItApplication this$0 -> e
+    java.lang.String toString() -> toString
+    boolean equals(java.lang.Object) -> equals
+com.geekjamboree.noteit.NumberPicker -> com.geekjamboree.noteit.NumberPicker:
+    com.geekjamboree.noteit.NumberPicker$Formatter TWO_DIGIT_FORMATTER -> a
+    android.os.Handler mHandler -> f
+    java.lang.Runnable mRunnable -> g
+    android.widget.EditText mText -> h
+    android.text.InputFilter mNumberInputFilter -> i
+    java.lang.String[] mDisplayedValues -> j
+    int mStart -> b
+    int mEnd -> c
+    int mCurrent -> d
+    int mPrevious -> e
+    com.geekjamboree.noteit.NumberPicker$OnChangedListener mListener -> k
+    com.geekjamboree.noteit.NumberPicker$Formatter mFormatter -> l
+    long mSpeed -> m
+    boolean mIncrement -> n
+    boolean mDecrement -> o
+    char[] DIGIT_CHARACTERS -> p
+    com.geekjamboree.noteit.NumberPickerButton mIncrementButton -> q
+    com.geekjamboree.noteit.NumberPickerButton mDecrementButton -> r
+    void setEnabled(boolean) -> setEnabled
+    void onClick(android.view.View) -> onClick
+    void changeCurrent(int) -> a
+    void notifyChange() -> d
+    void updateView() -> e
+    void onFocusChange(android.view.View,boolean) -> onFocusChange
+    void validateInput(android.view.View) -> a
+    boolean onLongClick(android.view.View) -> onLongClick
+    void cancelIncrement() -> a
+    void cancelDecrement() -> b
+    int getSelectedPos(java.lang.String) -> a
+    boolean access$0(com.geekjamboree.noteit.NumberPicker) -> a
+    android.os.Handler access$1(com.geekjamboree.noteit.NumberPicker) -> b
+    long access$2(com.geekjamboree.noteit.NumberPicker) -> c
+    boolean access$3(com.geekjamboree.noteit.NumberPicker) -> d
+    java.lang.String[] access$4(com.geekjamboree.noteit.NumberPicker) -> e
+    android.text.InputFilter access$5(com.geekjamboree.noteit.NumberPicker) -> f
+    char[] access$6() -> c
+    int access$7(com.geekjamboree.noteit.NumberPicker,java.lang.String) -> a
+com.geekjamboree.noteit.NumberPicker$1 -> com.geekjamboree.noteit.ge:
+    java.lang.StringBuilder mBuilder -> a
+    java.util.Formatter mFmt -> b
+    java.lang.Object[] mArgs -> c
+    java.lang.String toString(int) -> a
+com.geekjamboree.noteit.NumberPicker$2 -> com.geekjamboree.noteit.gf:
+    com.geekjamboree.noteit.NumberPicker this$0 -> a
+    void run() -> run
+com.geekjamboree.noteit.NumberPicker$Formatter -> com.geekjamboree.noteit.gg:
+    java.lang.String toString(int) -> a
+com.geekjamboree.noteit.NumberPicker$NumberPickerInputFilter -> com.geekjamboree.noteit.gh:
+    com.geekjamboree.noteit.NumberPicker this$0 -> a
+    java.lang.CharSequence filter(java.lang.CharSequence,int,int,android.text.Spanned,int,int) -> filter
+com.geekjamboree.noteit.NumberPicker$NumberRangeKeyListener -> com.geekjamboree.noteit.gi:
+    com.geekjamboree.noteit.NumberPicker this$0 -> a
+    int getInputType() -> getInputType
+    char[] getAcceptedChars() -> getAcceptedChars
+    java.lang.CharSequence filter(java.lang.CharSequence,int,int,android.text.Spanned,int,int) -> filter
+com.geekjamboree.noteit.NumberPicker$OnChangedListener -> com.geekjamboree.noteit.gj:
+com.geekjamboree.noteit.NumberPickerButton -> com.geekjamboree.noteit.NumberPickerButton:
+    com.geekjamboree.noteit.NumberPicker mNumberPicker -> a
+    void setNumberPicker(com.geekjamboree.noteit.NumberPicker) -> a
+    boolean onTouchEvent(android.view.MotionEvent) -> onTouchEvent
+    boolean onTrackballEvent(android.view.MotionEvent) -> onTrackballEvent
+    boolean onKeyUp(int,android.view.KeyEvent) -> onKeyUp
+    void cancelLongpressIfRequired(android.view.MotionEvent) -> a
+    void cancelLongpress() -> a
+com.geekjamboree.noteit.PopupWindows -> com.geekjamboree.noteit.gk:
+    android.content.Context mContext -> a
+    android.widget.PopupWindow mWindow -> b
+    android.view.View mRootView -> c
+    android.graphics.drawable.Drawable mBackground -> d
+    android.view.WindowManager mWindowManager -> e
+    void onDismiss() -> onDismiss
+    void preShow() -> a
+    void setContentView(android.view.View) -> a
+    void setOnDismissListener(android.widget.PopupWindow$OnDismissListener) -> a
+    void dismiss() -> b
+com.geekjamboree.noteit.PopupWindows$1 -> com.geekjamboree.noteit.gl:
+    com.geekjamboree.noteit.PopupWindows this$0 -> a
+    boolean onTouch(android.view.View,android.view.MotionEvent) -> onTouch
+com.geekjamboree.noteit.QuickAction -> com.geekjamboree.noteit.gm:
+    android.view.View mRootView -> f
+    android.widget.ImageView mArrowUp -> g
+    android.widget.ImageView mArrowDown -> h
+    android.view.LayoutInflater mInflater -> i
+    android.view.ViewGroup mTrack -> j
+    android.widget.ScrollView mScroller -> k
+    com.geekjamboree.noteit.QuickAction$OnActionItemClickListener mItemClickListener -> l
+    com.geekjamboree.noteit.QuickAction$OnDismissListener mDismissListener -> m
+    java.util.List actionItems -> n
+    boolean mDidAction -> o
+    int mChildPos -> p
+    int mInsertPos -> q
+    int mAnimStyle -> r
+    int mOrientation -> s
+    int rootWidth -> t
+    com.geekjamboree.noteit.ActionItem getActionItem(int) -> a
+    void setRootViewId(int) -> b
+    void setOnActionItemClickListener(com.geekjamboree.noteit.QuickAction$OnActionItemClickListener) -> a
+    void addActionItem(com.geekjamboree.noteit.ActionItem) -> a
+    void show(android.view.View) -> b
+    void onDismiss() -> onDismiss
+    com.geekjamboree.noteit.QuickAction$OnActionItemClickListener access$0(com.geekjamboree.noteit.QuickAction) -> a
+    void access$1$595c3bf9(com.geekjamboree.noteit.QuickAction) -> b
+com.geekjamboree.noteit.QuickAction$1 -> com.geekjamboree.noteit.gn:
+    com.geekjamboree.noteit.QuickAction this$0 -> a
+    int val$pos -> b
+    int val$actionId -> c
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.QuickAction$OnActionItemClickListener -> com.geekjamboree.noteit.go:
+    void onItemClick$2dcd758d(int) -> a
+com.geekjamboree.noteit.QuickAction$OnDismissListener -> com.geekjamboree.noteit.gp:
+com.geekjamboree.noteit.RegisterActivity -> com.geekjamboree.noteit.RegisterActivity:
+    com.geekjamboree.noteit.TitleBar mToolbar -> a
+    boolean mEulaAccepted -> b
+    android.view.View mRoot -> c
+    void onCreate(android.os.Bundle) -> onCreate
+    void showIndeterminateProgress() -> b
+    void hideIndeterminateProgress() -> c
+    void doSaveLoginDetails(java.lang.String,java.lang.String) -> a
+    void onEulaAgreedTo() -> a
+com.geekjamboree.noteit.RegisterActivity$1 -> com.geekjamboree.noteit.gq:
+    com.geekjamboree.noteit.RegisterActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.RegisterActivity$2 -> com.geekjamboree.noteit.gr:
+    com.geekjamboree.noteit.RegisterActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+    com.geekjamboree.noteit.RegisterActivity access$0(com.geekjamboree.noteit.RegisterActivity$2) -> a
+com.geekjamboree.noteit.RegisterActivity$2$1 -> com.geekjamboree.noteit.gs:
+    com.geekjamboree.noteit.RegisterActivity$2 this$1 -> a
+    java.lang.String val$email -> b
+    java.lang.String val$password -> c
+    void onPostExecute(long,java.lang.String) -> a
+com.geekjamboree.noteit.ReportActivity -> com.geekjamboree.noteit.ReportActivity:
+    com.geekjamboree.noteit.TitleBar mToolbar -> a
+    android.webkit.WebView mTextView -> b
+    java.lang.String mCurrentReportText -> c
+    java.lang.String mCurrentReportHtml -> d
+    int mReportHeaderId -> e
+    int mReportItemId -> f
+    int mReportFooterId -> g
+    boolean mAttachHTML -> h
+    void onCreate(android.os.Bundle) -> onCreate
+    void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
+    void onResume() -> onResume
+    void doEmail() -> a
+    android.net.Uri writeToExternalStoragePublic() -> b
+com.geekjamboree.noteit.ReportActivity$1 -> com.geekjamboree.noteit.gt:
+    com.geekjamboree.noteit.ReportActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.ReportActivity$2 -> com.geekjamboree.noteit.gu:
+    com.geekjamboree.noteit.ReportActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.ReportActivity$3 -> com.geekjamboree.noteit.gv:
+    com.geekjamboree.noteit.ReportActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.ReportActivity$onDisplayCategoryReportListener -> com.geekjamboree.noteit.gw:
+    com.geekjamboree.noteit.ReportActivity this$0 -> a
+    void onPostExecute(long,java.util.ArrayList,java.lang.String) -> a
+com.geekjamboree.noteit.ReportActivity$onDisplayItemReportListener -> com.geekjamboree.noteit.gx:
+    com.geekjamboree.noteit.ReportActivity this$0 -> a
+    void onPostExecute(long,java.util.ArrayList,java.lang.String) -> a
+com.geekjamboree.noteit.ReportCategoryChart -> com.geekjamboree.noteit.ReportCategoryChart:
+    int[] COLORS -> c
+    org.achartengine.model.CategorySeries mSeries -> d
+    org.achartengine.renderer.DefaultRenderer mRenderer -> e
+    org.achartengine.GraphicalView mChartView -> f
+    com.geekjamboree.noteit.TitleBar mToolbar -> a
+    android.view.View mRoot -> b
+    void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
+    void onCreate(android.os.Bundle) -> onCreate
+    void onResume() -> onResume
+    org.achartengine.model.CategorySeries access$0(com.geekjamboree.noteit.ReportCategoryChart) -> a
+    int[] access$1() -> a
+    org.achartengine.renderer.DefaultRenderer access$2(com.geekjamboree.noteit.ReportCategoryChart) -> b
+    org.achartengine.GraphicalView access$3(com.geekjamboree.noteit.ReportCategoryChart) -> c
+com.geekjamboree.noteit.ReportCategoryChart$1 -> com.geekjamboree.noteit.gy:
+    com.geekjamboree.noteit.ReportCategoryChart this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.ReportCategoryChart$2 -> com.geekjamboree.noteit.gz:
+    com.geekjamboree.noteit.ReportCategoryChart this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.ReportCategoryChart$onDisplayCategoryReportListener -> com.geekjamboree.noteit.ha:
+    com.geekjamboree.noteit.ReportCategoryChart this$0 -> a
+    void onPostExecute(long,java.util.ArrayList,java.lang.String) -> a
+com.geekjamboree.noteit.ReportMenuActivity -> com.geekjamboree.noteit.ReportMenuActivity:
+    java.lang.String GROUP_NAME -> a
+    java.lang.String REPORT_NAME -> b
+    java.lang.String REPORT_ID -> c
+    java.lang.String REPORT_DESCRIPTION -> d
+    java.lang.String REPORT_TYPE -> e
+    int REPORT_TYPE_ITEM -> f
+    int REPORT_TYPE_CATEGORY -> g
+    com.geekjamboree.noteit.ExpandableLVRightIndicator mListView -> h
+    com.geekjamboree.noteit.TitleBar mToolbar -> i
+    android.content.SharedPreferences mPrefs -> j
+    int mFontSize -> k
+    void onCreate(android.os.Bundle) -> onCreate
+    void onResume() -> onResume
+    void doDisplayReport(int) -> a
+    void doDisplayChart(int) -> b
+    void doExpandAll() -> a
+    void doCollapseAll() -> b
+com.geekjamboree.noteit.ReportMenuActivity$1 -> com.geekjamboree.noteit.hb:
+    com.geekjamboree.noteit.ReportMenuActivity this$0 -> a
+    boolean onChildClick(android.widget.ExpandableListView,android.view.View,int,int,long) -> onChildClick
+com.geekjamboree.noteit.ReportMenuActivity$2 -> com.geekjamboree.noteit.hc:
+    com.geekjamboree.noteit.ReportMenuActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.ReportMenuActivity$3 -> com.geekjamboree.noteit.hd:
+    com.geekjamboree.noteit.ReportMenuActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.ReportMenuActivity$4 -> com.geekjamboree.noteit.he:
+    com.geekjamboree.noteit.ReportMenuActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.ReportMenuActivity$5 -> com.geekjamboree.noteit.hf:
+    com.geekjamboree.noteit.ReportMenuActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.ReportMenuActivity$SimpleExpandaleAdapterWithFontSize -> com.geekjamboree.noteit.hg:
+    int[] mGroupTo -> a
+    int[] mChildTo -> b
+    android.content.Context mContext -> c
+    com.geekjamboree.noteit.ReportMenuActivity this$0 -> d
+    android.view.View getChildView(int,int,boolean,android.view.View,android.view.ViewGroup) -> getChildView
+    android.view.View getGroupView(int,boolean,android.view.View,android.view.ViewGroup) -> getGroupView
+com.geekjamboree.noteit.ShoppingListActivity -> com.geekjamboree.noteit.ShoppingListActivity:
+    android.widget.ListView mListView -> a
+    com.geekjamboree.noteit.ShoppingListActivity$ShoppingListAdapter mAdapter -> b
+    com.geekjamboree.noteit.TitleBar mToolbar -> c
+    int mFontSize -> d
+    boolean mIsShoppingListFetched -> e
+    boolean mIsDisplayCount -> f
+    android.content.SharedPreferences$OnSharedPreferenceChangeListener mPrefChangeListener -> g
+    void onCreate(android.os.Bundle) -> onCreate
+    void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
+    void onPause() -> onPause
+    void onResume() -> onResume
+    boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
+    void onCreateContextMenu(android.view.ContextMenu,android.view.View,android.view.ContextMenu$ContextMenuInfo) -> onCreateContextMenu
+    boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
+    boolean onContextItemSelected(android.view.MenuItem) -> onContextItemSelected
+    void onPostExecute$1712e425(long,java.lang.String) -> a
+    void doAddShoppingList() -> a
+com.geekjamboree.noteit.ShoppingListActivity$1 -> com.geekjamboree.noteit.hh:
+    com.geekjamboree.noteit.ShoppingListActivity this$0 -> a
+    void onSharedPreferenceChanged(android.content.SharedPreferences,java.lang.String) -> onSharedPreferenceChanged
+com.geekjamboree.noteit.ShoppingListActivity$10 -> com.geekjamboree.noteit.hi:
+    com.geekjamboree.noteit.ShoppingListActivity this$0 -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.geekjamboree.noteit.ShoppingListActivity$1ItemClickAndPostExecuteListener -> com.geekjamboree.noteit.hj:
+    android.view.View mView -> a
+    com.geekjamboree.noteit.ShoppingListActivity this$0 -> b
+    void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
+com.geekjamboree.noteit.ShoppingListActivity$2 -> com.geekjamboree.noteit.hk:
+    com.geekjamboree.noteit.ShoppingListActivity this$0 -> a
+    android.widget.EditText val$editListName -> b
+    int val$index -> c
+    void onClick(android.content.DialogInterface,int) -> onClick
+    com.geekjamboree.noteit.ShoppingListActivity access$0(com.geekjamboree.noteit.ShoppingListActivity$2) -> a
+com.geekjamboree.noteit.ShoppingListActivity$2$1 -> com.geekjamboree.noteit.hl:
+    com.geekjamboree.noteit.ShoppingListActivity$2 this$1 -> a
+    void onPostExecute(long,java.lang.String) -> a
+com.geekjamboree.noteit.ShoppingListActivity$3 -> com.geekjamboree.noteit.hm:
+    com.geekjamboree.noteit.ShoppingListActivity this$0 -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.geekjamboree.noteit.ShoppingListActivity$4 -> com.geekjamboree.noteit.hn:
+    com.geekjamboree.noteit.ShoppingListActivity this$0 -> a
+    int val$index -> b
+    void onClick(android.content.DialogInterface,int) -> onClick
+    com.geekjamboree.noteit.ShoppingListActivity access$0(com.geekjamboree.noteit.ShoppingListActivity$4) -> a
+com.geekjamboree.noteit.ShoppingListActivity$4$1 -> com.geekjamboree.noteit.ho:
+    com.geekjamboree.noteit.ShoppingListActivity$4 this$1 -> a
+    void onPostExecute(long,java.lang.String) -> a
+com.geekjamboree.noteit.ShoppingListActivity$5 -> com.geekjamboree.noteit.hp:
+    com.geekjamboree.noteit.ShoppingListActivity this$0 -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.geekjamboree.noteit.ShoppingListActivity$6 -> com.geekjamboree.noteit.hq:
+    com.geekjamboree.noteit.ShoppingListActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.ShoppingListActivity$7 -> com.geekjamboree.noteit.hr:
+    com.geekjamboree.noteit.ShoppingListActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.ShoppingListActivity$8 -> com.geekjamboree.noteit.hs:
+    com.geekjamboree.noteit.ShoppingListActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.geekjamboree.noteit.ShoppingListActivity$9 -> com.geekjamboree.noteit.ht:
+    com.geekjamboree.noteit.ShoppingListActivity this$0 -> a
+    android.view.View val$dialogView -> b
+    void onClick(android.content.DialogInterface,int) -> onClick
+    com.geekjamboree.noteit.ShoppingListActivity access$0(com.geekjamboree.noteit.ShoppingListActivity$9) -> a
+com.geekjamboree.noteit.ShoppingListActivity$9$1 -> com.geekjamboree.noteit.hu:
+    com.geekjamboree.noteit.ShoppingListActivity$9 this$1 -> a
+    void onPostExecute(long,java.lang.String) -> a
+com.geekjamboree.noteit.ShoppingListActivity$ShoppingListAdapter -> com.geekjamboree.noteit.hv:
+    com.geekjamboree.noteit.ShoppingListActivity this$0 -> e
+    android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
+com.geekjamboree.noteit.SplashScreen -> com.geekjamboree.noteit.SplashScreen:
+    android.content.SharedPreferences mPrefs -> a
+    android.view.View mContentView -> b
+    void onCreate(android.os.Bundle) -> onCreate
+    void onPostExecute(long,java.lang.String) -> a
+    void doLoginActivity() -> a
+com.geekjamboree.noteit.SplashScreen$1 -> com.geekjamboree.noteit.hw:
+    com.geekjamboree.noteit.SplashScreen this$0 -> a
+    com.geekjamboree.noteit.NoteItApplication val$app -> b
+    void onPostExecute$1712e425(long,java.lang.String) -> a
+com.geekjamboree.noteit.ThemeUtils -> com.geekjamboree.noteit.hx:
+    int sTheme -> a
+    void initializeThemes() -> a
+    void onActivityCreateSetTheme(android.app.Activity) -> a
+    int getResourceIdFromAttribute(android.content.Context,int) -> a
+com.geekjamboree.noteit.TitleBar -> com.geekjamboree.noteit.TitleBar:
+    com.geekjamboree.noteit.ViewFlipperHack mFlipper -> a
+    android.widget.LinearLayout mTitleRoot -> b
+    android.widget.TextView mTitleText -> c
+    boolean mProgressShowing -> d
+    int mIndex -> e
+    float mScale -> f
+    int mButtonSize -> g
+    int mButtonPadding -> h
+    int mButtonMargin -> i
+    int mButtonSeparatorWidth -> j
+    int mButtonSeparatorHeight -> k
+    void doInit() -> d
+    void SetTitle(java.lang.CharSequence) -> a
+    java.lang.String GetTitle() -> a
+    void showInderminateProgress(java.lang.String) -> a
+    void hideIndeterminateProgress() -> b
+    void addCenterFillButton(android.widget.Button) -> a
+    android.widget.ImageButton addLeftAlignedButton$54a063cb() -> c
+    android.widget.ImageButton addRightAlignedButton(int,boolean,boolean) -> a
+    void addVerticalSeparator(android.app.Activity,boolean) -> a
+    void RequestNoTitle(android.app.Activity) -> a
+    int getButtonDim() -> e
+com.geekjamboree.noteit.ViewFlipperHack -> com.geekjamboree.noteit.ViewFlipperHack:
+    void onDetachedFromWindow() -> onDetachedFromWindow
+com.google.ads.Ad -> com.google.ads.a:
+com.google.ads.AdActivity -> com.google.ads.AdActivity:
+    com.google.ads.internal.a a -> a
+    java.lang.Object b -> b
+    com.google.ads.AdActivity c -> c
+    com.google.ads.internal.d d -> d
+    com.google.ads.AdActivity e -> e
+    com.google.ads.AdActivity f -> f
+    com.google.ads.AdActivity$StaticMethodWrapper g -> g
+    com.google.ads.internal.AdWebView h -> h
+    android.view.ViewGroup i -> i
+    boolean j -> j
+    long k -> k
+    android.widget.RelativeLayout l -> l
+    com.google.ads.AdActivity m -> m
+    boolean n -> n
+    boolean o -> o
+    boolean p -> p
+    boolean q -> q
+    com.google.ads.internal.AdVideoView r -> r
+    com.google.ads.internal.AdVideoView getAdVideoView() -> a
+    com.google.ads.internal.AdWebView getOpeningAdWebView() -> b
+    boolean isShowing() -> c
+    void launchAdActivity(com.google.ads.internal.d,com.google.ads.internal.e) -> a
+    void a(com.google.ads.internal.d) -> b
+    void moveAdVideoView(int,int,int,int) -> a
+    void newAdVideoView(int,int,int,int) -> b
+    android.widget.RelativeLayout$LayoutParams a(int,int,int,int) -> c
+    void onClick(android.view.View) -> onClick
+    void onCreate(android.os.Bundle) -> onCreate
+    void a(com.google.ads.internal.AdWebView,boolean,int,boolean) -> a
+    void onDestroy() -> onDestroy
+    void onPause() -> onPause
+    void d() -> g
+    void onWindowFocusChanged(boolean) -> onWindowFocusChanged
+    void onActivityResult(int,int,android.content.Intent) -> onActivityResult
+    java.lang.Object a() -> d
+    com.google.ads.AdActivity b() -> e
+    com.google.ads.internal.d c() -> f
+    com.google.ads.internal.d b(com.google.ads.internal.d) -> a
+com.google.ads.AdActivity$StaticMethodWrapper -> com.google.ads.b:
+    boolean isShowing() -> a
+    void launchAdActivity(com.google.ads.internal.d,com.google.ads.internal.e) -> a
+com.google.ads.AdListener -> com.google.ads.c:
+com.google.ads.AdRequest -> com.google.ads.d:
+    java.text.SimpleDateFormat a -> b
+    java.lang.reflect.Method b -> c
+    java.lang.reflect.Method c -> d
+    com.google.ads.AdRequest$Gender d -> e
+    java.util.Date e -> f
+    java.util.Set f -> g
+    java.util.Map g -> h
+    java.util.Map h -> i
+    android.location.Location i -> j
+    boolean j -> k
+    boolean k -> l
+    java.lang.String TEST_EMULATOR -> a
+    java.util.Set l -> m
+    com.google.ads.AdRequest setKeywords(java.util.Set) -> a
+    com.google.ads.AdRequest setNetworkExtras(com.google.ads.mediation.NetworkExtras) -> a
+    java.lang.Object getNetworkExtras(java.lang.Class) -> a
+    java.util.Map getRequestMap(android.content.Context) -> a
+    com.google.ads.AdRequest setTestDevices(java.util.Set) -> b
+    boolean isTestDevice(android.content.Context) -> b
+com.google.ads.AdRequest$ErrorCode -> com.google.ads.e:
+    com.google.ads.AdRequest$ErrorCode INVALID_REQUEST -> a
+    com.google.ads.AdRequest$ErrorCode NO_FILL -> b
+    com.google.ads.AdRequest$ErrorCode NETWORK_ERROR -> c
+    com.google.ads.AdRequest$ErrorCode INTERNAL_ERROR -> d
+    java.lang.String a -> e
+    com.google.ads.AdRequest$ErrorCode[] b -> f
+    com.google.ads.AdRequest$ErrorCode[] values() -> values
+    com.google.ads.AdRequest$ErrorCode valueOf(java.lang.String) -> valueOf
+    java.lang.String toString() -> toString
+com.google.ads.AdRequest$Gender -> com.google.ads.f:
+    com.google.ads.AdRequest$Gender UNKNOWN -> a
+    com.google.ads.AdRequest$Gender MALE -> b
+    com.google.ads.AdRequest$Gender FEMALE -> c
+    com.google.ads.AdRequest$Gender[] a -> d
+    com.google.ads.AdRequest$Gender[] values() -> values
+    com.google.ads.AdRequest$Gender valueOf(java.lang.String) -> valueOf
+com.google.ads.AdSize -> com.google.ads.g:
+    com.google.ads.AdSize SMART_BANNER -> a
+    com.google.ads.AdSize BANNER -> b
+    com.google.ads.AdSize IAB_MRECT -> c
+    com.google.ads.AdSize IAB_BANNER -> d
+    com.google.ads.AdSize IAB_LEADERBOARD -> e
+    com.google.ads.AdSize IAB_WIDE_SKYSCRAPER -> f
+    int a -> g
+    int b -> h
+    boolean c -> i
+    boolean d -> j
+    boolean e -> k
+    java.lang.String f -> l
+    com.google.ads.AdSize createAdSize(com.google.ads.AdSize,android.content.Context) -> a
+    int getWidth() -> a
+    int getHeight() -> b
+    boolean a() -> f
+    boolean isFullWidth() -> c
+    boolean isAutoHeight() -> d
+    boolean isCustomAdSize() -> e
+    java.lang.String toString() -> toString
+com.google.ads.AdView -> com.google.ads.AdView:
+    com.google.ads.m a -> a
+    com.google.ads.internal.d b -> b
+    void a(android.content.Context,java.lang.String,int,com.google.ads.AdSize,android.util.AttributeSet) -> a
+    int a(android.content.Context,int) -> a
+    boolean a(android.content.Context,com.google.ads.AdSize,android.util.AttributeSet) -> a
+    boolean b(android.content.Context,com.google.ads.AdSize,android.util.AttributeSet) -> b
+    void a(android.content.Context,java.lang.String,com.google.ads.AdSize,android.util.AttributeSet) -> a
+    java.lang.String a(java.lang.String,android.content.Context,android.util.AttributeSet,boolean,boolean) -> a
+    java.util.Set b$565bd434(java.lang.String,android.content.Context,android.util.AttributeSet) -> a
+    void a(android.app.Activity,com.google.ads.AdSize,java.lang.String) -> a
+com.google.ads.InterstitialAd -> com.google.ads.h:
+com.google.ads.a -> com.google.ads.i:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    java.util.List c -> c
+    java.util.HashMap d -> d
+    java.lang.String a() -> a
+    java.lang.String b() -> b
+    java.util.List c() -> c
+    java.util.HashMap d() -> d
+com.google.ads.aa -> com.google.ads.j:
+    android.content.Context a -> a
+    java.lang.String b -> b
+    void run() -> run
+com.google.ads.ab -> com.google.ads.k:
+    java.lang.ref.WeakReference a -> a
+    void run() -> run
+com.google.ads.ac -> com.google.ads.l:
+    android.net.Uri a -> a
+    android.net.Uri b -> b
+    java.lang.String[] c -> c
+    java.lang.String[] d -> d
+com.google.ads.ae -> com.google.ads.m:
+    com.google.ads.internal.a a -> a
+    void a(android.webkit.WebView,boolean) -> a
+    void a(android.webkit.WebView,java.lang.String) -> a
+    void a(android.app.Activity,android.webkit.WebView,java.lang.String) -> a
+    boolean a(android.content.Context,long) -> a
+    void a(android.app.Activity) -> a
+com.google.ads.ae$a -> com.google.ads.n:
+    java.lang.ref.WeakReference a -> a
+    android.content.SharedPreferences$Editor b -> b
+    void run() -> run
+com.google.ads.ae$b -> com.google.ads.o:
+    java.lang.ref.WeakReference a -> a
+    android.webkit.WebView b -> b
+    java.lang.String c -> c
+    void run() -> run
+com.google.ads.ae$c -> com.google.ads.p:
+    boolean a -> a
+    android.webkit.WebView b -> b
+    void run() -> run
+com.google.ads.af -> com.google.ads.q:
+    boolean a(android.content.Context) -> a
+    boolean a(android.content.Intent,android.content.Context) -> a
+com.google.ads.ag -> com.google.ads.r:
+    void a(com.google.ads.internal.d,java.util.HashMap,android.webkit.WebView) -> a
+com.google.ads.ag$a -> com.google.ads.s:
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.google.ads.ag$b -> com.google.ads.t:
+    com.google.ads.ag$b a -> a
+    com.google.ads.ag$b b -> b
+    java.lang.String c -> c
+    com.google.ads.ag$b[] d -> d
+    com.google.ads.ag$b[] values() -> values
+    com.google.ads.ag$b valueOf(java.lang.String) -> valueOf
+com.google.ads.ag$c -> com.google.ads.u:
+    com.google.ads.internal.d a -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.google.ads.b -> com.google.ads.v:
+    java.math.BigInteger a -> a
+    java.math.BigInteger b -> b
+    com.google.ads.b c -> c
+    com.google.ads.b a() -> a
+    java.math.BigInteger b() -> b
+    java.math.BigInteger c() -> c
+    java.math.BigInteger d() -> d
+com.google.ads.c -> com.google.ads.w:
+    java.util.Map a -> a
+    java.lang.String b -> b
+    java.lang.String c -> c
+    java.util.List d -> d
+    java.lang.Integer e -> e
+    java.lang.Integer f -> f
+    java.util.List g -> g
+    java.util.List h -> h
+    java.util.List i -> i
+    com.google.ads.c a(java.lang.String) -> a
+    boolean a() -> a
+    int b() -> b
+    java.lang.String c() -> c
+    boolean d() -> d
+    int e() -> e
+    java.util.List f() -> f
+    java.util.List g() -> g
+    java.util.List h() -> h
+    java.util.List i() -> i
+    com.google.ads.a a(org.json.JSONObject) -> a
+    com.google.ads.internal.h j() -> j
+    java.util.List a(org.json.JSONObject,java.lang.String) -> a
+com.google.ads.c$1 -> com.google.ads.x:
+com.google.ads.d -> com.google.ads.y:
+    com.google.ads.c a -> a
+    long b -> b
+    boolean a() -> a
+    void a(com.google.ads.c,int) -> a
+    com.google.ads.c b() -> b
+com.google.ads.e -> com.google.ads.z:
+    com.google.ads.internal.d a -> a
+    com.google.ads.h b -> b
+    java.lang.Object c -> c
+    java.lang.Thread d -> d
+    java.lang.Object e -> e
+    boolean f -> f
+    java.lang.Object g -> g
+    boolean a() -> a
+    void a(com.google.ads.c,com.google.ads.AdRequest) -> a
+    boolean d() -> b
+    boolean a(java.lang.String,android.app.Activity,com.google.ads.AdRequest,com.google.ads.f,java.util.HashMap,long) -> a
+    boolean e(com.google.ads.h) -> b
+    void d(com.google.ads.h) -> a
+    void a(com.google.ads.e,com.google.ads.c,com.google.ads.AdRequest) -> a
+    java.lang.Object a(com.google.ads.e) -> a
+    java.lang.Thread a$42ec7dd0(com.google.ads.e) -> b
+    com.google.ads.internal.d b(com.google.ads.e) -> c
+    boolean a(com.google.ads.e,com.google.ads.h) -> a
+com.google.ads.e$1 -> com.google.ads.aa:
+    com.google.ads.c a -> a
+    com.google.ads.AdRequest b -> b
+    com.google.ads.e c -> c
+    void run() -> run
+com.google.ads.e$7 -> com.google.ads.ab:
+    com.google.ads.c a -> a
+    com.google.ads.e b -> b
+    void run() -> run
+com.google.ads.e$8 -> com.google.ads.ac:
+    com.google.ads.h a -> a
+    android.view.View b -> b
+    com.google.ads.f c -> c
+    com.google.ads.e d -> d
+    void run() -> run
+com.google.ads.f -> com.google.ads.ad:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    java.lang.String c -> c
+    java.util.List d -> d
+    java.util.List e -> e
+    java.util.List f -> f
+    java.lang.String a() -> a
+    java.lang.String b() -> b
+    java.lang.String c() -> c
+    java.util.List d() -> d
+com.google.ads.h -> com.google.ads.ae:
+    com.google.ads.internal.h a -> a
+    com.google.ads.f b -> b
+    boolean c -> c
+    boolean d -> d
+    com.google.ads.e e -> e
+    com.google.ads.mediation.MediationAdapter f -> f
+    boolean g -> g
+    boolean h -> h
+    android.view.View i -> i
+    android.os.Handler j -> j
+    java.lang.String k -> k
+    com.google.ads.AdRequest l -> l
+    java.util.HashMap m -> m
+    void a(android.app.Activity) -> a
+    void b() -> a
+    boolean c() -> b
+    boolean d() -> c
+    android.view.View e() -> d
+    java.lang.String g() -> e
+    void a$1385ff() -> f
+    void a(com.google.ads.mediation.MediationAdapter) -> a
+    void j() -> g
+    boolean k() -> h
+    com.google.ads.mediation.MediationAdapter a(com.google.ads.h) -> a
+com.google.ads.h$1 -> com.google.ads.af:
+    com.google.ads.h a -> a
+    void run() -> run
+com.google.ads.i -> com.google.ads.ag:
+    com.google.ads.h a -> a
+    java.lang.String b -> b
+    com.google.ads.AdRequest c -> c
+    java.util.HashMap d -> d
+    boolean e -> e
+    java.lang.ref.WeakReference f -> f
+    void run() -> run
+    void a$f3e38aa() -> a
+com.google.ads.i$a -> com.google.ads.ah:
+com.google.ads.internal.AdVideoView -> com.google.ads.a.a:
+    com.google.ads.internal.a b -> b
+    java.lang.ref.WeakReference c -> c
+    com.google.ads.internal.AdWebView d -> d
+    android.widget.MediaController a -> a
+    long e -> e
+    android.widget.VideoView f -> f
+    java.lang.String g -> g
+    void b() -> a
+    void setMediaControllerEnabled(boolean) -> a
+    void setSrc(java.lang.String) -> a
+    void onCompletion(android.media.MediaPlayer) -> onCompletion
+    boolean onError(android.media.MediaPlayer,int,int) -> onError
+    void onPrepared(android.media.MediaPlayer) -> onPrepared
+    void c() -> b
+    void d() -> c
+    void a(int) -> a
+    void a(android.view.MotionEvent) -> a
+    void e() -> d
+    void f() -> e
+com.google.ads.internal.AdVideoView$a -> com.google.ads.a.b:
+    java.lang.ref.WeakReference a -> a
+    android.os.Handler b -> b
+    void run() -> run
+    void a() -> a
+com.google.ads.internal.AdWebView -> com.google.ads.a.c:
+    java.lang.ref.WeakReference a -> a
+    com.google.ads.AdSize b -> b
+    boolean c -> c
+    boolean d -> d
+    void a() -> a
+    void b() -> b
+    void c() -> c
+    com.google.ads.AdActivity d() -> d
+    boolean e() -> e
+    void setAdActivity(com.google.ads.AdActivity) -> a
+    void loadDataWithBaseURL(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> loadDataWithBaseURL
+    void loadUrl(java.lang.String) -> loadUrl
+    void stopLoading() -> stopLoading
+    void destroy() -> destroy
+    void onMeasure(int,int) -> onMeasure
+    void setIsExpandedMraid(boolean) -> a
+com.google.ads.internal.AdWebView$1 -> com.google.ads.a.d:
+    com.google.ads.internal.AdWebView a -> a
+    void onDownloadStart(java.lang.String,java.lang.String,java.lang.String,java.lang.String,long) -> onDownloadStart
+com.google.ads.internal.a -> com.google.ads.a.e:
+    com.google.ads.internal.a d -> d
+    com.google.ads.util.f a -> a
+    java.util.Map b -> b
+    java.util.Map c -> c
+    void a(com.google.ads.internal.d,java.util.Map,android.net.Uri,android.webkit.WebView) -> a
+    boolean a(android.net.Uri) -> a
+    boolean b(android.net.Uri) -> b
+    boolean c(android.net.Uri) -> c
+    void a(android.webkit.WebView,java.lang.String,java.lang.String) -> a
+    void a(android.webkit.WebView,java.lang.String) -> a
+    void a(android.webkit.WebView,java.util.Map) -> a
+    void a(android.webkit.WebView) -> a
+    void b(android.webkit.WebView) -> b
+    com.google.ads.internal.a a() -> a
+com.google.ads.internal.a$1 -> com.google.ads.a.f:
+com.google.ads.internal.a$2 -> com.google.ads.a.g:
+    java.lang.Object b() -> a
+com.google.ads.internal.a$3 -> com.google.ads.a.h:
+com.google.ads.internal.b -> com.google.ads.a.i:
+    boolean a -> a
+    void a(java.lang.String) -> a
+    void b(java.lang.String) -> b
+    java.lang.String c(java.lang.String) -> c
+com.google.ads.internal.c -> com.google.ads.a.j:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    java.lang.String c -> c
+    java.lang.String d -> d
+    boolean e -> e
+    com.google.ads.internal.f f -> f
+    com.google.ads.internal.d g -> g
+    com.google.ads.AdRequest h -> h
+    android.webkit.WebView i -> i
+    java.lang.String j -> j
+    java.util.LinkedList k -> k
+    java.lang.String l -> l
+    boolean m -> m
+    boolean n -> n
+    com.google.ads.AdRequest$ErrorCode o -> o
+    boolean p -> p
+    int q -> q
+    java.lang.Thread r -> r
+    boolean s -> s
+    void a(java.lang.String) -> a
+    void a(com.google.ads.AdRequest) -> a
+    void run() -> run
+    java.lang.String d() -> c
+    java.lang.String a(java.util.Map,android.app.Activity) -> a
+    void a(com.google.ads.AdRequest$ErrorCode,boolean) -> a
+    void a(boolean) -> a
+    void b(java.lang.String) -> b
+    void a(java.lang.String,java.lang.String) -> a
+    void c(java.lang.String) -> c
+    void d(java.lang.String) -> d
+    void e(java.lang.String) -> e
+    void a(com.google.ads.AdRequest$ErrorCode) -> a
+    void c() -> a
+    void b$1385ff() -> b
+    void a(int) -> a
+    void c(boolean) -> b
+    com.google.ads.internal.d a(com.google.ads.internal.c) -> a
+com.google.ads.internal.c$1 -> com.google.ads.a.k:
+    com.google.ads.c a -> a
+    com.google.ads.internal.c b -> b
+    void run() -> run
+com.google.ads.internal.c$a -> com.google.ads.a.l:
+    com.google.ads.internal.d a -> a
+    android.webkit.WebView b -> b
+    com.google.ads.internal.f c -> c
+    com.google.ads.AdRequest$ErrorCode d -> d
+    boolean e -> e
+    void run() -> run
+com.google.ads.internal.c$b -> com.google.ads.a.m:
+    com.google.ads.internal.c a -> a
+com.google.ads.internal.c$c -> com.google.ads.a.n:
+    java.lang.String b -> b
+    java.lang.String c -> c
+    android.webkit.WebView d -> d
+    com.google.ads.internal.c a -> a
+    void run() -> run
+com.google.ads.internal.c$d -> com.google.ads.a.o:
+    com.google.ads.internal.c a -> a
+com.google.ads.internal.c$e -> com.google.ads.a.p:
+    com.google.ads.internal.d a -> a
+    java.util.LinkedList b -> b
+    int c -> c
+    boolean d -> d
+    java.lang.String e -> e
+    void run() -> run
+com.google.ads.internal.d -> com.google.ads.a.q:
+    java.lang.Object a -> a
+    com.google.ads.m b -> b
+    com.google.ads.internal.c c -> c
+    com.google.ads.AdRequest d -> d
+    com.google.ads.internal.g e -> e
+    com.google.ads.internal.AdWebView f -> f
+    com.google.ads.internal.i g -> g
+    android.os.Handler h -> h
+    long i -> i
+    boolean j -> j
+    boolean k -> k
+    boolean l -> l
+    boolean m -> m
+    android.content.SharedPreferences n -> n
+    long o -> o
+    com.google.ads.ab p -> p
+    boolean q -> q
+    java.util.LinkedList r -> r
+    java.util.LinkedList s -> s
+    int t -> t
+    java.lang.Boolean u -> u
+    com.google.ads.d v -> v
+    com.google.ads.e w -> w
+    com.google.ads.f x -> x
+    java.lang.String y -> y
+    void a() -> a
+    void a(java.lang.String) -> a
+    java.lang.String c() -> b
+    void d() -> c
+    void e() -> d
+    void f() -> e
+    com.google.ads.m g() -> f
+    com.google.ads.d h() -> g
+    com.google.ads.internal.c i() -> h
+    com.google.ads.internal.AdWebView j() -> i
+    com.google.ads.internal.i k() -> j
+    com.google.ads.internal.g l() -> k
+    void a(int) -> a
+    int m() -> l
+    long n() -> m
+    boolean o() -> v
+    boolean p() -> n
+    boolean r() -> o
+    void a(com.google.ads.AdRequest) -> a
+    void a(com.google.ads.AdRequest$ErrorCode) -> a
+    void a(com.google.ads.c) -> a
+    void a$413ecd99(android.view.View,com.google.ads.h,com.google.ads.f) -> a
+    void b(com.google.ads.c) -> b
+    void s() -> p
+    void t() -> q
+    void u() -> r
+    void v() -> s
+    void a(java.util.List,java.lang.String,java.lang.String,java.lang.String,java.lang.Boolean) -> a
+    void w() -> w
+    void a(java.lang.Runnable) -> a
+    void x() -> t
+    void a(long) -> a
+    void a(boolean) -> a
+    void a(android.view.View) -> a
+    void a(float) -> a
+    void b(long) -> b
+    void A() -> x
+    void B() -> u
+    void b(java.lang.String) -> b
+    void a(java.util.LinkedList) -> a
+    void b(boolean) -> b
+com.google.ads.internal.e -> com.google.ads.a.r:
+    java.lang.String a -> a
+    java.util.HashMap b -> b
+    android.os.Bundle a() -> a
+    java.lang.String b() -> b
+    java.util.HashMap c() -> c
+com.google.ads.internal.f -> com.google.ads.a.s:
+    com.google.ads.internal.c a -> a
+    com.google.ads.internal.d b -> b
+    com.google.ads.internal.f$a c -> c
+    boolean d -> d
+    boolean e -> e
+    java.lang.String f -> f
+    java.lang.Thread g -> g
+    void a() -> a
+    void a(java.net.HttpURLConnection) -> a
+    void a(boolean) -> a
+    void a(java.lang.String) -> a
+    void run() -> run
+com.google.ads.internal.f$1 -> com.google.ads.a.t:
+    java.net.HttpURLConnection a(java.net.URL) -> a
+com.google.ads.internal.f$a -> com.google.ads.a.u:
+    java.net.HttpURLConnection a(java.net.URL) -> a
+com.google.ads.internal.g -> com.google.ads.a.v:
+    java.util.LinkedList b -> b
+    long c -> c
+    long d -> d
+    java.util.LinkedList e -> e
+    long f -> f
+    java.lang.String g -> g
+    long h -> h
+    boolean i -> i
+    boolean j -> j
+    java.lang.String a -> a
+    void a() -> a
+    void b() -> b
+    void c() -> c
+    void d() -> d
+    long e() -> e
+    java.lang.String f() -> f
+    java.lang.String g() -> g
+    long h() -> h
+    long i() -> i
+    java.lang.String j() -> j
+    void a(java.lang.String) -> a
+    boolean k() -> k
+    void l() -> l
+    boolean m() -> m
+    void n() -> n
+    void o() -> o
+    java.lang.String p() -> p
+    void b(java.lang.String) -> b
+    long q() -> q
+com.google.ads.internal.h -> com.google.ads.a.w:
+    com.google.ads.AdSize b -> b
+    boolean c -> c
+    com.google.ads.internal.h a -> a
+    com.google.ads.internal.h a(com.google.ads.AdSize,android.content.Context) -> a
+    com.google.ads.internal.h a(com.google.ads.AdSize) -> a
+    boolean a() -> a
+    com.google.ads.AdSize b() -> b
+com.google.ads.internal.i -> com.google.ads.a.x:
+    com.google.ads.internal.a c -> c
+    com.google.ads.internal.d a -> a
+    java.util.Map d -> d
+    boolean b -> b
+    boolean e -> e
+    boolean f -> f
+    boolean g -> g
+    boolean h -> h
+    com.google.ads.internal.i a(com.google.ads.internal.d,java.util.Map,boolean,boolean) -> a
+    boolean shouldOverrideUrlLoading(android.webkit.WebView,java.lang.String) -> shouldOverrideUrlLoading
+    void onPageFinished(android.webkit.WebView,java.lang.String) -> onPageFinished
+    void a$1385ff() -> a
+    void b$1385ff() -> b
+    void c$1385ff() -> c
+    void d$1385ff() -> d
+com.google.ads.internal.j -> com.google.ads.a.y:
+    byte[] a -> a
+    android.view.ViewGroup a(android.app.Activity,com.google.ads.internal.d) -> a
+com.google.ads.internal.j$a -> com.google.ads.a.z:
+    android.gesture.GestureStore a -> a
+    android.app.Activity b -> b
+    com.google.ads.internal.d c -> c
+    void onGesturePerformed(android.gesture.GestureOverlayView,android.gesture.Gesture) -> onGesturePerformed
+    android.app.Activity a(com.google.ads.internal.j$a) -> a
+com.google.ads.internal.j$a$1 -> com.google.ads.a.aa:
+    com.google.ads.internal.j$a a -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.google.ads.internal.j$a$2 -> com.google.ads.a.ab:
+    java.lang.String a -> a
+    com.google.ads.internal.j$a b -> b
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.google.ads.j -> com.google.ads.ai:
+    com.google.ads.h a -> a
+com.google.ads.k -> com.google.ads.aj:
+    com.google.ads.h a -> a
+com.google.ads.l -> com.google.ads.ak:
+    com.google.ads.l b -> b
+    com.google.ads.util.i$b a -> a
+    com.google.ads.l a() -> a
+com.google.ads.l$a -> com.google.ads.al:
+    com.google.ads.util.i$c a -> a
+    com.google.ads.util.i$c b -> b
+    com.google.ads.util.i$c c -> c
+    com.google.ads.util.i$c d -> d
+    com.google.ads.util.i$c e -> e
+    com.google.ads.util.i$c f -> f
+    com.google.ads.util.i$c g -> g
+    com.google.ads.util.i$c h -> h
+    com.google.ads.util.i$c i -> i
+    com.google.ads.util.i$c j -> j
+    com.google.ads.util.i$c k -> k
+    com.google.ads.util.i$c l -> l
+com.google.ads.m -> com.google.ads.am:
+    com.google.ads.util.i$b a -> a
+    com.google.ads.util.i$b b -> b
+    com.google.ads.util.i$d c -> c
+    com.google.ads.util.i$b d -> d
+    com.google.ads.util.i$b e -> e
+    com.google.ads.util.i$b f -> f
+    com.google.ads.util.i$b g -> g
+    com.google.ads.util.i$b h -> h
+    com.google.ads.util.i$b i -> i
+    com.google.ads.util.i$c j -> j
+    boolean a() -> a
+    boolean b() -> b
+    com.google.ads.m a(com.google.ads.Ad,java.lang.String,android.app.Activity,android.view.ViewGroup,com.google.ads.AdSize) -> a
+com.google.ads.mediation.MediationAdRequest -> com.google.ads.b.a:
+    com.google.ads.AdRequest a -> a
+    boolean b -> b
+    boolean c -> c
+com.google.ads.mediation.MediationAdapter -> com.google.ads.b.b:
+    void destroy() -> a
+    java.lang.Class getAdditionalParametersType() -> b
+    java.lang.Class getServerParametersType() -> c
+com.google.ads.mediation.MediationBannerAdapter -> com.google.ads.b.c:
+    void requestBannerAd$3a67d0d9() -> d
+com.google.ads.mediation.MediationInterstitialAdapter -> com.google.ads.b.d:
+    void requestInterstitialAd$732d5d79() -> d
+com.google.ads.mediation.MediationServerParameters -> com.google.ads.b.e:
+    void load(java.util.Map) -> a
+com.google.ads.mediation.MediationServerParameters$MappingException -> com.google.ads.b.f:
+com.google.ads.mediation.MediationServerParameters$Parameter -> com.google.ads.b.g:
+    java.lang.String name() -> a
+    boolean required() -> b
+com.google.ads.mediation.NetworkExtras -> com.google.ads.b.h:
+com.google.ads.mediation.admob.AdMobAdapterExtras -> com.google.ads.b.a.a:
+    boolean a -> a
+    boolean b -> b
+    java.util.Map c -> c
+    boolean getPlusOneOptOut() -> a
+    java.util.Map getExtras() -> b
+com.google.ads.n -> com.google.ads.an:
+    void a(com.google.ads.internal.d,java.util.HashMap,android.webkit.WebView) -> a
+com.google.ads.o -> com.google.ads.ao:
+    com.google.ads.internal.a a -> a
+    void a(com.google.ads.internal.d,java.util.HashMap,android.webkit.WebView) -> a
+com.google.ads.p -> com.google.ads.ap:
+    void a(com.google.ads.internal.d,java.util.HashMap,android.webkit.WebView) -> a
+com.google.ads.q -> com.google.ads.aq:
+    void a(com.google.ads.internal.d,java.util.HashMap,android.webkit.WebView) -> a
+com.google.ads.r -> com.google.ads.ar:
+    com.google.ads.internal.a a -> a
+    void a(com.google.ads.internal.d,java.util.HashMap,android.webkit.WebView) -> a
+com.google.ads.s -> com.google.ads.as:
+    void a(com.google.ads.internal.d,java.util.HashMap,android.webkit.WebView) -> a
+com.google.ads.searchads.SearchAdRequest -> com.google.ads.c.a:
+    java.lang.String a -> b
+    int b -> c
+    int c -> d
+    int d -> e
+    int e -> f
+    int f -> g
+    int g -> h
+    java.lang.String h -> i
+    int i -> j
+    int j -> k
+    com.google.ads.searchads.SearchAdRequest$BorderType k -> l
+    int l -> m
+    java.lang.String m -> n
+    java.util.Map getRequestMap(android.content.Context) -> a
+    java.lang.String a(int) -> a
+com.google.ads.searchads.SearchAdRequest$BorderType -> com.google.ads.c.b:
+    com.google.ads.searchads.SearchAdRequest$BorderType NONE -> a
+    com.google.ads.searchads.SearchAdRequest$BorderType DASHED -> b
+    com.google.ads.searchads.SearchAdRequest$BorderType DOTTED -> c
+    com.google.ads.searchads.SearchAdRequest$BorderType SOLID -> d
+    java.lang.String a -> e
+    com.google.ads.searchads.SearchAdRequest$BorderType[] b -> f
+    com.google.ads.searchads.SearchAdRequest$BorderType[] values() -> values
+    com.google.ads.searchads.SearchAdRequest$BorderType valueOf(java.lang.String) -> valueOf
+    java.lang.String toString() -> toString
+com.google.ads.t -> com.google.ads.at:
+    void a(com.google.ads.internal.d,java.util.HashMap,android.webkit.WebView) -> a
+com.google.ads.u -> com.google.ads.au:
+    void a(com.google.ads.internal.d,java.util.HashMap,android.webkit.WebView) -> a
+com.google.ads.util.AdUtil -> com.google.ads.util.AdUtil:
+    int a -> a
+    java.lang.Boolean b -> b
+    java.lang.String c -> c
+    java.lang.String d -> d
+    java.lang.String e -> e
+    android.media.AudioManager f -> f
+    boolean g -> g
+    boolean h -> h
+    java.lang.String i -> i
+    boolean a(android.content.Intent,android.content.Context) -> a
+    java.lang.String a(java.lang.Readable) -> a
+    int a(java.lang.String) -> b
+    java.lang.String a(android.content.Context) -> a
+    int a() -> a
+    int b() -> b
+    int a(android.content.Context,android.util.DisplayMetrics) -> a
+    int b(android.content.Context,android.util.DisplayMetrics) -> b
+    boolean b(android.content.Context) -> b
+    boolean a(int,int,java.lang.String) -> a
+    boolean c(android.content.Context) -> c
+    boolean c() -> c
+    boolean a(android.net.Uri) -> a
+    java.lang.String b(java.lang.String) -> a
+    java.lang.String d(android.content.Context) -> d
+    java.lang.String e(android.content.Context) -> e
+    java.lang.String f(android.content.Context) -> f
+    com.google.ads.util.AdUtil$a g(android.content.Context) -> g
+    android.util.DisplayMetrics a(android.app.Activity) -> a
+    java.lang.String a(android.location.Location) -> a
+    java.lang.String c(java.lang.String) -> c
+    java.util.HashMap b(android.net.Uri) -> b
+    boolean d() -> d
+    void a(boolean) -> a
+    void h(android.content.Context) -> h
+    java.lang.String i(android.content.Context) -> i
+    void a(android.webkit.WebView) -> a
+    void a(java.net.HttpURLConnection,android.content.Context) -> a
+    java.lang.String a(java.util.Map) -> a
+    org.json.JSONObject b(java.util.Map) -> b
+    org.json.JSONArray a(java.util.Set) -> a
+com.google.ads.util.AdUtil$UserActivityReceiver -> com.google.ads.util.AdUtil$UserActivityReceiver:
+    void onReceive(android.content.Context,android.content.Intent) -> onReceive
+com.google.ads.util.AdUtil$a -> com.google.ads.util.a:
+    com.google.ads.util.AdUtil$a a -> a
+    com.google.ads.util.AdUtil$a b -> b
+    com.google.ads.util.AdUtil$a c -> c
+    com.google.ads.util.AdUtil$a d -> d
+    com.google.ads.util.AdUtil$a e -> e
+    com.google.ads.util.AdUtil$a f -> f
+    com.google.ads.util.AdUtil$a[] g -> g
+    com.google.ads.util.AdUtil$a[] values() -> values
+    com.google.ads.util.AdUtil$a valueOf(java.lang.String) -> valueOf
+com.google.ads.util.a -> com.google.ads.util.b:
+    boolean a -> a
+    void a(boolean,java.lang.String) -> a
+    void b(boolean) -> a
+    void b(boolean,java.lang.String) -> b
+    void b(java.lang.Object) -> a
+    void a(java.lang.Object,java.lang.Object) -> a
+    void a(java.lang.String) -> a
+    void c(boolean,java.lang.String) -> c
+com.google.ads.util.a$a -> com.google.ads.util.c:
+com.google.ads.util.b -> com.google.ads.util.d:
+    com.google.ads.util.b$b a -> a
+    int b -> b
+    void a$4ae80d28() -> h
+    void a$552c4e01() -> a
+    void a$f3e38aa() -> b
+    void b$552c4e01() -> c
+    void b$f3e38aa() -> d
+    void c$552c4e01() -> e
+    void c$f3e38aa() -> f
+    void d$552c4e01() -> g
+    void e(java.lang.String) -> a
+    void d(java.lang.String,java.lang.Throwable) -> a
+    boolean a(java.lang.String,int) -> a
+com.google.ads.util.b$a -> com.google.ads.util.e:
+    com.google.ads.util.b$a a -> a
+    com.google.ads.util.b$a b -> b
+    com.google.ads.util.b$a c -> c
+    com.google.ads.util.b$a d -> d
+    com.google.ads.util.b$a e -> e
+    int f -> f
+    com.google.ads.util.b$a[] g -> g
+    com.google.ads.util.b$a[] values() -> values
+    com.google.ads.util.b$a valueOf(java.lang.String) -> valueOf
+com.google.ads.util.b$b -> com.google.ads.util.f:
+com.google.ads.util.c -> com.google.ads.util.g:
+    boolean a -> a
+    byte[] a(java.lang.String) -> a
+    java.lang.String b$79bb807(byte[]) -> a
+com.google.ads.util.c$a -> com.google.ads.util.h:
+    byte[] a -> a
+    int b -> b
+com.google.ads.util.c$b -> com.google.ads.util.i:
+    int[] c -> c
+    int[] d -> d
+    int e -> e
+    int f -> f
+    int[] g -> g
+    boolean a$7dcd25fc$1cf967a0(byte[],int) -> a
+com.google.ads.util.c$c -> com.google.ads.util.j:
+    byte[] h -> h
+    byte[] i -> i
+    byte[] j -> j
+    int c -> c
+    int k -> k
+    boolean d -> d
+    boolean e -> e
+    boolean f -> f
+    byte[] l -> l
+    boolean g -> g
+    boolean a$7dcd25fc$1cf967a0(byte[],int) -> a
+com.google.ads.util.d -> com.google.ads.util.k:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    java.lang.String c -> c
+    com.google.ads.util.d d -> d
+    com.google.ads.util.d e -> e
+    boolean equals(java.lang.Object) -> equals
+    boolean a(java.lang.String,java.lang.String) -> a
+    int hashCode() -> hashCode
+com.google.ads.util.e -> com.google.ads.util.l:
+    int a(android.content.Context,android.util.DisplayMetrics) -> a
+    int b(android.content.Context,android.util.DisplayMetrics) -> b
+    int a(android.content.Context,float,int) -> a
+com.google.ads.util.f -> com.google.ads.util.m:
+    java.lang.Object b() -> a
+com.google.ads.util.g -> com.google.ads.util.n:
+    void a(android.webkit.WebSettings,com.google.ads.m) -> a
+com.google.ads.util.g$1 -> com.google.ads.util.o:
+    int[] a -> a
+com.google.ads.util.g$a -> com.google.ads.util.p:
+    com.google.ads.m a -> a
+    void onCloseWindow(android.webkit.WebView) -> onCloseWindow
+    boolean onConsoleMessage(android.webkit.ConsoleMessage) -> onConsoleMessage
+    void onExceededDatabaseQuota(java.lang.String,java.lang.String,long,long,long,android.webkit.WebStorage$QuotaUpdater) -> onExceededDatabaseQuota
+    boolean onJsAlert(android.webkit.WebView,java.lang.String,java.lang.String,android.webkit.JsResult) -> onJsAlert
+    boolean onJsBeforeUnload(android.webkit.WebView,java.lang.String,java.lang.String,android.webkit.JsResult) -> onJsBeforeUnload
+    boolean onJsConfirm(android.webkit.WebView,java.lang.String,java.lang.String,android.webkit.JsResult) -> onJsConfirm
+    boolean onJsPrompt(android.webkit.WebView,java.lang.String,java.lang.String,java.lang.String,android.webkit.JsPromptResult) -> onJsPrompt
+    void onReachedMaxAppCacheSize(long,long,android.webkit.WebStorage$QuotaUpdater) -> onReachedMaxAppCacheSize
+    void onShowCustomView(android.view.View,android.webkit.WebChromeClient$CustomViewCallback) -> onShowCustomView
+    boolean a(android.webkit.WebView,java.lang.String,java.lang.String,java.lang.String,android.webkit.JsResult,android.webkit.JsPromptResult,boolean) -> a
+com.google.ads.util.g$a$1 -> com.google.ads.util.q:
+    android.webkit.JsResult a -> a
+    void onCancel(android.content.DialogInterface) -> onCancel
+com.google.ads.util.g$a$2 -> com.google.ads.util.r:
+    android.webkit.JsResult a -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.google.ads.util.g$a$3 -> com.google.ads.util.s:
+    android.webkit.JsResult a -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.google.ads.util.g$a$4 -> com.google.ads.util.t:
+    android.webkit.JsPromptResult a -> a
+    void onCancel(android.content.DialogInterface) -> onCancel
+com.google.ads.util.g$a$5 -> com.google.ads.util.u:
+    android.webkit.JsPromptResult a -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.google.ads.util.g$a$6 -> com.google.ads.util.v:
+    android.webkit.JsPromptResult a -> a
+    android.widget.EditText b -> b
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.google.ads.util.g$b -> com.google.ads.util.w:
+    android.webkit.WebResourceResponse shouldInterceptRequest(android.webkit.WebView,java.lang.String) -> shouldInterceptRequest
+    android.webkit.WebResourceResponse a(java.lang.String,android.content.Context) -> a
+com.google.ads.util.h -> com.google.ads.util.x:
+com.google.ads.util.h$a -> com.google.ads.util.y:
+    void onShowCustomView(android.view.View,int,android.webkit.WebChromeClient$CustomViewCallback) -> onShowCustomView
+com.google.ads.util.i -> com.google.ads.util.z:
+    java.lang.Object a -> a
+    int b -> b
+    java.util.HashMap c -> c
+    int m -> m
+    java.util.ArrayList d -> d
+    void finalize() -> finalize
+    java.lang.String toString() -> toString
+    void a(com.google.ads.util.i,com.google.ads.util.i$a) -> a
+com.google.ads.util.i$a -> com.google.ads.util.aa:
+    java.lang.Object a -> a
+    java.lang.String b -> b
+    com.google.ads.util.i c -> c
+    java.lang.String toString() -> toString
+com.google.ads.util.i$b -> com.google.ads.util.ab:
+    com.google.ads.util.i d -> d
+    java.lang.Object a() -> a
+    java.lang.String toString() -> toString
+com.google.ads.util.i$c -> com.google.ads.util.ac:
+    boolean e -> e
+    com.google.ads.util.i d -> d
+    java.lang.Object a() -> a
+    void a(java.lang.Object) -> a
+    java.lang.String toString() -> toString
+com.google.ads.util.i$d -> com.google.ads.util.ad:
+    com.google.ads.util.i d -> d
+    java.lang.Object a() -> a
+    java.lang.String toString() -> toString
+com.google.ads.v -> com.google.ads.av:
+    void a(com.google.ads.internal.d,java.util.HashMap,android.webkit.WebView) -> a
+    void a(java.util.HashMap,java.lang.String,com.google.ads.util.i$c) -> a
+    void b(java.util.HashMap,java.lang.String,com.google.ads.util.i$c) -> b
+    void c(java.util.HashMap,java.lang.String,com.google.ads.util.i$c) -> c
+com.google.ads.w -> com.google.ads.aw:
+    void a(com.google.ads.internal.d,java.util.HashMap,android.webkit.WebView) -> a
+com.google.ads.x -> com.google.ads.ax:
+    com.google.ads.AdActivity$StaticMethodWrapper a -> a
+    void a(com.google.ads.internal.d,java.util.HashMap,android.webkit.WebView) -> a
+com.google.ads.y -> com.google.ads.ay:
+    void a(com.google.ads.internal.d,java.util.HashMap,android.webkit.WebView) -> a
+com.google.ads.z -> com.google.ads.az:
+    com.google.ads.internal.a a -> a
+    int a(java.util.HashMap,java.lang.String,int,android.util.DisplayMetrics) -> a
+    void a(com.google.ads.internal.d,java.util.HashMap,android.webkit.WebView) -> a
+org.achartengine.ChartFactory -> org.achartengine.a:
+    org.achartengine.GraphicalView getPieChartView(android.content.Context,org.achartengine.model.CategorySeries,org.achartengine.renderer.DefaultRenderer) -> a
+org.achartengine.GraphicalActivity -> org.achartengine.GraphicalActivity:
+    org.achartengine.GraphicalView mView -> a
+    org.achartengine.chart.AbstractChart mChart -> b
+    void onCreate(android.os.Bundle) -> onCreate
+org.achartengine.GraphicalView -> org.achartengine.b:
+    org.achartengine.chart.AbstractChart mChart -> a
+    org.achartengine.renderer.DefaultRenderer mRenderer -> b
+    android.graphics.Rect mRect -> c
+    android.os.Handler mHandler -> d
+    android.graphics.RectF mZoomR -> e
+    android.graphics.Bitmap zoomInImage -> f
+    android.graphics.Bitmap zoomOutImage -> g
+    android.graphics.Bitmap fitZoomImage -> h
+    int zoomSize -> i
+    int ZOOM_BUTTONS_COLOR -> j
+    org.achartengine.tools.Zoom mZoomIn -> k
+    org.achartengine.tools.Zoom mZoomOut -> l
+    org.achartengine.tools.FitZoom mFitZoom -> m
+    android.graphics.Paint mPaint -> n
+    org.achartengine.ITouchHandler mTouchHandler -> o
+    float oldX -> p
+    float oldY -> q
+    void onDraw(android.graphics.Canvas) -> onDraw
+    void zoomIn() -> a
+    void zoomOut() -> b
+    void zoomReset() -> c
+    android.graphics.RectF getZoomRectangle() -> d
+    boolean onTouchEvent(android.view.MotionEvent) -> onTouchEvent
+    void repaint() -> e
+org.achartengine.GraphicalView$1 -> org.achartengine.c:
+    org.achartengine.GraphicalView this$0 -> a
+    void run() -> run
+org.achartengine.ITouchHandler -> org.achartengine.d:
+    boolean handleTouch(android.view.MotionEvent) -> a
+org.achartengine.TouchHandler -> org.achartengine.e:
+    org.achartengine.renderer.DefaultRenderer mRenderer -> a
+    float oldX -> b
+    float oldY -> c
+    float oldX2 -> d
+    float oldY2 -> e
+    android.graphics.RectF zoomR -> f
+    org.achartengine.tools.Pan mPan -> g
+    org.achartengine.tools.Zoom mPinchZoom -> h
+    org.achartengine.GraphicalView graphicalView -> i
+    boolean handleTouch(android.view.MotionEvent) -> a
+org.achartengine.TouchHandlerOld -> org.achartengine.f:
+    org.achartengine.renderer.DefaultRenderer mRenderer -> a
+    float oldX -> b
+    float oldY -> c
+    android.graphics.RectF zoomR -> d
+    org.achartengine.tools.Pan mPan -> e
+    org.achartengine.GraphicalView graphicalView -> f
+    boolean handleTouch(android.view.MotionEvent) -> a
+org.achartengine.chart.AbstractChart -> org.achartengine.a.a:
+    void draw(android.graphics.Canvas,int,int,int,int,android.graphics.Paint) -> a
+    int drawLegend(android.graphics.Canvas,org.achartengine.renderer.DefaultRenderer,java.lang.String[],int,int,int,int,int,int,android.graphics.Paint,boolean) -> a
+    void drawString(android.graphics.Canvas,java.lang.String,float,float,android.graphics.Paint) -> a
+    boolean getExceed(float,org.achartengine.renderer.DefaultRenderer,int,int) -> a
+    boolean isVertical(org.achartengine.renderer.DefaultRenderer) -> a
+    void drawLegendShape$37852e6c$3b49ebf(android.graphics.Canvas,float,float,android.graphics.Paint) -> a
+    void drawLabel(android.graphics.Canvas,java.lang.String,org.achartengine.renderer.DefaultRenderer,java.util.List,int,int,float,float,float,float,int,int,int,android.graphics.Paint) -> a
+org.achartengine.chart.PieChart -> org.achartengine.a.b:
+    org.achartengine.chart.PieMapper mPieMapper -> e
+    void draw(android.graphics.Canvas,int,int,int,int,android.graphics.Paint) -> a
+org.achartengine.chart.PieMapper -> org.achartengine.a.c:
+    java.util.List mPieSegmentList -> a
+    int mPieChartRadius -> b
+    int mCenterX -> c
+    int mCenterY -> d
+    void setDimensions(int,int,int) -> a
+    boolean areAllSegmentPresent(int) -> a
+    void addPieSegment(int,float,float,float) -> a
+    void clearPieSegments() -> a
+org.achartengine.chart.PieSegment -> org.achartengine.a.d:
+    float mStartAngle -> a
+    float mEndAngle -> b
+    int mDataIndex -> c
+    float mValue -> d
+    java.lang.String toString() -> toString
+org.achartengine.chart.RoundChart -> org.achartengine.a.e:
+    org.achartengine.model.CategorySeries mDataset -> a
+    org.achartengine.renderer.DefaultRenderer mRenderer -> b
+    int mCenterX -> c
+    int mCenterY -> d
+    void drawTitle(android.graphics.Canvas,int,int,int,android.graphics.Paint) -> a
+    void drawLegendShape$37852e6c$3b49ebf(android.graphics.Canvas,float,float,android.graphics.Paint) -> a
+    org.achartengine.renderer.DefaultRenderer getRenderer() -> a
+    int getCenterX() -> b
+    int getCenterY() -> c
+    void setCenterX(int) -> a
+    void setCenterY(int) -> b
+org.achartengine.chart.XYChart -> org.achartengine.a.f:
+    org.achartengine.model.XYMultipleSeriesDataset mDataset -> a
+    org.achartengine.renderer.XYMultipleSeriesRenderer mRenderer -> b
+    android.graphics.Rect mScreenR -> c
+    java.util.Map mCalcRange -> d
+    java.util.Map clickableAreas -> e
+    org.achartengine.renderer.XYMultipleSeriesRenderer getRenderer() -> a
+    org.achartengine.model.XYMultipleSeriesDataset getDataset() -> b
+    double[] getCalcRange(int) -> a
+    double[] toRealPoint(float,float,int) -> a
+org.achartengine.model.CategorySeries -> org.achartengine.b.a:
+    java.lang.String mTitle -> a
+    java.util.List mCategories -> b
+    java.util.List mValues -> c
+    void add(java.lang.String,double) -> a
+    double getValue(int) -> a
+    java.lang.String getCategory(int) -> b
+    int getItemCount() -> a
+org.achartengine.model.XYMultipleSeriesDataset -> org.achartengine.b.b:
+    java.util.List mSeries -> a
+    org.achartengine.model.XYSeries[] getSeries() -> a
+org.achartengine.model.XYSeries -> org.achartengine.b.c:
+    double mMinX -> a
+    double mMaxX -> b
+    double mMinY -> c
+    double mMaxY -> d
+    int mScaleNumber -> e
+    int getScaleNumber() -> a
+    double getMinX() -> b
+    double getMinY() -> c
+    double getMaxX() -> d
+    double getMaxY() -> e
+org.achartengine.renderer.DefaultRenderer -> org.achartengine.c.a:
+    java.lang.String mChartTitle -> a
+    float mChartTitleTextSize -> b
+    android.graphics.Typeface REGULAR_TEXT_FONT -> c
+    java.lang.String mTextTypefaceName -> d
+    int mTextTypefaceStyle -> e
+    int mBackgroundColor -> f
+    boolean mApplyBackgroundColor -> g
+    boolean mShowAxes -> h
+    int mAxesColor -> i
+    boolean mShowLabels -> j
+    int mLabelsColor -> k
+    float mLabelsTextSize -> l
+    boolean mShowLegend -> m
+    float mLegendTextSize -> n
+    boolean mFitLegend -> o
+    boolean mShowGridX -> p
+    boolean mShowGridY -> q
+    boolean mShowCustomTextGrid -> r
+    java.util.List mRenderers -> s
+    boolean mAntialiasing -> t
+    int mLegendHeight -> u
+    int[] mMargins -> v
+    float mScale -> w
+    boolean mPanEnabled -> x
+    boolean mZoomEnabled -> y
+    boolean mZoomButtonsVisible -> z
+    float mZoomRate -> A
+    boolean mExternalZoomEnabled -> B
+    float mOriginalScale -> C
+    boolean mClickEnabled -> D
+    int selectableBuffer -> E
+    boolean mInScroll -> F
+    float mStartAngle -> G
+    java.lang.String getChartTitle() -> a
+    float getChartTitleTextSize() -> b
+    void setChartTitleTextSize$133aeb() -> c
+    void addSeriesRenderer(org.achartengine.renderer.SimpleSeriesRenderer) -> a
+    org.achartengine.renderer.SimpleSeriesRenderer getSeriesRendererAt(int) -> a
+    int getSeriesRendererCount() -> d
+    int getBackgroundColor() -> e
+    void setBackgroundColor(int) -> b
+    boolean isApplyBackgroundColor() -> f
+    void setApplyBackgroundColor$1385ff() -> g
+    int getLabelsColor() -> h
+    float getLabelsTextSize() -> i
+    void setLabelsTextSize$133aeb() -> j
+    boolean isShowLabels() -> k
+    boolean isShowLegend() -> l
+    boolean isFitLegend() -> m
+    float getLegendTextSize() -> n
+    void setLegendTextSize$133aeb() -> o
+    boolean isAntialiasing() -> p
+    float getScale() -> q
+    float getOriginalScale() -> r
+    void setScale(float) -> a
+    boolean isZoomEnabled() -> s
+    boolean isZoomButtonsVisible() -> t
+    boolean isExternalZoomEnabled() -> u
+    float getZoomRate() -> v
+    boolean isPanEnabled() -> w
+    boolean isClickEnabled() -> x
+    void setClickEnabled$1385ff() -> y
+    int getLegendHeight() -> z
+    void setMargins(int[]) -> a
+    boolean isInScroll() -> A
+    void setStartAngle$133aeb() -> B
+org.achartengine.renderer.SimpleSeriesRenderer -> org.achartengine.c.b:
+    int mColor -> a
+    float mChartValuesTextSize -> b
+    android.graphics.Paint$Align mChartValuesTextAlign -> c
+    float mChartValuesSpacing -> d
+    boolean mGradientEnabled -> e
+    int getColor() -> a
+    void setColor(int) -> a
+org.achartengine.renderer.XYMultipleSeriesRenderer -> org.achartengine.c.c:
+    java.lang.String mXTitle -> a
+    java.lang.String[] mYTitle -> b
+    float mAxisTitleTextSize -> c
+    double[] mMinX -> d
+    double[] mMaxX -> e
+    double[] mMinY -> f
+    double[] mMaxY -> g
+    int mXLabels -> h
+    int mYLabels -> i
+    org.achartengine.renderer.XYMultipleSeriesRenderer$Orientation mOrientation -> j
+    java.util.Map mXTextLabels -> k
+    java.util.Map mYTextLabels -> l
+    boolean mPanXEnabled -> m
+    boolean mPanYEnabled -> n
+    boolean mZoomXEnabled -> o
+    boolean mZoomYEnabled -> p
+    double mBarSpacing -> q
+    int mMarginsColor -> r
+    double[] mPanLimits -> s
+    double[] mZoomLimits -> t
+    java.util.Map initialRange -> u
+    float mPointSize -> v
+    int mGridColor -> w
+    int scalesCount -> x
+    android.graphics.Paint$Align xLabelsAlign -> y
+    android.graphics.Paint$Align[] yLabelsAlign -> z
+    android.graphics.Paint$Align[] yAxisAlign -> A
+    int mXLabelsColor -> B
+    int[] mYLabelsColor -> C
+    void initAxesRange$13462e() -> M
+    org.achartengine.renderer.XYMultipleSeriesRenderer$Orientation getOrientation() -> C
+    double getXAxisMin(int) -> c
+    void setXAxisMin(double,int) -> a
+    boolean isMinXSet(int) -> d
+    double getXAxisMax(int) -> e
+    void setXAxisMax(double,int) -> b
+    boolean isMaxXSet(int) -> f
+    double getYAxisMin(int) -> g
+    void setYAxisMin(double,int) -> c
+    boolean isMinYSet(int) -> h
+    double getYAxisMax(int) -> i
+    void setYAxisMax(double,int) -> d
+    boolean isMaxYSet(int) -> j
+    boolean isPanEnabled() -> w
+    boolean isPanXEnabled() -> D
+    boolean isPanYEnabled() -> E
+    boolean isZoomEnabled() -> s
+    boolean isZoomXEnabled() -> F
+    boolean isZoomYEnabled() -> G
+    int getMarginsColor() -> H
+    void setMarginsColor(int) -> k
+    double[] getPanLimits() -> I
+    double[] getZoomLimits() -> J
+    void setRange(double[],int) -> a
+    boolean isInitialRangeSet() -> K
+    boolean isInitialRangeSet(int) -> l
+    double[] getInitialRange(int) -> m
+    int getScalesCount() -> L
+org.achartengine.renderer.XYMultipleSeriesRenderer$Orientation -> org.achartengine.c.d:
+    org.achartengine.renderer.XYMultipleSeriesRenderer$Orientation HORIZONTAL -> a
+    org.achartengine.renderer.XYMultipleSeriesRenderer$Orientation VERTICAL -> b
+    int mAngle -> c
+    org.achartengine.renderer.XYMultipleSeriesRenderer$Orientation[] $VALUES -> d
+    org.achartengine.renderer.XYMultipleSeriesRenderer$Orientation[] values() -> values
+    org.achartengine.renderer.XYMultipleSeriesRenderer$Orientation valueOf(java.lang.String) -> valueOf
+org.achartengine.tools.AbstractTool -> org.achartengine.d.a:
+    org.achartengine.chart.AbstractChart mChart -> a
+    org.achartengine.renderer.XYMultipleSeriesRenderer mRenderer -> b
+    double[] getRange(int) -> a
+    void checkRange(double[],int) -> a
+    void setXRange(double,double,int) -> a
+    void setYRange(double,double,int) -> b
+org.achartengine.tools.FitZoom -> org.achartengine.d.b:
+    void apply() -> a
+org.achartengine.tools.Pan -> org.achartengine.d.c:
+    java.util.List mPanListeners -> c
+    boolean limitsReachedX -> d
+    boolean limitsReachedY -> e
+    void apply(float,float,float,float) -> a
+    void notifyPanListeners() -> a
+org.achartengine.tools.Zoom -> org.achartengine.d.d:
+    boolean mZoomIn -> c
+    float mZoomRate -> d
+    java.util.List mZoomListeners -> e
+    boolean limitsReachedX -> f
+    boolean limitsReachedY -> g
+    void setZoomRate(float) -> a
+    void apply(int) -> b
+    void notifyZoomListeners$8a7ab56() -> b
+    void notifyZoomResetListeners() -> a
+org.achartengine.tools.ZoomEvent -> org.achartengine.d.e:
+    boolean mZoomIn -> a
+    float mZoomRate -> b
