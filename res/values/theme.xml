@@ -27,7 +27,13 @@
     	<item name="android:background">@android:color/transparent</item>
     </style>
     
-	<style name="TextAppearance.TradeMarkDark" parent="@android:style/TextAppearance">
+    <style name="AppDialog_Animation">
+        <item name="@android:attr/windowEnterAnimation">@anim/slide_in_down</item>
+        <item name="@android:attr/windowExitAnimation">@anim/slide_out_up</item>
+        <item name="@android:attr/windowHideAnimation">@anim/slide_out_up</item>
+    </style>
+
+    <style name="TextAppearance.TradeMarkDark" parent="@android:style/TextAppearance">
 	    <item name="android:background">@android:color/transparent</item>
 	    <item name="android:textColor">@color/noteit_trademark_dark</item>
     </style>

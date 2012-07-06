@@ -31,6 +31,7 @@
         <item name="android:windowBackground">@drawable/bg_dark</item>
 	    <item name="android:windowIsFloating">true</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@style/AppDialog_Animation</item>
 	</style>
 	
     <style name="App_TipsBackground_Dark">
