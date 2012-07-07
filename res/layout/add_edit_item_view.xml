@@ -1,175 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/addedit_view" 
+    android:id="@+id/addedit_view"
+    style="?NI_DialogStyle"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    style="?NI_DialogStyle">
-    
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="10dip" >
+    android:layout_height="wrap_content" >
 
-    <LinearLayout
-        android:id="@+id/addedit_titlebar"
-        android:layout_width="fill_parent"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dip"
-        android:minHeight="48dip"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" >
+        android:padding="8dip" >
 
-        <TextView
-            android:id="@+id/addedit_textview_caption"
-            style="?TextAppearance_Item_Bold_Large"
-            android:layout_width="0dip"
+        <LinearLayout
+            android:id="@+id/addedit_titlebar"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="@string/addedit_Title" />
+            android:minHeight="48dip"
+            android:orientation="horizontal" >
 
-        <ImageButton
-            android:id="@+id/addedit_btnPrev"
-            style="@style/App_ImageButtonStyle"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/addedit_textview_caption"
+                style="?TextAppearance_Item_Bold_Large"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/addedit_Title" />
+
+            <ImageButton
+                android:id="@+id/addedit_btnPrev"
+                style="@style/App_ImageButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:contentDescription="@string/itemlist_previous"
+                android:src="?Prev_Small" />
+
+            <ImageButton
+                android:id="@+id/addedit_btnNext"
+                style="@style/App_ImageButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:contentDescription="@string/itemlist_next"
+                android:src="?Next_Small" />
+        </LinearLayout>
+
+		<TextView
+		    android:id="@+id/textItemName"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/addedit_Name_Hint"
+		    android:layout_gravity="left|center_vertical"
+		    android:layout_below="@+id/addedit_titlebar"
+		    android:layout_marginBottom="8dip" />
+		        
+        <AutoCompleteTextView
+            android:id="@+id/addedit_editName"
+            style="?NI_EditTextStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/textItemName"
+            android:layout_marginBottom="8dip"
+            android:completionThreshold="3"
+            android:ellipsize="none"
+            android:hint="@string/addedit_Name_Hint"
+            android:inputType="textCapWords|textNoSuggestions"
+            android:selectAllOnFocus="true"
+            android:singleLine="true" />
+
+		<TextView
+		    android:id="@+id/textCategory"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/addedit_category_label"
+		    android:layout_gravity="left|center_vertical"
+		    android:layout_below="@id/addedit_editName"
+		    android:paddingBottom="8dip" />
+		
+		<Spinner
+		    android:id="@+id/addedit_spinCategories"
+		    style="?AddEdit_Widget"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@id/textCategory"
+		    android:layout_gravity="right|center_vertical" />
+            
+        <LinearLayout
+            android:id="@+id/addedit_updowncontrol"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|right"
-            android:contentDescription="@string/itemlist_previous"
-            android:src="?Prev_Small" />
+            android:layout_below="@id/addedit_spinCategories"
+            android:layout_marginBottom="8dp" 
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
 
-        <ImageButton
-            android:id="@+id/addedit_btnNext"
-            style="@style/App_ImageButtonStyle"
-            android:layout_width="wrap_content"
+            <com.geekjamboree.noteit.NumberPicker
+                android:id="@+id/addedit_txtQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+            </com.geekjamboree.noteit.NumberPicker>
+
+            <Spinner
+                android:id="@+id/addedit_units"
+                style="?AddEdit_Widget"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_price"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|right"
-            android:contentDescription="@string/itemlist_next"
-            android:src="?Next_Small" />
-    </LinearLayout>
+            android:layout_below="@id/addedit_updowncontrol"
+            android:layout_marginBottom="8dp" 
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
 
-    <AutoCompleteTextView
-        android:id="@+id/addedit_editName"
-        style="?NI_EditTextStyle"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/addedit_titlebar"
-        android:layout_marginBottom="5dp"
-        android:completionThreshold="3"
-        android:ellipsize="none"
-        android:hint="@string/addedit_Name_Hint"
-        android:inputType="textCapWords|textNoSuggestions"
-        android:selectAllOnFocus="true"
-        android:singleLine="true" />
+            <com.geekjamboree.noteit.NumberPicker
+                android:id="@+id/addedit_editprice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+            </com.geekjamboree.noteit.NumberPicker>
 
-    <Spinner
-        android:id="@+id/addedit_spinCategories"
-        style="?AddEdit_Widget"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/addedit_editName"
-        android:layout_marginBottom="5dp" />
+            <CheckBox
+                android:id="@+id/addedit_AskLater"
+                style="?TextAppearance_Item_Small"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:text="@string/addedit_askLater" />
 
-    <LinearLayout
-        android:id="@+id/addedit_updowncontrol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/addedit_spinCategories"
-        android:layout_marginBottom="5dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" >
+            <ImageButton
+                android:id="@+id/addedit_asklater_help"
+                style="@style/App_ImageButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/addedit_askLater"
+                android:src="?Help" />
+        </LinearLayout>
 
-        <com.geekjamboree.noteit.NumberPicker
-            android:id="@+id/addedit_txtQuantity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </com.geekjamboree.noteit.NumberPicker>
-
-        <Spinner
-            android:id="@+id/addedit_units"
-            style="?AddEdit_Widget"
-            android:layout_width="0dip"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4" />
-        
-    </LinearLayout>
+            android:layout_below="@id/layout_price"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical|fill_horizontal"
+            android:orientation="horizontal" >
 
-    <LinearLayout
-        android:id="@+id/layout_price"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/addedit_updowncontrol"
-        android:layout_marginBottom="5dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" >
+            <TextView
+                android:id="@+id/addedit_labelTotal"
+                style="?TextAppearance_Item_Small"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:text="@+id/addedit_labelTotal" />
 
-        <com.geekjamboree.noteit.NumberPicker
-            android:id="@+id/addedit_editprice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </com.geekjamboree.noteit.NumberPicker>
-        
-        <CheckBox
-            android:id="@+id/addedit_AskLater"
-            style="?TextAppearance_Item_Small"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:gravity="left|center_vertical"
-            android:text="@string/addedit_askLater" />
+            <Button
+                android:id="@+id/addedit_btnContinue"
+                style="?NI_TextButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:text="@string/addedit_Continue" />
 
-        <ImageButton
-            android:id="@+id/addedit_asklater_help"
-            style="@style/App_ImageButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/addedit_askLater"
-            android:src="?Help" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/addedit_btnDone"
+                style="?NI_TextButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:text="@string/addedit_Done" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/layout_price"
-        android:layout_marginTop="10dp"
-        android:gravity="center_vertical|fill_horizontal"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/addedit_labelTotal"
-            style="?TextAppearance_Item_Small"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:layout_weight="1"
-            android:gravity="left|center_vertical"
-            android:text="@+id/addedit_labelTotal" />
-
-        <Button
-            android:id="@+id/addedit_btnContinue"
-            style="?NI_TextButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
-            android:text="@string/addedit_Continue" />
-
-        <Button
-            android:id="@+id/addedit_btnDone"
-            style="?NI_TextButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
-            android:text="@string/addedit_Done" />
-
-        <Button
-            android:id="@+id/addedit_btnCancel"
-            style="?NI_TextButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
-            android:text="@string/Cancel" />
-    </LinearLayout>
-    
-</RelativeLayout>
+            <Button
+                android:id="@+id/addedit_btnCancel"
+                style="?NI_TextButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:text="@string/Cancel" />
+        </LinearLayout>
+    </RelativeLayout>
 
 </ScrollView>

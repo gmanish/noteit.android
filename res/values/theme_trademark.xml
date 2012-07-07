@@ -15,8 +15,8 @@
     </style>
     
     <style name="App_CustomDialog.Trademark" parent="@style/NI_DialogBase.Light">
-        <item name="android:windowBackground">@drawable/bg_trademark</item>
-        <item name="android:windowIsFloating">true</item>
+<!--         <item name="android:windowBackground">@drawable/bg_trademark</item>
+ -->        <item name="android:windowIsFloating">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowAnimationStyle">@style/AppDialog_Animation</item>
 	</style>

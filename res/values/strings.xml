@@ -105,6 +105,7 @@
 	<string name="addedit_asklaterhelp">"If you do not know the price of the item, please select \"Ask Later\". You will be prompted for price when you mark the item \"Done\"."</string>
 	<string name="addedit_total">Total: %1$.2f</string>
 	<string name="addedit_asklater_price">Total Price</string>
+	<string name="addedit_category_label">Category:</string>
 	
 	<string name="reporting_title">Reports</string>
 	<string name="reporting_purchased_group">Expense Reports</string>
