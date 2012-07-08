@@ -205,9 +205,6 @@
 		<item name="Category_Small">@drawable/category_dark</item>
 		<item name="Category_Shared_Small">@drawable/category_shared_dark</item>
 		<item name="Hand_Small">@drawable/hand_dark</item>
-		<item name="Prev_Small">@drawable/prev_dark</item>
-		<item name="Next_Small">@drawable/next_dark</item>
-		<item name="Scan_Barcode">@drawable/barcode_dark</item>		
 		<item name="Popup_Background">@drawable/popup_trademark</item>
 		<item name="Popup_Up">@drawable/arrow_up_trademark</item>
 		<item name="Popup_Down">@drawable/arrow_down_trademark</item>

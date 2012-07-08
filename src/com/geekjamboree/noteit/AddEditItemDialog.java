@@ -574,7 +574,7 @@ class AddEditItemDialog extends Dialog {
         if (!mIsAddItem) {
         	
         	ImageButton prevButton = mToolbar.addRightAlignedButton(
-        			ThemeUtils.getResourceIdFromAttribute(getContext(), R.attr.Prev_Small), false, true);
+        			R.drawable.prev, false, true);
         	
         	prevButton.setOnClickListener(new View.OnClickListener() {
     			
@@ -588,7 +588,7 @@ class AddEditItemDialog extends Dialog {
         	});
     		
         	ImageButton nextButton = mToolbar.addRightAlignedButton(
-        			ThemeUtils.getResourceIdFromAttribute(getContext(), R.attr.Next_Small), false, true);
+        			R.drawable.next, false, true);
         	
         	nextButton.setOnClickListener(new View.OnClickListener() {
     			
