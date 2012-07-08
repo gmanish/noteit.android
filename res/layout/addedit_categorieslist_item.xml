@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="4dp" >
+
+    <TextView
+        android:id="@+id/categorylists_item_name"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+       	android:layout_gravity="center_vertical"
+       	android:gravity="center_vertical"
+		android:singleLine="true"
+		android:ellipsize="end"
+        android:drawableLeft="?Category_Small"
+        android:drawableRight="?Hand_Small"
+        android:drawablePadding="4dip"
+        android:text="@+id/categorylists_item_name" />
+    
+</LinearLayout>

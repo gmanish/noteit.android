@@ -5,7 +5,6 @@ package com.geekjamboree.noteit;
 
 import java.util.ArrayList;
 
-import com.geekjamboree.noteit.ItemListActivity.ItemType;
 import com.geekjamboree.noteit.NoteItApplication.OnMethodExecuteListerner;
 import com.geekjamboree.noteit.R;
 import com.geekjamboree.noteit.NoteItApplication;
@@ -46,11 +45,21 @@ public class CategoryListActivity
 	QuickAction							mQuickAction;
 	int									mSelectedCategory = 0;
 	
-	protected class CategoryListAdapter extends ArrayAdapterWithFontSize<Category> implements DragDropListener {
+	class CategoryListAdapterDragDrop extends CategoryListAdapter implements DragDropListener {
 
-		public CategoryListAdapter(Context context, int resource,
-				int textViewResourceId, ArrayList<Category> objects) {
-			super(context, resource, textViewResourceId, objects, ItemType.BOLD);
+		public CategoryListAdapterDragDrop(
+				Context context, 
+				int resource,
+				int textViewResourceId, 
+				ArrayList<Category> objects) {
+			
+			super(
+				context, 
+				resource, 
+				textViewResourceId, 
+				objects, 
+				(NoteItApplication) getApplication(), 
+				true);
 		}
 
 		public void onDrag(int dragSource, int dropTarget) {
@@ -68,8 +77,8 @@ public class CategoryListActivity
 						notifyDataSetChanged();
 					} else
 						CustomToast.makeText(
-								CategoryListActivity.this, 
-								CategoryListActivity.this.getListView(), 
+								getContext(), 
+								getListView(), 
 								message).show(true);
 				}
 			});
@@ -89,21 +98,21 @@ public class CategoryListActivity
 				if (category != null && category.mUserID != app.getUserID()) {
 					textView.setCompoundDrawablesWithIntrinsicBounds(
 							ThemeUtils.getResourceIdFromAttribute(
-									CategoryListActivity.this, 
+									getContext(), 
 									R.attr.Category_Shared_Small), 
 							0,
 							ThemeUtils.getResourceIdFromAttribute(
-									CategoryListActivity.this,
+									getContext(),
 									R.attr.Hand_Small), 
 							0);
 				} else { 
 					textView.setCompoundDrawablesWithIntrinsicBounds(
 							ThemeUtils.getResourceIdFromAttribute(
-									CategoryListActivity.this, 
+									getContext(), 
 									R.attr.Category_Small),
 							0,
 							ThemeUtils.getResourceIdFromAttribute(
-									CategoryListActivity.this, 
+									getContext(), 
 									R.attr.Hand_Small), 
 							0);
 				}
@@ -111,8 +120,7 @@ public class CategoryListActivity
 			return view;
 		}
 	}
-	
-	
+
 	static final int QA_ID_EDIT 	= 0;
 	static final int QA_ID_DELETE	= 1;
 	static final int QA_ID_BOUGHT	= 2;
@@ -149,7 +157,9 @@ public class CategoryListActivity
     			this, 
     			R.layout.categorieslist_item, 
     			R.id.categorylists_item_name, 
-    			((NoteItApplication) getApplication()).getCategories());
+    			((NoteItApplication) getApplication()).getCategories(),
+    			(NoteItApplication) getApplication(),
+    			true);
     	mListView.setAdapter(mAdapter);
     	mListView.setDragDropListener(this);
     	mListView.setTextFilterEnabled(true);

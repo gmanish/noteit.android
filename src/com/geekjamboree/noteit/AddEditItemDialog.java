@@ -24,7 +24,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.TextView;
 
 class AddEditItemDialog extends Dialog {
@@ -32,6 +31,19 @@ class AddEditItemDialog extends Dialog {
 	public interface baseListener{
 		// Just a convenience, I need to have a single pointer
 		// as a member that can hold both types of listeners
+	}
+	
+	class AddEditCategoryListAdapter extends CategoryListAdapter {
+
+		public AddEditCategoryListAdapter(Context context, int resource,
+				int textViewResourceId, ArrayList<Category> objects,
+				NoteItApplication app, boolean showDragDropIcon) {
+			super(context, resource, textViewResourceId, objects, app, showDragDropIcon);
+		}
+	
+	   protected int getPreferredTextAppearance() {
+			return ThemeUtils.getResourceIdFromAttribute(getContext(), R.attr.TextAppearance_Tiny);
+	    }
 	}
 	
 	public interface addItemListener extends baseListener {
@@ -102,7 +114,7 @@ class AddEditItemDialog extends Dialog {
 	NumberPicker			mEditQuantity;
 	NumberPicker			mEditCost;
 	TextView				mTextTotal;
-	Spinner					mSpinCategories;
+	CategoryListView		mListViewCategories;
 	Spinner					mSpinUnits;
 	CheckBox				mAskLater;
 	View					mContentView = null;
@@ -233,8 +245,8 @@ class AddEditItemDialog extends Dialog {
 			});
     	}
     	
-        mSpinCategories = (Spinner) findViewById(R.id.addedit_spinCategories);
-        if (mSpinCategories != null) {
+        mListViewCategories = (CategoryListView) findViewById(R.id.addedit_listViewCategory);
+        if (mListViewCategories != null) {
         	populateCategories();
         }
         
@@ -380,28 +392,44 @@ class AddEditItemDialog extends Dialog {
     
     protected void populateCategories() {
     	
-    	ArrayList<Category> categories = mApplication.getCategories();
-        ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(
-                getContext(), 
-                android.R.layout.simple_spinner_item,
-                categories);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinCategories.setAdapter(adapter);
-        mSpinCategories.setOnItemSelectedListener(
-            new OnItemSelectedListener() {
-                public void onItemSelected(
-                        AdapterView<?> parent, View view, int position, long id) {
-                }
-
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            });
+//    	ArrayList<Category> categories = mApplication.getCategories();
+//        ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(
+//                getContext(), 
+//                android.R.layout.simple_spinner_item,
+//                categories);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        mSpinCategories.setAdapter(adapter);
+//        mSpinCategories.setOnItemSelectedListener(
+//            new OnItemSelectedListener() {
+//                public void onItemSelected(
+//                        AdapterView<?> parent, View view, int position, long id) {
+//                }
+//
+//                public void onNothingSelected(AdapterView<?> parent) {
+//                }
+//            });
         
-        // Set the selection to the "Uncategorized" category  
-        // which has a hard coded id = 1
-        int index = categories.indexOf(mApplication.new Category(1));
-        if (index >= 0)
-        	mSpinCategories.setSelection(index);        
+//        // Set the selection to the "Uncategorized" category  
+//        // which has a hard coded id = 1
+//        int index = categories.indexOf(mApplication.new Category(1));
+//        if (index >= 0)
+//        	mSpinCategories.setSelection(index);
+        
+        
+        AddEditCategoryListAdapter lvAdapter = new AddEditCategoryListAdapter(
+    			getContext(),
+    			R.layout.addedit_categorieslist_item, 
+    			R.id.categorylists_item_name, 
+    			mApplication.getCategories(),
+    			mApplication,
+    			false);
+        
+    	mListViewCategories.setAdapter(lvAdapter);
+    	mListViewCategories.setTextFilterEnabled(true);
+    	mListViewCategories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    		}
+    	});
     }
     
     protected void populateUnits() {
@@ -431,15 +459,15 @@ class AddEditItemDialog extends Dialog {
     	mEditCost.setCurrent(item.mUnitPrice);
     	mAskLater.setChecked(item.mIsAskLater > 0);
     	
-    	ArrayAdapter<Category> adapter = (ArrayAdapter<Category>)mSpinCategories.getAdapter();
-    	if (adapter != null){
-    		int position = adapter.getPosition(mApplication.new Category(item.mCategoryID));
-    		if (position >=0 && position < adapter.getCount())
-    			mSpinCategories.setSelection(position);
-    	}
-    	
+//    	ArrayAdapter<Category> adapter = (ArrayAdapter<Category>)mSpinCategories.getAdapter();
+//    	if (adapter != null){
+//    		int position = adapter.getPosition(mApplication.new Category(item.mCategoryID));
+//    		if (position >=0 && position < adapter.getCount())
+//    			mSpinCategories.setSelection(position);
+//    	}
+//    	
     	ArrayAdapter<Unit> unitAdapter = (ArrayAdapter<Unit>)mSpinUnits.getAdapter();
-    	if (adapter != null) {
+    	if (unitAdapter != null) {
     		int position = unitAdapter.getPosition(mApplication.new Unit(item.mUnitID, "", "", 0));
     		if (position >= 0 && position < unitAdapter.getCount())
     			mSpinUnits.setSelection(position);
@@ -486,12 +514,12 @@ class AddEditItemDialog extends Dialog {
     	else 
     		item = mApplication.new Item();
     	
-    	int  position = mSpinCategories.getSelectedItemPosition();
-    	if (position != Spinner.INVALID_POSITION) {
-        	item.mCategoryID = ((Category)mSpinCategories.getItemAtPosition(position)).mID;
-    	}
+//    	int  position = mSpinCategories.getSelectedItemPosition();
+//    	if (position != Spinner.INVALID_POSITION) {
+//        	item.mCategoryID = ((Category)mSpinCategories.getItemAtPosition(position)).mID;
+//    	}
     	
-    	position = mSpinUnits.getSelectedItemPosition();
+    	int position = mSpinUnits.getSelectedItemPosition();
     	if (position != Spinner.INVALID_POSITION) {
     		item.mUnitID = ((Unit) mSpinUnits.getItemAtPosition(position)).mID;
     	}

@@ -1,166 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/addedit_view"
+    style="?NI_AppBackgroundNormal"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    style="?NI_AppBackgroundNormal" >
+    android:orientation="vertical" >
 
-	<com.geekjamboree.noteit.TitleBar
-	    android:id="@+id/addedit_title_bar"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content" />
-    
-    <ScrollView
+    <com.geekjamboree.noteit.TitleBar
+        android:id="@+id/addedit_title_bar"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dip" >
+
+        <AutoCompleteTextView
+            android:id="@+id/addedit_editName"
+            style="?NI_EditTextStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dip"
+            android:completionThreshold="3"
+            android:ellipsize="none"
+            android:hint="@string/addedit_Name_Hint"
+            android:inputType="textCapWords|textNoSuggestions"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:textSize="14dip" />
+
+        <TextView
+            android:id="@+id/textCategory"
+            style="?TextAppearance_Tiny"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:text="@string/addedit_category_label" />
+		<!--
+			The following LinearLayout might seem to be redundant, but
+			it is not. It's a workaround for the ListView height problem.
+			If we set height to wrap_contents, the ListView grows to max
+			size possible, thereby obscuring the other controls in the view.
+			Wrapped by a LinearLayout with layout_weight set to 0.1, it seems
+			to behave as expected, occupying only the available space and
+			leaving room for others.  
+		-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_marginTop="8dip"
+            android:layout_weight="0.1"
+            android:orientation="vertical" >
+
+            <com.geekjamboree.noteit.CategoryListView
+                android:id="@+id/addedit_listViewCategory"
+                style="?NI_ListViewAttr"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollingCache="true" />
+            
+        </LinearLayout>
+
+        <TableLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+			<TableRow 
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+	            android:layout_marginTop="8dip"
+			    android:gravity="center_vertical">
+			    
+				<TextView
+		            android:id="@+id/textQuantity"
+		            style="?TextAppearance_Tiny"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:gravity="right|center_vertical"
+		            android:text="@string/addedit_quantity_label" />
+	
+				<com.geekjamboree.noteit.NumberPicker
+	                android:id="@+id/addedit_txtQuantity"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"/>
+	
+	            <Spinner
+	                android:id="@+id/addedit_units"
+	                style="?AddEdit_Widget"
+	                android:layout_width="0dip"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="0.4" />
+	            
+	        </TableRow>
+
+			<TableRow
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+	            android:layout_marginTop="8dip"
+			    android:gravity="center_vertical">
+	
+		        <TextView
+		            android:id="@+id/textPrice"
+		            style="?TextAppearance_Tiny"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:gravity="right|center_vertical"
+		            android:text="@string/addedit_price_label" />
+		
+	            <com.geekjamboree.noteit.NumberPicker
+	                android:id="@+id/addedit_editprice"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content" />
+	
+	            <CheckBox
+	                android:id="@+id/addedit_AskLater"
+	                style="?TextAppearance_Tiny"
+	                android:layout_width="0dip"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+	                android:text="@string/addedit_askLater" />
+	
+	            <ImageButton
+	                android:id="@+id/addedit_asklater_help"
+	                style="@style/App_ImageButtonStyle"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_marginLeft="4dip"
+	                android:contentDescription="@string/addedit_askLater"
+	                android:src="?Help" />
+	            
+			</TableRow>
+			
+        </TableLayout>
+
+        <TextView
+            android:id="@+id/addedit_labelTotal"
+            style="?TextAppearance_Tiny"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dip"
+            android:gravity="left|center_vertical"
+            android:text="@+id/addedit_labelTotal" />
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dip" >
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="horizontal" >
 
-            <AutoCompleteTextView
-                android:id="@+id/addedit_editName"
-                style="?NI_EditTextStyle"
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="8dip"
-                android:completionThreshold="3"
-                android:ellipsize="none"
-                android:hint="@string/addedit_Name_Hint"
-                android:inputType="textCapWords|textNoSuggestions"
-                android:selectAllOnFocus="true"
-                android:singleLine="true" />
-
-            <TextView
-                android:id="@+id/textCategory"
+            <Button
+                android:id="@+id/addedit_btnContinue"
+                style="?NI_TextButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:text="@string/addedit_category_label" />
-
-            <Spinner
-                android:id="@+id/addedit_spinCategories"
-                style="?AddEdit_Widget"
-                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
-                android:layout_marginTop="8dip" />
+                android:text="@string/addedit_Continue" />
 
-            <TextView
-                android:id="@+id/textQuantity"
+            <Button
+                android:id="@+id/addedit_btnDone"
+                style="?NI_TextButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:layout_marginTop="8dip"
-                android:text="@string/addedit_quantity_label" />
+                android:layout_gravity="right|center_vertical"
+                android:text="@string/addedit_Done" />
 
-            <LinearLayout
-                android:id="@+id/addedit_updowncontrol"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dip"
-                android:gravity="center_vertical"
-                android:orientation="horizontal" >
-
-                <com.geekjamboree.noteit.NumberPicker
-                    android:id="@+id/addedit_txtQuantity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
-                </com.geekjamboree.noteit.NumberPicker>
-
-                <Spinner
-                    android:id="@+id/addedit_units"
-                    style="?AddEdit_Widget"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.4" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/textPrice"
+            <Button
+                android:id="@+id/addedit_btnCancel"
+                style="?NI_TextButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:layout_marginTop="8dip"
-                android:text="@string/addedit_price_label" />
-
-            <LinearLayout
-                android:id="@+id/layout_price"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dip"
-                android:gravity="center_vertical"
-                android:orientation="horizontal" >
-
-                <com.geekjamboree.noteit.NumberPicker
-                    android:id="@+id/addedit_editprice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
-                </com.geekjamboree.noteit.NumberPicker>
-
-                <CheckBox
-                    android:id="@+id/addedit_AskLater"
-                    style="?TextAppearance_Item_Small"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="left|center_vertical"
-                    android:text="@string/addedit_askLater" />
-
-                <ImageButton
-                    android:id="@+id/addedit_asklater_help"
-                    style="@style/App_ImageButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/addedit_askLater"
-                    android:src="?Help" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/addedit_labelTotal"
-                style="?TextAppearance_Item_Small"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dip"
-                android:gravity="left|center_vertical"
-                android:text="@+id/addedit_labelTotal" />
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="center_vertical|center_horizontal"
-                android:orientation="horizontal" >
-
-                <Button
-                    android:id="@+id/addedit_btnContinue"
-                    style="?NI_TextButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    android:text="@string/addedit_Continue" />
-
-                <Button
-                    android:id="@+id/addedit_btnDone"
-                    style="?NI_TextButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    android:text="@string/addedit_Done" />
-
-                <Button
-                    android:id="@+id/addedit_btnCancel"
-                    style="?NI_TextButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    android:text="@string/Cancel" />
-            </LinearLayout>
+                android:layout_gravity="right|center_vertical"
+                android:text="@string/Cancel" />
         </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
 </LinearLayout>

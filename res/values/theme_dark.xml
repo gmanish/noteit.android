@@ -29,7 +29,8 @@
 	
 	<style name="App_CustomDialog.Dark" parent="@style/NI_DialogBase.Dark">
 <!--         <item name="android:windowBackground">@drawable/bg_dark</item>
- -->	    <item name="android:windowIsFloating">true</item>
+ -->	    
+ 		<item name="android:windowIsFloating">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowAnimationStyle">@style/AppDialog_Animation</item>
 	</style>
@@ -115,6 +116,10 @@
 	    <item name="android:textSize">12sp</item>
     </style>
 
+	<style name="TextAppearance_Dark.Tiny" parent="@style/TextAppearance_Dark.Footer">
+	    <item name="android:textSize">12sp</item>
+    </style>
+
 	<!--  Style Definitions for Dark Theme -->
     <style name="NI_AppBackgroundNormal">
     </style>
@@ -172,7 +177,8 @@
 		<item name="TextAppearance_Item_SubItem_Large">@style/TextAppearance_Dark.SubItem</item>
 		
 		<item name="TextAppearance_Footer">@style/TextAppearance_Dark.Footer</item>
-		
+		<item name="TextAppearance_Tiny">@style/TextAppearance_Dark.Tiny</item>
+				
 		<item name="Report_Header_HTML">@string/reporting_category_head_dark</item>
 		<item name="Report_Item_HTML">@string/reporting_category_report_item_dark</item>
 		<item name="Report_Footer_HTML">@string/reporting_category_footer_dark</item>

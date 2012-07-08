@@ -14,9 +14,14 @@
         <item name="android:background">@color/app_tm_textbutton_background</item>
     </style>
     
+	<style name="EditTextStyle_Trademark" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">@color/noteit_trademark_dark</item>
+	</style>
+	    
     <style name="App_CustomDialog.Trademark" parent="@style/NI_DialogBase.Light">
 <!--         <item name="android:windowBackground">@drawable/bg_trademark</item>
- -->        <item name="android:windowIsFloating">true</item>
+ -->        
+ 		<item name="android:windowIsFloating">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowAnimationStyle">@style/AppDialog_Animation</item>
 	</style>
@@ -127,23 +132,24 @@
 	    <item name="android:textSize">12sp</item>
 	</style>
 
+	<style name="TextAppearance_Trademark.Tiny" parent="@android:style/TextAppearance.Small">
+	    <item name="android:textColor">@color/textcolor_primary_trademark</item>
+	    <item name="android:textSize">12sp</item>
+	</style>
+		
     <style name="NI_ListViewAttr_Trademark" parent="@android:style/Widget.AbsListView">
         
         <item name="android:divider">@drawable/listview_separator_trademark</item>
         <item name="android:childDivider">@drawable/listview_separator_trademark</item>
-        <item name="android:background">@drawable/application_background_trademark</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="android:groupIndicator">@color/listitem_group_indicator_trademark</item>
         <item name="android:dividerHeight">2dip</item>
-		<item name="android:cacheColorHint">#00000000</item>
+		<item name="android:cacheColorHint">@android:color/transparent</item>
         <item name="android:fadingEdge">vertical</item>
         <item name="android:fadingEdgeLength">8dip</item>
         <item name="android:listSelector">@color/listview_selector_trademark</item> 
         
    	</style>
-    
-	<style name="EditTextStyle_Trademark" parent="@android:style/Widget.EditText">
-        <item name="android:textColor">@color/noteit_trademark_dark</item>
-	</style>
     
     <style name="NI_AppTheme.Trademark" parent="@style/NI_ThemeBase.Light">
         
@@ -183,6 +189,8 @@
 		<item name="TextAppearance_Item_SubItem_Large">@style/TextAppearance_Trademark.SubItem</item>
 		
 		<item name="TextAppearance_Footer">@style/TextAppearance_Trademark.Footer</item>
+		<item name="TextAppearance_Tiny">@style/TextAppearance_Trademark.Tiny</item>
+		
 		<item name="Report_Header_HTML">@string/reporting_category_head_trademark</item>
 		<item name="Report_Item_HTML">@string/reporting_category_report_item_trademark</item>
 		<item name="Report_Footer_HTML">@string/reporting_category_footer_trademark</item>
