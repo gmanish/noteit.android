@@ -16,7 +16,7 @@
     <style name="NI_ButtonBase"	parent="@android:style/Widget.Holo.Button.Small" />
     
     <style name="NI_DialogBase"></style>
-    <style name="NI_DialogBase.Dark" parent="@android:style/Theme.Holo.Dialog.NoActionBar" />
-    <style name="NI_DialogBase.Light" parent="@android:style/Theme.Holo.Light.Dialog.NoActionBar" />
+    <style name="NI_DialogBase.Dark" parent="@android:style/Theme.Holo.NoActionBar" />
+    <style name="NI_DialogBase.Light" parent="@android:style/Theme.Holo.Light.NoActionBar" />
     	
 </resources>

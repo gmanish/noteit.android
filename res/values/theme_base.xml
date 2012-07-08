@@ -16,7 +16,7 @@
     <style name="NI_ButtonBase"	parent="@android:style/Widget.Button.Small" />
     
     <style name="NI_DialogBase"/>
-    <style name="NI_DialogBase.Dark" parent="@android:style/Theme.Dialog" />
-    <style name="NI_DialogBase.Light" parent="@android:style/Theme.Dialog" />
+    <style name="NI_DialogBase.Dark" parent="@android:style/Theme" />
+    <style name="NI_DialogBase.Light" parent="@android:style/Theme.Light" />
     
 </resources>

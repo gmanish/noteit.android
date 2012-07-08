@@ -92,6 +92,7 @@ class AddEditItemDialog extends Dialog {
 	long						mItemID = 0; // Holds only for edit mode
 	Item 						mOriginalItem;
 	navigateItemsListener 		mNavigationListener; 
+	String 						mCurrencyFormat = new String();
 	
 	ArrayAdapter<SuggestedItem> mAutoCompleteAdapter;
 	AutoCompleteTextView 		mItemName;
@@ -105,6 +106,7 @@ class AddEditItemDialog extends Dialog {
 	Spinner					mSpinUnits;
 	CheckBox				mAskLater;
 	View					mContentView = null;
+	TitleBar				mToolbar;
 
 	final AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -216,7 +218,9 @@ class AddEditItemDialog extends Dialog {
         }
         
         mContentView = findViewById(R.id.addedit_view);
-    	((TextView) findViewById(R.id.addedit_textview_caption)).setText(title);
+        mToolbar = (TitleBar) mContentView.findViewById(R.id.addedit_title_bar);
+    	doSetupToolbarButtons(title);
+    	
     	final ImageButton askLater = (ImageButton) findViewById(R.id.addedit_asklater_help);
     	if (askLater != null) {
     		askLater.setOnClickListener(new View.OnClickListener() {
@@ -294,6 +298,8 @@ class AddEditItemDialog extends Dialog {
         	mItemName.setOnItemClickListener(mItemClickListener);
         }
 
+        mCurrencyFormat = mApplication.getCurrencyFormat(false);
+        
         Button continueBtn = (Button) findViewById(R.id.addedit_btnContinue);
         continueBtn.setOnClickListener(new View.OnClickListener() {
 			
@@ -326,45 +332,6 @@ class AddEditItemDialog extends Dialog {
 				dismiss();
 			}
 		});    	        
-        
-        ImageButton prevBtn = (ImageButton) findViewById(R.id.addedit_btnPrev);
-        ImageButton nextBtn = (ImageButton) findViewById(R.id.addedit_btnNext);
-        
-        if (!mIsAddItem) {
-        	
-        	prevBtn.setOnClickListener(new View.OnClickListener() {
-				
-				public void onClick(View v) {
-					
-					long prevItemID = mNavigationListener.onPreviousItem(); 
-					if (prevItemID > 0) {
-						mItemID = prevItemID;
-						doFetchAndDisplayItem(prevItemID);
-					}
-				}
-			});
-        	
-        	nextBtn.setOnClickListener(new View.OnClickListener() {
-				
-				public void onClick(View v) {
-					
-					long nextItemID = mNavigationListener.onNextItem(); 
-					if (nextItemID > 0) {
-						mItemID = nextItemID;
-						doFetchAndDisplayItem(nextItemID);
-					}
-				}
-			});
-        }
-        
-        if (!mIsAddItem) {
-        	// In the edit mode "Add More" button does not make sense
-        	continueBtn.setVisibility(View.GONE);
-        } else {
-        	// In the Add mode, next and prev don't make sense
-        	nextBtn.setVisibility(View.GONE);
-        	prevBtn.setVisibility(View.GONE);
-        }
         
     	if (mIsAddItem == false && mItemID != 0){
     		doFetchAndDisplayItem(mItemID);
@@ -566,11 +533,45 @@ class AddEditItemDialog extends Dialog {
 		}
 		
 		if (newValue > 0 && quantity > 0) {
-			String total = String.format(format, newValue * quantity);			
+			String total = String.format(format, String.format(mCurrencyFormat, newValue * quantity));			
 			mTextTotal.setText(total);
 			mTextTotal.setVisibility(View.VISIBLE);
 		} else {
-			mTextTotal.setVisibility(View.INVISIBLE);
+			mTextTotal.setVisibility(View.GONE);
 		}
+    }
+    
+	protected void doSetupToolbarButtons(String title) {
+
+        if (!mIsAddItem) {
+        	
+        	ImageButton prevButton = mToolbar.addRightAlignedButton(
+        			ThemeUtils.getResourceIdFromAttribute(getContext(), R.attr.Prev_Small), false, true);
+        	
+        	prevButton.setOnClickListener(new View.OnClickListener() {
+    			
+    			public void onClick(View v) {
+    				long prevItemID = mNavigationListener.onPreviousItem(); 
+    				if (prevItemID > 0) {
+    					mItemID = prevItemID;
+    					doFetchAndDisplayItem(prevItemID);
+    				}
+    			}
+        	});
+    		
+        	ImageButton nextButton = mToolbar.addRightAlignedButton(
+        			ThemeUtils.getResourceIdFromAttribute(getContext(), R.attr.Next_Small), false, true);
+        	
+        	nextButton.setOnClickListener(new View.OnClickListener() {
+    			
+    			public void onClick(View v) {
+    				long nextItemID = mNavigationListener.onNextItem(); 
+    				if (nextItemID > 0) {
+    					mItemID = nextItemID;
+    					doFetchAndDisplayItem(nextItemID);
+    				}
+    			}
+    		});
+        }
     }
 }
