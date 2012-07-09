@@ -62,5 +62,6 @@
 	<attr name="Increment" format="reference"></attr>
 	<attr name="Decrement" format="reference"></attr>
 	<attr name="Tips_Background" format="reference"></attr>
+	<attr name="Check" format="reference"></attr>
 					
 </resources>

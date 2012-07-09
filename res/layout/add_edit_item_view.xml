@@ -54,13 +54,14 @@
             android:layout_weight="0.1"
             android:orientation="vertical" >
 
-            <com.geekjamboree.noteit.CategoryListView
+            <ListView
                 android:id="@+id/addedit_listViewCategory"
                 style="?NI_ListViewAttr"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbarAlwaysDrawVerticalTrack="true"
-                android:scrollingCache="true" />
+                android:scrollingCache="true"
+                android:choiceMode="singleChoice" />
             
         </LinearLayout>
 

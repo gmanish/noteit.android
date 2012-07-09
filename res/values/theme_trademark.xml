@@ -214,7 +214,8 @@
 		<item name="Increment">@drawable/increment_dark</item>
 		<item name="Decrement">@drawable/decrement_dark</item>
 		<item name="Tips_Background">@style/App_TipsBackground_Trademark</item>
-					
+		<item name="Check">@drawable/check_dark</item>
+		
 	</style>
     			
 </resources>

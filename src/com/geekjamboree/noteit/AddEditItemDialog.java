@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -23,6 +24,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -33,17 +35,76 @@ class AddEditItemDialog extends Dialog {
 		// as a member that can hold both types of listeners
 	}
 	
-	class AddEditCategoryListAdapter extends CategoryListAdapter {
+	class AddEditCategoryListAdapter extends ArrayAdapter<Category> {
 
-		public AddEditCategoryListAdapter(Context context, int resource,
-				int textViewResourceId, ArrayList<Category> objects,
-				NoteItApplication app, boolean showDragDropIcon) {
-			super(context, resource, textViewResourceId, objects, app, showDragDropIcon);
+		class CategoryView extends CheckableView {
+
+			public CategoryView(
+					Context context) throws Exception {
+				
+				super(
+					context, 
+					null, 
+					0, 
+					R.layout.addedit_categorieslist_item, 
+					R.id.categorylists_item_name);
+			}
+			
+			@Override
+			public int getLeftDrawable() {
+				return CategoryListAdapter.getCategoryDrawableId(
+						getContext(), 
+						mApplication, 
+						getItem(getId()));
+			}
+		}
+		
+		public AddEditCategoryListAdapter(
+				Context context, 
+				ArrayList<Category> objects) {
+			super(
+				context, 
+				R.layout.addedit_categorieslist_item, 
+				R.id.categorylists_item_name,
+				objects);
 		}
 	
-	   protected int getPreferredTextAppearance() {
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+
+			CategoryView view = null;
+			
+			if (convertView == null) {
+				try {
+					view = new CategoryView(getContext());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				view = (CategoryView) convertView;
+			}
+			
+			if (view != null) {
+				
+				NoteItApplication 	app = mApplication;
+				Category 			category = app.getCategory(position);
+				TextView 			textView = (TextView) view.findViewById(R.id.categorylists_item_name);
+				
+				view.setId(position);
+				if (textView != null && category != null) {
+					
+					textView.setTextAppearance(getContext(), getPreferredTextAppearance());
+					textView.setText(category.mName);
+					textView.setCompoundDrawablesWithIntrinsicBounds(
+						CategoryListAdapter.getCategoryDrawableId(getContext(), app, category), 0, 0, 0);
+				}
+			}
+			return view;
+		}
+
+		protected int getPreferredTextAppearance() {
 			return ThemeUtils.getResourceIdFromAttribute(getContext(), R.attr.TextAppearance_Tiny);
-	    }
+		}
 	}
 	
 	public interface addItemListener extends baseListener {
@@ -114,7 +175,7 @@ class AddEditItemDialog extends Dialog {
 	NumberPicker			mEditQuantity;
 	NumberPicker			mEditCost;
 	TextView				mTextTotal;
-	CategoryListView		mListViewCategories;
+	ListView				mListViewCategories;
 	Spinner					mSpinUnits;
 	CheckBox				mAskLater;
 	View					mContentView = null;
@@ -245,7 +306,7 @@ class AddEditItemDialog extends Dialog {
 			});
     	}
     	
-        mListViewCategories = (CategoryListView) findViewById(R.id.addedit_listViewCategory);
+        mListViewCategories = (ListView) findViewById(R.id.addedit_listViewCategory);
         if (mListViewCategories != null) {
         	populateCategories();
         }
@@ -392,44 +453,26 @@ class AddEditItemDialog extends Dialog {
     
     protected void populateCategories() {
     	
-//    	ArrayList<Category> categories = mApplication.getCategories();
-//        ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(
-//                getContext(), 
-//                android.R.layout.simple_spinner_item,
-//                categories);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        mSpinCategories.setAdapter(adapter);
-//        mSpinCategories.setOnItemSelectedListener(
-//            new OnItemSelectedListener() {
-//                public void onItemSelected(
-//                        AdapterView<?> parent, View view, int position, long id) {
-//                }
-//
-//                public void onNothingSelected(AdapterView<?> parent) {
-//                }
-//            });
-        
-//        // Set the selection to the "Uncategorized" category  
-//        // which has a hard coded id = 1
-//        int index = categories.indexOf(mApplication.new Category(1));
-//        if (index >= 0)
-//        	mSpinCategories.setSelection(index);
-        
-        
-        AddEditCategoryListAdapter lvAdapter = new AddEditCategoryListAdapter(
-    			getContext(),
-    			R.layout.addedit_categorieslist_item, 
-    			R.id.categorylists_item_name, 
-    			mApplication.getCategories(),
-    			mApplication,
-    			false);
+    	ArrayList<Category> 		categories = mApplication.getCategories();
+        AddEditCategoryListAdapter 	lvAdapter = new AddEditCategoryListAdapter(getContext(), categories);
         
     	mListViewCategories.setAdapter(lvAdapter);
     	mListViewCategories.setTextFilterEnabled(true);
     	mListViewCategories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    		
     		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    			
+    			mListViewCategories.setItemChecked(position, true);
     		}
     	});
+    	
+    	// Set the selection to the "Uncategorized" category  
+        // which has a hard coded id = 1
+        int index = categories.indexOf(mApplication.new Category(1));
+        if (index >= 0) {
+			mListViewCategories.setItemChecked(index, true);
+			mListViewCategories.setSelection(index);
+        }
     }
     
     protected void populateUnits() {
@@ -459,18 +502,21 @@ class AddEditItemDialog extends Dialog {
     	mEditCost.setCurrent(item.mUnitPrice);
     	mAskLater.setChecked(item.mIsAskLater > 0);
     	
-//    	ArrayAdapter<Category> adapter = (ArrayAdapter<Category>)mSpinCategories.getAdapter();
-//    	if (adapter != null){
-//    		int position = adapter.getPosition(mApplication.new Category(item.mCategoryID));
-//    		if (position >=0 && position < adapter.getCount())
-//    			mSpinCategories.setSelection(position);
-//    	}
-//    	
+    	AddEditCategoryListAdapter adapter = (AddEditCategoryListAdapter) mListViewCategories.getAdapter();
+    	if (adapter != null){
+    		int position = adapter.getPosition(mApplication.new Category(item.mCategoryID));
+    		if (position >=0 && position < adapter.getCount()) {
+    			mListViewCategories.setItemChecked(position, true);
+    			mListViewCategories.setSelection(position);
+    		}
+    	}
+    	
     	ArrayAdapter<Unit> unitAdapter = (ArrayAdapter<Unit>)mSpinUnits.getAdapter();
     	if (unitAdapter != null) {
     		int position = unitAdapter.getPosition(mApplication.new Unit(item.mUnitID, "", "", 0));
-    		if (position >= 0 && position < unitAdapter.getCount())
+    		if (position >= 0 && position < unitAdapter.getCount()) {
     			mSpinUnits.setSelection(position);
+    		}
     	}
     	
     	doUpdateTotal();
@@ -514,12 +560,15 @@ class AddEditItemDialog extends Dialog {
     	else 
     		item = mApplication.new Item();
     	
-//    	int  position = mSpinCategories.getSelectedItemPosition();
-//    	if (position != Spinner.INVALID_POSITION) {
-//        	item.mCategoryID = ((Category)mSpinCategories.getItemAtPosition(position)).mID;
-//    	}
+    	int  position = mListViewCategories.getCheckedItemPosition();
+    	if (position != ListView.INVALID_POSITION) {
+    		AddEditCategoryListAdapter adapter = (AddEditCategoryListAdapter) mListViewCategories.getAdapter();
+    		if (adapter != null) {
+    			item.mCategoryID = (adapter.getItem(position)).mID;
+    		}
+    	}
     	
-    	int position = mSpinUnits.getSelectedItemPosition();
+    	position = mSpinUnits.getSelectedItemPosition();
     	if (position != Spinner.INVALID_POSITION) {
     		item.mUnitID = ((Unit) mSpinUnits.getItemAtPosition(position)).mID;
     	}

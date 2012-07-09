@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/splash_root"
     style="?NI_AppBackgroundNormal"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_gravity="center_vertical"
     android:gravity="center"
     android:orientation="vertical" >
@@ -32,7 +32,7 @@
 	    android:layout_margin="10dip" />
 	
 	<TextView
-	    style="?TextAppearance_Item_Small"
+	    style="?TextAppearance_Tiny"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_gravity="center"

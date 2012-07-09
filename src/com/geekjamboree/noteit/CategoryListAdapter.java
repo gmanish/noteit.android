@@ -20,12 +20,10 @@ class CategoryListAdapter extends ArrayAdapterWithFontSize<Category> {
 			int resource,
 			int textViewResourceId, 
 			ArrayList<Category> objects,
-			NoteItApplication app,
-			boolean showDragDropIcon) {
+			NoteItApplication app) {
 		
 		super(context, resource, textViewResourceId, objects, ItemType.BOLD);
 		mApp = app;
-		mShowDragDropIcon = showDragDropIcon;
 	}
 
 	@Override
@@ -39,28 +37,31 @@ class CategoryListAdapter extends ArrayAdapterWithFontSize<Category> {
 			Category 			category = app.getCategory(position);
 			TextView 			textView = (TextView) view.findViewById(mTextViewResId);
 			
-			if (category != null && category.mUserID != app.getUserID()) {
+			if (textView != null && category != null) {
+				
 				textView.setCompoundDrawablesWithIntrinsicBounds(
-						ThemeUtils.getResourceIdFromAttribute(
-								getContext(), 
-								R.attr.Category_Shared_Small), 
+						getCategoryDrawableId(getContext(), app, category), 
 						0,
-						mShowDragDropIcon? ThemeUtils.getResourceIdFromAttribute(
-								getContext(),
-								R.attr.Hand_Small) : 0, 
-						0);
-			} else { 
-				textView.setCompoundDrawablesWithIntrinsicBounds(
-						ThemeUtils.getResourceIdFromAttribute(
-								getContext(), 
-								R.attr.Category_Small),
-						0,
-						mShowDragDropIcon ? ThemeUtils.getResourceIdFromAttribute(
-								getContext(), 
-								R.attr.Hand_Small) : 0, 
+						ThemeUtils.getResourceIdFromAttribute(getContext(), R.attr.Hand_Small), 
 						0);
 			}
 		}
 		return view;
+	}
+	
+	public static int getCategoryDrawableId(Context context, NoteItApplication app, Category category) {
+		
+		if (app != null && category != null) {
+			if (category.mUserID != app.getUserID()) {
+				return ThemeUtils.getResourceIdFromAttribute(
+							context, 
+							R.attr.Category_Shared_Small);
+			} else { 
+				return ThemeUtils.getResourceIdFromAttribute(
+							context, 
+							R.attr.Category_Small);
+			}
+		} else
+			return 0;
 	}
 }

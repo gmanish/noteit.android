@@ -58,7 +58,7 @@ class DragDropListView extends ListView {
 		
 		int x = (int) ev.getX();
 		int y = (int) ev.getY();
-		if (ev.getAction() == MotionEvent.ACTION_DOWN && x >= mDragDropIndicatorLeft && x <=	 mDragDropIndicatorRight) {
+		if (ev.getAction() == MotionEvent.ACTION_DOWN && x >= mDragDropIndicatorLeft && x <= mDragDropIndicatorRight) {
 			
 			Log.i("CategoryListView.onTouchEvent"	, "X: " + x + " Y: " + y);
 			mIsDown = true;

@@ -58,8 +58,7 @@ public class CategoryListActivity
 				resource, 
 				textViewResourceId, 
 				objects, 
-				(NoteItApplication) getApplication(), 
-				true);
+				(NoteItApplication) getApplication());
 		}
 
 		public void onDrag(int dragSource, int dropTarget) {
@@ -153,13 +152,11 @@ public class CategoryListActivity
         doSetupToolbarButtons();
         
         mListView = (CategoryListView) findViewById(android.R.id.list);
-        mAdapter = new CategoryListAdapter(
+        mAdapter = new CategoryListAdapterDragDrop(
     			this, 
     			R.layout.categorieslist_item, 
     			R.id.categorylists_item_name, 
-    			((NoteItApplication) getApplication()).getCategories(),
-    			(NoteItApplication) getApplication(),
-    			true);
+    			((NoteItApplication) getApplication()).getCategories());
     	mListView.setAdapter(mAdapter);
     	mListView.setDragDropListener(this);
     	mListView.setTextFilterEnabled(true);

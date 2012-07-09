@@ -44,7 +44,7 @@
 	<color name="noteit_dark_darker">#474545</color>
 	<color name="noteit_dark_darkest">#3b3939</color>
 	
-	<color name="TextColor_Primary_Dark">#FFF</color>
+	<color name="TextColor_Primary_Dark">#f3f3f3</color>
 	<color name="TextColor_Secondary_Dark">#a1a1a1</color>
 
 	<style name="TextAppearance_Dark" parent="@android:style/TextAppearance">
@@ -203,6 +203,8 @@
 		<item name="Increment">@drawable/increment</item>
 		<item name="Decrement">@drawable/decrement</item>
 		<item name="Tips_Background">@style/App_TipsBackground_Dark</item>
+		<item name="Check">@drawable/check</item>
+		
 	</style>
     
 </resources>
