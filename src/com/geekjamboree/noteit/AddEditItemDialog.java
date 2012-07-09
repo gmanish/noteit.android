@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -334,29 +333,6 @@ class AddEditItemDialog extends Dialog {
 			}
 		});
         
-        Button doneBtn = (Button) findViewById(R.id.addedit_btnDone);
-        doneBtn.setOnClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
-				try {
-					saveItem();
-					dismiss();
-		    	}catch (DialogFieldException dialogException){
-		    		
-		    		CustomToast.makeText(
-		    				getContext(),
-		    				mContentView,
-		    				dialogException.getMessage()).show(true);
-		    	}
-		    	catch (Exception e) {
-		    		CustomToast.makeText(
-		    				getContext(),
-		    				mContentView,
-		    				getContext().getResources().getString(R.string.server_error)).show(true);
-		    	}
-			}
-		});
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean showSuggestions = prefs.getBoolean("Show_Suggestions", true);
         
@@ -372,40 +348,7 @@ class AddEditItemDialog extends Dialog {
         }
 
         mCurrencyFormat = mApplication.getCurrencyFormat(false);
-        
-        Button continueBtn = (Button) findViewById(R.id.addedit_btnContinue);
-        continueBtn.setOnClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
-				
-				try {
-					saveItem();
-					// clear contents here
-					clearDialogFields();
-		    	}catch (DialogFieldException dialogException){
-		    		
-		    		CustomToast.makeText(
-		    				getContext(),
-		    				mContentView,
-		    				dialogException.getMessage()).show(true);
-		    	}
-		    	catch (Exception e) {
-		    		CustomToast.makeText(
-		    				getContext(),
-		    				mContentView,
-		    				getContext().getResources().getString(R.string.server_error)).show(true);
-		    	}
-			}
-		});
-        
-        Button cancelBtn = (Button) findViewById(R.id.addedit_btnCancel);
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
-				dismiss();
-			}
-		});    	        
-        
+                       
     	if (mIsAddItem == false && mItemID != 0){
     		doFetchAndDisplayItem(mItemID);
     	} else 
@@ -618,12 +561,33 @@ class AddEditItemDialog extends Dialog {
 		}
     }
     
+    void doSave() {
+    	
+		try {
+			saveItem();
+    	}catch (DialogFieldException dialogException){
+    		
+    		CustomToast.makeText(
+    				getContext(),
+    				mContentView,
+    				dialogException.getMessage()).show(true);
+    	}
+    	catch (Exception e) {
+    		CustomToast.makeText(
+    				getContext(),
+    				mContentView,
+    				getContext().getResources().getString(R.string.server_error)).show(true);
+    	}
+    }
+    
 	protected void doSetupToolbarButtons(String title) {
 
+		mToolbar.SetTitle(title);
+		mToolbar.addVerticalSeparator(getContext(), false);
+		
         if (!mIsAddItem) {
         	
         	ImageButton prevButton = mToolbar.addRightAlignedButton(R.drawable.prev);
-        	
         	prevButton.setOnClickListener(new View.OnClickListener() {
     			
     			public void onClick(View v) {
@@ -636,7 +600,6 @@ class AddEditItemDialog extends Dialog {
         	});
     		
         	ImageButton nextButton = mToolbar.addRightAlignedButton(R.drawable.next);
-        	
         	nextButton.setOnClickListener(new View.OnClickListener() {
     			
     			public void onClick(View v) {
@@ -648,5 +611,23 @@ class AddEditItemDialog extends Dialog {
     			}
     		});
         }
-    }
+        
+        ImageButton saveAndCloseButton = mToolbar.addRightAlignedButton(R.drawable.save_close);
+        saveAndCloseButton.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				doSave();
+				dismiss();
+			}
+		});
+
+        ImageButton saveAndContinueButton = mToolbar.addRightAlignedButton(R.drawable.save_add);
+        saveAndContinueButton.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				doSave();
+				clearDialogFields();
+			}
+		});
+	}
 }

@@ -152,14 +152,14 @@ public class TitleBar extends LinearLayout {
     	return button;
     }
     
-    public void addVerticalSeparator(Activity activity, boolean leftAlligned) {
+    public void addVerticalSeparator(Context context, boolean leftAlligned) {
     	
     	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(mButtonSeparatorWidth, mButtonSeparatorHeight);
 
     	lp.gravity = (leftAlligned ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL;
     	ImageView sep = new ImageView(getContext());
     	sep.setLayoutParams(lp);
-    	sep.setBackgroundResource(ThemeUtils.getResourceIdFromAttribute(activity, R.attr.NI_VerticalSeparator));
+    	sep.setBackgroundResource(ThemeUtils.getResourceIdFromAttribute(context, R.attr.NI_VerticalSeparator));
     	if (leftAlligned)
     		mTitleRoot.addView(sep, mIndex++);
     	else 
