@@ -129,7 +129,7 @@ public class MainPreferenceActivity extends PreferenceActivity {
 	
     protected void doSetupToolbarButtons() {
 
-    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home, true, true);
+    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home);
     	homeButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {

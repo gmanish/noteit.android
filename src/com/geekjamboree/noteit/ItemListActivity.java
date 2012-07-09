@@ -1386,7 +1386,7 @@ public class ItemListActivity
     
     protected void doSetupToolbarButtons(String listName) {
 
-    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home, true, true);
+    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home);
     	homeButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -1411,7 +1411,7 @@ public class ItemListActivity
 		
     	mToolbar.addVerticalSeparator(this, false);
     	
-    	ImageButton addButton = mToolbar.addRightAlignedButton(R.drawable.add, false, true);
+    	ImageButton addButton = mToolbar.addRightAlignedButton(R.drawable.add);
     	addButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -1419,47 +1419,21 @@ public class ItemListActivity
 			}
 		});
     	
-    	ImageButton scanBarcodeButton = mToolbar.addRightAlignedButton(R.drawable.barcode, true, false);
+    	ImageButton scanBarcodeButton = mToolbar.addRightAlignedButton(R.drawable.barcode);
     	scanBarcodeButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
 				doScanBarcode();
 			}
 		});
-    	
-    	ImageButton expandCollapse = mToolbar.addRightAlignedButton(R.drawable.expand_collapse, true, true);
-    	expandCollapse.setOnClickListener(new OnClickListener() {
+
+    	ImageButton shareButton = mToolbar.addRightAlignedButton(R.drawable.share);
+    	shareButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
-				mExpandCollapseQA.show(v);
+				doShare();
 			}
 		});
-    	
-    	mExpandCollapseQA = new QuickAction(this);
-    	ActionItem collapseAll = new ActionItem(
-    									QA_COLLAPSE,
-    									getString(R.string.itemlist_collapseall),
-    									getResources().getDrawable(R.drawable.collapse));
-    	ActionItem expandAll = new ActionItem(
-	    		QA_EXPAND, 
-	    		getString(R.string.itemlist_expandall), 
-	    		getResources().getDrawable(R.drawable.expand));
-    	mExpandCollapseQA.addActionItem(collapseAll);
-    	mExpandCollapseQA.addActionItem(expandAll);
-    	mExpandCollapseQA.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
-			
-			public void onItemClick(QuickAction source, int pos, int actionId) {
-				
-				switch(actionId){
-				case QA_EXPAND:
-					doExpandAll();
-					break;
-				case QA_COLLAPSE:
-					doCollapseAll();
-					break;
-				}
-			}
-		});		
     }
     
     private void addFooterToListView(boolean add) {

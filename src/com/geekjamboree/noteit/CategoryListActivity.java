@@ -289,7 +289,7 @@ public class CategoryListActivity
 
 	protected void doSetupToolbarButtons() {
 
-    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home, true, true);
+    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home);
     	homeButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -303,7 +303,7 @@ public class CategoryListActivity
     	mToolbar.addVerticalSeparator(this, true);
     	mToolbar.addVerticalSeparator(this, false);
 
-    	ImageButton addButton = mToolbar.addRightAlignedButton(R.drawable.add, false, true);
+    	ImageButton addButton = mToolbar.addRightAlignedButton(R.drawable.add);
     	addButton.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
@@ -311,7 +311,7 @@ public class CategoryListActivity
 			}
     	});
 		
-    	ImageButton settingsButton = mToolbar.addRightAlignedButton(R.drawable.settings, false, true);
+    	ImageButton settingsButton = mToolbar.addRightAlignedButton(R.drawable.settings);
     	settingsButton.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {

@@ -178,7 +178,7 @@ public class ReportCategoryChart extends Activity {
 	
 	protected void doSetupToolbarButtons() {
 
-    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home, true, true);
+    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home);
     	homeButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -192,7 +192,7 @@ public class ReportCategoryChart extends Activity {
     	mToolbar.addVerticalSeparator(this, true);
     	mToolbar.addVerticalSeparator(this, false);
     	
-    	ImageButton settingsButton = mToolbar.addRightAlignedButton(R.drawable.settings, true, true);
+    	ImageButton settingsButton = mToolbar.addRightAlignedButton(R.drawable.settings);
     	settingsButton.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {

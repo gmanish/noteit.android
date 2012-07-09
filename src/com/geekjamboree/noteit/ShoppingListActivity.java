@@ -374,7 +374,7 @@ public class ShoppingListActivity
     
     protected void doSetupToolbarButtons() {
 
-    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home, true, true);
+    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home);
     	homeButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -388,7 +388,7 @@ public class ShoppingListActivity
     	mToolbar.addVerticalSeparator(this, true);
     	mToolbar.addVerticalSeparator(this, false);
 
-    	ImageButton addButton = mToolbar.addRightAlignedButton(R.drawable.add, true, true);
+    	ImageButton addButton = mToolbar.addRightAlignedButton(R.drawable.add);
     	addButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -396,7 +396,7 @@ public class ShoppingListActivity
 			}
     	});
 		
-    	ImageButton settingsButton = mToolbar.addRightAlignedButton(R.drawable.settings, false, true);
+    	ImageButton settingsButton = mToolbar.addRightAlignedButton(R.drawable.settings);
     	settingsButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {

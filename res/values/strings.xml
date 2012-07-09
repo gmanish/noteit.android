@@ -135,7 +135,7 @@
 	<string name="reporting_emailIntro">The sender shared a Shopping Report with you:</string>
 	<string name="reporting_sharemessage">Share Report Via</string>
 	
-	<string name="sharewithuser_title">Email of NoteIt! user&#8230;</string>
+	<string name="sharewithuser_title">User Email&#8230;</string>
 	<string name="sharewith_title">Share with?</string>
 	<string name="sharewith_succeded">Your list is now shared with user %1$s. A message has been sent to the user.</string>
 	<string name="reporting_category_head_dark">
@@ -248,7 +248,7 @@
 	</string-array>
 	
 	<string-array name="shoplist_share_options">
-	    <item>NoteIt! user&#8230;</item>
+	    <item>Another User&#8230;</item>
 	    <item>Others&#8230;</item>
 	</string-array>
 	    	

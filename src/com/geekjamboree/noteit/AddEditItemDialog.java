@@ -622,8 +622,7 @@ class AddEditItemDialog extends Dialog {
 
         if (!mIsAddItem) {
         	
-        	ImageButton prevButton = mToolbar.addRightAlignedButton(
-        			R.drawable.prev, false, true);
+        	ImageButton prevButton = mToolbar.addRightAlignedButton(R.drawable.prev);
         	
         	prevButton.setOnClickListener(new View.OnClickListener() {
     			
@@ -636,8 +635,7 @@ class AddEditItemDialog extends Dialog {
     			}
         	});
     		
-        	ImageButton nextButton = mToolbar.addRightAlignedButton(
-        			R.drawable.next, false, true);
+        	ImageButton nextButton = mToolbar.addRightAlignedButton(R.drawable.next);
         	
         	nextButton.setOnClickListener(new View.OnClickListener() {
     			

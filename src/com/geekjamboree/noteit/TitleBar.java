@@ -126,39 +126,27 @@ public class TitleBar extends LinearLayout {
     	root.addView(button);
     }
         
-    public ImageButton addLeftAlignedButton(
-    		int id, 
-    		boolean separatorBefore, 
-    		boolean separatorAfter) {
+    public ImageButton addLeftAlignedButton(int id) {
 
     	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(getButtonDim(), getButtonDim());
     	
     	lp.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
-    	lp.leftMargin = separatorBefore == true ? mButtonMargin : 0;
-    	lp.rightMargin = separatorAfter == true ? mButtonMargin : 0;
     	ImageButton button = new ImageButton(getContext(), null, R.attr.NI_ButtonStyle);
     	button.setLayoutParams(lp);
     	button.setPadding(mButtonPadding, mButtonPadding, mButtonPadding, mButtonPadding);
-//    	button.setBackgroundResource(R.color.app_button_background);
     	button.setImageResource(id);
     	mTitleRoot.addView(button, mIndex++);
     	return button;
     }
     
-    public ImageButton addRightAlignedButton(
-    		int id, 
-    		boolean separatorBefore, 
-    		boolean separatorAfter) {
+    public ImageButton addRightAlignedButton(int id) {
     	
     	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(getButtonDim(), getButtonDim());
 
     	lp.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
-    	lp.leftMargin = separatorBefore == true ? mButtonMargin : 0;
-    	lp.rightMargin = separatorAfter == true ? mButtonMargin : 0;
     	ImageButton button = new ImageButton(getContext(), null, R.attr.NI_ButtonStyle);
     	button.setLayoutParams(lp);
     	button.setPadding(mButtonPadding, mButtonPadding, mButtonPadding, mButtonPadding);
-//    	button.setBackgroundResource(R.color.app_button_background);
     	button.setImageResource(id);
     	mTitleRoot.addView(button);
     	return button;
@@ -171,7 +159,6 @@ public class TitleBar extends LinearLayout {
     	lp.gravity = (leftAlligned ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL;
     	ImageView sep = new ImageView(getContext());
     	sep.setLayoutParams(lp);
-//    	sep.setPadding(mButtonPadding, mButtonPadding, mButtonPadding, mButtonPadding);
     	sep.setBackgroundResource(ThemeUtils.getResourceIdFromAttribute(activity, R.attr.NI_VerticalSeparator));
     	if (leftAlligned)
     		mTitleRoot.addView(sep, mIndex++);

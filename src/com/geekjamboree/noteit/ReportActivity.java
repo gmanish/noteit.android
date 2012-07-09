@@ -336,7 +336,7 @@ public class ReportActivity extends Activity {
 
 	protected void doSetupToolbarButtons() {
 
-    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home, true, true);
+    	ImageButton homeButton = mToolbar.addLeftAlignedButton(R.drawable.home);
     	homeButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -350,7 +350,7 @@ public class ReportActivity extends Activity {
     	mToolbar.addVerticalSeparator(this, true);
     	mToolbar.addVerticalSeparator(this, false);
     	
-    	ImageButton shareButton = mToolbar.addRightAlignedButton(R.drawable.share, true, true);
+    	ImageButton shareButton = mToolbar.addRightAlignedButton(R.drawable.share);
     	shareButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -358,7 +358,7 @@ public class ReportActivity extends Activity {
 			}
 		});
     	
-    	ImageButton settingsButton = mToolbar.addRightAlignedButton(R.drawable.settings, false, true);
+    	ImageButton settingsButton = mToolbar.addRightAlignedButton(R.drawable.settings);
     	settingsButton.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
