@@ -2,6 +2,7 @@ package com.geekjamboree.noteit;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.Checkable;
 import android.widget.LinearLayout;
@@ -17,14 +18,14 @@ public class CheckableView extends LinearLayout implements Checkable {
         this(context, null);
 	}
 
-	public CheckableView(Context context, AttributeSet attrs) throws Exception {
+	public CheckableView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
 	}
 
 	public CheckableView(
 			Context context, 
 			AttributeSet attrs, 
-			int defStyle) throws Exception {
+			int defStyle) {
 		this(context, attrs, defStyle, android.R.layout.simple_list_item_1, android.R.id.text1);
 	}
 
@@ -33,14 +34,15 @@ public class CheckableView extends LinearLayout implements Checkable {
 			AttributeSet attrs, 
 			int defStyle,
 			int resource, 
-			int textViewResourceId) throws Exception {
+			int textViewResourceId) {
 		
-		super(context, attrs, defStyle);
+		super(context, attrs);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(resource, this, true);
 		mTextView = (TextView) findViewById(textViewResourceId);
-		if (mTextView == null)
-			throw new Exception("The specified TextView resource Id was not found.");
+		if (mTextView == null) {
+			Log.e("CheckableView", "The specified TextView resource Id was not found.");
+		}
 	}
 
 	public boolean isChecked() {

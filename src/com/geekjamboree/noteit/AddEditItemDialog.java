@@ -40,7 +40,7 @@ class AddEditItemDialog extends Dialog {
 		class CategoryView extends CheckableView {
 
 			public CategoryView(
-					Context context) throws Exception {
+					Context context) {
 				
 				super(
 					context, 

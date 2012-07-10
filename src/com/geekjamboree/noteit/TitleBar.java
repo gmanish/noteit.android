@@ -106,8 +106,9 @@ public class TitleBar extends LinearLayout {
     		Button button) {
     	
     	LinearLayout 				root = (LinearLayout) findViewById(R.id.titlebar_root);
-    	LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(
-    			LinearLayout.LayoutParams.MATCH_PARENT, 
+    	@SuppressWarnings("deprecation")
+		LinearLayout.LayoutParams 	lp = new LinearLayout.LayoutParams(
+    			LinearLayout.LayoutParams.FILL_PARENT, 
     			getButtonDim()); // Fill Parent because this button needs to expand to fill available horizontal space 
     	
     	// When we display the center fill button, we don't have the title

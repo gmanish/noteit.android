@@ -2069,15 +2069,17 @@ public class ItemListActivity
 		 */
 	    public void setViewParams(View view, int height) {
 
-	    	 ViewGroup.LayoutParams params = new AbsListView.LayoutParams(
-		                ViewGroup.LayoutParams.MATCH_PARENT, 
+	    	 @SuppressWarnings("deprecation")
+			ViewGroup.LayoutParams params = new AbsListView.LayoutParams(
+		                ViewGroup.LayoutParams.FILL_PARENT, 
 		                height);
 	        
 	        view.setLayoutParams(params);
 	        view.setPadding(height + 10, 0, 0, 0);
 	    }
 	    
-	    public View getChildView(
+	    @SuppressWarnings("deprecation")
+		public View getChildView(
 	    		int groupPosition, 
 	    		int childPosition,
 				boolean isLastChild, 
@@ -2103,11 +2105,11 @@ public class ItemListActivity
     	        ViewGroup.LayoutParams 	params = (ViewGroup.LayoutParams) parent.getLayoutParams();
     	        
     	        if (params != null) {  
-    	            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+    	            params.width = ViewGroup.LayoutParams.FILL_PARENT;
     	            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
     	        } else {
     	        	params = new AbsListView.LayoutParams(
-    		                ViewGroup.LayoutParams.MATCH_PARENT, 
+    		                ViewGroup.LayoutParams.FILL_PARENT, 
     		                ViewGroup.LayoutParams.WRAP_CONTENT);
     	        }	
 
