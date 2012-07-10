@@ -23,6 +23,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -174,6 +175,7 @@ class AddEditItemDialog extends Dialog {
 	NumberPicker			mEditQuantity;
 	NumberPicker			mEditCost;
 	TextView				mTextTotal;
+	LinearLayout 			mStatusBar;
 	ListView				mListViewCategories;
 	Spinner					mSpinUnits;
 	CheckBox				mAskLater;
@@ -319,7 +321,8 @@ class AddEditItemDialog extends Dialog {
         mEditQuantity = (NumberPicker) findViewById(R.id.addedit_txtQuantity);
         mEditCost = (NumberPicker) findViewById(R.id.addedit_editprice);
         mAskLater = (CheckBox) findViewById(R.id.addedit_AskLater);
-        mTextTotal = (TextView) findViewById(R.id.addedit_labelTotal);
+        mStatusBar = (LinearLayout) findViewById(R.id.bottom_bar);
+        mTextTotal = (TextView) mStatusBar.findViewById(R.id.addedit_labelTotal);
         mEditCost.setOnChangeListener(new NumberPicker.OnChangedListener() {
 			
 			public void onChanged(NumberPicker picker, float oldVal, float newVal) {
@@ -349,10 +352,12 @@ class AddEditItemDialog extends Dialog {
 
         mCurrencyFormat = mApplication.getCurrencyFormat(false);
                        
-    	if (mIsAddItem == false && mItemID != 0){
+    	if (!mIsAddItem && mItemID != 0){
     		doFetchAndDisplayItem(mItemID);
-    	} else 
+    	} else {
+    		clearDialogFields();
     		doUpdateTotal();
+    	}
     	
     }
     
@@ -555,16 +560,17 @@ class AddEditItemDialog extends Dialog {
 		if (newValue > 0 && quantity > 0) {
 			String total = String.format(format, String.format(mCurrencyFormat, newValue * quantity));			
 			mTextTotal.setText(total);
-			mTextTotal.setVisibility(View.VISIBLE);
+			mStatusBar.setVisibility(View.VISIBLE);
 		} else {
-			mTextTotal.setVisibility(View.GONE);
+			mStatusBar.setVisibility(View.GONE);
 		}
     }
     
-    void doSave() {
+    void doSaveAndClose() {
     	
 		try {
 			saveItem();
+			dismiss();
     	}catch (DialogFieldException dialogException){
     		
     		CustomToast.makeText(
@@ -580,7 +586,27 @@ class AddEditItemDialog extends Dialog {
     	}
     }
     
-	protected void doSetupToolbarButtons(String title) {
+    void doSaveAndContinue() {
+    	
+		try {
+			saveItem();
+			clearDialogFields();
+    	}catch (DialogFieldException dialogException){
+    		
+    		CustomToast.makeText(
+    				getContext(),
+    				mContentView,
+    				dialogException.getMessage()).show(true);
+    	}
+    	catch (Exception e) {
+    		CustomToast.makeText(
+    				getContext(),
+    				mContentView,
+    				getContext().getResources().getString(R.string.server_error)).show(true);
+    	}
+    }
+
+    protected void doSetupToolbarButtons(String title) {
 
 		mToolbar.SetTitle(title);
 		mToolbar.addVerticalSeparator(getContext(), false);
@@ -612,22 +638,20 @@ class AddEditItemDialog extends Dialog {
     		});
         }
         
-        ImageButton saveAndCloseButton = mToolbar.addRightAlignedButton(R.drawable.save_close);
-        saveAndCloseButton.setOnClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
-				doSave();
-				dismiss();
-			}
-		});
-
         ImageButton saveAndContinueButton = mToolbar.addRightAlignedButton(R.drawable.save_add);
         saveAndContinueButton.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				doSave();
-				clearDialogFields();
+				doSaveAndContinue();
 			}
 		});
-	}
+
+        ImageButton saveAndCloseButton = mToolbar.addRightAlignedButton(R.drawable.save_close);
+        saveAndCloseButton.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				doSaveAndClose();
+			}
+		});
+    }
 }
