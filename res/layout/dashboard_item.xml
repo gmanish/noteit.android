@@ -2,19 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
     android:padding="8dip"
     android:orientation="vertical" >
 
     <TextView
         android:id="@+id/dashboard_item_text"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/app_name"
         android:gravity="center"
         android:drawableTop="@drawable/cart_big"
         android:drawablePadding="8dip"
+        android:text="@string/app_name"
         android:textAppearance="?TextAppearance_Group_Small" />
 
 </LinearLayout>

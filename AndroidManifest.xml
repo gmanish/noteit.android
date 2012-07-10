@@ -30,7 +30,6 @@
         <activity android:name="MainPreferenceActivity"></activity>
         <activity android:name="ItemListActivity"></activity>
         <activity android:name="CategoryListActivity"></activity>
-        <activity android:name="AddEditItemActivity"></activity>
         <activity android:name="ReportMenuActivity"></activity>
         <activity android:name="ReportActivity"></activity>
         <activity android:name="ReportCategoryChart"></activity>

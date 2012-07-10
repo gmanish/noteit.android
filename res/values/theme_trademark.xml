@@ -24,6 +24,7 @@
  		<item name="android:windowIsFloating">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowAnimationStyle">@style/AppDialog_Animation</item>
+        <item name="android:windowSoftInputMode">stateVisible|adjustResize|adjustPan</item>
 	</style>
     
     <!--  Style Definitions for Trademark Theme -->

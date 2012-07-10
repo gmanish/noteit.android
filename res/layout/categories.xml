@@ -30,12 +30,18 @@
 	    android:text="@string/categoriesactivity_empty_list"
 	    style="?TextAppearance_Item_Small" />
 
-  	<com.google.ads.AdView
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		ads:adUnitId="a14fbd2f2e807ca"
-		ads:adSize="BANNER"
-		ads:testDevices="TEST_EMULATOR, 544ED9EA497C0DCEFC6FBD8935FBC34A"
-		ads:loadAdOnCreate="true"/>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        style="?NI_StatusBackground" >
     
+        <com.google.ads.AdView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			ads:adUnitId="a14fbd2f2e807ca"
+			ads:adSize="BANNER"
+			ads:testDevices="TEST_EMULATOR, 544ED9EA497C0DCEFC6FBD8935FBC34A"
+			ads:loadAdOnCreate="true"/>
+	</LinearLayout>
+	    
 </LinearLayout>
